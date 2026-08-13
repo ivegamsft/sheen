@@ -1,0 +1,19 @@
+name: "sprint-closeout-routing"
+description: "Routing evaluation — validates trigger activation for the sprint-closeout skill."
+skill: "skills/sprint-closeout/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Run a sprint closeout checklist and summarize completed work, spillover, and blockers."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Prepare sprint closure notes for stakeholders and list carry-forward actions with owners."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Close Sprint 31 and package artifacts for retrospective and next sprint planning."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Implement JWT refresh token rotation in our API."
+    expect_activation: false
+  - id: "neg-2"
+    input: "Compare PostgreSQL and MySQL indexing internals."
+    expect_activation: false

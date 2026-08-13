@@ -1,0 +1,19 @@
+name: "manual-test-strategy-routing"
+description: "Routing evaluation — validates trigger activation for the manual-test-strategy skill."
+skill: "skills/manual-test-strategy/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Help me figure out which tests in our regression suite should stay manual and which should be automated."
+    expect_activation: true
+  - id: "pos-2"
+    input: "I need to write an exploratory test charter for our new checkout flow before the release."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Build a repeatable manual regression checklist our QA team can run before each sprint release."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Write Cypress test code for the shopping cart add-to-cart interaction."
+    expect_activation: false
+  - id: "neg-2"
+    input: "How do I benchmark the throughput of my API under 10,000 concurrent requests?"
+    expect_activation: false

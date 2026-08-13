@@ -1,0 +1,19 @@
+name: "security-operations-routing"
+description: "Routing evaluation — validates trigger activation for the security-operations skill."
+skill: "skills/security-operations/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Write KQL detection rules for our SIEM to catch brute-force login attempts."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Automate the secret rotation workflow for our Azure Key Vault credentials."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Build a security alert triage playbook so on-call engineers know how to handle Kubernetes threat alerts."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Generate a one-time penetration test report for our web application."
+    expect_activation: false
+  - id: "neg-2"
+    input: "Design the user interface for our new dashboard feature."
+    expect_activation: false

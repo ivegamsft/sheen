@@ -1,0 +1,19 @@
+name: "code-review-routing"
+description: "Routing evaluation — validates trigger activation for the code-review skill."
+skill: "skills/code-review/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Can you review this pull request and flag any bugs or regressions?"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Check this diff and tell me which findings are most severe and which I should fix first."
+    expect_activation: true
+  - id: "pos-3"
+    input: "I refactored the payment module — are there edge cases I might have missed?"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Add a new endpoint to handle user profile updates."
+    expect_activation: false
+  - id: "neg-2"
+    input: "How do I configure SSH keys for GitHub access?"
+    expect_activation: false

@@ -1,0 +1,19 @@
+name: "azure-landing-zone-routing"
+description: "Routing evaluation — validates trigger activation for the azure-landing-zone skill."
+skill: "skills/azure-landing-zone/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Help me design an Azure enterprise-scale landing zone aligned to the Cloud Adoption Framework"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Scaffold a management group hierarchy for our organization with Corp, Online, and Sandbox groups"
+    expect_activation: true
+  - id: "pos-3"
+    input: "We need to vend a new application landing zone subscription for the payments team"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Deploy a single Azure Function app to an existing resource group"
+    expect_activation: false
+  - id: "neg-2"
+    input: "Design an AWS Organizations structure with service control policies"
+    expect_activation: false

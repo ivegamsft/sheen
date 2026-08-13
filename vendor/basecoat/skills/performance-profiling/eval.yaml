@@ -1,0 +1,19 @@
+name: "performance-profiling-routing"
+description: "Routing evaluation — validates trigger activation for the performance-profiling skill."
+skill: "skills/performance-profiling/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "My API response times have spiked — can you help me profile the hot path in our service?"
+    expect_activation: true
+  - id: "pos-2"
+    input: "I need to find the CPU and memory bottleneck causing our service to degrade under load."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Compare the baseline runtime against the optimized version to verify the performance regression is fixed."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Which features should we prioritize on the product roadmap for next quarter?"
+    expect_activation: false
+  - id: "neg-2"
+    input: "What is the capital of France?"
+    expect_activation: false

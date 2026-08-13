@@ -1,0 +1,19 @@
+name: "contract-testing-routing"
+description: "Routing evaluation — validates trigger activation for the contract-testing skill."
+skill: "skills/contract-testing/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Add Pact contract tests between our order service and the payment provider."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Set up Pact Broker in our CI pipeline so provider verification runs on every build."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Orchestrate our multi-service integration test suite using Docker Compose."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Write a unit test for the calculateDiscount function in isolation."
+    expect_activation: false
+  - id: "neg-2"
+    input: "Run a load test against the production API to check throughput under peak traffic."
+    expect_activation: false

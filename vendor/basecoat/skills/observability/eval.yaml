@@ -1,0 +1,19 @@
+name: "observability-routing"
+description: "Routing evaluation — validates trigger activation for the observability skill."
+skill: "skills/observability/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "How do I instrument my Node.js service with OpenTelemetry to capture traces?"
+    expect_activation: true
+  - id: "pos-2"
+    input: "I need to add structured logging with trace IDs so I can correlate requests across services."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Help me define SLI and latency metrics for my API so I can set up alerting."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Redesign the landing page layout with a new color palette and hero section."
+    expect_activation: false
+  - id: "neg-2"
+    input: "What is the capital of France?"
+    expect_activation: false

@@ -1,0 +1,19 @@
+name: "azure-linux-app-service-routing"
+description: "Routing evaluation — validates trigger activation for the azure-linux-app-service skill."
+skill: "skills/azure-linux-app-service/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "How do I deploy my FastAPI application to Azure App Service on Linux?"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Configure the startup command for my Node.js app on Azure App Service Linux"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Set up a deployment slot swap between staging and production on Azure App Service"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Configure IIS bindings and application pools on a Windows App Service plan"
+    expect_activation: false
+  - id: "neg-2"
+    input: "How do I package my WPF desktop application for distribution?"
+    expect_activation: false

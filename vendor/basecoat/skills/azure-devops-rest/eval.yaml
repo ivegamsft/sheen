@@ -1,0 +1,19 @@
+name: "azure-devops-rest-routing"
+description: "Routing evaluation — validates trigger activation for the azure-devops-rest skill."
+skill: "skills/azure-devops-rest/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Write a script to query Azure DevOps work items via the REST API filtered by sprint"
+    expect_activation: true
+  - id: "pos-2"
+    input: "How do I authenticate to the Azure DevOps REST API using a PAT token in a pipeline?"
+    expect_activation: true
+  - id: "pos-3"
+    input: "I need to update a work item's state and add a comment using the Azure DevOps REST API with JSON Patch"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Call the GitHub REST API to list pull requests for a repository"
+    expect_activation: false
+  - id: "neg-2"
+    input: "Deploy a new Azure Storage account using Bicep"
+    expect_activation: false

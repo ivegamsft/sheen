@@ -1,0 +1,88 @@
+# .basecoat.yml --- BaseCoat consumer configuration
+#
+# Place this file at the root of your repo to control two things:
+#   1. Sync behaviour --- which upstream source to pull from and which assets to include.
+#   2. Memory sweep --- how the weekly enterprise sweep collects learnings from your repo.
+#
+# All keys are optional. Remove any key to accept the default.
+#
+# Full reference: https://github.com/YOUR-ORG/basecoat/blob/main/docs/guides/basecoat-yml.md
+
+
+# -- Sync configuration --------------------------------------------------------
+
+# source: the upstream BaseCoat repo to clone assets from.
+# Override when your org maintains a private fork.
+# Default: https://github.com/YOUR-ORG/basecoat.git
+source: https://github.com/YOUR-ORG/basecoat.git
+
+# ref: branch or tag to sync from.
+# Pin to a release tag (e.g. v3.25.0) for production stability.
+# Default: main
+ref: main
+
+# agents: explicit allow-list of agent names (without the .agent.md suffix).
+# Omit this key entirely to sync all available agents.
+# agents:
+#   - solution-architect
+#   - code-review
+#   - sprint-planner
+#   - security-review
+
+# skills: explicit allow-list of skill directory names.
+# Omit this key entirely to sync all available skills.
+# skills:
+#   - azure-diagnostics
+#   - database-migration
+
+# instructions: explicit allow-list of instruction file names (without .instructions.md).
+# Omit this key entirely to sync all available instruction files.
+# instructions:
+#   - governance
+#   - token-economics
+
+# scoped_instructions: instructions applied to specific file patterns.
+# Populated by the integrate prompt based on detected tech stack.
+# scoped_instructions: []
+
+# sync: sync behaviour overrides (one mapping — combine the keys you need).
+#   script  --- path to the sync entrypoint, relative to repo root. Set this when
+#               your sync script is not the canonical root sync.ps1/sync.sh (e.g.
+#               you keep it under scripts/). The rollout-basecoat skill uses it
+#               directly instead of searching. Omit for root sync.ps1/sync.sh or
+#               auto-discovery.
+#   exclude --- paths to skip during sync (prefixes or globs).
+# sync:
+#   script: scripts/basecoat/sync-basecoat.ps1
+#   exclude:
+#     - archive/   # skip archived/deprecated assets
+
+
+# -- Memory sweep configuration ------------------------------------------------
+#
+# The weekly enterprise memory sweep (scripts/sweep-enterprise-memory.ps1) reads
+# these keys from repos that carry the 'basecoat-enabled' GitHub topic.
+
+# learning_labels: issues and PRs with ANY of these labels are swept as learning candidates.
+# Default: [learning, retrospective, decision]
+learning_labels:
+  - learning
+  - retrospective
+  - decision
+  # - adr        # Architecture Decision Record
+  # - postmortem # Incident postmortem
+
+# days_back: how many calendar days back the sweep looks for signals.
+# Increase to 90 if your team runs quarterly retrospectives.
+# Default: 30
+days_back: 30
+
+# Team metadata --- included in candidate files to help stewards during triage.
+team: ""         # e.g., "Platform Engineering"
+contact: ""      # GitHub username or team handle, e.g., "@my-team"
+domain: ""       # ci | git | authoring | process | security |
+                 #   portal | testing | governance | memory | infra
+
+# auto_pr: when true, submit-learning.ps1 automatically opens a PR for each candidate.
+# Default: false --- candidates land in sweep-candidates/ for manual steward review.
+auto_pr: false

@@ -1,0 +1,19 @@
+name: "cqrs-event-sourcing-routing"
+description: "Routing evaluation — validates trigger activation for the cqrs-event-sourcing skill."
+skill: "skills/cqrs-event-sourcing/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Help me design a CQRS architecture for our order management service."
+    expect_activation: true
+  - id: "pos-2"
+    input: "I need to implement event sourcing to maintain a full audit trail of all state changes."
+    expect_activation: true
+  - id: "pos-3"
+    input: "How do I plan read model projections and support event replay for my event store?"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Scaffold a simple CRUD admin panel with basic create, read, update, delete operations."
+    expect_activation: false
+  - id: "neg-2"
+    input: "What is the weather like in Seattle today?"
+    expect_activation: false

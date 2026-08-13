@@ -1,0 +1,19 @@
+name: "service-bus-migration-routing"
+description: "Routing evaluation — validates trigger activation for the service-bus-migration skill."
+skill: "skills/service-bus-migration/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Map our existing MSMQ queues to Azure Service Bus topics and subscriptions."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Design a hybrid bridge between MSMQ and Service Bus for a zero-downtime cutover."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Implement retry and dead-letter handling as we migrate our binary messages to JSON on Service Bus."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Design a greenfield event streaming platform using Kafka and schema registry."
+    expect_activation: false
+  - id: "neg-2"
+    input: "Help me write a unit test for this authentication function."
+    expect_activation: false

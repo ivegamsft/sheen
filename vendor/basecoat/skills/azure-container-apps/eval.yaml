@@ -1,0 +1,19 @@
+name: "azure-container-apps-routing"
+description: "Routing evaluation — validates trigger activation for the azure-container-apps skill."
+skill: "skills/azure-container-apps/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "How do I deploy my containerized Node.js app to Azure Container Apps?"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Configure a Dapr sidecar for my Azure Container Apps service to enable pub/sub"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Set up scaling rules so my container app scales to zero when there's no traffic"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Add a new node pool to my AKS cluster and configure the node autoscaler"
+    expect_activation: false
+  - id: "neg-2"
+    input: "Write a Python script that parses CSV files"
+    expect_activation: false

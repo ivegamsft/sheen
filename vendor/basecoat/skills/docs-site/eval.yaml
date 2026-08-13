@@ -1,0 +1,19 @@
+name: "docs-site-routing"
+description: "Routing evaluation — validates trigger activation for the docs-site skill."
+skill: "skills/docs-site/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Set up a MkDocs Material documentation site for this repository and publish it to GitHub Pages."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Generate a getting-started guide with architecture diagrams for our SDK."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Add a CI workflow that automatically deploys our docs site on every push to main."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Add an inline comment explaining what this regex does."
+    expect_activation: false
+  - id: "neg-2"
+    input: "Write copy for the hero section of our product marketing landing page."
+    expect_activation: false

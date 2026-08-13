@@ -1,0 +1,19 @@
+name: "app-inventory-routing"
+description: "Routing evaluation — validates trigger activation for the app-inventory skill."
+skill: "skills/app-inventory/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "I need to inventory our legacy application portfolio before we start migrating to Azure"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Scan this app for all its dependencies and connection strings so we can assess migration complexity"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Generate an application inventory report that maps all external service bindings"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Rewrite this legacy Java servlet app in Spring Boot"
+    expect_activation: false
+  - id: "neg-2"
+    input: "How do I configure autoscaling on my AKS cluster?"
+    expect_activation: false
