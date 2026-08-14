@@ -17,6 +17,9 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
   reversibility checks, and ADR-ready output contract).
 - Refined `skills/design-debate/eval.yaml` scenarios to improve routing
   disambiguation against neighboring review and token-edit requests.
+- Replaced scaffold-level placeholder bodies in 37 repo skills with
+  category-specific, BaseCoat-spec workflows, guardrails, and output contracts
+  while preserving each skill's scope and delegate pairings.
 
 ## [0.1.0] — Phase 0 · Scaffold
 

@@ -1,7 +1,7 @@
 ---
 name: motion-elevation
 compatibility: [github-copilot-cli]
-description: " USE FOR: duration and easing tokens, elevation level rules, material/translucency guidance. DO NOT USE FOR: full interaction state specs, usability heuristic reviews."
+description: "Use when this skill is the right fit for the request. USE FOR: duration and easing tokens, elevation level rules, material/translucency guidance. DO NOT USE FOR: full interaction state specs, usability heuristic reviews."
 category: foundation
 metadata:
   category: foundation
@@ -10,23 +10,27 @@ metadata:
   pillar: foundations
 allowed-tools: []
 ---
+
 # motion-elevation
 
 Define motion, elevation, and material behavior primitives.
 
 ## Workflow
-1. Clarify scope, constraints, and expected outcomes for this request.
-2. Apply the skill's core method to produce a concrete, auditable artifact.
-3. Validate consistency with sheen standards (tokens, usability, accessibility, governance as applicable).
-4. Produce prioritized recommendations or deliverables with rationale.
+1. Inventory existing primitives, aliases, and constraints for the target surfaces.
+2. Define normalized foundation rules (naming, scales, and semantic intent).
+3. Produce cross-theme mappings and list deliberate exceptions with rationale.
+4. Validate compatibility with related foundations and downstream components.
+5. Publish migration notes for safe adoption and backwards compatibility.
 
 ## Guardrails
-- Do not exceed this skill's scope boundaries.
-- Do not claim compliance or quality outcomes without concrete evidence.
-- Do not duplicate workflows that belong to neighboring skills.
+- Do not introduce breaking foundation changes without migration guidance.
+- Do not encode one-off product exceptions as global foundation rules.
+- Do not bypass accessibility constraints when shaping primitives.
+- Do not duplicate semantics already covered by adjacent foundation skills.
 
 ## Output
-- A clear artifact bundle for this skill's domain with prioritized findings/actions.
+- Foundation decision brief with naming/scales and constraints.
+- Impact and migration checklist for affected components and themes.
 
 ## Delegates / pairs with
 - theming

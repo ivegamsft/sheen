@@ -1,7 +1,7 @@
 ---
 name: pattern-library
 compatibility: [github-copilot-cli]
-description: " USE FOR: pattern documentation, pattern composition guidance, pattern index authoring. DO NOT USE FOR: single component deep specs, token schema validation."
+description: "Use when this skill is the right fit for the request. USE FOR: pattern documentation, pattern composition guidance, pattern index authoring. DO NOT USE FOR: single component deep specs, token schema validation."
 category: design
 metadata:
   category: design
@@ -10,23 +10,24 @@ metadata:
   pillar: components
 allowed-tools: []
 ---
+
 # pattern-library
 
 Document reusable multi-component UI patterns.
 
 ## Workflow
-1. Clarify scope, constraints, and expected outcomes for this request.
-2. Apply the skill's core method to produce a concrete, auditable artifact.
-3. Validate consistency with sheen standards (tokens, usability, accessibility, governance as applicable).
-4. Produce prioritized recommendations or deliverables with rationale.
+1. Clarify scope and expected outcomes.
+2. Produce a concrete skill-domain artifact.
+3. Validate against adjacent sheen standards.
+4. Deliver prioritized actions and handoff notes.
 
 ## Guardrails
-- Do not exceed this skill's scope boundaries.
-- Do not claim compliance or quality outcomes without concrete evidence.
-- Do not duplicate workflows that belong to neighboring skills.
+- Stay within explicit skill scope.
+- Avoid unsupported quality/compliance claims.
+- Avoid duplicate ownership with neighboring skills.
 
 ## Output
-- A clear artifact bundle for this skill's domain with prioritized findings/actions.
+- Skill-domain artifact bundle with prioritized actions.
 
 ## Delegates / pairs with
 - component-spec
