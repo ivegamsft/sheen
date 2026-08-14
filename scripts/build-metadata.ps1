@@ -96,6 +96,18 @@ Get-ChildItem tokens\themes -Filter '*.tokens.json' -File -ErrorAction SilentlyC
 $coreCount = (Get-ChildItem tokens\core -Filter '*.tokens.json' -File -ErrorAction SilentlyContinue | Measure-Object).Count
 $semanticCount = (Get-ChildItem tokens\semantic -Filter '*.tokens.json' -File -ErrorAction SilentlyContinue | Measure-Object).Count
 $themeCount = $themes.Count
+$promptNames = @(
+    Get-ChildItem prompts -File -Force -ErrorAction SilentlyContinue |
+    Where-Object { $_.Name -ne '.gitkeep' } |
+    Sort-Object Name |
+    ForEach-Object { $_.BaseName }
+)
+$templateNames = @(
+    Get-ChildItem templates -File -Recurse -Force -ErrorAction SilentlyContinue |
+    Where-Object { $_.Name -ne '.gitkeep' } |
+    Sort-Object FullName |
+    ForEach-Object { $_.BaseName }
+)
 
 $obj = [ordered]@{
     '$comment' = 'GENERATED FILE — do not hand-edit. Produced by scripts/build-metadata.ps1 from repo-root assets (vendor/ excluded).'
@@ -110,8 +122,8 @@ $obj = [ordered]@{
         skills = $skillItems.Count
         agents = $agentItems.Count
         instructions = $instructionItems.Count
-        prompts = (Get-ChildItem prompts -File -ErrorAction SilentlyContinue | Measure-Object).Count
-        templates = (Get-ChildItem templates -File -Recurse -ErrorAction SilentlyContinue | Measure-Object).Count
+        prompts = $promptNames.Count
+        templates = $templateNames.Count
         tokens = [ordered]@{
             core = $coreCount
             semantic = $semanticCount
@@ -122,8 +134,8 @@ $obj = [ordered]@{
         skills = @($skillItems | ForEach-Object { $_.name })
         agents = @($agentItems | ForEach-Object { $_.name })
         instructions = @($instructionItems | ForEach-Object { $_.name })
-        prompts = @()
-        templates = @()
+        prompts = $promptNames
+        templates = $templateNames
         themes = @($themes | ForEach-Object { $_.name })
     }
     inventory = [ordered]@{

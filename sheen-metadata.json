@@ -13,8 +13,8 @@
     "skills": 46,
     "agents": 6,
     "instructions": 0,
-    "prompts": 1,
-    "templates": 1,
+    "prompts": 0,
+    "templates": 0,
     "tokens": {
       "core": 7,
       "semantic": 1,
