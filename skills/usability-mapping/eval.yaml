@@ -3,17 +3,17 @@ description: "Routing evaluation — validates trigger activation for usability-
 skill: "skills/usability-mapping/SKILL.md"
 scenarios:
   - id: "pos-1"
-    input: "Help with flow-to-heuristic coverage mapping."
+    input: "Need help with flow-to-heuristic coverage mapping for our product experience."
     expect_activation: true
   - id: "pos-2"
-    input: "Need support for screen inventory audits."
+    input: "Create a plan for screen inventory audits in an upcoming release."
     expect_activation: true
   - id: "pos-3"
-    input: "Guide usability gap mapping for this product."
+    input: "Compare approaches for usability gap mapping and recommend one."
     expect_activation: true
   - id: "neg-1"
-    input: "Please handle full heuristic critique writeups."
+    input: "This request is only about full heuristic critique writeups."
     expect_activation: false
   - id: "neg-2"
-    input: "This request is about token schema edits only."
+    input: "Please focus exclusively on token schema edits."
     expect_activation: false

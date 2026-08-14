@@ -10,6 +10,9 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 ### Added
 - `docs/reference/incident-learnings.md` to capture build and automation
   incident learnings with RCA-oriented evidence and follow-up guardrails.
+- `docs/reference/model-capabilities.json` and
+  `docs/reference/model-capabilities.md` to provide model capability governance
+  and ownership/update process for skill and agent audits.
 
 ### Changed
 - Upgraded `skills/design-debate/SKILL.md` from a generic stub to a concrete,
@@ -20,6 +23,9 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 - Replaced scaffold-level placeholder bodies in 37 repo skills with
   category-specific, BaseCoat-spec workflows, guardrails, and output contracts
   while preserving each skill's scope and delegate pairings.
+- Normalized remaining skill description prefaces to start with `Use when ...`
+  and upgraded 37 generic routing eval files to domain-realistic prompts for
+  stronger activation/disambiguation coverage.
 
 ## [0.1.0] — Phase 0 · Scaffold
 

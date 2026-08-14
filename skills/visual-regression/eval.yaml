@@ -3,17 +3,17 @@ description: "Routing evaluation — validates trigger activation for visual-reg
 skill: "skills/visual-regression/SKILL.md"
 scenarios:
   - id: "pos-1"
-    input: "Help with snapshot baseline setup."
+    input: "Need help with snapshot baseline setup for our product experience."
     expect_activation: true
   - id: "pos-2"
-    input: "Need support for visual diff triage."
+    input: "Create a plan for visual diff triage in an upcoming release."
     expect_activation: true
   - id: "pos-3"
-    input: "Guide design QA drift detection for this product."
+    input: "Compare approaches for design QA drift detection and recommend one."
     expect_activation: true
   - id: "neg-1"
-    input: "Please handle functional test authoring."
+    input: "This request is only about functional test authoring."
     expect_activation: false
   - id: "neg-2"
-    input: "This request is about security threat modeling only."
+    input: "Please focus exclusively on security threat modeling."
     expect_activation: false

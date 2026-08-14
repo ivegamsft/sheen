@@ -3,17 +3,17 @@ description: "Routing evaluation — validates trigger activation for design-sys
 skill: "skills/design-system-audit/SKILL.md"
 scenarios:
   - id: "pos-1"
-    input: "Help with token/component coherence checks."
+    input: "Need help with token/component coherence checks for our product experience."
     expect_activation: true
   - id: "pos-2"
-    input: "Need support for design drift detection."
+    input: "Create a plan for design drift detection in an upcoming release."
     expect_activation: true
   - id: "pos-3"
-    input: "Guide system-level consistency audits for this product."
+    input: "Compare approaches for system-level consistency audits and recommend one."
     expect_activation: true
   - id: "neg-1"
-    input: "Please handle repo-wide UX debt triage."
+    input: "This request is only about repo-wide UX debt triage."
     expect_activation: false
   - id: "neg-2"
-    input: "This request is about new system bootstrap only."
+    input: "Please focus exclusively on new system bootstrap."
     expect_activation: false

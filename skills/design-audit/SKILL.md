@@ -1,7 +1,7 @@
 ---
 name: design-audit
 compatibility: [github-copilot-cli]
-description: "Top-level design assessment for an existing repo or product. USE FOR: repo-wide design audits, prioritizing UX/design debt, generating a remediation backlog from evidence. DO NOT USE FOR: editing only token files in isolation, greenfield system bootstrap from zero."
+description: "Use when this skill is the right fit for the request. Top-level design assessment for an existing repo or product. USE FOR: repo-wide design audits, prioritizing UX/design debt, generating a remediation backlog from evidence. DO NOT USE FOR: editing only token files in isolation, greenfield system bootstrap from zero."
 category: lifecycle
 metadata:
   category: lifecycle

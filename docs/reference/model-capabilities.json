@@ -1,0 +1,21 @@
+{
+  "schema": "basecoat-model-capabilities/v1",
+  "owner": "basecoat-sheen maintainers",
+  "update_cadence": "on model/runtime changes",
+  "models": [
+    {
+      "id": "gpt-5.3-codex",
+      "provider": "github-copilot",
+      "reasoning_effort_configurable": false,
+      "supports_tools": true,
+      "supports_long_context": true
+    },
+    {
+      "id": "gpt-5.4-mini",
+      "provider": "github-copilot",
+      "reasoning_effort_configurable": false,
+      "supports_tools": true,
+      "supports_long_context": true
+    }
+  ]
+}

@@ -3,17 +3,17 @@ description: "Routing evaluation — validates trigger activation for logo-usage
 skill: "skills/logo-usage/SKILL.md"
 scenarios:
   - id: "pos-1"
-    input: "Help with logo variant guidance."
+    input: "Need help with logo variant guidance for our product experience."
     expect_activation: true
   - id: "pos-2"
-    input: "Need support for clear-space rules."
+    input: "Create a plan for clear-space rules in an upcoming release."
     expect_activation: true
   - id: "pos-3"
-    input: "Guide misuse prevention examples for this product."
+    input: "Compare approaches for misuse prevention examples and recommend one."
     expect_activation: true
   - id: "neg-1"
-    input: "Please handle icon system grids."
+    input: "This request is only about icon system grids."
     expect_activation: false
   - id: "neg-2"
-    input: "This request is about usability audits only."
+    input: "Please focus exclusively on usability audits."
     expect_activation: false

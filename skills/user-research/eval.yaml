@@ -3,17 +3,17 @@ description: "Routing evaluation — validates trigger activation for user-resea
 skill: "skills/user-research/SKILL.md"
 scenarios:
   - id: "pos-1"
-    input: "Help with research planning."
+    input: "Need help with research planning for our product experience."
     expect_activation: true
   - id: "pos-2"
-    input: "Need support for interview/persona synthesis."
+    input: "Create a plan for interview/persona synthesis in an upcoming release."
     expect_activation: true
   - id: "pos-3"
-    input: "Guide usability test protocol design for this product."
+    input: "Compare approaches for usability test protocol design and recommend one."
     expect_activation: true
   - id: "neg-1"
-    input: "Please handle heuristic-only reviews."
+    input: "This request is only about heuristic-only reviews."
     expect_activation: false
   - id: "neg-2"
-    input: "This request is about token schema authoring only."
+    input: "Please focus exclusively on token schema authoring."
     expect_activation: false

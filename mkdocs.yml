@@ -48,4 +48,5 @@ nav:
       - Skills Catalog: reference/skills-catalog.md
       - Agent Roster: reference/agent-roster.md
       - Validation Checks: reference/validation-checks.md
+      - Model Capabilities: reference/model-capabilities.md
       - Incident Learnings: reference/incident-learnings.md
