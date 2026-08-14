@@ -3,7 +3,6 @@
   "schema": "sheen-metadata/v1",
   "name": "basecoat-sheen",
   "version": "0.1.0",
-  "generated": null,
   "source": {
     "excluded": [
       "vendor/"

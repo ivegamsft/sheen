@@ -114,7 +114,6 @@ $obj = [ordered]@{
     schema   = 'sheen-metadata/v1'
     name     = 'basecoat-sheen'
     version  = $version
-    generated = $null
     source = [ordered]@{
         excluded = @('vendor/')
     }
