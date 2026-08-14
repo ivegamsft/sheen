@@ -3,17 +3,17 @@ description: "Routing evaluation — validates trigger activation for wireframin
 skill: "skills/wireframing/SKILL.md"
 scenarios:
   - id: "pos-1"
-    input: "Help with screen wireframe drafting."
+    input: "Need help with screen wireframe drafting for our product experience."
     expect_activation: true
   - id: "pos-2"
-    input: "Need support for layout hierarchy planning."
+    input: "Create a plan for layout hierarchy planning in an upcoming release."
     expect_activation: true
   - id: "pos-3"
-    input: "Guide flow skeleton definition for this product."
+    input: "Compare approaches for flow skeleton definition and recommend one."
     expect_activation: true
   - id: "neg-1"
-    input: "Please handle final visual polish."
+    input: "This request is only about final visual polish."
     expect_activation: false
   - id: "neg-2"
-    input: "This request is about token refactoring only."
+    input: "Please focus exclusively on token refactoring."
     expect_activation: false

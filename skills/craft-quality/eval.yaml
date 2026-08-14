@@ -3,17 +3,17 @@ description: "Routing evaluation — validates trigger activation for craft-qual
 skill: "skills/craft-quality/SKILL.md"
 scenarios:
   - id: "pos-1"
-    input: "Help with craft checklist passes."
+    input: "Need help with craft checklist passes for our product experience."
     expect_activation: true
   - id: "pos-2"
-    input: "Need support for polish quality assessments."
+    input: "Create a plan for polish quality assessments in an upcoming release."
     expect_activation: true
   - id: "pos-3"
-    input: "Guide consistency refinements for this product."
+    input: "Compare approaches for consistency refinements and recommend one."
     expect_activation: true
   - id: "neg-1"
-    input: "Please handle formal usability audits."
+    input: "This request is only about formal usability audits."
     expect_activation: false
   - id: "neg-2"
-    input: "This request is about framework detection scans only."
+    input: "Please focus exclusively on framework detection scans."
     expect_activation: false

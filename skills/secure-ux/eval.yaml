@@ -3,17 +3,17 @@ description: "Routing evaluation — validates trigger activation for secure-ux.
 skill: "skills/secure-ux/SKILL.md"
 scenarios:
   - id: "pos-1"
-    input: "Help with safe error-state design."
+    input: "Need help with safe error-state design for our product experience."
     expect_activation: true
   - id: "pos-2"
-    input: "Need support for auth/consent ux hardening."
+    input: "Create a plan for auth/consent ux hardening in an upcoming release."
     expect_activation: true
   - id: "pos-3"
-    input: "Guide input-feedback privacy safety for this product."
+    input: "Compare approaches for input-feedback privacy safety and recommend one."
     expect_activation: true
   - id: "neg-1"
-    input: "Please handle backend threat modeling."
+    input: "This request is only about backend threat modeling."
     expect_activation: false
   - id: "neg-2"
-    input: "This request is about penetration testing only."
+    input: "Please focus exclusively on penetration testing."
     expect_activation: false

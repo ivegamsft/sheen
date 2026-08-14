@@ -95,8 +95,8 @@
         "category": "a11y",
         "pillar": "a11y",
         "maturity": "stable",
-        "description": "WCAG 2.2 AA accessibility conformance audit for UI surfaces. USE FOR: a11y issue discovery and triage, remediation planning, conformance statement drafting. DO NOT USE FOR: only checking color-pair contrast, non-accessibility style preference reviews.",
-        "hash": "c9b1c0a91f50d499bd20ca930fb53019a8bad0f36cc59f0bec0f63850309e0df"
+        "description": "Use when this skill is the right fit for the request. WCAG 2.2 AA accessibility conformance audit for UI surfaces. USE FOR: a11y issue discovery and triage, remediation planning, conformance statement drafting. DO NOT USE FOR: only checking color-pair contrast, non-accessibility style preference reviews.",
+        "hash": "d0f9263a3a2cb8ceb74fb39187795f6a9ce919c8f71192299f2b006ab81e9b26"
       },
       {
         "name": "brand-identity",
@@ -135,8 +135,8 @@
         "category": "foundation",
         "pillar": "foundations",
         "maturity": "stable",
-        "description": "Build accessible palette ramps and semantic color roles. USE FOR: generating color ramps, mapping brand hues to semantic roles, validating cross-theme contrast readiness. DO NOT USE FOR: isolated per-pair contrast reporting only, non-color token authoring.",
-        "hash": "b65a1aa975fe83106cf419276e743bc32ed33210723da53412956f800b89d5b1"
+        "description": "Use when this skill is the right fit for the request. Build accessible palette ramps and semantic color roles. USE FOR: generating color ramps, mapping brand hues to semantic roles, validating cross-theme contrast readiness. DO NOT USE FOR: isolated per-pair contrast reporting only, non-color token authoring.",
+        "hash": "a4c6073f6dfff82e8b14fcc0617ff97bdf769e5efec43762ce4fefb0200cc585"
       },
       {
         "name": "component-spec",
@@ -145,8 +145,8 @@
         "category": "design",
         "pillar": "components",
         "maturity": "stable",
-        "description": "Author complete component specifications with anatomy, variants, states, and accessibility behavior. USE FOR: defining component contracts, documenting ARIA/keyboard behavior, producing implementation-ready redlines. DO NOT USE FOR: whole-system design audits, broad UX strategy documents.",
-        "hash": "299d679a6c41b7b0815be686516b5fb080c924150824b4b7f7f16c83643ef893"
+        "description": "Use when this skill is the right fit for the request. Author complete component specifications with anatomy, variants, states, and accessibility behavior. USE FOR: defining component contracts, documenting ARIA/keyboard behavior, producing implementation-ready redlines. DO NOT USE FOR: whole-system design audits, broad UX strategy documents.",
+        "hash": "1df7cd47adb0edaf0fb68fa60b33c2b53909d6fad5f8cb20ace4910364c5a210"
       },
       {
         "name": "content-hierarchy",
@@ -175,8 +175,8 @@
         "category": "governance",
         "pillar": "governance",
         "maturity": "stable",
-        "description": "Scaffold a new sheen skill that conforms to the skill contract. USE FOR: creating new skill folders and frontmatter, authoring routing eval scenarios, updating catalog entries safely. DO NOT USE FOR: writing instruction-layer files, implementing product feature code.",
-        "hash": "7efd46fb03ebbf7dd94647497624ecba7519d4d1be5797bd52d142620ffb63e3"
+        "description": "Use when this skill is the right fit for the request. Scaffold a new sheen skill that conforms to the skill contract. USE FOR: creating new skill folders and frontmatter, authoring routing eval scenarios, updating catalog entries safely. DO NOT USE FOR: writing instruction-layer files, implementing product feature code.",
+        "hash": "e292d99892caef0f56a88f27977013cca9a2ffaf7db4dd633b92f5ac15b69bf2"
       },
       {
         "name": "css-mapping",
@@ -195,8 +195,8 @@
         "category": "lifecycle",
         "pillar": "lifecycle",
         "maturity": "stable",
-        "description": "Top-level design assessment for an existing repo or product. USE FOR: repo-wide design audits, prioritizing UX/design debt, generating a remediation backlog from evidence. DO NOT USE FOR: editing only token files in isolation, greenfield system bootstrap from zero.",
-        "hash": "b24f5aa7b319c4540c62a63a1a73e3172af2e5e17b2cefa33d49133fa2014bcf"
+        "description": "Use when this skill is the right fit for the request. Top-level design assessment for an existing repo or product. USE FOR: repo-wide design audits, prioritizing UX/design debt, generating a remediation backlog from evidence. DO NOT USE FOR: editing only token files in isolation, greenfield system bootstrap from zero.",
+        "hash": "e4276b3d0b4cef3cd9844e95cbb55696e2d1e2505c62399c6e0e95c607686a12"
       },
       {
         "name": "design-bootstrap",
@@ -205,8 +205,8 @@
         "category": "lifecycle",
         "pillar": "lifecycle",
         "maturity": "stable",
-        "description": "Greenfield design-system bootstrap entry point. USE FOR: starting a design system from scratch, seeding initial tokens and themes, defining first-pass IA/component foundations. DO NOT USE FOR: auditing an established system, isolated one-off component tweaks.",
-        "hash": "618786d7fbf567a28af2173011fac1925fedd05e86a4fcc1b55cb27546090b10"
+        "description": "Use when this skill is the right fit for the request. Greenfield design-system bootstrap entry point. USE FOR: starting a design system from scratch, seeding initial tokens and themes, defining first-pass IA/component foundations. DO NOT USE FOR: auditing an established system, isolated one-off component tweaks.",
+        "hash": "9696e9e64484bd125594337fa088e7678579f0c17bc23290fa40d3ca9de18783"
       },
       {
         "name": "design-debate",
@@ -275,8 +275,8 @@
         "category": "foundation",
         "pillar": "foundations",
         "maturity": "stable",
-        "description": "Author and evolve DTCG token source-of-truth. USE FOR: creating or editing core/semantic tokens, adding token aliases safely, maintaining token schema integrity. DO NOT USE FOR: choosing brand palette strategy alone, running full-repo UX audits.",
-        "hash": "420b69188325ca67e7f4181a5319a3f3ba7470b152b5a12817242c196124224e"
+        "description": "Use when this skill is the right fit for the request. Author and evolve DTCG token source-of-truth. USE FOR: creating or editing core/semantic tokens, adding token aliases safely, maintaining token schema integrity. DO NOT USE FOR: choosing brand palette strategy alone, running full-repo UX audits.",
+        "hash": "647225f5fd8ccde94f351d9e6077f20472850e800b9121cfa77c415e81e30dff"
       },
       {
         "name": "design-update",
@@ -535,8 +535,8 @@
         "category": "usability",
         "pillar": "usability",
         "maturity": "stable",
-        "description": "Heuristic usability evaluation grounded in NN/g and ISO 9241 principles. USE FOR: reviewing flow usability, scoring heuristic violations, generating prioritized usability recommendations. DO NOT USE FOR: standards-based accessibility conformance audits, creating new token primitives.",
-        "hash": "ad4fd94559c64d4b32cd17e26b5533ffdc65ae146e7ef7b132f99eb15434842d"
+        "description": "Use when this skill is the right fit for the request. Heuristic usability evaluation grounded in NN/g and ISO 9241 principles. USE FOR: reviewing flow usability, scoring heuristic violations, generating prioritized usability recommendations. DO NOT USE FOR: standards-based accessibility conformance audits, creating new token primitives.",
+        "hash": "a7b587f173212aee15d64a36908a47ccbe543018111b5fe5d893c8705b590584"
       },
       {
         "name": "wireframing",

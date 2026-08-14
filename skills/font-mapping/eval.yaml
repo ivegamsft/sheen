@@ -3,17 +3,17 @@ description: "Routing evaluation — validates trigger activation for font-mappi
 skill: "skills/font-mapping/SKILL.md"
 scenarios:
   - id: "pos-1"
-    input: "Help with font usage inventory."
+    input: "Need help with font usage inventory for our product experience."
     expect_activation: true
   - id: "pos-2"
-    input: "Need support for weight/style mapping."
+    input: "Create a plan for weight/style mapping in an upcoming release."
     expect_activation: true
   - id: "pos-3"
-    input: "Guide type token candidate mapping for this product."
+    input: "Compare approaches for type token candidate mapping and recommend one."
     expect_activation: true
   - id: "neg-1"
-    input: "Please handle new typography scale creation."
+    input: "This request is only about new typography scale creation."
     expect_activation: false
   - id: "neg-2"
-    input: "This request is about a11y conformance statements only."
+    input: "Please focus exclusively on a11y conformance statements."
     expect_activation: false

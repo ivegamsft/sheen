@@ -3,17 +3,17 @@ description: "Routing evaluation — validates trigger activation for responsive
 skill: "skills/responsive-design/SKILL.md"
 scenarios:
   - id: "pos-1"
-    input: "Help with breakpoint behavior definition."
+    input: "Need help with breakpoint behavior definition for our product experience."
     expect_activation: true
   - id: "pos-2"
-    input: "Need support for responsive reflow planning."
+    input: "Create a plan for responsive reflow planning in an upcoming release."
     expect_activation: true
   - id: "pos-3"
-    input: "Guide adaptive layout guidance for this product."
+    input: "Compare approaches for adaptive layout guidance and recommend one."
     expect_activation: true
   - id: "neg-1"
-    input: "Please handle spacing-scale authoring."
+    input: "This request is only about spacing-scale authoring."
     expect_activation: false
   - id: "neg-2"
-    input: "This request is about brand tone guidance only."
+    input: "Please focus exclusively on brand tone guidance."
     expect_activation: false
