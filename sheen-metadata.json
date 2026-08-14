@@ -215,8 +215,8 @@
         "category": "lifecycle",
         "pillar": "lifecycle",
         "maturity": "beta",
-        "description": " USE FOR: option tradeoff analysis, design decision records, criteria-based comparisons. DO NOT USE FOR: single artifact polish reviews, token-only edits.",
-        "hash": "88005d426d572fb20ee6a0fe262168168bdb9291642ef87d94bb325cbdfc2f1c"
+        "description": "Use when you need to choose between competing design approaches with explicit criteria and documented tradeoffs. USE FOR: option tradeoff analysis, design decision records (ADRs), criteria-based comparisons with evidence. DO NOT USE FOR: single artifact polish reviews, token-only mechanical edits.",
+        "hash": "85bb3b5b05b77b7f6821bd6528b28dc7d08d3749665b2d7a51209390ee1111be"
       },
       {
         "name": "design-exploration",

@@ -7,6 +7,17 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+### Added
+- `docs/reference/incident-learnings.md` to capture build and automation
+  incident learnings with RCA-oriented evidence and follow-up guardrails.
+
+### Changed
+- Upgraded `skills/design-debate/SKILL.md` from a generic stub to a concrete,
+  auditable decision workflow (weighted criteria, option matrix, risk and
+  reversibility checks, and ADR-ready output contract).
+- Refined `skills/design-debate/eval.yaml` scenarios to improve routing
+  disambiguation against neighboring review and token-edit requests.
+
 ## [0.1.0] — Phase 0 · Scaffold
 
 ### Added
