@@ -79,6 +79,26 @@ requires **0 human approvals**, so a maintainer may merge their own PR, but only
 **after all enterprise checks pass**. See `branch_protection.enterprise_governance`
 in the profile JSON.
 
+## Repo security posture (matches basecoat)
+
+GHAS repo-security features are enabled to **match `IBuySpy-Shared/basecoat`**.
+These harden the shared enterprise instance and are **independent of the
+`solo-dev` authoring ceremony — the profile stays `solo-dev`.**
+
+| Feature | State |
+|---|---|
+| Code security (CodeQL) | ✅ enabled (default setup `configured`) |
+| Dependabot security updates | ✅ enabled |
+| Secret scanning | ✅ enabled |
+| Secret scanning — push protection | ✅ enabled |
+| Secret scanning — non-provider patterns | ✅ enabled |
+| Secret scanning — validity checks | ✅ enabled |
+| Secret scanning — AI detection | ✅ enabled |
+| Secret scanning — delegated alert dismissal | ✅ enabled |
+| Secret scanning — delegated bypass | ❌ disabled (matches basecoat) |
+
+CodeQL default setup also satisfies the enterprise code-scanning ruleset on `main`.
+
 ## Upgrading to `team-dev`
 
 The solo pack is only the local ceremony; enterprise governance already provides
