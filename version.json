@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "releaseDate": "2026-08-14",
-  "notes": "Wave release: governance docs, incident learnings, design-debate workflow, skill hardening, and validation coverage for the published sheen asset set."
+  "notes": "Instruction layer (bands 10-90) and shared templates: design-principles, accessibility, tokens-naming, components-states, web-usability, brand-voice, ia-navigation, taxonomy-ontology, content-multilingual, standards-conformance instructions plus style-guide, component-spec, brand-guidelines, and design-review templates."
 }

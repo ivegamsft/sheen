@@ -2,7 +2,7 @@
   "$comment": "GENERATED FILE — do not hand-edit. Produced by scripts/build-metadata.ps1 from repo-root assets (vendor/ excluded).",
   "schema": "sheen-metadata/v1",
   "name": "basecoat-sheen",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "source": {
     "excluded": [
       "vendor/"
@@ -11,9 +11,9 @@
   "counts": {
     "skills": 46,
     "agents": 6,
-    "instructions": 0,
+    "instructions": 10,
     "prompts": 0,
-    "templates": 0,
+    "templates": 8,
     "tokens": {
       "core": 7,
       "semantic": 1,
@@ -77,9 +77,29 @@
       "information-architect",
       "ux-designer"
     ],
-    "instructions": [],
+    "instructions": [
+      "sheen-10-core-accessibility",
+      "sheen-10-core-design-principles",
+      "sheen-20-tokens-naming",
+      "sheen-30-components-states",
+      "sheen-40-web-usability",
+      "sheen-50-brand-voice",
+      "sheen-60-ia-navigation",
+      "sheen-70-taxonomy-ontology",
+      "sheen-80-content-multilingual",
+      "sheen-90-standards-conformance"
+    ],
     "prompts": [],
-    "templates": [],
+    "templates": [
+      "brand-guidelines",
+      "README",
+      "component-spec",
+      "README",
+      "design-review",
+      "README",
+      "README",
+      "style-guide"
+    ],
     "themes": [
       "dark",
       "high-contrast",
@@ -599,7 +619,88 @@
         "hash": "a1503c12ab2f6aec3d5c7512071edc186a471b4d0a4f1903c19bb2de8f0ddb7b"
       }
     ],
-    "instructions": [],
+    "instructions": [
+      {
+        "name": "sheen-10-core-accessibility",
+        "path": "instructions/sheen-10-core-accessibility.instructions.md",
+        "band": "10",
+        "layer": "core",
+        "description": "Always-on accessibility baseline: WCAG 2.2 AA and WAI-ARIA rules for every design asset.",
+        "hash": "46b77119abd846a5dabd0b1c0f80579c3f5b720d2944d46933d1da6441c1ee9b"
+      },
+      {
+        "name": "sheen-10-core-design-principles",
+        "path": "instructions/sheen-10-core-design-principles.instructions.md",
+        "band": "10",
+        "layer": "core",
+        "description": "Always-on design values and craft principles for every sheen asset and review.",
+        "hash": "29111e902674e3fe49026bf8152870e06c1da8b7a8dafac8dc90a1256b007e84"
+      },
+      {
+        "name": "sheen-20-tokens-naming",
+        "path": "instructions/sheen-20-tokens-naming.instructions.md",
+        "band": "20",
+        "layer": "tokens",
+        "description": "Always-on naming and structure rules for DTCG design tokens in the sheen token system.",
+        "hash": "4e6e61f252d69cee4bd56ca45a55b687cf50261793af54d774741b0008e71613"
+      },
+      {
+        "name": "sheen-30-components-states",
+        "path": "instructions/sheen-30-components-states.instructions.md",
+        "band": "30",
+        "layer": "components",
+        "description": "Always-on rules for component anatomy, interaction states, ARIA mapping, and keyboard model.",
+        "hash": "3a64227e1e2fd12c43cbfab1c27054e9d4341cd36c38698dbd754310d91a07e2"
+      },
+      {
+        "name": "sheen-40-web-usability",
+        "path": "instructions/sheen-40-web-usability.instructions.md",
+        "band": "40",
+        "layer": "web-usability",
+        "description": "Always-on web usability rules grounded in the NN/g ten heuristics and ISO 9241 dialogue principles.",
+        "hash": "e24927f34a799c61dd1757d6ef383e6f9212abecb3d4fae3ea02e8584dd1f13c"
+      },
+      {
+        "name": "sheen-50-brand-voice",
+        "path": "instructions/sheen-50-brand-voice.instructions.md",
+        "band": "50",
+        "layer": "brand",
+        "description": "Always-on brand identity constraints: voice, logo, color, typography, and imagery.",
+        "hash": "0c7717d0d9941484684e2b16e449a74e64f0cbb039daa140954b6d04432cc316"
+      },
+      {
+        "name": "sheen-60-ia-navigation",
+        "path": "instructions/sheen-60-ia-navigation.instructions.md",
+        "band": "60",
+        "layer": "information-architecture",
+        "description": "Always-on information architecture and navigation pattern rules.",
+        "hash": "bb299cea616cc81ae4ba0f30d1078113e163e20d3ba4074e6106d3a84db293ca"
+      },
+      {
+        "name": "sheen-70-taxonomy-ontology",
+        "path": "instructions/sheen-70-taxonomy-ontology.instructions.md",
+        "band": "70",
+        "layer": "taxonomy-ontology",
+        "description": "Always-on controlled vocabulary, relationship, and taxonomy rules for design system assets.",
+        "hash": "8b657d1fcd46b40dbb126254e698bb274863885c8018a7cac36a657a7cebb912"
+      },
+      {
+        "name": "sheen-80-content-multilingual",
+        "path": "instructions/sheen-80-content-multilingual.instructions.md",
+        "band": "80",
+        "layer": "content",
+        "description": "Always-on microcopy, plain language, i18n/l10n, and content design rules.",
+        "hash": "ef8ef92429da9f088102b554c25960f2421f11f00423d017166f2b0e7f61dcc5"
+      },
+      {
+        "name": "sheen-90-standards-conformance",
+        "path": "instructions/sheen-90-standards-conformance.instructions.md",
+        "band": "90",
+        "layer": "standards",
+        "description": "Always-on cross-cutting conformance gates: WCAG, WAI-ARIA, ISO 9241, DTCG, BCP 47, OWASP.",
+        "hash": "0221f77362919494a12319817e29c24f05335e6cf219cde7cda355acd8ca5697"
+      }
+    ],
     "themes": [
       {
         "name": "dark",
