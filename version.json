@@ -1,6 +1,7 @@
 {
   "name": "basecoat-sheen",
   "version": "0.3.0",
+  "version": "0.4.0",
   "releaseDate": "2026-08-14",
-  "notes": "Instruction layer (bands 10-90) and shared templates: design-principles, accessibility, tokens-naming, components-states, web-usability, brand-voice, ia-navigation, taxonomy-ontology, content-multilingual, standards-conformance instructions plus style-guide, component-spec, brand-guidelines, and design-review templates."
+  "notes": "Semantic typography role tokens (DTCG composite), MIT LICENSE, SPEC decision closure, and validator composite-type support."
 }

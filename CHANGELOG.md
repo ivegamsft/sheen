@@ -7,6 +7,27 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.4.0] — 2026-08-14
+
+### Added
+- `tokens/semantic/type.tokens.json` — 10 DTCG composite typography role tokens
+  (`display`, `heading-1`, `heading-2`, `heading-3`, `body`, `body-sm`, `label`,
+  `caption`, `code`, `code-sm`). Each is a `$type: "typography"` composite
+  referencing core `type.*` primitives via aliases. Resolves template references
+  to `typography.body`, `typography.heading-1`, etc.
+- `LICENSE` (MIT) — closes SPEC §13 D5.
+
+### Changed
+- `scripts/validate-tokens.ps1` — extend `$AllowedTypes` to include `'typography'`,
+  `'elevation'`, and `'material'` composite types per DTCG §9 / spec 01 §2.
+- `tokens/themes/{light,dark,high-contrast}.tokens.json` — add `type.*` entries
+  for theme-layer completeness; values are identical across themes (typography
+  does not vary by colour scheme).
+- `SPEC.md §13` — close all remaining open/proposed decisions: D2 (full breadth),
+  D3 (standalone sibling), D4 (DTCG JSON), D5 (MIT), D6 (mkdocs-material),
+  D7 (WCAG 2.2 AA + ISO 9241/25010 + OWASP UX).
+- `checks.json` — version bump 0.1.0 → 0.2.0.
+
 ## [0.3.0] — 2026-08-14
 
 ### Added
@@ -70,7 +91,8 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 - The upstream `basecoat` framework remains vendored read-only under
   `vendor/basecoat/` and is not modified by sheen.
 
-[Unreleased]: https://github.com/IBuySpy-Shared/basecoat-sheen/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/IBuySpy-Shared/basecoat-sheen/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.4.0
 [0.3.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.3.0
 [0.2.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.2.0
 [0.1.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.1.0
