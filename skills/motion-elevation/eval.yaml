@@ -1,0 +1,19 @@
+name: "motion-elevation-routing"
+description: "Routing evaluation — validates trigger activation for motion-elevation."
+skill: "skills/motion-elevation/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Help with duration and easing tokens."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Need support for elevation level rules."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Guide material/translucency guidance for this product."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Please handle full interaction state specs."
+    expect_activation: false
+  - id: "neg-2"
+    input: "This request is about usability heuristic reviews only."
+    expect_activation: false

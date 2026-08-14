@@ -1,0 +1,19 @@
+name: "design-handoff-routing"
+description: "Routing evaluation — validates trigger activation for design-handoff."
+skill: "skills/design-handoff/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Help with engineering handoff packaging."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Need support for redline and annotation bundling."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Guide token/spec export preparation for this product."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Please handle authoring core component specs."
+    expect_activation: false
+  - id: "neg-2"
+    input: "This request is about backend implementation only."
+    expect_activation: false

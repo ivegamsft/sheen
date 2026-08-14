@@ -1,0 +1,19 @@
+name: "style-guide-authoring-routing"
+description: "Routing evaluation — validates trigger activation for style-guide-authoring."
+skill: "skills/style-guide-authoring/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Help with style-guide compilation."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Need support for pattern library publication."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Guide guideline consolidation for this product."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Please handle single-component-only specs."
+    expect_activation: false
+  - id: "neg-2"
+    input: "This request is about token validation scripts only."
+    expect_activation: false

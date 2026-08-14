@@ -1,0 +1,19 @@
+name: "information-architecture-routing"
+description: "Routing evaluation — validates trigger activation for information-architecture."
+skill: "skills/information-architecture/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Help with site map structuring."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Need support for content model definition."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Guide navigation architecture planning for this product."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Please handle pixel-level component specs."
+    expect_activation: false
+  - id: "neg-2"
+    input: "This request is about palette generation only."
+    expect_activation: false

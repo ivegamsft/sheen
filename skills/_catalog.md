@@ -1,24 +1,72 @@
 # Sheen Skill Catalog
 
-Phase 2 delivers the initial core skill set from SPEC §11.
-
-## Lifecycle
-- `skills/design-audit/`
-- `skills/design-bootstrap/`
+Complete catalog as of Phase 3 (SPEC s11).
 
 ## Foundations
-- `skills/design-tokens/`
-- `skills/color-system/`
+- skills/color-system/
+- skills/design-tokens/
+- skills/iconography/
+- skills/layout-grid-spacing/
+- skills/motion-elevation/
+- skills/theming/
+- skills/typography/
 
-## Components
-- `skills/component-spec/`
+## Brand
+- skills/brand-identity/
+- skills/brand-voice-tone/
+- skills/imagery-illustration/
+- skills/logo-usage/
+
+## Information architecture
+- skills/information-architecture/
+- skills/navigation-design/
+- skills/ontology/
+- skills/taxonomy/
+- skills/wireframing/
+
+## Components / UI
+- skills/component-spec/
+- skills/design-system-audit/
+- skills/pattern-library/
+- skills/ui-states-interaction/
+
+## Web design & usability
+- skills/content-hierarchy/
+- skills/landing-page-design/
+- skills/responsive-design/
+- skills/web-usability-review/
+
+## Content & localization
+- skills/multilingual/
+- skills/ux-writing/
 
 ## Accessibility
-- `skills/accessibility-audit/`
+- skills/accessibility-audit/
+- skills/color-contrast-check/
 
-## Usability
-- `skills/web-usability-review/`
+## Security & privacy UX
+- skills/secure-ux/
 
-## Governance / Meta
-- `skills/create-design-skill/`
+## Mapping / discovery
+- skills/css-mapping/
+- skills/font-mapping/
+- skills/i18n-framework-mapping/
+- skills/usability-mapping/
+
+## Lifecycle / operations
+- skills/design-audit/
+- skills/design-bootstrap/
+- skills/design-debate/
+- skills/design-exploration/
+- skills/design-handoff/
+- skills/design-suggest/
+- skills/design-update/
+
+## Governance / meta
+- skills/craft-quality/
+- skills/create-design-skill/
+- skills/design-review/
+- skills/style-guide-authoring/
+- skills/user-research/
+- skills/visual-regression/
 

@@ -1,0 +1,19 @@
+name: "ui-states-interaction-routing"
+description: "Routing evaluation — validates trigger activation for ui-states-interaction."
+skill: "skills/ui-states-interaction/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Help with interaction state modeling."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Need support for transition behavior definition."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Guide empty/error/loading state guidance for this product."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Please handle component anatomy-only specs."
+    expect_activation: false
+  - id: "neg-2"
+    input: "This request is about enterprise security pen-tests only."
+    expect_activation: false

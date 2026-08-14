@@ -1,0 +1,19 @@
+name: "brand-identity-routing"
+description: "Routing evaluation — validates trigger activation for brand-identity."
+skill: "skills/brand-identity/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Help with brand principles definition."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Need support for visual identity codification."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Guide brand consistency guidance for this product."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Please handle microcopy editing."
+    expect_activation: false
+  - id: "neg-2"
+    input: "This request is about component redline specs only."
+    expect_activation: false

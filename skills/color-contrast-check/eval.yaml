@@ -1,0 +1,19 @@
+name: "color-contrast-check-routing"
+description: "Routing evaluation — validates trigger activation for color-contrast-check."
+skill: "skills/color-contrast-check/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Help with contrast ratio checks."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Need support for theme pair validation."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Guide wcag contrast triage for this product."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Please handle full accessibility audits."
+    expect_activation: false
+  - id: "neg-2"
+    input: "This request is about navigation IA design only."
+    expect_activation: false

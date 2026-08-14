@@ -1,0 +1,19 @@
+name: "design-review-routing"
+description: "Routing evaluation — validates trigger activation for design-review."
+skill: "skills/design-review/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Help with artifact critique."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Need support for principle-based review."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Guide craft issue identification for this product."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Please handle multi-option debate facilitation."
+    expect_activation: false
+  - id: "neg-2"
+    input: "This request is about full repo audits only."
+    expect_activation: false
