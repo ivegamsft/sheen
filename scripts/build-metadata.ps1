@@ -134,16 +134,18 @@ $obj = [ordered]@{
     }
 }
 
-$newJson = $obj | ConvertTo-Json -Depth 10
+$newJson = ($obj | ConvertTo-Json -Depth 10)
+function Normalize-JsonText([string]$text) {
+    return ($text -replace "`r`n", "`n").TrimEnd()
+}
 
 if ($Check) {
     if (-not (Test-Path $outPath)) {
         Write-Host "::error::sheen-metadata.json missing"
         exit 1
     }
-    $oldObj = Get-Content $outPath -Raw | ConvertFrom-Json
-    $oldJson = $oldObj | ConvertTo-Json -Depth 10
-    if ($oldJson -ne $newJson) {
+    $oldJson = Get-Content $outPath -Raw
+    if ((Normalize-JsonText $oldJson) -ne (Normalize-JsonText $newJson)) {
         Write-Host "::error::sheen-metadata.json is out of date. Run scripts/build-metadata.ps1"
         exit 1
     }
