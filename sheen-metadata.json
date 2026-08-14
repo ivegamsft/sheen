@@ -16,7 +16,7 @@
     "templates": 8,
     "tokens": {
       "core": 7,
-      "semantic": 1,
+      "semantic": 2,
       "themes": 3
     }
   },
@@ -705,17 +705,17 @@
       {
         "name": "dark",
         "path": "tokens/themes/dark.tokens.json",
-        "hash": "5c8b62b3293b22c7eac83cd35363f971e08799d256f51e6d9c41492a4f1477c0"
+        "hash": "e9c4e043b6f6f1b4075b2df6b2eff918286f609274e0e69c29ecafec51cd2f55"
       },
       {
         "name": "high-contrast",
         "path": "tokens/themes/high-contrast.tokens.json",
-        "hash": "6c6892e1077e871f449e408f03e812fa7c2b7ffe1ef75805b0159964ac49ab8b"
+        "hash": "cc96a6fc10ba342035fa7da77b092e9cf9af054f7336d90fe6e73b1ea15de7f3"
       },
       {
         "name": "light",
         "path": "tokens/themes/light.tokens.json",
-        "hash": "75967c2e4bebdb1211e31efe0f5ee15680c268433e78f55baa1e62203b9ffa94"
+        "hash": "e2efe3b21b76dfd5fc676872a35eae3c8b1e9d8b06f0d5fe7ddf1e0ee8a35f9c"
       }
     ]
   }

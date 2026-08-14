@@ -1,0 +1,115 @@
+{
+  "$description": "Semantic typography tokens -- alias/role tokens mapping named text roles to core type primitives. Reference tokens/core/type.tokens.json only. Keys MUST stay stable (spec 01 s3.2). Themes may override $value but MUST NOT introduce new keys.",
+  "type": {
+    "display": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{type.font-family.sans}",
+        "fontWeight": "{type.font-weight.semibold}",
+        "fontSize": "{type.font-size.5xl}",
+        "lineHeight": "{type.line-height.tight}",
+        "letterSpacing": "{type.letter-spacing.tight}"
+      },
+      "$description": "Display / hero text. Large, attention-grabbing. Use sparingly."
+    },
+    "heading-1": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{type.font-family.sans}",
+        "fontWeight": "{type.font-weight.semibold}",
+        "fontSize": "{type.font-size.4xl}",
+        "lineHeight": "{type.line-height.tight}",
+        "letterSpacing": "{type.letter-spacing.tight}"
+      },
+      "$description": "Primary page heading (H1). One per page/view."
+    },
+    "heading-2": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{type.font-family.sans}",
+        "fontWeight": "{type.font-weight.semibold}",
+        "fontSize": "{type.font-size.3xl}",
+        "lineHeight": "{type.line-height.snug}",
+        "letterSpacing": "{type.letter-spacing.tight}"
+      },
+      "$description": "Section heading (H2)."
+    },
+    "heading-3": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{type.font-family.sans}",
+        "fontWeight": "{type.font-weight.semibold}",
+        "fontSize": "{type.font-size.2xl}",
+        "lineHeight": "{type.line-height.snug}",
+        "letterSpacing": "{type.letter-spacing.normal}"
+      },
+      "$description": "Subsection heading (H3)."
+    },
+    "body": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{type.font-family.sans}",
+        "fontWeight": "{type.font-weight.regular}",
+        "fontSize": "{type.font-size.lg}",
+        "lineHeight": "{type.line-height.normal}",
+        "letterSpacing": "{type.letter-spacing.normal}"
+      },
+      "$description": "Default body text. 16px baseline satisfies accessibility minimum."
+    },
+    "body-sm": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{type.font-family.sans}",
+        "fontWeight": "{type.font-weight.regular}",
+        "fontSize": "{type.font-size.md}",
+        "lineHeight": "{type.line-height.normal}",
+        "letterSpacing": "{type.letter-spacing.normal}"
+      },
+      "$description": "Small body text. 14px. Use sparingly; prefer body at 16px."
+    },
+    "label": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{type.font-family.sans}",
+        "fontWeight": "{type.font-weight.medium}",
+        "fontSize": "{type.font-size.md}",
+        "lineHeight": "{type.line-height.snug}",
+        "letterSpacing": "{type.letter-spacing.normal}"
+      },
+      "$description": "Form labels, button text, navigation items. Medium weight for legibility."
+    },
+    "caption": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{type.font-family.sans}",
+        "fontWeight": "{type.font-weight.regular}",
+        "fontSize": "{type.font-size.sm}",
+        "lineHeight": "{type.line-height.normal}",
+        "letterSpacing": "{type.letter-spacing.normal}"
+      },
+      "$description": "Captions, helper text, fine print. 12px minimum; do not go below this."
+    },
+    "code": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{type.font-family.mono}",
+        "fontWeight": "{type.font-weight.regular}",
+        "fontSize": "{type.font-size.md}",
+        "lineHeight": "{type.line-height.relaxed}",
+        "letterSpacing": "{type.letter-spacing.normal}"
+      },
+      "$description": "Inline and block code. Monospace family; relaxed line-height for readability."
+    },
+    "code-sm": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{type.font-family.mono}",
+        "fontWeight": "{type.font-weight.regular}",
+        "fontSize": "{type.font-size.sm}",
+        "lineHeight": "{type.line-height.relaxed}",
+        "letterSpacing": "{type.letter-spacing.normal}"
+      },
+      "$description": "Small inline code. Use inside captions or dense tables."
+    }
+  }
+}
