@@ -9,10 +9,9 @@ foundation that basecoat provides: basecoat governs the *engineering* surface,
 sheen governs the *design* surface, and the two namespaces (`basecoat-*` /
 `sheen-*`) never collide, so a consumer can adopt both together.
 
-> **Status:** Scaffold (Phase 0). The contract is specified in [`SPEC.md`](SPEC.md)
-> and [`specs/`](specs/); assets land phase-by-phase (see
-> [Delivery phases](SPEC.md#11-delivery-phases)). Directories are seeded empty and
-> CI no-ops gracefully until assets exist.
+> **Status:** v0.2.0 release. The contract is specified in
+> [`SPEC.md`](SPEC.md) and [`specs/`](specs/); the repo now contains published
+> assets and validation coverage across the catalog.
 
 ---
 

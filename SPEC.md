@@ -2,9 +2,10 @@
 
 > Status: **Draft v0.1** · Owner: TBD · Last updated: 2026-08-13
 >
-> This is a design specification only. No assets are implemented yet. It defines
-> what basecoat-sheen is, how it is structured, and the conventions every asset
-> must follow so implementation can begin from a shared contract.
+> This is a design specification and implementation contract for
+> basecoat-sheen. It defines what the repository is, how it is structured, and
+> the conventions every asset must follow so implementation stays aligned to a
+> shared contract.
 >
 > **Detailed specs:** see [`specs/`](specs/README.md) — token system (01), skill
 > contract (02), agent contract (03), instruction layers (04), validation (05),

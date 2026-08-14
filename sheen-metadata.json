@@ -2,7 +2,7 @@
   "$comment": "GENERATED FILE — do not hand-edit. Produced by scripts/build-metadata.ps1 from repo-root assets (vendor/ excluded).",
   "schema": "sheen-metadata/v1",
   "name": "basecoat-sheen",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "source": {
     "excluded": [
       "vendor/"
