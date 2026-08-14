@@ -316,6 +316,28 @@ the relevant skills + instructions and carries an eval file.
   markdown lint, build `sheen-metadata.json`, deploy docs.
 - **`rollback.*`** reverts a sync to a prior pinned ref.
 
+### 10.1 CI/CD & onboarding profile (`solo-dev`)
+
+The repo is onboarded with the **solo-dev** profile (see
+[`.github/PROFILE.md`](.github/PROFILE.md) and
+[`.github/sheen-onboarding-profile.json`](.github/sheen-onboarding-profile.json)),
+mirroring basecoat's profile model in `vendor/basecoat/scripts/bootstrap.ps1`
+(`branch_policy: minimal`, `workflow_pack/template_pack: solo`,
+`telemetry_mode/secrets_mode: local`, `hook_pack: none`).
+
+basecoat ships **~95 org-scale workflows**; sheen's **solo pack** keeps only:
+
+- `ci.yml` — `lint-and-validate` (skill/agent/instruction frontmatter, naming,
+  catalog drift) + `tokens` (DTCG JSON validity).
+- `docs.yml` — mkdocs strict build when configured.
+
+All steps **exclude `vendor/`** and **no-op gracefully** until root assets exist,
+so CI is green pre-implementation. **No branch protection** is applied (honoring
+`branch_policy: minimal`; CI is the gate, self-merge allowed). Excluded upstream
+workflows (portal-deploy, release-train, governance-enforce, memory-sweep,
+adoption-metrics, reviewer-autoassign, cross-repo sync, org secret gates) activate
+on upgrade to **team-dev**.
+
 ---
 
 ## 11. Delivery phases
@@ -375,3 +397,4 @@ phase, not v1 blockers.
 | D6 | Docs stack = mkdocs (match basecoat) | Proposed |
 | D7 | Conformance baseline = WCAG 2.2 AA + ISO 9241/25010 + OWASP UX (spec 08) | Proposed |
 | D8 | Integrate basecoat by **vendoring** it into `vendor/basecoat/` | **Confirmed: yes** |
+| D9 | CI/CD onboarding profile = **solo-dev** (minimal branch policy, solo workflow pack, local telemetry/secrets, no branch protection) | **Confirmed: yes** |

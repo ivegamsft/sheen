@@ -1,0 +1,55 @@
+name: "Sheen - Docs"
+
+# Solo-dev docs build. Builds the mkdocs site if configured; otherwise no-ops.
+# telemetry_mode=local => build-only, no deploy/secrets in the solo pack.
+# Enable GitHub Pages deploy when upgrading to team-dev.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+      - ".github/workflows/docs.yml"
+  pull_request:
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v4
+
+      - name: Skip if docs not configured
+        id: check
+        run: |
+          if [ -f mkdocs.yml ] && [ -d docs ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "No mkdocs.yml/docs yet - skipping docs build (Phase 4)."
+          fi
+
+      - name: Set up Python
+        if: steps.check.outputs.configured == 'true'
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v5
+        with:
+          python-version: "3.x"
+
+      - name: Build mkdocs site (strict)
+        if: steps.check.outputs.configured == 'true'
+        run: |
+          pip install mkdocs mkdocs-material
+          mkdocs build --strict

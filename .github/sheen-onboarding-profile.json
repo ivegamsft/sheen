@@ -1,0 +1,58 @@
+{
+  "profile": "solo-dev",
+  "description": "Solo-developer onboarding profile for basecoat-sheen. Mirrors basecoat's solo-dev profile: minimal ceremony, local telemetry and secrets, no team gates.",
+  "source": "Derived from vendor/basecoat/scripts/bootstrap.ps1 profile table (solo-dev).",
+  "settings": {
+    "branch_policy": "minimal",
+    "workflow_pack": "solo",
+    "template_pack": "solo",
+    "telemetry_mode": "local",
+    "secrets_mode": "local",
+    "hook_pack": "none"
+  },
+  "branch_protection": {
+    "enabled": false,
+    "self_merge_allowed": true,
+    "required_reviews": 0,
+    "required_status_checks": ["Sheen - CI / lint-and-validate"],
+    "rationale": "solo-dev branch_policy is 'minimal' - no required human review; CI is the gate. Raise to team-dev to enable reviews and protected branches.",
+    "org_ruleset_override": {
+      "note": "The IBuySpy-Shared org enforces branch rulesets on main that supersede this repo-level solo policy.",
+      "enforced": [
+        "Changes must be made through a pull request (no direct push to main)",
+        "All GitHub Actions must be pinned to a full-length commit SHA",
+        "Waiting for Code Scanning results before merge"
+      ]
+    }
+  },
+  "workflow_pack_solo": {
+    "included": [
+      ".github/workflows/ci.yml",
+      ".github/workflows/docs.yml"
+    ],
+    "excluded_from_upstream": [
+      "portal-deploy",
+      "release-train",
+      "governance-enforce",
+      "memory-sweep",
+      "adoption-metrics",
+      "org-wide rollout / cross-repo sync",
+      "reviewer-autoassign / pr-auto-merge",
+      "secret-scan gates requiring org secrets"
+    ],
+    "note": "basecoat ships ~95 org-scale workflows across team/regulated packs. The solo pack keeps only asset validation, token lint, and optional docs build."
+  },
+  "secrets": {
+    "required": [],
+    "note": "secrets_mode=local - no repo/org secrets required for the solo pack. Never commit secrets; see .gitignore."
+  },
+  "scan_scope": {
+    "include": ["skills/", "agents/", "instructions/", "prompts/", "templates/", "tokens/", "specs/"],
+    "exclude": ["vendor/"],
+    "note": "vendor/basecoat is read-only and validated upstream; sheen CI never scans it."
+  },
+  "upgrade_path": {
+    "to": "team-dev",
+    "how": "Set branch_policy=shared, enable branch_protection, add reviewer/PR-gate workflows, move telemetry/secrets to workflow scope."
+  }
+}
