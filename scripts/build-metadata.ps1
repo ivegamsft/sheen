@@ -136,7 +136,7 @@ $obj = [ordered]@{
 
 $newJson = ($obj | ConvertTo-Json -Depth 10)
 function Normalize-JsonText([string]$text) {
-    return ($text -replace "`r`n", "`n").TrimEnd()
+    return (($text -replace "^\uFEFF", '') -replace "`r`n", "`n").TrimEnd()
 }
 
 if ($Check) {
@@ -153,6 +153,6 @@ if ($Check) {
     exit 0
 }
 
-Set-Content -LiteralPath $outPath -Value $newJson -Encoding utf8
+Set-Content -LiteralPath $outPath -Value $newJson -Encoding utf8NoBOM
 Write-Host "build-metadata: wrote sheen-metadata.json"
 exit 0
