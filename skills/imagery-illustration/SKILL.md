@@ -1,7 +1,7 @@
 ---
 name: imagery-illustration
 compatibility: [github-copilot-cli]
-description: " USE FOR: imagery style direction, illustration system guidance, art-direction constraints. DO NOT USE FOR: logo safe-area rules, token architecture."
+description: "Use when this skill is the right fit for the request. USE FOR: imagery style direction, illustration system guidance, art-direction constraints. DO NOT USE FOR: logo safe-area rules, token architecture."
 category: brand
 metadata:
   category: brand
@@ -10,23 +10,27 @@ metadata:
   pillar: brand
 allowed-tools: []
 ---
+
 # imagery-illustration
 
 Define photography and illustration direction.
 
 ## Workflow
-1. Clarify scope, constraints, and expected outcomes for this request.
-2. Apply the skill's core method to produce a concrete, auditable artifact.
-3. Validate consistency with sheen standards (tokens, usability, accessibility, governance as applicable).
-4. Produce prioritized recommendations or deliverables with rationale.
+1. Capture audience, context, and brand outcome for the request.
+2. Define principle-level constraints and non-negotiable identity rules.
+3. Generate options that express the brand system across key moments.
+4. Evaluate options for distinctiveness, consistency, and usability impact.
+5. Recommend a direction with adoption guidance and anti-patterns.
 
 ## Guardrails
-- Do not exceed this skill's scope boundaries.
-- Do not claim compliance or quality outcomes without concrete evidence.
-- Do not duplicate workflows that belong to neighboring skills.
+- Do not sacrifice legibility or clarity for stylistic expression.
+- Do not create conflicting rules with existing brand identity decisions.
+- Do not approve trademark/logo usage outside policy constraints.
+- Do not provide direction without concrete application examples.
 
 ## Output
-- A clear artifact bundle for this skill's domain with prioritized findings/actions.
+- Brand guidance artifact with approved patterns and anti-patterns.
+- Rollout notes for consistent application across surfaces.
 
 ## Delegates / pairs with
 - brand-identity

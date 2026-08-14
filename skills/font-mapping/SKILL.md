@@ -1,7 +1,7 @@
 ---
 name: font-mapping
 compatibility: [github-copilot-cli]
-description: " USE FOR: font usage inventory, weight/style mapping, type token candidate mapping. DO NOT USE FOR: new typography scale creation, a11y conformance statements."
+description: "Use when this skill is the right fit for the request. USE FOR: font usage inventory, weight/style mapping, type token candidate mapping. DO NOT USE FOR: new typography scale creation, a11y conformance statements."
 category: mapping
 metadata:
   category: mapping
@@ -10,23 +10,27 @@ metadata:
   pillar: mapping
 allowed-tools: []
 ---
+
 # font-mapping
 
 Inventory and map fonts to typography tokens.
 
 ## Workflow
-1. Clarify scope, constraints, and expected outcomes for this request.
-2. Apply the skill's core method to produce a concrete, auditable artifact.
-3. Validate consistency with sheen standards (tokens, usability, accessibility, governance as applicable).
-4. Produce prioritized recommendations or deliverables with rationale.
+1. Inventory source artifacts and classify mapping candidates.
+2. Map each candidate to target contracts with confidence labels.
+3. Flag collisions and ambiguities requiring adjudication.
+4. Quantify coverage and prioritize unresolved gaps.
+5. Deliver a migration-ready mapping table with next actions.
 
 ## Guardrails
-- Do not exceed this skill's scope boundaries.
-- Do not claim compliance or quality outcomes without concrete evidence.
-- Do not duplicate workflows that belong to neighboring skills.
+- Do not infer mappings without traceable source evidence.
+- Do not collapse distinct concepts into a single target key.
+- Do not overwrite canonical mappings without conflict review.
+- Do not report completion while unresolved gaps remain untracked.
 
 ## Output
-- A clear artifact bundle for this skill's domain with prioritized findings/actions.
+- Source-to-target mapping matrix with confidence levels.
+- Gap/conflict report prioritized for remediation.
 
 ## Delegates / pairs with
 - typography

@@ -1,7 +1,7 @@
 ---
 name: usability-mapping
 compatibility: [github-copilot-cli]
-description: " USE FOR: flow-to-heuristic coverage mapping, screen inventory audits, usability gap mapping. DO NOT USE FOR: full heuristic critique writeups, token schema edits."
+description: "Use when this skill is the right fit for the request. USE FOR: flow-to-heuristic coverage mapping, screen inventory audits, usability gap mapping. DO NOT USE FOR: full heuristic critique writeups, token schema edits."
 category: mapping
 metadata:
   category: mapping
@@ -10,23 +10,27 @@ metadata:
   pillar: mapping
 allowed-tools: []
 ---
+
 # usability-mapping
 
 Map flows/screens to usability heuristic coverage.
 
 ## Workflow
-1. Clarify scope, constraints, and expected outcomes for this request.
-2. Apply the skill's core method to produce a concrete, auditable artifact.
-3. Validate consistency with sheen standards (tokens, usability, accessibility, governance as applicable).
-4. Produce prioritized recommendations or deliverables with rationale.
+1. Inventory source artifacts and classify mapping candidates.
+2. Map each candidate to target contracts with confidence labels.
+3. Flag collisions and ambiguities requiring adjudication.
+4. Quantify coverage and prioritize unresolved gaps.
+5. Deliver a migration-ready mapping table with next actions.
 
 ## Guardrails
-- Do not exceed this skill's scope boundaries.
-- Do not claim compliance or quality outcomes without concrete evidence.
-- Do not duplicate workflows that belong to neighboring skills.
+- Do not infer mappings without traceable source evidence.
+- Do not collapse distinct concepts into a single target key.
+- Do not overwrite canonical mappings without conflict review.
+- Do not report completion while unresolved gaps remain untracked.
 
 ## Output
-- A clear artifact bundle for this skill's domain with prioritized findings/actions.
+- Source-to-target mapping matrix with confidence levels.
+- Gap/conflict report prioritized for remediation.
 
 ## Delegates / pairs with
 - web-usability-review

@@ -1,7 +1,7 @@
 ---
 name: navigation-design
 compatibility: [github-copilot-cli]
-description: " USE FOR: global/local nav patterns, wayfinding design, menu/breadcrumb strategy. DO NOT USE FOR: content ontology modeling, theme token changes."
+description: "Use when this skill is the right fit for the request. USE FOR: global/local nav patterns, wayfinding design, menu/breadcrumb strategy. DO NOT USE FOR: content ontology modeling, theme token changes."
 category: ia
 metadata:
   category: ia
@@ -10,23 +10,27 @@ metadata:
   pillar: ia
 allowed-tools: []
 ---
+
 # navigation-design
 
 Design navigation systems and wayfinding patterns.
 
 ## Workflow
-1. Clarify scope, constraints, and expected outcomes for this request.
-2. Apply the skill's core method to produce a concrete, auditable artifact.
-3. Validate consistency with sheen standards (tokens, usability, accessibility, governance as applicable).
-4. Produce prioritized recommendations or deliverables with rationale.
+1. Define user intents and findability tasks for the information space.
+2. Model entities, categories, and relationships for retrieval and navigation.
+3. Build candidate structures and labeling systems for target channels.
+4. Stress-test ambiguity and overlap using representative content examples.
+5. Finalize governance rules for growth, naming, and change control.
 
 ## Guardrails
-- Do not exceed this skill's scope boundaries.
-- Do not claim compliance or quality outcomes without concrete evidence.
-- Do not duplicate workflows that belong to neighboring skills.
+- Do not optimize taxonomy for internal jargon over user language.
+- Do not leave overlapping categories without clear disambiguation rules.
+- Do not change IA without migration implications for navigation/search.
+- Do not publish IA recommendations without concrete placement examples.
 
 ## Output
-- A clear artifact bundle for this skill's domain with prioritized findings/actions.
+- IA/taxonomy package: structure map, definitions, and naming rules.
+- Ambiguity and edge-case register with resolution policy.
 
 ## Delegates / pairs with
 - information-architecture

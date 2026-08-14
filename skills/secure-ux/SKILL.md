@@ -1,7 +1,7 @@
 ---
 name: secure-ux
 compatibility: [github-copilot-cli]
-description: " USE FOR: safe error-state design, auth/consent ux hardening, input-feedback privacy safety. DO NOT USE FOR: backend threat modeling, penetration testing."
+description: "Use when this skill is the right fit for the request. USE FOR: safe error-state design, auth/consent ux hardening, input-feedback privacy safety. DO NOT USE FOR: backend threat modeling, penetration testing."
 category: security
 metadata:
   category: security
@@ -10,23 +10,27 @@ metadata:
   pillar: security
 allowed-tools: []
 ---
+
 # secure-ux
 
 Apply security and privacy best practices to user-facing UX.
 
 ## Workflow
-1. Clarify scope, constraints, and expected outcomes for this request.
-2. Apply the skill's core method to produce a concrete, auditable artifact.
-3. Validate consistency with sheen standards (tokens, usability, accessibility, governance as applicable).
-4. Produce prioritized recommendations or deliverables with rationale.
+1. Identify trust boundaries in auth, consent, and data-exposure moments.
+2. Map likely misuse cases the interface must prevent or contain.
+3. Design safe interaction/copy patterns for risky or irreversible actions.
+4. Validate least-privilege and privacy expectations in proposed flows.
+5. Prioritize hardening recommendations by exploitability and user harm.
 
 ## Guardrails
-- Do not exceed this skill's scope boundaries.
-- Do not claim compliance or quality outcomes without concrete evidence.
-- Do not duplicate workflows that belong to neighboring skills.
+- Do not expose sensitive internals through user-facing errors.
+- Do not replace backend controls with UX-only mitigations.
+- Do not weaken consent clarity for conversion goals.
+- Do not omit failure-state handling for sensitive actions.
 
 ## Output
-- A clear artifact bundle for this skill's domain with prioritized findings/actions.
+- Secure-UX hardening checklist with prioritized mitigations.
+- Updated flow notes covering abuse cases and safe defaults.
 
 ## Delegates / pairs with
 - ui-states-interaction

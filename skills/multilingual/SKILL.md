@@ -1,7 +1,7 @@
 ---
 name: multilingual
 compatibility: [github-copilot-cli]
-description: " USE FOR: i18n/l10n strategy, locale externalization planning, rtl/pluralization guidance. DO NOT USE FOR: framework detection only, color contrast checks."
+description: "Use when this skill is the right fit for the request. USE FOR: i18n/l10n strategy, locale externalization planning, rtl/pluralization guidance. DO NOT USE FOR: framework detection only, color contrast checks."
 category: content
 metadata:
   category: content
@@ -10,23 +10,27 @@ metadata:
   pillar: content
 allowed-tools: []
 ---
+
 # multilingual
 
 Design multilingual readiness and localization workflows.
 
 ## Workflow
-1. Clarify scope, constraints, and expected outcomes for this request.
-2. Apply the skill's core method to produce a concrete, auditable artifact.
-3. Validate consistency with sheen standards (tokens, usability, accessibility, governance as applicable).
-4. Produce prioritized recommendations or deliverables with rationale.
+1. Define audience, intent, and context for each content touchpoint.
+2. Establish hierarchy and terminology constraints for the journey.
+3. Draft/refine copy for default, empty, error, and success states.
+4. Validate readability, consistency, and localization readiness.
+5. Deliver editorial decisions and reuse rules for implementation.
 
 ## Guardrails
-- Do not exceed this skill's scope boundaries.
-- Do not claim compliance or quality outcomes without concrete evidence.
-- Do not duplicate workflows that belong to neighboring skills.
+- Do not prioritize tone over comprehension and actionability.
+- Do not introduce terminology drift across related flows.
+- Do not leave critical states without user-facing guidance copy.
+- Do not use localization-hostile phrasing or culture assumptions.
 
 ## Output
-- A clear artifact bundle for this skill's domain with prioritized findings/actions.
+- Content package with approved copy variants by state.
+- Editorial decision log with reuse and localization notes.
 
 ## Delegates / pairs with
 - i18n-framework-mapping

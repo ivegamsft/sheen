@@ -1,7 +1,7 @@
 ---
 name: design-exploration
 compatibility: [github-copilot-cli]
-description: " USE FOR: concept generation, divergent direction exploration, idea synthesis. DO NOT USE FOR: final decision arbitration, wcag audit reporting."
+description: "Use when this skill is the right fit for the request. USE FOR: concept generation, divergent direction exploration, idea synthesis. DO NOT USE FOR: final decision arbitration, wcag audit reporting."
 category: lifecycle
 metadata:
   category: lifecycle
@@ -10,23 +10,27 @@ metadata:
   pillar: lifecycle
 allowed-tools: []
 ---
+
 # design-exploration
 
 Generate and shape new design concepts.
 
 ## Workflow
-1. Clarify scope, constraints, and expected outcomes for this request.
-2. Apply the skill's core method to produce a concrete, auditable artifact.
-3. Validate consistency with sheen standards (tokens, usability, accessibility, governance as applicable).
-4. Produce prioritized recommendations or deliverables with rationale.
+1. Establish lifecycle objective (audit, exploration, handoff, update, or recommendation).
+2. Gather current-state evidence and explicit constraints.
+3. Produce decision-ready artifacts using this lifecycle method.
+4. Validate compatibility with design system, accessibility, and governance.
+5. Sequence next actions with owners, dependencies, and risk notes.
 
 ## Guardrails
-- Do not exceed this skill's scope boundaries.
-- Do not claim compliance or quality outcomes without concrete evidence.
-- Do not duplicate workflows that belong to neighboring skills.
+- Do not make directional claims without evidence collection.
+- Do not present exploratory artifacts as final sign-off.
+- Do not omit risk/dependency notes for downstream execution.
+- Do not duplicate ownership of neighboring lifecycle skills without handoff.
 
 ## Output
-- A clear artifact bundle for this skill's domain with prioritized findings/actions.
+- Lifecycle artifact set (analysis, decisions, and actions).
+- Handoff-ready summary with risks and dependency map.
 
 ## Delegates / pairs with
 - design-debate
