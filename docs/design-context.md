@@ -2,7 +2,7 @@
 
 > The shared design values, influence sources, and craft bar that sheen assets
 > appeal to during reviews, debates, and audits. Distilled from root
-> [`SPEC.md` §2](../SPEC.md#2-influences--sources) and made durable here and in
+> `SPEC.md` §2 and made durable here and in
 > `references/`. `sheen-10-core-design-principles` loads these values as ambient
 > context.
 
@@ -53,8 +53,7 @@ The **Nielsen Norman Group** ten heuristics are the evaluation checklist for
 ## Conformance bar
 
 The influences set the *aesthetic* bar; formal standards set the *conformance* bar
-and become `checks.json` gates (see
-[`specs/08-standards-conformance.spec.md`](../specs/08-standards-conformance.spec.md)):
+and become `checks.json` gates (see `specs/08-standards-conformance.spec.md`):
 
 - **W3C WCAG 2.2 AA** + **WAI-ARIA / APG**
 - **ISO 9241** (usability / human-centered design) + **ISO/IEC 25010**

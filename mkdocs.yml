@@ -1,0 +1,50 @@
+site_name: basecoat-sheen
+site_description: Design governance finish coat for basecoat
+repo_url: https://github.com/IBuySpy-Shared/basecoat-sheen
+theme:
+  name: material
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Philosophy: philosophy.md
+  - Design Context: design-context.md
+  - Foundations:
+      - Overview: foundations/index.md
+      - Tokens: foundations/tokens.md
+      - Typography: foundations/typography.md
+      - Layout & Spacing: foundations/layout-spacing.md
+      - Motion, Elevation, Materials: foundations/motion-elevation-materials.md
+  - Brand:
+      - Overview: brand/index.md
+      - Brand Identity: brand/identity.md
+      - Voice & Tone: brand/voice-tone.md
+      - Logo Usage: brand/logo-usage.md
+      - Imagery: brand/imagery.md
+  - Components:
+      - Overview: components/index.md
+      - Component Spec Contract: components/component-spec.md
+      - States & Interaction: components/states-interaction.md
+      - Pattern Library: components/pattern-library.md
+      - Design Handoff: components/handoff.md
+  - Accessibility:
+      - Overview: accessibility/index.md
+      - WCAG Audit: accessibility/wcag-audit.md
+      - Contrast Gate: accessibility/contrast-gate.md
+      - Standards Mapping: accessibility/standards-mapping.md
+  - Usability:
+      - Overview: usability/index.md
+      - Heuristic Review: usability/heuristic-review.md
+      - Responsive Design: usability/responsive-design.md
+      - Content Hierarchy: usability/content-hierarchy.md
+  - Guides:
+      - .sheen.yml Guide: guides/sheen-yml.md
+      - Authoring a Skill: guides/authoring-a-skill.md
+      - Adopting Tokens: guides/adopting-tokens.md
+  - Reference:
+      - Skills Catalog: reference/skills-catalog.md
+      - Agent Roster: reference/agent-roster.md
+      - Validation Checks: reference/validation-checks.md
