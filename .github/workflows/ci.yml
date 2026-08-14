@@ -108,6 +108,17 @@ jobs:
           fi
           echo "OK"
 
+      - name: Install PowerShell (lint job)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq powershell
+
+      - name: Lint - frontmatter contracts
+        run: pwsh -NonInteractive -File scripts/lint-frontmatter.ps1
+
+      - name: Validate - metadata drift
+        run: pwsh -NonInteractive -File scripts/build-metadata.ps1 -Check
+
   tokens:
     runs-on: ubuntu-latest
     timeout-minutes: 10
