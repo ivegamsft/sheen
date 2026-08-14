@@ -130,3 +130,13 @@ jobs:
           echo "Token JSON validated. (Reference resolution, naming, and WCAG"
           echo "contrast gates are enforced by scripts/validate-tokens once implemented - spec 01/05.)"
           exit $status
+
+      - name: Install PowerShell
+        if: ${{ hashFiles('tokens/**/*.tokens.json') != '' }}
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq powershell
+
+      - name: Validate - tokens (DTCG schema, references, contrast gate)
+        if: ${{ hashFiles('tokens/**/*.tokens.json') != '' }}
+        run: pwsh -NonInteractive -File scripts/validate-tokens.ps1 tokens

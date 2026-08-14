@@ -1,0 +1,12 @@
+{
+  "$description": "Core shape/geometry — corner radii. Mirrors Windows 11 geometry (small=2px, medium=4px, large=8px). No references at this tier.",
+  "radius": {
+    "none":   { "$type": "dimension", "$value": "0px" },
+    "small":  { "$type": "dimension", "$value": "2px",   "$description": "Subtle rounding (chips, tags)" },
+    "medium": { "$type": "dimension", "$value": "6px",   "$description": "Default component radius (buttons, inputs)" },
+    "large":  { "$type": "dimension", "$value": "8px",   "$description": "Cards, dialogs, menus" },
+    "xl":     { "$type": "dimension", "$value": "12px" },
+    "2xl":    { "$type": "dimension", "$value": "16px" },
+    "full":   { "$type": "dimension", "$value": "9999px","$description": "Pill / fully-rounded" }
+  }
+}

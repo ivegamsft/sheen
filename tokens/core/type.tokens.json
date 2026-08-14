@@ -1,0 +1,40 @@
+{
+  "$description": "Core typography — global primitives. Font families, weights, size scale, line-heights, letter-spacing. No references at this tier.",
+  "type": {
+    "font-family": {
+      "sans":  { "$type": "fontFamily", "$value": ["-apple-system", "BlinkMacSystemFont", "Segoe UI", "Noto Sans", "Helvetica", "Arial", "sans-serif"], "$description": "System sans-serif stack" },
+      "mono":  { "$type": "fontFamily", "$value": ["SFMono-Regular", "Consolas", "Liberation Mono", "Menlo", "Courier New", "monospace"], "$description": "System monospace stack" },
+      "serif": { "$type": "fontFamily", "$value": ["Georgia", "Times New Roman", "serif"] }
+    },
+    "font-weight": {
+      "regular":   { "$type": "fontWeight", "$value": 400 },
+      "medium":    { "$type": "fontWeight", "$value": 500 },
+      "semibold":  { "$type": "fontWeight", "$value": 600 },
+      "bold":      { "$type": "fontWeight", "$value": 700 }
+    },
+    "font-size": {
+      "xs":   { "$type": "dimension", "$value": "10px" },
+      "sm":   { "$type": "dimension", "$value": "12px" },
+      "md":   { "$type": "dimension", "$value": "14px",  "$description": "Base body size" },
+      "lg":   { "$type": "dimension", "$value": "16px" },
+      "xl":   { "$type": "dimension", "$value": "20px" },
+      "2xl":  { "$type": "dimension", "$value": "24px" },
+      "3xl":  { "$type": "dimension", "$value": "32px" },
+      "4xl":  { "$type": "dimension", "$value": "40px" },
+      "5xl":  { "$type": "dimension", "$value": "48px" }
+    },
+    "line-height": {
+      "tight":   { "$type": "number", "$value": 1.25 },
+      "snug":    { "$type": "number", "$value": 1.375 },
+      "normal":  { "$type": "number", "$value": 1.5,   "$description": "Default body line-height" },
+      "relaxed": { "$type": "number", "$value": 1.625 },
+      "loose":   { "$type": "number", "$value": 2.0 }
+    },
+    "letter-spacing": {
+      "tight":   { "$type": "dimension", "$value": "-0.02em" },
+      "normal":  { "$type": "dimension", "$value": "0" },
+      "wide":    { "$type": "dimension", "$value": "0.04em" },
+      "wider":   { "$type": "dimension", "$value": "0.08em" }
+    }
+  }
+}

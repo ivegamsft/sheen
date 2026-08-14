@@ -1,0 +1,20 @@
+{
+  "$description": "Core motion — durations and easing curves. Aligned with Windows 11 / M3 motion principles (Calm: motion serves the task). No references at this tier.",
+  "motion": {
+    "duration": {
+      "instant":   { "$type": "duration", "$value": "0ms" },
+      "fast":      { "$type": "duration", "$value": "100ms", "$description": "Micro-interactions (icon swap, toggle)" },
+      "normal":    { "$type": "duration", "$value": "200ms", "$description": "Default transition (hover, focus)" },
+      "moderate":  { "$type": "duration", "$value": "300ms", "$description": "Component enter/exit (dropdown, tooltip)" },
+      "slow":      { "$type": "duration", "$value": "500ms", "$description": "Page transitions, sheet slide-in" },
+      "deliberate":{ "$type": "duration", "$value": "700ms", "$description": "Full-screen or complex orchestration" }
+    },
+    "easing": {
+      "linear":      { "$type": "cubicBezier", "$value": [0.0, 0.0, 1.0, 1.0], "$description": "No easing — progress bars, loaders" },
+      "ease-in":     { "$type": "cubicBezier", "$value": [0.4, 0.0, 1.0, 1.0], "$description": "Elements leaving the screen" },
+      "ease-out":    { "$type": "cubicBezier", "$value": [0.0, 0.0, 0.2, 1.0], "$description": "Elements entering the screen (default)" },
+      "ease-in-out": { "$type": "cubicBezier", "$value": [0.4, 0.0, 0.2, 1.0], "$description": "Elements moving across the screen" },
+      "spring":      { "$type": "cubicBezier", "$value": [0.175, 0.885, 0.32, 1.275], "$description": "Playful overshoot for expressive moments" }
+    }
+  }
+}

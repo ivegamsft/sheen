@@ -1,0 +1,31 @@
+{
+  "$description": "Core materials — translucency and backdrop surfaces. Mica/Acrylic-style values (Windows 11 inspiration). No references at this tier.",
+  "material": {
+    "acrylic": {
+      "light": {
+        "background-color": { "$type": "color",  "$value": "rgba(255,255,255,0.70)", "$description": "Acrylic panel fill (light) — tinted semi-transparent" },
+        "backdrop-blur":    { "$type": "dimension","$value": "20px",                  "$description": "Backdrop blur radius for acrylic (light)" },
+        "noise-opacity":    { "$type": "number",  "$value": 0.03,                    "$description": "Subtle noise texture opacity" }
+      },
+      "dark": {
+        "background-color": { "$type": "color",  "$value": "rgba(30,30,30,0.70)",    "$description": "Acrylic panel fill (dark)" },
+        "backdrop-blur":    { "$type": "dimension","$value": "20px" },
+        "noise-opacity":    { "$type": "number",  "$value": 0.03 }
+      }
+    },
+    "mica": {
+      "light": {
+        "background-color": { "$type": "color",  "$value": "rgba(243,243,243,0.50)", "$description": "Mica surface fill (light) — subtler than Acrylic, no noise" },
+        "backdrop-blur":    { "$type": "dimension","$value": "60px",                  "$description": "Mica uses a deeper blur for the 'real-material' effect" }
+      },
+      "dark": {
+        "background-color": { "$type": "color",  "$value": "rgba(32,32,32,0.50)",    "$description": "Mica surface fill (dark)" },
+        "backdrop-blur":    { "$type": "dimension","$value": "60px" }
+      }
+    },
+    "scrim": {
+      "default": { "$type": "color", "$value": "rgba(0,0,0,0.32)", "$description": "Modal/dialog backdrop scrim" },
+      "heavy":   { "$type": "color", "$value": "rgba(0,0,0,0.56)", "$description": "Full-screen overlay scrim" }
+    }
+  }
+}

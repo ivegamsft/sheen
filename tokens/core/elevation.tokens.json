@@ -1,0 +1,35 @@
+{
+  "$description": "Core elevation levels — shadow definitions. Levels 0-5. No references at this tier.",
+  "elevation": {
+    "0": {
+      "$type": "shadow",
+      "$value": { "offsetX": "0px", "offsetY": "0px", "blur": "0px", "spread": "0px", "color": "rgba(0,0,0,0)" },
+      "$description": "Flat — no elevation"
+    },
+    "1": {
+      "$type": "shadow",
+      "$value": { "offsetX": "0px", "offsetY": "1px", "blur": "3px", "spread": "0px", "color": "rgba(31,35,40,0.12)" },
+      "$description": "Subtle lift — cards at rest"
+    },
+    "2": {
+      "$type": "shadow",
+      "$value": { "offsetX": "0px", "offsetY": "3px", "blur": "6px", "spread": "0px", "color": "rgba(31,35,40,0.15)" },
+      "$description": "Cards on hover, dropdowns"
+    },
+    "3": {
+      "$type": "shadow",
+      "$value": { "offsetX": "0px", "offsetY": "8px", "blur": "24px", "spread": "0px", "color": "rgba(31,35,40,0.20)" },
+      "$description": "Popovers, tooltips"
+    },
+    "4": {
+      "$type": "shadow",
+      "$value": { "offsetX": "0px", "offsetY": "12px", "blur": "32px", "spread": "0px", "color": "rgba(31,35,40,0.25)" },
+      "$description": "Modals, dialogs"
+    },
+    "5": {
+      "$type": "shadow",
+      "$value": { "offsetX": "0px", "offsetY": "16px", "blur": "48px", "spread": "0px", "color": "rgba(31,35,40,0.30)" },
+      "$description": "Full-screen overlays, sheets"
+    }
+  }
+}

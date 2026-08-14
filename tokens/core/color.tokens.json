@@ -1,0 +1,105 @@
+{
+  "$description": "Core colour palette — global primitives. Context-agnostic ramps. No references allowed at this tier (spec 01 s3.1).",
+  "color": {
+    "neutral": {
+      "0":   { "$type": "color", "$value": "#ffffff",  "$description": "Pure white" },
+      "5":   { "$type": "color", "$value": "#f6f8fa",  "$description": "Near-white canvas" },
+      "10":  { "$type": "color", "$value": "#eaeef2" },
+      "20":  { "$type": "color", "$value": "#d0d7de" },
+      "30":  { "$type": "color", "$value": "#afb8c1" },
+      "40":  { "$type": "color", "$value": "#8c959f" },
+      "50":  { "$type": "color", "$value": "#6e7781" },
+      "60":  { "$type": "color", "$value": "#57606a" },
+      "70":  { "$type": "color", "$value": "#424a53" },
+      "80":  { "$type": "color", "$value": "#32383f" },
+      "85":  { "$type": "color", "$value": "#1f2328" },
+      "90":  { "$type": "color", "$value": "#24292f" },
+      "95":  { "$type": "color", "$value": "#1b1f24" },
+      "100": { "$type": "color", "$value": "#0d1117",  "$description": "Near-black canvas (dark mode bg)" }
+    },
+    "blue": {
+      "0":   { "$type": "color", "$value": "#ddf4ff" },
+      "10":  { "$type": "color", "$value": "#b6e3ff" },
+      "20":  { "$type": "color", "$value": "#80ccff" },
+      "30":  { "$type": "color", "$value": "#54aeff" },
+      "40":  { "$type": "color", "$value": "#218bff" },
+      "50":  { "$type": "color", "$value": "#0969da",  "$description": "Brand action blue (light mode)" },
+      "60":  { "$type": "color", "$value": "#0550ae" },
+      "70":  { "$type": "color", "$value": "#033d8b" },
+      "80":  { "$type": "color", "$value": "#0a3069" },
+      "90":  { "$type": "color", "$value": "#002155" },
+      "100": { "$type": "color", "$value": "#001229" }
+    },
+    "blue-dark": {
+      "40":  { "$type": "color", "$value": "#2f81f7",  "$description": "Brand action blue (dark mode)" },
+      "50":  { "$type": "color", "$value": "#1f6feb" }
+    },
+    "green": {
+      "0":   { "$type": "color", "$value": "#dafbe1" },
+      "10":  { "$type": "color", "$value": "#aceebb" },
+      "20":  { "$type": "color", "$value": "#6fdd8b" },
+      "30":  { "$type": "color", "$value": "#4ac26b" },
+      "40":  { "$type": "color", "$value": "#2da44e" },
+      "50":  { "$type": "color", "$value": "#1a7f37",  "$description": "Success green (light mode)" },
+      "60":  { "$type": "color", "$value": "#116329" },
+      "70":  { "$type": "color", "$value": "#044f1e" },
+      "80":  { "$type": "color", "$value": "#003d16" },
+      "90":  { "$type": "color", "$value": "#002d11" },
+      "100": { "$type": "color", "$value": "#00170a" }
+    },
+    "green-dark": {
+      "30":  { "$type": "color", "$value": "#3fb950",  "$description": "Success green (dark mode)" }
+    },
+    "red": {
+      "0":   { "$type": "color", "$value": "#ffebe9" },
+      "10":  { "$type": "color", "$value": "#ffcecb" },
+      "20":  { "$type": "color", "$value": "#ffaba8" },
+      "30":  { "$type": "color", "$value": "#ff8182" },
+      "40":  { "$type": "color", "$value": "#fa4549" },
+      "50":  { "$type": "color", "$value": "#cf222e",  "$description": "Error/danger red (light mode)" },
+      "60":  { "$type": "color", "$value": "#a40e26" },
+      "70":  { "$type": "color", "$value": "#82071e" },
+      "80":  { "$type": "color", "$value": "#660018" },
+      "90":  { "$type": "color", "$value": "#4c0014" },
+      "100": { "$type": "color", "$value": "#330011" }
+    },
+    "red-dark": {
+      "40":  { "$type": "color", "$value": "#f85149",  "$description": "Error/danger red (dark mode)" }
+    },
+    "orange": {
+      "0":   { "$type": "color", "$value": "#fff1e5" },
+      "10":  { "$type": "color", "$value": "#ffd8b5" },
+      "20":  { "$type": "color", "$value": "#ffb77c" },
+      "30":  { "$type": "color", "$value": "#fb8f44" },
+      "40":  { "$type": "color", "$value": "#e16f24" },
+      "50":  { "$type": "color", "$value": "#bc4c00",  "$description": "Warning/caution orange (light mode)" },
+      "60":  { "$type": "color", "$value": "#953800" },
+      "70":  { "$type": "color", "$value": "#762c00" },
+      "80":  { "$type": "color", "$value": "#5c2200" },
+      "90":  { "$type": "color", "$value": "#471700" },
+      "100": { "$type": "color", "$value": "#340e00" }
+    },
+    "orange-dark": {
+      "30":  { "$type": "color", "$value": "#d29922",  "$description": "Warning/caution orange (dark mode)" }
+    },
+    "purple": {
+      "0":   { "$type": "color", "$value": "#fbefff" },
+      "10":  { "$type": "color", "$value": "#ecd8ff" },
+      "20":  { "$type": "color", "$value": "#d2b0ff" },
+      "30":  { "$type": "color", "$value": "#bc80ff" },
+      "40":  { "$type": "color", "$value": "#a371f7" },
+      "50":  { "$type": "color", "$value": "#8957e5" },
+      "60":  { "$type": "color", "$value": "#6e40c9" },
+      "70":  { "$type": "color", "$value": "#5a32a3" },
+      "80":  { "$type": "color", "$value": "#432482" },
+      "90":  { "$type": "color", "$value": "#2e1461" },
+      "100": { "$type": "color", "$value": "#1a0740" }
+    },
+    "hc-yellow": {
+      "50":  { "$type": "color", "$value": "#ffff00",  "$description": "High-contrast highlight yellow (19.6:1 on black)" }
+    },
+    "hc-cyan": {
+      "50":  { "$type": "color", "$value": "#1aebff",  "$description": "High-contrast link/active cyan (14.6:1 on black)" }
+    }
+  }
+}
