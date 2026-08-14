@@ -1,0 +1,20 @@
+name: "create-design-skill-routing"
+description: "Routing evaluation — validates trigger activation for create-design-skill."
+skill: "skills/create-design-skill/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Scaffold a new sheen skill for design decision logs with proper eval scenarios."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Create a SKILL.md + eval.yaml package that follows our skill contract."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Add a new design skill and update the catalog without breaking routing."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Write a new layered instruction file for taxonomy guidance."
+    expect_activation: false
+  - id: "neg-2"
+    input: "Implement backend API handlers and database migrations."
+    expect_activation: false
+

@@ -8,23 +8,36 @@
     "excluded": ["vendor/"]
   },
   "counts": {
-    "skills": 0,
+    "skills": 8,
     "agents": 0,
     "instructions": 0,
     "prompts": 0,
     "templates": 0,
     "tokens": {
-      "core": 0,
-      "semantic": 0,
-      "themes": 0
+      "core": 7,
+      "semantic": 1,
+      "themes": 3
     }
   },
   "assets": {
-    "skills": [],
+    "skills": [
+      "accessibility-audit",
+      "color-system",
+      "component-spec",
+      "create-design-skill",
+      "design-audit",
+      "design-bootstrap",
+      "design-tokens",
+      "web-usability-review"
+    ],
     "agents": [],
     "instructions": [],
     "prompts": [],
     "templates": [],
-    "themes": []
+    "themes": [
+      "dark",
+      "high-contrast",
+      "light"
+    ]
   }
 }

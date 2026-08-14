@@ -1,0 +1,20 @@
+name: "web-usability-review-routing"
+description: "Routing evaluation — validates trigger activation for web-usability-review."
+skill: "skills/web-usability-review/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Review our onboarding flow using NN/g heuristics and prioritize usability issues."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Evaluate this dashboard experience for friction and task efficiency."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Generate a usability scorecard and improvement plan for the signup journey."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Run a WCAG accessibility compliance audit and conformance statement."
+    expect_activation: false
+  - id: "neg-2"
+    input: "Add semantic and core token definitions for a new theme."
+    expect_activation: false
+

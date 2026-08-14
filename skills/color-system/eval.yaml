@@ -1,0 +1,20 @@
+name: "color-system-routing"
+description: "Routing evaluation — validates trigger activation for color-system."
+skill: "skills/color-system/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Create an accessible brand color ramp and map it to semantic primary roles."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Refine surface/on-surface roles for light and dark themes."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Build warning and error role colors that hold contrast across themes."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Run only a contrast report on existing token pairs."
+    expect_activation: false
+  - id: "neg-2"
+    input: "Author typography scales and line-height guidelines."
+    expect_activation: false
+
