@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.1.0",
-  "releaseDate": null,
-  "notes": "Phase 0 scaffold: repository structure, governance files, consumer config (.sheen.yml.example, checks.json, sheen-metadata.json), and sync/rollback tooling. No assets published yet."
+  "version": "0.2.0",
+  "releaseDate": "2026-08-14",
+  "notes": "Wave release: governance docs, incident learnings, design-debate workflow, skill hardening, and validation coverage for the published sheen asset set."
 }

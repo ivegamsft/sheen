@@ -7,6 +7,8 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-08-14
+
 ### Added
 - `docs/reference/incident-learnings.md` to capture build and automation
   incident learnings with RCA-oriented evidence and follow-up guardrails.
@@ -47,5 +49,6 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 - The upstream `basecoat` framework remains vendored read-only under
   `vendor/basecoat/` and is not modified by sheen.
 
-[Unreleased]: https://github.com/IBuySpy-Shared/basecoat-sheen/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/IBuySpy-Shared/basecoat-sheen/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.2.0
 [0.1.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.1.0
