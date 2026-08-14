@@ -1,7 +1,7 @@
 {
   "profile": "solo-dev",
-  "description": "Solo-developer onboarding profile for basecoat-sheen. Mirrors basecoat's solo-dev profile: minimal ceremony, local telemetry and secrets, no team gates.",
-  "source": "Derived from vendor/basecoat/scripts/bootstrap.ps1 profile table (solo-dev).",
+  "description": "Solo-dev workflow/template pack for basecoat-sheen, running on a SHARED enterprise EMU instance. The 'solo-dev' choice governs only the local authoring ceremony (lightweight workflow + template pack, local telemetry/secrets, no hooks). It does NOT govern merges: the enterprise EMU org/enterprise rulesets are the authoritative branch governance for main (see enterprise_governance).",
+  "source": "Derived from vendor/basecoat/scripts/bootstrap.ps1 profile table (solo-dev). Merge governance is enterprise-managed (EMU), not repo-level.",
   "settings": {
     "branch_policy": "minimal",
     "workflow_pack": "solo",
@@ -12,17 +12,24 @@
   },
   "branch_protection": {
     "enabled": false,
-    "self_merge_allowed": true,
+    "note": "Repo-level branch protection is intentionally not set; the enterprise EMU rulesets below are authoritative and cannot be relaxed from this repo.",
+    "self_merge_allowed": "gated",
+    "self_merge_note": "The org ruleset requires 0 human approvals, so a maintainer may merge their own PR, but ONLY after all enterprise checks pass (CodeQL code scanning, code quality, Copilot code review). Do NOT use admin/force bypass on a shared instance.",
     "required_reviews": 0,
-    "required_status_checks": ["Sheen - CI / lint-and-validate"],
-    "rationale": "solo-dev branch_policy is 'minimal' - no required human review; CI is the gate. Raise to team-dev to enable reviews and protected branches.",
-    "org_ruleset_override": {
-      "note": "The IBuySpy-Shared org enforces branch rulesets on main that supersede this repo-level solo policy.",
+    "enterprise_governance": {
+      "instance_type": "EMU (Enterprise Managed Users), shared across the enterprise",
+      "authoritative": true,
+      "note": "These enterprise/org rulesets govern every change to main and supersede the solo-dev branch_policy. They must be satisfied through the normal PR flow; do not bypass.",
       "enforced": [
-        "Changes must be made through a pull request (no direct push to main)",
-        "All GitHub Actions must be pinned to a full-length commit SHA",
-        "Waiting for Code Scanning results before merge"
-      ]
+        "Pull request required - no direct push to main (org ruleset 'default-branch-protection')",
+        "No force-push (non_fast_forward) and no branch deletion on main",
+        "CodeQL code scanning must pass - high-or-higher / error threshold (org ruleset)",
+        "Code quality checks must pass at 'errors' severity (org ruleset)",
+        "Copilot code review runs on push (org ruleset)",
+        "All GitHub Actions must be pinned to a full-length commit SHA (enterprise Actions policy)",
+        "File-path restriction on '.github/agents/*.md' and 'agents/*.md' (enterprise ruleset; bypass: EnterpriseOwner only)"
+      ],
+      "bypass": "The code-scanning/quality/Copilot-review ruleset has NO bypass actors; admin bypass does not apply. Merge only via passing checks."
     }
   },
   "workflow_pack_solo": {

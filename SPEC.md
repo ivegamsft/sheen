@@ -332,11 +332,19 @@ basecoat ships **~95 org-scale workflows**; sheen's **solo pack** keeps only:
 - `docs.yml` — mkdocs strict build when configured.
 
 All steps **exclude `vendor/`** and **no-op gracefully** until root assets exist,
-so CI is green pre-implementation. **No branch protection** is applied (honoring
-`branch_policy: minimal`; CI is the gate, self-merge allowed). Excluded upstream
-workflows (portal-deploy, release-train, governance-enforce, memory-sweep,
-adoption-metrics, reviewer-autoassign, cross-repo sync, org secret gates) activate
-on upgrade to **team-dev**.
+so CI is green pre-implementation. No *repo-level* branch protection is added.
+
+**Enterprise EMU governance (authoritative).** basecoat-sheen runs on a **shared
+enterprise EMU instance**, so the `solo-dev` profile governs only the local
+authoring ceremony (workflow/template pack, local telemetry/secrets, no hooks) —
+**not** merges. Enterprise/org rulesets govern `main` and supersede
+`branch_policy: minimal`: PR required (no direct push/force-push/deletion), CodeQL
+code scanning + code quality must pass, Copilot code review on push, all Actions
+SHA-pinned, and an agent-file path restriction. These rulesets have **no bypass
+actors** for the security checks, so there is **no admin/self bypass** — merges go
+through passing checks. Excluded upstream workflows (portal-deploy, release-train,
+governance-enforce, memory-sweep, adoption-metrics, reviewer-autoassign, cross-repo
+sync, org secret gates) remain out of scope.
 
 ---
 
@@ -397,4 +405,4 @@ phase, not v1 blockers.
 | D6 | Docs stack = mkdocs (match basecoat) | Proposed |
 | D7 | Conformance baseline = WCAG 2.2 AA + ISO 9241/25010 + OWASP UX (spec 08) | Proposed |
 | D8 | Integrate basecoat by **vendoring** it into `vendor/basecoat/` | **Confirmed: yes** |
-| D9 | CI/CD onboarding profile = **solo-dev** (minimal branch policy, solo workflow pack, local telemetry/secrets, no branch protection) | **Confirmed: yes** |
+| D9 | CI/CD onboarding profile = **solo-dev** (local authoring ceremony only). Runs on a **shared enterprise EMU instance**; enterprise/org rulesets (PR-required, CodeQL + code-quality, Copilot review, SHA-pinned actions, agent-path restriction) are the authoritative merge governance — no admin/self bypass. | **Confirmed: yes** |
