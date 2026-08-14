@@ -1,0 +1,19 @@
+name: "mcp-development-routing"
+description: "Routing evaluation — validates trigger activation for the mcp-development skill."
+skill: "skills/mcp-development/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Scaffold a new MCP server in TypeScript that exposes tools for querying our internal API."
+    expect_activation: true
+  - id: "pos-2"
+    input: "How do I define the tool contract for an MCP tool that takes a file path and returns its contents?"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Which MCP transport should I use — stdio, SSE, or Streamable HTTP — for a VS Code extension integration?"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Design a REST API with OpenAPI spec for a user management service."
+    expect_activation: false
+  - id: "neg-2"
+    input: "How do I style a button with a hover effect in CSS?"
+    expect_activation: false

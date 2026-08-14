@@ -1,0 +1,19 @@
+name: "ha-resilience-routing"
+description: "Routing evaluation — validates trigger activation for the ha-resilience skill."
+skill: "skills/ha-resilience/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "We need multi-region failover for our API — how do I design active-active across two Azure regions?"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Help me add a circuit breaker pattern to protect our service from a flaky third-party dependency."
+    expect_activation: true
+  - id: "pos-3"
+    input: "I want to run chaos testing scenarios against our SLOs to validate recovery behavior."
+    expect_activation: true
+  - id: "neg-1"
+    input: "I'm spinning up a single-server app for a demo — what's the quickest setup?"
+    expect_activation: false
+  - id: "neg-2"
+    input: "What's the difference between RGB and CMYK color models?"
+    expect_activation: false

@@ -1,0 +1,19 @@
+name: "standup-signal-extraction-routing"
+description: "Routing evaluation — validates trigger activation for standup-signal-extraction."
+skill: "skills/standup-signal-extraction/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Turn these standup updates into blockers, dependencies, and a day plan with owners."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Extract escalation items from our daily standup notes."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Summarize today standup into actionable tasks and unresolved blockers."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Implement Redis caching in our API."
+    expect_activation: false
+  - id: "neg-2"
+    input: "Build a full quarterly roadmap."
+    expect_activation: false

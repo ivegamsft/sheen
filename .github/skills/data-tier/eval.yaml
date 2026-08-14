@@ -1,0 +1,19 @@
+name: "data-tier-routing"
+description: "Routing evaluation — validates trigger activation for the data-tier skill."
+skill: "skills/data-tier/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Design a relational schema for a multi-tenant SaaS application with user accounts and billing."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Review this SQL query — I'm worried it's causing N+1 problems and is missing indexes."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Write a database migration script for adding a new column, including a rollback block."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Update the button label on the checkout page from 'Submit' to 'Place Order'."
+    expect_activation: false
+  - id: "neg-2"
+    input: "How do I set up a GitHub Actions runner on a self-hosted machine?"
+    expect_activation: false

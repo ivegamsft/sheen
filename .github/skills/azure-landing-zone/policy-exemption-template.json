@@ -1,0 +1,36 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "exemptionName": {
+      "value": "exempt-<workload>-<policy-id>"
+    },
+    "displayName": {
+      "value": "<Short description of the exemption>"
+    },
+    "description": {
+      "value": "<Detailed business justification for the exemption. Include compensating controls in place.>"
+    },
+    "policyAssignmentId": {
+      "value": "/providers/Microsoft.Management/managementGroups/<MG-ID>/providers/Microsoft.Authorization/policyAssignments/<ASSIGNMENT-NAME>"
+    },
+    "policyDefinitionReferenceIds": {
+      "value": ["<POLICY-DEFINITION-REFERENCE-ID>"]
+    },
+    "exemptionCategory": {
+      "value": "Waiver"
+    },
+    "expiresOn": {
+      "value": "<YYYY-MM-DDTHH:MM:SSZ — mandatory, maximum 12 months from approval date>"
+    },
+    "metadata": {
+      "value": {
+        "approvedBy": "<name or role of approver>",
+        "approvedAt": "<YYYY-MM-DDTHH:MM:SSZ>",
+        "justification": "<one-sentence business justification>",
+        "compensatingControls": "<description of mitigating controls active while exemption is in place>",
+        "reviewDate": "<YYYY-MM-DD — scheduled review date, must be on or before expiresOn>"
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+name: "devops-routing"
+description: "Routing evaluation — validates trigger activation for the devops skill."
+skill: "skills/devops/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Create a GitHub Actions CI/CD pipeline with build, test, and deploy stages for my service."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Review this Bicep template and tell me if there are any deployment issues."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Write a rollback runbook for the payment service in case the release goes wrong."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Implement the new discount calculation feature in the order service."
+    expect_activation: false
+  - id: "neg-2"
+    input: "Suggest a color palette for our company's redesigned marketing website."
+    expect_activation: false

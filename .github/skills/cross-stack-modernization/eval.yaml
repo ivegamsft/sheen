@@ -1,0 +1,19 @@
+name: "cross-stack-modernization-routing"
+description: "Routing evaluation — validates trigger activation for the cross-stack-modernization skill."
+skill: "skills/cross-stack-modernization/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Help me build a modernization strategy for our 10-year-old Java monolith."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Should we rewrite this service from scratch or incrementally refactor it using strangler fig?"
+    expect_activation: true
+  - id: "pos-3"
+    input: "How do I sequence service extraction to minimize dependency risk during the migration?"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Design a brand-new microservices architecture for a greenfield e-commerce platform."
+    expect_activation: false
+  - id: "neg-2"
+    input: "Write a regex to validate email addresses."
+    expect_activation: false

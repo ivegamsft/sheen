@@ -1,0 +1,19 @@
+name: "architecture-routing"
+description: "Routing evaluation — validates trigger activation for the architecture skill."
+skill: "skills/architecture/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Help me design the overall system architecture for our new e-commerce platform"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Create a C4 diagram showing the containers and components for our microservices system"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Write an ADR documenting our decision to use Kafka over RabbitMQ for event streaming"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Fix the failing unit tests in the CI pipeline"
+    expect_activation: false
+  - id: "neg-2"
+    input: "Make the login button pixel-perfect according to the Figma design"
+    expect_activation: false

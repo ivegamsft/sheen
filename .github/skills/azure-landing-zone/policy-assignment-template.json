@@ -1,0 +1,37 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "policyAssignmentName": {
+      "value": "assign-nist-80053-landing-zones"
+    },
+    "policyDefinitionId": {
+      "value": "/providers/Microsoft.Authorization/policySetDefinitions/179d1daa-458f-4e47-8086-2a68d0d6c38f"
+    },
+    "displayName": {
+      "value": "NIST SP 800-53 Rev. 5 — Landing Zones"
+    },
+    "description": {
+      "value": "Assigns the NIST SP 800-53 Rev. 5 policy initiative to enforce security and compliance controls across all Landing Zone subscriptions."
+    },
+    "enforcementMode": {
+      "value": "Default"
+    },
+    "managementGroupId": {
+      "value": "<LANDING-ZONES-MG-ID>"
+    },
+    "managedIdentityLocation": {
+      "value": "eastus"
+    },
+    "parameters": {
+      "value": {}
+    },
+    "nonComplianceMessages": {
+      "value": [
+        {
+          "message": "Resource does not comply with NIST SP 800-53 Rev. 5. Remediate or request a formal exemption."
+        }
+      ]
+    }
+  }
+}

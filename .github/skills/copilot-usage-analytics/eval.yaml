@@ -1,0 +1,19 @@
+name: "copilot-usage-analytics-routing"
+description: "Routing evaluation — validates trigger activation for the copilot-usage-analytics skill."
+skill: "skills/copilot-usage-analytics/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "How much did this Copilot agent session cost in tokens and estimated dollars?"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Which agent dispatches in our workflow are the most expensive and can we route them to a cheaper model?"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Show me which GitHub Copilot usage APIs are available and what data they return."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Build a product analytics dashboard to track user signups and feature adoption."
+    expect_activation: false
+  - id: "neg-2"
+    input: "How do I center a div with CSS flexbox?"
+    expect_activation: false

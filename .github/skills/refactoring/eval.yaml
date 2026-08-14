@@ -1,0 +1,19 @@
+name: "refactoring-routing"
+description: "Routing evaluation — validates trigger activation for the refactoring skill."
+skill: "skills/refactoring/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "This method is 300 lines long — help me safely extract it into smaller functions without changing behavior."
+    expect_activation: true
+  - id: "pos-2"
+    input: "There's duplicated validation logic in three places; help me remove the duplication without breaking outputs."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Help me plan an incremental cleanup of this legacy module, splitting its responsibilities step by step."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Rewrite the entire payment service from scratch using a microservices architecture."
+    expect_activation: false
+  - id: "neg-2"
+    input: "What is the capital of France?"
+    expect_activation: false

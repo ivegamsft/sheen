@@ -1,0 +1,19 @@
+name: "azure-policy-routing"
+description: "Routing evaluation — validates trigger activation for the azure-policy skill."
+skill: "skills/azure-policy/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Write an Azure Policy definition that denies resource creation if the required cost-center tag is missing"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Create a policy initiative that bundles all our CIS benchmark controls for the subscription"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Build a DeployIfNotExists policy remediation that automatically enables diagnostic settings on storage accounts"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Which Azure RBAC built-in role should I assign to a developer who needs to read storage blobs?"
+    expect_activation: false
+  - id: "neg-2"
+    input: "How do I center a div in CSS?"
+    expect_activation: false

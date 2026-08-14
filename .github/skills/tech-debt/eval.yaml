@@ -1,0 +1,19 @@
+name: "tech-debt-routing"
+description: "Routing evaluation — validates trigger activation for the tech-debt skill."
+skill: "skills/tech-debt/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Help me build a technical debt register for our codebase and rank the items with RICE scoring."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Reserve some sprint capacity for debt remediation and track our amortization progress over time."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Compare these debt items by impact and effort so we know which cleanup work to tackle first."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Implement the new checkout feature with discount code support."
+    expect_activation: false
+  - id: "neg-2"
+    input: "Our service is down and customers can't check out — help us respond to this production incident."
+    expect_activation: false

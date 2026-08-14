@@ -1,0 +1,19 @@
+name: "dev-containers-routing"
+description: "Routing evaluation — validates trigger activation for the dev-containers skill."
+skill: "skills/dev-containers/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Create a devcontainer.json for this repo so new contributors can onboard in minutes."
+    expect_activation: true
+  - id: "pos-2"
+    input: "Set up GitHub Codespaces for our team so everyone has the same dev toolchain."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Add the recommended VS Code extensions and settings inside the dev container."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Create a production Kubernetes deployment manifest for this service."
+    expect_activation: false
+  - id: "neg-2"
+    input: "Write unit tests for the authentication middleware."
+    expect_activation: false

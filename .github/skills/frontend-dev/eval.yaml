@@ -1,0 +1,19 @@
+name: "frontend-dev-routing"
+description: "Routing evaluation — validates trigger activation for the frontend-dev skill."
+skill: "skills/frontend-dev/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Can you help me scaffold an accessible modal dialog component that meets WCAG 2.1 AA requirements?"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Review this page for WCAG accessibility issues and tell me what needs to be fixed."
+    expect_activation: true
+  - id: "pos-3"
+    input: "I need to implement a responsive grid layout that stacks on mobile and goes side-by-side on desktop."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Design a REST API for a user authentication service with JWT token handling."
+    expect_activation: false
+  - id: "neg-2"
+    input: "How do I configure a Kubernetes ingress controller?"
+    expect_activation: false
