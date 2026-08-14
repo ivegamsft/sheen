@@ -1,0 +1,30 @@
+{
+  "$comment": "GENERATED FILE — do not hand-edit. Produced by scripts/build-metadata from repo-root assets (vendor/ excluded). Implements specs/05-validation-checks.spec.md. Phase 0 scaffold: asset sets are empty until pillars are populated.",
+  "schema": "sheen-metadata/v1",
+  "name": "basecoat-sheen",
+  "version": "0.1.0",
+  "generated": null,
+  "source": {
+    "excluded": ["vendor/"]
+  },
+  "counts": {
+    "skills": 0,
+    "agents": 0,
+    "instructions": 0,
+    "prompts": 0,
+    "templates": 0,
+    "tokens": {
+      "core": 0,
+      "semantic": 0,
+      "themes": 0
+    }
+  },
+  "assets": {
+    "skills": [],
+    "agents": [],
+    "instructions": [],
+    "prompts": [],
+    "templates": [],
+    "themes": []
+  }
+}

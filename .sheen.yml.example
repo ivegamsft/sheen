@@ -1,0 +1,59 @@
+# .sheen.yml --- basecoat-sheen consumer configuration
+#
+# Place this file at the root of your repo to control how the finish coat is
+# applied: which upstream sheen source to pull from, which assets to include, and
+# which themes to materialize.
+#
+# All keys are optional. Remove any key to accept the default.
+#
+# sheen is the design/UX layer over basecoat. It syncs alongside a `.basecoat.yml`;
+# the `sheen-*` and `basecoat-*` namespaces never collide.
+#
+# Full reference: specs/06-consumption-sync.spec.md
+
+
+# -- Sync configuration --------------------------------------------------------
+
+# source: the upstream basecoat-sheen repo to clone assets from.
+# Override when your org maintains a private fork.
+# Default: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+
+# ref: branch or tag to sync from.
+# Pin to a release tag (e.g. v0.1.0) for production stability.
+# Default: main
+ref: main
+
+# skills: explicit allow-list of skill directory names.
+# Omit this key entirely to sync all available sheen skills.
+# skills:
+#   - design-review
+#   - token-audit
+
+# agents: explicit allow-list of agent names (without the .agent.md suffix).
+# Omit this key entirely to sync all available sheen agents.
+# agents:
+#   - ux-designer
+#   - design-reviewer
+
+# instructions: explicit allow-list of instruction file names (without .instructions.md).
+# Omit this key entirely to sync all available sheen instruction files.
+# instructions:
+#   - sheen-10-core-design-principles
+#   - sheen-20-tokens-foundations
+
+# themes: explicit allow-list of theme names to materialize from tokens/themes/.
+# Omit this key entirely to materialize all available themes.
+# themes:
+#   - light
+#   - dark
+#   - high-contrast
+
+# sync: sync behaviour overrides (one mapping --- combine the keys you need).
+#   script  --- path to the sync entrypoint, relative to repo root. Set this when
+#               your sync script is not the canonical root sync.ps1/sync.sh.
+#   exclude --- paths to skip during sync (prefixes or globs).
+# sync:
+#   script: scripts/sheen/sync-sheen.ps1
+#   exclude:
+#     - archive/   # skip archived/deprecated assets

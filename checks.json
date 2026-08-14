@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "basecoat-sheen checks",
+  "description": "Validation manifest for sheen assets. Implements specs/05-validation-checks.spec.md. Rules grouped by severity: 'error' fails CI, 'warn' is advisory. vendor/ is excluded (validated upstream).",
+  "version": "0.1.0",
+  "scope": {
+    "include": [
+      "skills/",
+      "agents/",
+      "instructions/",
+      "prompts/",
+      "templates/",
+      "tokens/"
+    ],
+    "exclude": [
+      "vendor/"
+    ]
+  },
+  "rules": {
+    "error": [
+      {
+        "id": "frontmatter-complete",
+        "applies_to": ["skills/**/SKILL.md", "agents/*.agent.md", "instructions/*.instructions.md"],
+        "description": "Every asset has all required frontmatter fields per specs 02-04.",
+        "script": "scripts/lint-frontmatter"
+      },
+      {
+        "id": "name-matches-folder",
+        "applies_to": ["skills/*/"],
+        "description": "Skill frontmatter 'name' equals its folder name.",
+        "script": "scripts/lint-frontmatter"
+      },
+      {
+        "id": "description-triggers",
+        "applies_to": ["skills/**/SKILL.md"],
+        "description": "Skill description contains USE FOR: (>=3 triggers) and DO NOT USE FOR: (>=2 anti-triggers).",
+        "script": "scripts/lint-frontmatter"
+      },
+      {
+        "id": "eval-min-scenarios",
+        "applies_to": ["skills/**/eval.yaml", "agents/*.agent.eval.yaml"],
+        "description": "Each eval has >=3 positive and >=2 negative scenarios.",
+        "script": "scripts/lint-frontmatter"
+      },
+      {
+        "id": "token-schema",
+        "applies_to": ["tokens/**/*.json"],
+        "description": "DTCG schema, reference resolution, naming, WCAG contrast, theme completeness, tier discipline (spec 01 s6).",
+        "script": "scripts/validate-tokens"
+      },
+      {
+        "id": "catalog-drift",
+        "applies_to": ["skills/_catalog.md", "sheen-metadata.json", "specs/07-skill-catalog.spec.md"],
+        "description": "Catalog, metadata inventory, and per-skill specs list the same set.",
+        "script": "scripts/build-metadata"
+      },
+      {
+        "id": "reference-integrity",
+        "applies_to": ["skills/**/SKILL.md", "agents/*.agent.md"],
+        "description": "Every composes.skills / delegates name resolves to an existing asset.",
+        "script": "scripts/lint-frontmatter"
+      }
+    ],
+    "warn": [
+      {
+        "id": "token-budget",
+        "applies_to": ["skills/**/SKILL.md"],
+        "description": "SKILL.md body over ~500 tokens."
+      },
+      {
+        "id": "description-overlap",
+        "applies_to": ["skills/**/SKILL.md"],
+        "description": "High similarity between two skill descriptions."
+      },
+      {
+        "id": "maturity-docs",
+        "applies_to": ["skills/**/SKILL.md", "agents/*.agent.md"],
+        "description": "A 'stable' asset lacking a docs page."
+      },
+      {
+        "id": "aria-keyboard-present",
+        "applies_to": ["templates/component-spec/**", "skills/**/templates/**"],
+        "description": "A component-spec / ui-states artifact missing an ARIA role/keyboard section (spec 08 s2.2)."
+      },
+      {
+        "id": "safe-error-note",
+        "applies_to": ["templates/**", "skills/**/templates/**"],
+        "description": "An error/empty-state spec lacking a no-information-leak note (spec 08 s2.11)."
+      },
+      {
+        "id": "locale-tags",
+        "applies_to": ["tokens/**/*.json", "instructions/*.instructions.md"],
+        "description": "Localized strings not using BCP 47 tags (spec 08 s2.9)."
+      }
+    ]
+  }
+}

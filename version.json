@@ -1,0 +1,6 @@
+{
+  "name": "basecoat-sheen",
+  "version": "0.1.0",
+  "releaseDate": null,
+  "notes": "Phase 0 scaffold: repository structure, governance files, consumer config (.sheen.yml.example, checks.json, sheen-metadata.json), and sync/rollback tooling. No assets published yet."
+}
