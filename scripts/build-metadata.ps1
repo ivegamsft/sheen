@@ -156,8 +156,23 @@ if ($Check) {
         exit 1
     }
     $oldJson = Get-Content $outPath -Raw
-    if ((Normalize-JsonText $oldJson) -ne (Normalize-JsonText $newJson)) {
+    $oldNorm = Normalize-JsonText $oldJson
+    $newNorm = Normalize-JsonText $newJson
+    if ($oldNorm -ne $newNorm) {
         Write-Host "::error::sheen-metadata.json is out of date. Run scripts/build-metadata.ps1"
+        $oldLines = $oldNorm -split "`n"
+        $newLines = $newNorm -split "`n"
+        $max = [Math]::Max($oldLines.Count, $newLines.Count)
+        for ($i = 0; $i -lt $max; $i++) {
+            $oldLine = if ($i -lt $oldLines.Count) { $oldLines[$i] } else { '<missing>' }
+            $newLine = if ($i -lt $newLines.Count) { $newLines[$i] } else { '<missing>' }
+            if ($oldLine -ne $newLine) {
+                Write-Host ("::error::first diff at line {0}" -f ($i + 1))
+                Write-Host ("::error::expected: {0}" -f $oldLine)
+                Write-Host ("::error::actual:   {0}" -f $newLine)
+                break
+            }
+        }
         exit 1
     }
     Write-Host "build-metadata --check: OK"
