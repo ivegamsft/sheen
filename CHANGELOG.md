@@ -7,6 +7,27 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.3.0] — 2026-08-14
+
+### Added
+- Instruction layer (bands 10–90): ten always-on ambient instruction files that
+  load design values, accessibility, token naming, component states, web usability,
+  brand voice, information architecture, taxonomy, content/i18n, and standards
+  conformance into every Copilot session.
+  - `instructions/sheen-10-core-design-principles.instructions.md`
+  - `instructions/sheen-10-core-accessibility.instructions.md`
+  - `instructions/sheen-20-tokens-naming.instructions.md`
+  - `instructions/sheen-30-components-states.instructions.md`
+  - `instructions/sheen-40-web-usability.instructions.md`
+  - `instructions/sheen-50-brand-voice.instructions.md`
+  - `instructions/sheen-60-ia-navigation.instructions.md`
+  - `instructions/sheen-70-taxonomy-ontology.instructions.md`
+  - `instructions/sheen-80-content-multilingual.instructions.md`
+  - `instructions/sheen-90-standards-conformance.instructions.md`
+- Shared cross-skill templates for four categories: `style-guide`,
+  `component-spec`, `brand-guidelines`, and `design-review`. Each includes a
+  `README.md` (usage guidance) and a populated starter template.
+
 ## [0.2.0] — 2026-08-14
 
 ### Added
@@ -49,6 +70,7 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 - The upstream `basecoat` framework remains vendored read-only under
   `vendor/basecoat/` and is not modified by sheen.
 
-[Unreleased]: https://github.com/IBuySpy-Shared/basecoat-sheen/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/IBuySpy-Shared/basecoat-sheen/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.3.0
 [0.2.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.2.0
 [0.1.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.1.0
