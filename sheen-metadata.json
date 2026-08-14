@@ -96,7 +96,7 @@
         "pillar": "a11y",
         "maturity": "stable",
         "description": "WCAG 2.2 AA accessibility conformance audit for UI surfaces. USE FOR: a11y issue discovery and triage, remediation planning, conformance statement drafting. DO NOT USE FOR: only checking color-pair contrast, non-accessibility style preference reviews.",
-        "hash": "135b739bcfc48867aff8dea2913a1eebfc3b9d4895b264d5fb02eda0a2ff3dd3"
+        "hash": "c9b1c0a91f50d499bd20ca930fb53019a8bad0f36cc59f0bec0f63850309e0df"
       },
       {
         "name": "brand-identity",
@@ -106,7 +106,7 @@
         "pillar": "brand",
         "maturity": "stable",
         "description": " USE FOR: brand principles definition, visual identity codification, brand consistency guidance. DO NOT USE FOR: microcopy editing, component redline specs.",
-        "hash": "e3f4f8567633b63cb705ef3d6bf9ba7898ac4fe8276182f1706f65a98a2fff0a"
+        "hash": "e924c785f6cfb3f3b0cfdf90e7b46534479b9785ee59bea08f5be7f04aa5c121"
       },
       {
         "name": "brand-voice-tone",
@@ -116,7 +116,7 @@
         "pillar": "brand",
         "maturity": "stable",
         "description": " USE FOR: voice and tone rules, messaging style guidance, tone-by-context matrix. DO NOT USE FOR: UI state behavior, token schema changes.",
-        "hash": "c31530463a993e866c5401bf67968305006486324607db1ad3a95c9f393bc35a"
+        "hash": "383902771d806479707c3cdc8cb9a97f910b1cf8b07c966f2182462eecb362ca"
       },
       {
         "name": "color-contrast-check",
@@ -126,7 +126,7 @@
         "pillar": "a11y",
         "maturity": "stable",
         "description": " USE FOR: contrast ratio checks, theme pair validation, wcag contrast triage. DO NOT USE FOR: full accessibility audits, navigation IA design.",
-        "hash": "bb677e9243800940819a67d0ffaa31164f7e4ed2d9db576973c55c0f1b618387"
+        "hash": "7df646c94498eb9e5b8fd1581a1cf6983612db69370bfd800fea451182c06eb0"
       },
       {
         "name": "color-system",
@@ -136,7 +136,7 @@
         "pillar": "foundations",
         "maturity": "stable",
         "description": "Build accessible palette ramps and semantic color roles. USE FOR: generating color ramps, mapping brand hues to semantic roles, validating cross-theme contrast readiness. DO NOT USE FOR: isolated per-pair contrast reporting only, non-color token authoring.",
-        "hash": "62e08fec6131aa7e7f450ebacbc1539141b004481893093e0ddb56eee86265a7"
+        "hash": "b65a1aa975fe83106cf419276e743bc32ed33210723da53412956f800b89d5b1"
       },
       {
         "name": "component-spec",
@@ -146,7 +146,7 @@
         "pillar": "components",
         "maturity": "stable",
         "description": "Author complete component specifications with anatomy, variants, states, and accessibility behavior. USE FOR: defining component contracts, documenting ARIA/keyboard behavior, producing implementation-ready redlines. DO NOT USE FOR: whole-system design audits, broad UX strategy documents.",
-        "hash": "f838123771b41b75b737c2108300536b5afcbe91e9aacdf1d4ea5ca004331819"
+        "hash": "299d679a6c41b7b0815be686516b5fb080c924150824b4b7f7f16c83643ef893"
       },
       {
         "name": "content-hierarchy",
@@ -156,7 +156,7 @@
         "pillar": "usability",
         "maturity": "beta",
         "description": " USE FOR: content prioritization, scan-path improvement, hierarchy critique. DO NOT USE FOR: voice/tone strategy, token primitive edits.",
-        "hash": "f437ae6d7b7686805cc7519d74db3c07369b430983029d0c75d4daf27a8f3270"
+        "hash": "2fbbdb33199cd7bac9323fe1ede083fe2db1539c92157ff6718aeb997f27005d"
       },
       {
         "name": "craft-quality",
@@ -166,7 +166,7 @@
         "pillar": "governance",
         "maturity": "stable",
         "description": " USE FOR: craft checklist passes, polish quality assessments, consistency refinements. DO NOT USE FOR: formal usability audits, framework detection scans.",
-        "hash": "6f80dfa760678a782421c0a82ece8deca9751be0036b8de51bab38430e7de376"
+        "hash": "f3e37b50301075725179b245e3fcb6d6a8b8de865637529c49a526ccec678f75"
       },
       {
         "name": "create-design-skill",
@@ -176,7 +176,7 @@
         "pillar": "governance",
         "maturity": "stable",
         "description": "Scaffold a new sheen skill that conforms to the skill contract. USE FOR: creating new skill folders and frontmatter, authoring routing eval scenarios, updating catalog entries safely. DO NOT USE FOR: writing instruction-layer files, implementing product feature code.",
-        "hash": "6620ebddbee847d985eb3c4e4e2994fd00c26fdceb23657341187492aa9ae0b7"
+        "hash": "7efd46fb03ebbf7dd94647497624ecba7519d4d1be5797bd52d142620ffb63e3"
       },
       {
         "name": "css-mapping",
@@ -186,7 +186,7 @@
         "pillar": "mapping",
         "maturity": "beta",
         "description": " USE FOR: css inventory mapping, framework detection, token candidate extraction. DO NOT USE FOR: creating new semantic token models, design review facilitation.",
-        "hash": "45040340296ee217813de3cf86839b3d4e800dd9a8704fac6a208ecc47fb162a"
+        "hash": "655bb7b855bd5cac9941411fc0bd14e4128c7d1a26c7792eded71b530fe8d4e3"
       },
       {
         "name": "design-audit",
@@ -196,7 +196,7 @@
         "pillar": "lifecycle",
         "maturity": "stable",
         "description": "Top-level design assessment for an existing repo or product. USE FOR: repo-wide design audits, prioritizing UX/design debt, generating a remediation backlog from evidence. DO NOT USE FOR: editing only token files in isolation, greenfield system bootstrap from zero.",
-        "hash": "f21e1f402a77e3b0596dd6323b0712a605ea04c3872cc14fa0c15f67e5e79d97"
+        "hash": "b24f5aa7b319c4540c62a63a1a73e3172af2e5e17b2cefa33d49133fa2014bcf"
       },
       {
         "name": "design-bootstrap",
@@ -206,7 +206,7 @@
         "pillar": "lifecycle",
         "maturity": "stable",
         "description": "Greenfield design-system bootstrap entry point. USE FOR: starting a design system from scratch, seeding initial tokens and themes, defining first-pass IA/component foundations. DO NOT USE FOR: auditing an established system, isolated one-off component tweaks.",
-        "hash": "3017fee128d16e2b49fdbc978b8b23eb814440eb8151a0839c0bd0e8cb91503a"
+        "hash": "618786d7fbf567a28af2173011fac1925fedd05e86a4fcc1b55cb27546090b10"
       },
       {
         "name": "design-debate",
@@ -216,7 +216,7 @@
         "pillar": "lifecycle",
         "maturity": "beta",
         "description": " USE FOR: option tradeoff analysis, design decision records, criteria-based comparisons. DO NOT USE FOR: single artifact polish reviews, token-only edits.",
-        "hash": "5fd0fa8756a9955bdbc618f00c7fa55f640216aee06634c4b1d5332c5fc7b1bf"
+        "hash": "88005d426d572fb20ee6a0fe262168168bdb9291642ef87d94bb325cbdfc2f1c"
       },
       {
         "name": "design-exploration",
@@ -226,7 +226,7 @@
         "pillar": "lifecycle",
         "maturity": "beta",
         "description": " USE FOR: concept generation, divergent direction exploration, idea synthesis. DO NOT USE FOR: final decision arbitration, wcag audit reporting.",
-        "hash": "f46db606366ef2b18a187d9190e7b7efeff79d73deb517b5c1fb1e5015937ed3"
+        "hash": "28f3dc60e3eac7ef7ce70ccfc8bec1c249512777a93e7fec9ba451a0bfd8a83a"
       },
       {
         "name": "design-handoff",
@@ -236,7 +236,7 @@
         "pillar": "lifecycle",
         "maturity": "stable",
         "description": " USE FOR: engineering handoff packaging, redline and annotation bundling, token/spec export preparation. DO NOT USE FOR: authoring core component specs, backend implementation.",
-        "hash": "4c049a3900829f9943f48446ca92413b0f588872e4b96132d34fc5cc0c14354d"
+        "hash": "654ffc35ccfc6972c4c5f9be71d9bfdf78f4ee6840cf2b70682e2ffda1768084"
       },
       {
         "name": "design-review",
@@ -246,7 +246,7 @@
         "pillar": "governance",
         "maturity": "stable",
         "description": " USE FOR: artifact critique, principle-based review, craft issue identification. DO NOT USE FOR: multi-option debate facilitation, full repo audits.",
-        "hash": "1986214fea4698b80947655858a0afc6e8f1f241c375ee77848d0cfe35c0836d"
+        "hash": "9ab78ccf5e6d1ec0d88920ec600844dcde9dcb8b23f5bf515266f103b515f980"
       },
       {
         "name": "design-suggest",
@@ -256,7 +256,7 @@
         "pillar": "lifecycle",
         "maturity": "beta",
         "description": " USE FOR: targeted improvement suggestions, quick design wins, prioritized recommendation lists. DO NOT USE FOR: full repository audits, formal conformance claims.",
-        "hash": "b8c61085806ea39c7c28fb47adee85867693e1c65b80285b8c86501316cda349"
+        "hash": "cd731b7e452852607ed685bd9f9caf9c99d9f6efc1e2da0f64b4a2ac0991e540"
       },
       {
         "name": "design-system-audit",
@@ -266,7 +266,7 @@
         "pillar": "components",
         "maturity": "stable",
         "description": " USE FOR: token/component coherence checks, design drift detection, system-level consistency audits. DO NOT USE FOR: repo-wide UX debt triage, new system bootstrap.",
-        "hash": "473779429381e557a3e4cd77c15602c69da3a7ab7ef647d185012af5ee9296dc"
+        "hash": "0384d0f5bf6135e5cf9f2678b22b81b2ab698f7f6d8ea63b83b72a3676a20285"
       },
       {
         "name": "design-tokens",
@@ -276,7 +276,7 @@
         "pillar": "foundations",
         "maturity": "stable",
         "description": "Author and evolve DTCG token source-of-truth. USE FOR: creating or editing core/semantic tokens, adding token aliases safely, maintaining token schema integrity. DO NOT USE FOR: choosing brand palette strategy alone, running full-repo UX audits.",
-        "hash": "ed989d206da17b26b76cebea566f824630ba6ce54c2551099e6ba20fdad9b130"
+        "hash": "420b69188325ca67e7f4181a5319a3f3ba7470b152b5a12817242c196124224e"
       },
       {
         "name": "design-update",
@@ -286,7 +286,7 @@
         "pillar": "lifecycle",
         "maturity": "beta",
         "description": " USE FOR: design system modernization, token migration planning, theme evolution rollout. DO NOT USE FOR: from-scratch bootstrap, single-component specs.",
-        "hash": "4f1329d104684f6b6663ec61cf08ec8001862bb43fa15c57ed363e35e3ca3539"
+        "hash": "2a06d266e96d349e039d853c06c2d712bfd6b6149148ca819c2cd2503dfbf60d"
       },
       {
         "name": "font-mapping",
@@ -296,7 +296,7 @@
         "pillar": "mapping",
         "maturity": "beta",
         "description": " USE FOR: font usage inventory, weight/style mapping, type token candidate mapping. DO NOT USE FOR: new typography scale creation, a11y conformance statements.",
-        "hash": "f7ed8ab71679a378a6cdf74bc2e1076bdfab8099a0db52835540ae463abca012"
+        "hash": "1a74d3aaf21877e5c9885d8e2710a3d393c36a18786090e47ca0e9c5cd3a6778"
       },
       {
         "name": "i18n-framework-mapping",
@@ -306,7 +306,7 @@
         "pillar": "mapping",
         "maturity": "beta",
         "description": " USE FOR: i18n framework detection, locale coverage inventory, translation key gap mapping. DO NOT USE FOR: i18n strategy design, component variants.",
-        "hash": "e09ec3cd03061488ec6c13ef2c6ef90a4b4dc0a914f65da213fea3c6dc50ecd4"
+        "hash": "06dd7e609377038e6be422a7970a5b0b8248ea6653db948df02aea65be820618"
       },
       {
         "name": "iconography",
@@ -316,7 +316,7 @@
         "pillar": "foundations",
         "maturity": "beta",
         "description": " USE FOR: icon grid definition, stroke and sizing rules, icon naming taxonomy. DO NOT USE FOR: logo standards, full brand identity.",
-        "hash": "de6fd118ae5d4b7448ac8e43a7f36c394362dce257190d3f2e6f6a1166f04603"
+        "hash": "5c8f13399d990c031d5c28b7d03c368bac2bda5b250ffbaff0fc568a6ca57119"
       },
       {
         "name": "imagery-illustration",
@@ -326,7 +326,7 @@
         "pillar": "brand",
         "maturity": "beta",
         "description": " USE FOR: imagery style direction, illustration system guidance, art-direction constraints. DO NOT USE FOR: logo safe-area rules, token architecture.",
-        "hash": "d05c0b92bb98af2302ddbb1a3ce26a9d8285f4dc90ced51c3683a60008aedd2d"
+        "hash": "5bbb5ecc3fbf77eb69a9a492adb4067be15082c8369cbfdbfb58b1c683999b8c"
       },
       {
         "name": "information-architecture",
@@ -336,7 +336,7 @@
         "pillar": "ia",
         "maturity": "stable",
         "description": " USE FOR: site map structuring, content model definition, navigation architecture planning. DO NOT USE FOR: pixel-level component specs, palette generation.",
-        "hash": "1a404aebf993639618cfd15a31a09781b98602744b6aea931575cb97d0c9eef8"
+        "hash": "af5e65522e8c6baf141562b8fd933297d37760c8897784fe93c7ee1d2a0da536"
       },
       {
         "name": "landing-page-design",
@@ -346,7 +346,7 @@
         "pillar": "usability",
         "maturity": "beta",
         "description": " USE FOR: landing page structure, hero/cta hierarchy, conversion-focused section planning. DO NOT USE FOR: full IA maps, WCAG conformance audits.",
-        "hash": "0d35871bc791986ac828880fb8382bad2baa4d43000112c38d2ecedf7ba27145"
+        "hash": "fdb939ca76e3aa8cc24468bdabe29de011d124695f9d21cd9f3c2402275744cd"
       },
       {
         "name": "layout-grid-spacing",
@@ -356,7 +356,7 @@
         "pillar": "foundations",
         "maturity": "stable",
         "description": " USE FOR: spacing scale design, grid and gutters, breakpoint planning. DO NOT USE FOR: single-screen responsive QA, component anatomy specs.",
-        "hash": "1de4ac0dfd0bfefdd9cec352bc7b8764ff345b6171767a25405d8d45308454c0"
+        "hash": "99ed876e477f0fa975e876c4ea239c35a3a6af6107a8debc3d6dab7098999942"
       },
       {
         "name": "logo-usage",
@@ -366,7 +366,7 @@
         "pillar": "brand",
         "maturity": "stable",
         "description": " USE FOR: logo variant guidance, clear-space rules, misuse prevention examples. DO NOT USE FOR: icon system grids, usability audits.",
-        "hash": "3996d998f3886f24d174e0ba307918ff23c24c44d9d7cdbce5ae3740b84bc57b"
+        "hash": "22fbe672f8eed9e312b7cb0355a974969dc06fe85d3a53c11d706b3a1f94c184"
       },
       {
         "name": "motion-elevation",
@@ -376,7 +376,7 @@
         "pillar": "foundations",
         "maturity": "beta",
         "description": " USE FOR: duration and easing tokens, elevation level rules, material/translucency guidance. DO NOT USE FOR: full interaction state specs, usability heuristic reviews.",
-        "hash": "1a3634c1eb921ba834fdac34a69e1f7a546c78dc7fd416422e4870ff55f69cab"
+        "hash": "2f84a5c0680a1d84dffcd168cf75f1ee8cf56eaa591561cedc12dba89e529047"
       },
       {
         "name": "multilingual",
@@ -386,7 +386,7 @@
         "pillar": "content",
         "maturity": "stable",
         "description": " USE FOR: i18n/l10n strategy, locale externalization planning, rtl/pluralization guidance. DO NOT USE FOR: framework detection only, color contrast checks.",
-        "hash": "c8075984cc281a00ab85a68a889e42383b731e1300d703af873ef32c8ace58ce"
+        "hash": "0951fe9f7cc659efe95052fa83beac210f5cd243af3c09a39d09b37ffb9a324d"
       },
       {
         "name": "navigation-design",
@@ -396,7 +396,7 @@
         "pillar": "ia",
         "maturity": "stable",
         "description": " USE FOR: global/local nav patterns, wayfinding design, menu/breadcrumb strategy. DO NOT USE FOR: content ontology modeling, theme token changes.",
-        "hash": "5704b759021fcf8c26a0abad1d9e994d10760716cd08ca2d68d90d25a673a5ee"
+        "hash": "a517cdd134300a737d918c4e7bf7b0f3320abc5eccf73d619b892421026e7d8f"
       },
       {
         "name": "ontology",
@@ -406,7 +406,7 @@
         "pillar": "ia",
         "maturity": "beta",
         "description": " USE FOR: entity relationship modeling, semantic schema definition, attribute constraint mapping. DO NOT USE FOR: flat category taxonomies, brand color work.",
-        "hash": "1c38282a3fc1bd41b37c219249d00219f1862100492df402707c338a7c5ca42b"
+        "hash": "e07556fda1a8cd8ec5775f75361865e3400b321355cf6754096dd7d66a7dd607"
       },
       {
         "name": "pattern-library",
@@ -416,7 +416,7 @@
         "pillar": "components",
         "maturity": "beta",
         "description": " USE FOR: pattern documentation, pattern composition guidance, pattern index authoring. DO NOT USE FOR: single component deep specs, token schema validation.",
-        "hash": "56c4d25c1d0ee1b9d8aaaf92062105c4998099d563d8cedf53de0fd3a0ac1f4c"
+        "hash": "df6140fe7b815361fb40c2562dc2af613fc3577923b2f6565bd96cfb261a279d"
       },
       {
         "name": "responsive-design",
@@ -426,7 +426,7 @@
         "pillar": "usability",
         "maturity": "stable",
         "description": " USE FOR: breakpoint behavior definition, responsive reflow planning, adaptive layout guidance. DO NOT USE FOR: spacing-scale authoring, brand tone guidance.",
-        "hash": "8ae027002cf2d9107a671a8f772e46eed01d888c7345629bdcf76a9347f23feb"
+        "hash": "4ba5cb38ecaa717b9264571f978c05fd1b4426f83b6c5a9bc56b6c6a5237fdce"
       },
       {
         "name": "secure-ux",
@@ -436,7 +436,7 @@
         "pillar": "security",
         "maturity": "beta",
         "description": " USE FOR: safe error-state design, auth/consent ux hardening, input-feedback privacy safety. DO NOT USE FOR: backend threat modeling, penetration testing.",
-        "hash": "e0c5be6b8ce0593605f2931df1dc2a31bc63d31f2a47678fb4fbb3496fa2ff46"
+        "hash": "3febdbd9d229c85371f84722745d611d54239712c713bc8d3a4078b068f30ce3"
       },
       {
         "name": "style-guide-authoring",
@@ -446,7 +446,7 @@
         "pillar": "governance",
         "maturity": "stable",
         "description": " USE FOR: style-guide compilation, pattern library publication, guideline consolidation. DO NOT USE FOR: single-component-only specs, token validation scripts.",
-        "hash": "5eb68bf44007f55357093deee9142811e699ae27d1875b167f18af4e2121ae2f"
+        "hash": "30d4f22c297e5b2f61e23aa494d9dde2f240067933e1603b84fa31ea8c1f1a0a"
       },
       {
         "name": "taxonomy",
@@ -456,7 +456,7 @@
         "pillar": "ia",
         "maturity": "beta",
         "description": " USE FOR: controlled vocabulary design, category hierarchy rules, tag schema definition. DO NOT USE FOR: entity relationship modeling, component state specs.",
-        "hash": "0dcb863fc5bead87e5fa50c7da25e409c96b0e1295cd023f4492378adf9eb86e"
+        "hash": "69845e928cc45a047c17b83d8c6635bca5b9710a60fc4012e8031f845501fb92"
       },
       {
         "name": "theming",
@@ -466,7 +466,7 @@
         "pillar": "foundations",
         "maturity": "stable",
         "description": " USE FOR: new theme creation, semantic overrides, theme completeness validation. DO NOT USE FOR: new semantic key creation, brand voice guidance.",
-        "hash": "8f0a123b8aa52c3aa59f904df80352dba2f9cc277c2a32624eb180de52003603"
+        "hash": "6d5554e7c63d25972c8d9d24673fb443d2deb3daf97690c36389b59ecacf9267"
       },
       {
         "name": "typography",
@@ -476,7 +476,7 @@
         "pillar": "foundations",
         "maturity": "stable",
         "description": " USE FOR: type ramp definition, font pairing, text role mapping. DO NOT USE FOR: font inventory mapping, full usability audits.",
-        "hash": "20ad6a2b0f16e78cfc2cf8edde4d0d6df7e12270ed54e91abb1958a5f40d39b6"
+        "hash": "8090a81392c804f20490aecd6fd901fd2c011ce724372b815f6c6c184ec96ff8"
       },
       {
         "name": "ui-states-interaction",
@@ -486,7 +486,7 @@
         "pillar": "components",
         "maturity": "stable",
         "description": " USE FOR: interaction state modeling, transition behavior definition, empty/error/loading state guidance. DO NOT USE FOR: component anatomy-only specs, enterprise security pen-tests.",
-        "hash": "04b3b6332b35db057bc8d73241376b27d798e83e4cb032de12051bbdeec3d59e"
+        "hash": "92f4caeccfff327154741f9672f52216b192fa9d148f076a2c5d0171ec1594f3"
       },
       {
         "name": "usability-mapping",
@@ -496,7 +496,7 @@
         "pillar": "mapping",
         "maturity": "beta",
         "description": " USE FOR: flow-to-heuristic coverage mapping, screen inventory audits, usability gap mapping. DO NOT USE FOR: full heuristic critique writeups, token schema edits.",
-        "hash": "d70acaf9aaf29542501c95f7c0aa2177d41b1507c84ee91df64f58cb167e3f38"
+        "hash": "452af423d4b6a9855afec317c5ff7fffa968659bbaada798d166ce259be545c0"
       },
       {
         "name": "user-research",
@@ -506,7 +506,7 @@
         "pillar": "governance",
         "maturity": "beta",
         "description": " USE FOR: research planning, interview/persona synthesis, usability test protocol design. DO NOT USE FOR: heuristic-only reviews, token schema authoring.",
-        "hash": "ddf64f9f07c0773966298b21b3c1dcc4e1102acbf6d179800b344a9cd6c2bb23"
+        "hash": "b04e3dd93a65272eefdf3666fe706e47fc96a340400278c0722add8688c61f31"
       },
       {
         "name": "ux-writing",
@@ -516,7 +516,7 @@
         "pillar": "content",
         "maturity": "beta",
         "description": " USE FOR: microcopy authoring, error/empty-state text, plain-language rewriting. DO NOT USE FOR: brand identity systems, token architecture.",
-        "hash": "a4d7b53b11195d39c5d0fd80a4491200cc17ec102646f3ced2b6c9b56805e065"
+        "hash": "6b9bcb6fffd2b80203b7d2e72b06a53fdabb598ee0ca0e75410236b4c13eb729"
       },
       {
         "name": "visual-regression",
@@ -526,7 +526,7 @@
         "pillar": "governance",
         "maturity": "beta",
         "description": " USE FOR: snapshot baseline setup, visual diff triage, design QA drift detection. DO NOT USE FOR: functional test authoring, security threat modeling.",
-        "hash": "b29b1a3f119722f1572deb6ff9a1f1dd8ac895c878eb053875a10318d8f7d239"
+        "hash": "8ae2c93448998212b8daefdc0ffccf585da90e149a6b49b262e3928866463852"
       },
       {
         "name": "web-usability-review",
@@ -536,7 +536,7 @@
         "pillar": "usability",
         "maturity": "stable",
         "description": "Heuristic usability evaluation grounded in NN/g and ISO 9241 principles. USE FOR: reviewing flow usability, scoring heuristic violations, generating prioritized usability recommendations. DO NOT USE FOR: standards-based accessibility conformance audits, creating new token primitives.",
-        "hash": "542e83f10a002304518a0dbac92d4f3f9d560649a3e74d0ec9f8526dc2e8c47e"
+        "hash": "ad4fd94559c64d4b32cd17e26b5533ffdc65ae146e7ef7b132f99eb15434842d"
       },
       {
         "name": "wireframing",
@@ -546,7 +546,7 @@
         "pillar": "ia",
         "maturity": "stable",
         "description": " USE FOR: screen wireframe drafting, layout hierarchy planning, flow skeleton definition. DO NOT USE FOR: final visual polish, token refactoring.",
-        "hash": "bf872eebb9d167919835b97453ce2438b09ae8fae0bc889bd52b6c5a0171ec5d"
+        "hash": "87e8844827a6705a34b723f904496dee7df5bc40f7efa2236abbe6368b4c1288"
       }
     ],
     "agents": [
@@ -556,7 +556,7 @@
         "pillar": "a11y",
         "maturity": "draft",
         "description": "Design-role agent for WCAG conformance, contrast, and accessibility risk triage. Invoke for design requests in this mandate.",
-        "hash": "4f275b2be74ecb1219847bd2f29417f660dc5d7b13791a27c09c93f5550104b4"
+        "hash": "c99a8160d7e7d1446dd3a7ca38f1f49edff2f5b362b0347d5ba9d4fcb56f406c"
       },
       {
         "name": "brand-steward",
@@ -564,7 +564,7 @@
         "pillar": "brand",
         "maturity": "draft",
         "description": "Design-role agent for brand identity, voice, logo, and imagery integrity. Invoke for design requests in this mandate.",
-        "hash": "a0ddb79b2eec6705b992f3de045cca2ce7edeb2b97051d13c6237b35c54df058"
+        "hash": "3e854bc1b0b303e97aad61f96d36bededee678710cf48016b37800cfca68c860"
       },
       {
         "name": "design-reviewer",
@@ -572,7 +572,7 @@
         "pillar": "governance",
         "maturity": "draft",
         "description": "Design-role agent for craft-bar critiques and structured design tradeoff decisions. Invoke for design requests in this mandate.",
-        "hash": "d34b4d37c95ddc0d1de55b58b9336487347aa34634814e29c603d7e98dfb1f31"
+        "hash": "e2b6c314c88c88451cc6a5be410ce2b6a946238ad05376e2b79f26c846656a6d"
       },
       {
         "name": "design-system-architect",
@@ -580,7 +580,7 @@
         "pillar": "foundations",
         "maturity": "draft",
         "description": "Design-role agent for token architecture, theming, and component-system coherence. Invoke for design requests in this mandate.",
-        "hash": "351744061e20bc265daefde6d6f360aa00412eb9affc974f608c7b09b6b52754"
+        "hash": "2492a35995d545c606c645f2c63ca10c53cf0a127c997f34610907a72be8ace6"
       },
       {
         "name": "information-architect",
@@ -588,7 +588,7 @@
         "pillar": "ia",
         "maturity": "draft",
         "description": "Design-role agent for content structure, navigation, taxonomy, and ontology. Invoke for design requests in this mandate.",
-        "hash": "b93a537be3c5cfe57b2f9f3c0ba4813d0cb4eebe0d424e5126cb0f5c42186987"
+        "hash": "6992666a581a3248abe4ae506b27c43ad9566c878dac55fee6a869ae6bb5e7b0"
       },
       {
         "name": "ux-designer",
@@ -596,7 +596,7 @@
         "pillar": "usability",
         "maturity": "draft",
         "description": "Design-role agent for user journeys, interaction states, and usability optimization. Invoke for design requests in this mandate.",
-        "hash": "fcb8ee496fd386fe84037de87eccb6be9a47e7e0d68d306adffd628dc22a5c25"
+        "hash": "a1503c12ab2f6aec3d5c7512071edc186a471b4d0a4f1903c19bb2de8f0ddb7b"
       }
     ],
     "instructions": [],
@@ -604,17 +604,17 @@
       {
         "name": "dark",
         "path": "tokens/themes/dark.tokens.json",
-        "hash": "29aefcec84804f2aff3bb680234a89db95664b73b4dc2ad5fd278aee0bc4c243"
+        "hash": "5c8b62b3293b22c7eac83cd35363f971e08799d256f51e6d9c41492a4f1477c0"
       },
       {
         "name": "high-contrast",
         "path": "tokens/themes/high-contrast.tokens.json",
-        "hash": "ff45a42a7d5a5a98cd3e6364d6edc38d22faa42e1a662e3b48ccd5af7012b6be"
+        "hash": "6c6892e1077e871f449e408f03e812fa7c2b7ffe1ef75805b0159964ac49ab8b"
       },
       {
         "name": "light",
         "path": "tokens/themes/light.tokens.json",
-        "hash": "d295f2edffdf473b8d86957732a6c939360aa0ca2772a396e944df4cd0a88a0c"
+        "hash": "75967c2e4bebdb1211e31efe0f5ee15680c268433e78f55baa1e62203b9ffa94"
       }
     ]
   }

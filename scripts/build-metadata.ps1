@@ -38,7 +38,16 @@ function Get-Rel([string]$path) {
 }
 
 function Get-Hash([string]$path) {
-    return (Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash.ToLowerInvariant()
+    $text = Get-Content -LiteralPath $path -Raw
+    $normalized = (($text -replace "^\uFEFF", '') -replace "`r`n", "`n")
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes($normalized)
+    $sha = [System.Security.Cryptography.SHA256]::Create()
+    try {
+        return ([System.BitConverter]::ToString($sha.ComputeHash($bytes)) -replace '-', '').ToLowerInvariant()
+    }
+    finally {
+        $sha.Dispose()
+    }
 }
 
 $skillItems = @()
