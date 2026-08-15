@@ -1,19 +1,19 @@
-# Quick Start (10 Minutes)
+# 10-Minute Quick-Start
 
-basecoat-sheen is the design governance finish coat for basecoat: a reusable set
-of skills, agents, instruction layers, prompts, templates, and DTCG tokens that
-you can sync into a consumer repository with `.sheen.yml`. In one short setup,
-you can adopt only the assets you need now, then expand without changing your
-sync model.
+basecoat-sheen is the design governance finish coat for basecoat: a reusable
+set of skills, agents, instruction layers, prompts, templates, and DTCG tokens
+that you can sync into a consumer repository with `.sheen.yml`. In one short
+setup, you can adopt only the assets you need now, then expand without changing
+your sync model.
 
 This guide gets a new consumer from zero to first sync in five steps, then
 points to the three adoption modes:
 
-- [Lean mode](adoption-modes.md#mode-1-lean-solo-or-low-overhead)
-- [Token-only mode](adoption-modes.md#mode-2-token-only-design-system-governance-without-ai-assets)
-- [Full mode](adoption-modes.md#mode-3-full-cross-functional-maximum-coverage)
+- [Lean mode](adoption-modes.md#lean-mode)
+- [Token-only mode](adoption-modes.md#token-only-mode)
+- [Full mode](adoption-modes.md#full-mode)
 
-## Before you begin (1 minute)
+## Before you begin
 
 Have these ready:
 
@@ -24,7 +24,7 @@ Have these ready:
 If you are adopting from a tagged release, prefer pinning `ref` to a version tag
 instead of `main`.
 
-## Step 1. Copy config scaffold into your consumer repo (2 minutes)
+## Step 1. Copy config scaffold into your consumer repo
 
 Create `.sheen.yml` at the root of your consumer repository. Start from the
 template below (or copy from `.sheen.yml.example` in this repo).
@@ -57,7 +57,7 @@ your-consumer-repo/
 If you already use basecoat, keep `.basecoat.yml` as-is. basecoat and sheen use
 separate prefixes (`basecoat-*` and `sheen-*`), so both can be synced together.
 
-## Step 2. Run sync from the consumer repo (2 minutes)
+## Step 2. Run sync from the consumer repo
 
 From the consumer repository root, run the sync entrypoint for your platform.
 Use the script your team standardizes on.
@@ -82,7 +82,7 @@ You should see output indicating copied or updated sheen assets based on your
 `.sheen.yml` selection. If your first run is broad (no allow-lists), that is
 expected. Narrow later by editing allow-lists.
 
-## Step 3. Verify what landed (2 minutes)
+## Step 3. Verify what landed
 
 After sync, verify the expected directories and metadata are present in your
 consumer repository.
@@ -113,7 +113,7 @@ The scope comes from your `.sheen.yml` allow-lists.
 For token-heavy adoption, run your existing token validation or CI check after
 sync to confirm references and theme completeness in your consumer workflow.
 
-## Step 4. Explore the synced assets (2 minutes)
+## Step 4. Explore the synced assets
 
 Once files are present, orient quickly before integrating into team workflows.
 Start with catalog and guides, then inspect the exact assets you synced.
@@ -127,9 +127,9 @@ ls tokens/themes
 
 In this repository, the primary docs are:
 
-- [Skills Catalog](reference/skills-catalog.md)
-- [`.sheen.yml` Guide](guides/sheen-yml.md)
-- [Adopting Tokens](guides/adopting-tokens.md)
+- [Skills Catalog](../reference/skills-catalog.md)
+- [`.sheen.yml` Guide](../guides/sheen-yml.md)
+- [Adopting Tokens](../guides/adopting-tokens.md)
 
 Use these to map from business need to concrete assets:
 
@@ -137,12 +137,12 @@ Use these to map from business need to concrete assets:
 - Need governance language only: start with instruction layers
 - Need design-system consistency: start with tokens and themes
 
-## Step 5. Pick an integration mode and lock it in (2 minutes)
+## Step 5. Pick an integration mode and lock it in
 
 Choose one of the three profiles and commit that profile in `.sheen.yml`. You
 can switch modes later without changing tooling, only configuration.
 
-### Lean (solo or low overhead)
+### Lean mode
 
 ```yaml
 source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
@@ -154,7 +154,7 @@ instructions:
   - sheen-10-core-design-principles
 ```
 
-### Token-only (design system, no AI assets)
+### Token-only mode
 
 ```yaml
 source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
@@ -169,7 +169,7 @@ themes:
   - high-contrast
 ```
 
-### Full (cross-functional)
+### Full mode
 
 ```yaml
 source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
@@ -182,30 +182,6 @@ Profile details and expanded templates are documented in
 
 ---
 
-## What "good" looks like after day 1
-
-By the end of day 1, a healthy onboarding should produce three outcomes in the
-consumer repository:
-
-1. **Config clarity:** `.sheen.yml` is committed, reviewed, and pinned to your
-   chosen source/ref policy.
-2. **Asset clarity:** the synced directories match your selected mode (Lean,
-   Token-only, or Full), with no surprise payload.
-3. **Workflow clarity:** one concrete team workflow is running with the new
-   assets (for example: a design review, token audit, or standards check).
-
-You can capture this in PR notes with a short block:
-
-```text
-Profile: Lean
-Ref policy: main (temporary) -> tag pin planned next sprint
-Assets verified: skills/, instructions/
-First workflow: design-review applied to checkout flow
-```
-
-This simple record makes upgrades and future audits easier because reviewers can
-trace why the initial scope was selected.
-
 ## Common first-week workflow
 
 Use this sequence for the first week after onboarding:
@@ -217,30 +193,6 @@ Use this sequence for the first week after onboarding:
 5. Record your selected profile in team docs
 
 This prevents over-adoption while giving a clear path to full governance later.
-
-## Example pull request flow
-
-If you are introducing sheen to an established consumer repository, use a
-single-purpose onboarding PR:
-
-```bash
-git checkout -b docs/onboard-sheen
-cp .sheen.yml.example .sheen.yml
-# edit .sheen.yml to chosen mode
-./sync.sh   # or ./sync.ps1
-git add .sheen.yml skills instructions tokens
-git commit -m "Onboard basecoat-sheen in Lean mode"
-```
-
-PR description checklist:
-
-- Selected adoption mode and reason
-- Sync command used
-- Directories added or updated
-- Follow-up plan (expand mode or pin release tag)
-
-This keeps onboarding transparent and lowers friction for teams reviewing design
-governance changes for the first time.
 
 ## Troubleshooting quick hits
 
@@ -272,15 +224,15 @@ Keep both configurations:
 Run your established sync workflow for each. Namespaces are intentionally
 separate.
 
-For expanded answers, use the [Onboarding FAQ](onboarding-faq.md).
+For expanded answers, use the [FAQ](../support/faq.md).
 
 ## Where to go next
 
 - Read [Adoption Modes](adoption-modes.md) to pick a stable rollout profile
-- Check [Onboarding FAQ](onboarding-faq.md) for setup and maintenance answers
-- Browse [Skills Catalog](reference/skills-catalog.md) for workflow capabilities
-- Use [`.sheen.yml` Guide](guides/sheen-yml.md) for full config reference
-- For token usage patterns, read [Adopting Tokens](guides/adopting-tokens.md)
+- Check [FAQ](../support/faq.md) for setup and maintenance answers
+- Browse [Skills Catalog](../reference/skills-catalog.md) for workflow capabilities
+- Use [`.sheen.yml` Guide](../guides/sheen-yml.md) for full config reference
+- For token usage patterns, read [Adopting Tokens](../guides/adopting-tokens.md)
 
 When your team is ready, move from Lean or Token-only to Full by removing
 allow-lists, pinning to a release tag, and syncing on a regular cadence.

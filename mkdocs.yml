@@ -1,56 +1,100 @@
 site_name: basecoat-sheen
-site_description: Design governance finish coat for basecoat
+site_description: basecoat-sheen packages design tokens, skills, agents, and governance docs so designers, engineers, and platform teams can adopt a consistent UX system fast.
+site_url: https://ibuyspy-shared.github.io/basecoat-sheen/
 repo_url: https://github.com/IBuySpy-Shared/basecoat-sheen
 theme:
   name: material
+  custom_dir: overrides
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - toc.follow
+    - content.code.copy
 markdown_extensions:
   - admonition
+  - attr_list
+  - md_in_html
   - toc:
       permalink: true
+plugins:
+  - search # Built-in MkDocs search keeps the docs site self-contained and fast without external indexing.
 nav:
-  - Home: index.md
+  - Discovery:
+      - Home: index.md
+      - What is sheen?: discovery/what-is-sheen.md
+      - Core concepts: discovery/core-concepts.md
+      - Catalog: discovery/catalog.md
+      - Philosophy: philosophy.md
+      - Design Context: design-context.md
   - Getting Started:
-      - Overview: getting-started.md
-      - Quick Start (10 Minutes): quick-start.md
-      - Adoption Modes: adoption-modes.md
-      - Onboarding FAQ: onboarding-faq.md
-  - Philosophy: philosophy.md
-  - Design Context: design-context.md
-  - Foundations:
-      - Overview: foundations/index.md
-      - Tokens: foundations/tokens.md
-      - Typography: foundations/typography.md
-      - Layout & Spacing: foundations/layout-spacing.md
-      - Motion, Elevation, Materials: foundations/motion-elevation-materials.md
-  - Brand:
-      - Overview: brand/index.md
-      - Brand Identity: brand/identity.md
-      - Voice & Tone: brand/voice-tone.md
-      - Logo Usage: brand/logo-usage.md
-      - Imagery: brand/imagery.md
-  - Components:
-      - Overview: components/index.md
-      - Component Spec Contract: components/component-spec.md
-      - States & Interaction: components/states-interaction.md
-      - Pattern Library: components/pattern-library.md
-      - Design Handoff: components/handoff.md
-  - Accessibility:
-      - Overview: accessibility/index.md
-      - WCAG Audit: accessibility/wcag-audit.md
-      - Contrast Gate: accessibility/contrast-gate.md
-      - Standards Mapping: accessibility/standards-mapping.md
-  - Usability:
-      - Overview: usability/index.md
-      - Heuristic Review: usability/heuristic-review.md
-      - Responsive Design: usability/responsive-design.md
-      - Content Hierarchy: usability/content-hierarchy.md
-  - Guides:
+      - 10-Minute Quick-Start: getting-started/quick-start.md
+      - Adoption Modes: getting-started/adoption-modes.md
+      - Installation & Setup: getting-started.md
+  - Integration Patterns:
+      - Consumption Patterns: guides/consumption-patterns.md
+      - Token Build & CI Integration: guides/token-build-ci.md
+      - Skill / Agent / Instruction Usage: guides/asset-usage.md
       - .sheen.yml Guide: guides/sheen-yml.md
-      - Authoring a Skill: guides/authoring-a-skill.md
       - Adopting Tokens: guides/adopting-tokens.md
+      - Authoring a Skill: guides/authoring-a-skill.md
+  - Quick Refs:
+      - Onboarding Checklist: quick-refs/onboarding-checklist.md
+      - Adoption Mode Picker: quick-refs/adoption-mode-picker.md
+      - Sync Troubleshooting: quick-refs/sync-troubleshooting.md
+      - Skill Routing Guide: quick-refs/skill-routing-guide.md
+      - Token Application Patterns: quick-refs/token-application-patterns.md
+      - Common Config Recipes: quick-refs/common-config-recipes.md
+      - FAQ Cheat Sheet: quick-refs/faq-cheat-sheet.md
+      - Glossary: quick-refs/glossary.md
   - Reference:
+      - Full Specification: reference/full-specification.md
+      - Token System Docs: foundations/tokens.md
+      - Vocabulary: reference/vocabulary.md
+      - Contributing: reference/contributing.md
+      - Deep Dives:
+          - Foundations:
+              - Overview: foundations/index.md
+              - Tokens: foundations/tokens.md
+              - Typography: foundations/typography.md
+              - Layout & Spacing: foundations/layout-spacing.md
+              - Motion, Elevation, Materials: foundations/motion-elevation-materials.md
+          - Brand:
+              - Overview: brand/index.md
+              - Brand Identity: brand/identity.md
+              - Voice & Tone: brand/voice-tone.md
+              - Logo Usage: brand/logo-usage.md
+              - Imagery: brand/imagery.md
+          - Components:
+              - Overview: components/index.md
+              - Component Spec Contract: components/component-spec.md
+              - States & Interaction: components/states-interaction.md
+              - Pattern Library: components/pattern-library.md
+              - Design Handoff: components/handoff.md
+          - Accessibility:
+              - Overview: accessibility/index.md
+              - WCAG Audit: accessibility/wcag-audit.md
+              - Contrast Gate: accessibility/contrast-gate.md
+              - Standards Mapping: accessibility/standards-mapping.md
+          - Usability:
+              - Overview: usability/index.md
+              - Heuristic Review: usability/heuristic-review.md
+              - Responsive Design: usability/responsive-design.md
+              - Content Hierarchy: usability/content-hierarchy.md
       - Skills Catalog: reference/skills-catalog.md
       - Agent Roster: reference/agent-roster.md
       - Validation Checks: reference/validation-checks.md
       - Model Capabilities: reference/model-capabilities.md
       - Incident Learnings: reference/incident-learnings.md
+  - Support:
+      - FAQ: support/faq.md
+      - Troubleshooting: support/troubleshooting.md
+      - GitHub Issues: support/github-issues.md
+      - Legacy onboarding pages:
+          - Adoption Modes (legacy): adoption-modes.md
+          - Onboarding FAQ (legacy): onboarding-faq.md

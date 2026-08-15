@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+  <meta name="description" content="{{ config.site_description }}">
+  <meta name="keywords" content="design, governance, tokens, skills, agents, ux, accessibility, brand, docs">
+  <meta property="og:title" content="{{ page.title if page and page.title else config.site_name }}">
+  <meta property="og:description" content="{{ config.site_description }}">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="{{ config.site_url }}assets/og-basecoat-sheen.svg">
+  {% if page and page.canonical_url %}
+    <link rel="canonical" href="{{ page.canonical_url }}">
+  {% endif %}
+{% endblock %}
