@@ -4,6 +4,9 @@ basecoat-sheen is the design governance finish coat for basecoat. It packages
 design skills, agents, instruction layers, and DTCG tokens so teams can apply a
 consistent craft bar across UX, accessibility, brand, and handoff.
 
+Start here: [Quick Start (10 Minutes)](quick-start.md), then choose your rollout
+profile in [Adoption Modes](adoption-modes.md).
+
 ## What ships here
 
 - `skills/` — invokable design workflows with routing evals
@@ -19,4 +22,3 @@ consistent craft bar across UX, accessibility, brand, and handoff.
 - Phase 2: core skills ✅
 - Phase 3: full catalog + target agents ✅
 - Phase 4: docs site & portal foundations ✅ (this wave)
-

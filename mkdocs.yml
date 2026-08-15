@@ -9,7 +9,11 @@ markdown_extensions:
       permalink: true
 nav:
   - Home: index.md
-  - Getting Started: getting-started.md
+  - Getting Started:
+      - Overview: getting-started.md
+      - Quick Start (10 Minutes): quick-start.md
+      - Adoption Modes: adoption-modes.md
+      - Onboarding FAQ: onboarding-faq.md
   - Philosophy: philosophy.md
   - Design Context: design-context.md
   - Foundations:

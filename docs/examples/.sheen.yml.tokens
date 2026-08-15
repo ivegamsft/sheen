@@ -1,0 +1,12 @@
+# Token-only mode: design token governance and instructions, no skills or agents.
+source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+ref: main
+skills: []
+agents: []
+instructions:
+  - sheen-20-tokens-foundations
+themes:
+  - light
+  - dark
+  - high-contrast
+
