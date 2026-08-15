@@ -1,0 +1,11 @@
+# Cross-Functional Mode — shared design + eng governance
+source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+ref: v0.5.0  # pin to release for stability (upgrade quarterly)
+
+# Include all assets for maximum collaboration
+skills: []    # all skills
+agents: []    # all agents
+instructions: []  # all layers
+
+# Materialize themes for CSS and Figma
+themes: [light, dark, high-contrast]
