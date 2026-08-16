@@ -2,18 +2,24 @@ name: "design-reviewer-routing"
 description: "Routing and behavior evaluation for agent design-reviewer."
 skill: "agents/design-reviewer.agent.md"
 scenarios:
-  - id: "pos-1"
-    input: "Use design-reviewer to handle a design-review request."
+  - id: "pos-craft-bar-critique"
+    input: "Have design-reviewer run a craft-bar critique on the pricing page and identify principle-based design issues."
     expect_activation: true
-  - id: "pos-2"
-    input: "Need a governance-focused decision package from this agent."
+  - id: "pos-tradeoff-decision"
+    input: "I need a structured design tradeoff decision between two checkout layouts with risks, rationale, and next actions."
     expect_activation: true
-  - id: "pos-3"
-    input: "Orchestrate composed skills for this mandate using design-reviewer."
+  - id: "pos-governance-review"
+    input: "Review this feature proposal against design principles, craft quality, and governance expectations before approval."
     expect_activation: true
-  - id: "neg-1"
-    input: "Please do full repo modernization migrations."
+  - id: "pos-coordinate-review-skills"
+    input: "Coordinate design-review, design-debate, and craft-quality into a concise decision log for leadership."
+    expect_activation: true
+  - id: "neg-wcag-audit"
+    input: "Run a WCAG accessibility audit with contrast findings and ARIA remediation details."
     expect_activation: false
-  - id: "neg-2"
-    input: "Implement backend APIs and database migrations."
+  - id: "neg-design-system-tokens"
+    input: "Define semantic tokens, theme aliases, and component variant specs for the design system."
+    expect_activation: false
+  - id: "neg-platform-code"
+    input: "Refactor backend services, add database migrations, and configure CI deployment jobs."
     expect_activation: false
