@@ -7,6 +7,39 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.5.0] — 2026-08-16
+
+### Added
+- Consumer onboarding quick-start guide with three adoption modes (lean,
+  token-only, full), adoption-mode profiles, and an onboarding FAQ (#19).
+- Real-world consumption patterns with config recipes, diagrams, and FAQs:
+  solo-design, cross-functional, cross-org, token-only, and migration (#20).
+- Token build, theme application, and CI integration docs (CSS, Figma tokens,
+  Storybook, pre-commit, changelog automation) plus an example consumer under
+  `examples/consumer-tokens/` (#21).
+- Cross-repo sync validation & diagnostics tooling: `scripts/diagnose-sheen.ps1`
+  and `scripts/diagnose-sheen.sh` (token-resolution checks across themes,
+  basecoat/sheen namespace-collision detection, human report + JSON manifest)
+  with `docs/guides/diagnostics.md` (#23).
+- Automated eval routing gate: `scripts/audit-evals.ps1`,
+  `scripts/test-eval-routing.ps1`, and a `eval-routing` CI job (#24).
+- Publish/release tooling aligned with basecoat: `.github/workflows/release.yml`
+  (tag-triggered), `.github/workflows/version-check.yml` (version.json ↔ CHANGELOG
+  gate), and `scripts/generate-release-notes.sh` (#32).
+
+### Changed
+- Docs site information architecture reordered to the consumption flow
+  (discover → onboard → integrate → operate) with search, SEO/social meta,
+  and quick-reference cards (#22).
+- Hardened the 46 skill and 6 agent `eval.yaml` files; bottom-quartile routing
+  evals rewritten to meet the specificity threshold (#24).
+
+### Fixed
+- `version.json` had a duplicate `"version"` key (0.3.0/0.4.0); collapsed to a
+  single value and now gated by the version-consistency check (#32).
+- Remediated 10 Dependabot alerts (9 high, 1 moderate) in skill lockfiles:
+  `js-yaml`, `minimatch`, `nanoid`, and `brace-expansion` (#34).
+
 ## [0.4.0] — 2026-08-14
 
 ### Added
