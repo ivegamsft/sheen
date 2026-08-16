@@ -1,0 +1,136 @@
+name: "Sheen - Release"
+
+# Ported from basecoat's release.yml (vendor/basecoat excludes upstream .github/).
+# Adapted for sheen: drops basecoat's internal production-mirror + PRODUCTION_REPO_TOKEN
+# and reusable-Actions audit steps (basecoat-only), and reads sheen's Keep a Changelog
+# notes via scripts/generate-release-notes.sh.
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to (re)publish, e.g. v0.4.0"
+        type: string
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve tag
+        id: tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${{ inputs.tag || github.ref_name }}"
+          if [[ ! "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Tag '$tag' is not a vX.Y.Z semver tag"
+            exit 1
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Validate version.json matches tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected="${{ steps.tag.outputs.version }}"
+          if [[ "$(grep -c '"version"[[:space:]]*:' version.json)" -ne 1 ]]; then
+            echo "::error::version.json must contain exactly one \"version\" key"
+            exit 1
+          fi
+          actual="$(jq -r '.version' version.json)"
+          if [[ "$actual" != "$expected" ]]; then
+            echo "::error::Version mismatch: tag ${{ steps.tag.outputs.tag }} expects $expected, version.json has $actual"
+            exit 1
+          fi
+          echo "✓ version.json ($actual) matches tag ${{ steps.tag.outputs.tag }}"
+
+      - name: Validate sync scripts present
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ -f sync.ps1 && -f sync.sh ]] || { echo "::error::sync.ps1 and sync.sh must exist at repo root"; exit 1; }
+          [[ -f rollback.ps1 && -f rollback.sh ]] || { echo "::error::rollback.ps1 and rollback.sh must exist at repo root"; exit 1; }
+
+      - name: Wave/sprint label coverage gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${{ steps.tag.outputs.tag }}"
+          prev_tag="$(git --no-pager tag --sort=-creatordate | grep '^v' | grep -Fxv "$tag" | head -n1 || true)"
+          if [[ -z "$prev_tag" ]]; then
+            echo "::warning::No previous semver tag; skipping label coverage gate."
+            exit 0
+          fi
+          base_date="$(git --no-pager log -1 --format=%cI "$prev_tag")"
+          head_date="$(git --no-pager log -1 --format=%cI "$tag")"
+          pr_json="$(gh pr list --repo "${GITHUB_REPOSITORY}" --state merged --limit 500 \
+            --search "base:main merged:>=${base_date} merged:<=${head_date}" \
+            --json number,title,labels)"
+          total="$(jq 'length' <<<"$pr_json")"
+          unlabeled="$(jq '[.[] | select((.labels | map(.name | test("^(wave[:/-]|sprint[:/-]).+"; "i")) | any) | not)]' <<<"$pr_json")"
+          unlabeled_count="$(jq 'length' <<<"$unlabeled")"
+          echo "Release window ${prev_tag}..${tag}: ${total} merged PRs, ${unlabeled_count} missing wave/sprint labels"
+          if [[ "$total" -eq 0 || "$unlabeled_count" -eq 0 ]]; then exit 0; fi
+          jq -r '.[] | "- PR #\(.number): \(.title)"' <<<"$unlabeled" | head -n 30
+          if (( unlabeled_count * 100 > total * 10 )); then
+            echo "::error::Wave/sprint label coverage below threshold: ${unlabeled_count}/${total} unlabeled (>10%)."
+            exit 1
+          fi
+          echo "::warning::Partial wave/sprint label coverage: ${unlabeled_count}/${total} unlabeled (<=10%)."
+
+      - name: Build repository zip artifact
+        id: package
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${{ steps.tag.outputs.tag }}"
+          artifact="${GITHUB_REPOSITORY#*/}-${tag}.zip"
+          git archive --format=zip --output "$artifact" "$tag"
+          echo "artifact=$artifact" >> "$GITHUB_OUTPUT"
+
+      - name: Generate release notes
+        id: notes
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash scripts/generate-release-notes.sh "${{ steps.tag.outputs.tag }}" "${{ steps.tag.outputs.version }}" release-notes.md
+          echo "notes=release-notes.md" >> "$GITHUB_OUTPUT"
+
+      - name: Create or update GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${{ steps.tag.outputs.tag }}"
+          artifact="${{ steps.package.outputs.artifact }}"
+          notes="${{ steps.notes.outputs.notes }}"
+          if gh release view "$tag" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+            gh release upload "$tag" "$artifact" sync.ps1 sync.sh --clobber --repo "${GITHUB_REPOSITORY}"
+            gh release edit "$tag" --notes-file "$notes" --repo "${GITHUB_REPOSITORY}"
+          else
+            gh release create "$tag" "$artifact" sync.ps1 sync.sh \
+              --title "$tag" --notes-file "$notes" --repo "${GITHUB_REPOSITORY}"
+          fi
+          gh release view "$tag" --repo "${GITHUB_REPOSITORY}" --json assets --jq '.assets[].name' \
+            | grep -E '(sync\.ps1|sync\.sh)' || { echo "::error::sync scripts missing from release assets"; exit 1; }
