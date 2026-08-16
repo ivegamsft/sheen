@@ -1,0 +1,16 @@
+{
+  "name": "consumer-tokens-example",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "tokens:build": "node scripts/build-tokens.mjs",
+    "tokens:build:light": "node scripts/build-tokens.mjs --theme light",
+    "tokens:build:dark": "node scripts/build-tokens.mjs --theme dark",
+    "tokens:build:high-contrast": "node scripts/build-tokens.mjs --theme high-contrast",
+    "dev": "npx --yes serve src"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
