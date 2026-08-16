@@ -2,18 +2,24 @@ name: "accessibility-auditor-routing"
 description: "Routing and behavior evaluation for agent accessibility-auditor."
 skill: "agents/accessibility-auditor.agent.md"
 scenarios:
-  - id: "pos-1"
-    input: "Use accessibility-auditor to handle a accessibility-audit request."
+  - id: "pos-wcag-flow-audit"
+    input: "Ask accessibility-auditor to run a WCAG conformance review for checkout, including keyboard traps and screen-reader risks."
     expect_activation: true
-  - id: "pos-2"
-    input: "Need a a11y-focused decision package from this agent."
+  - id: "pos-contrast-risk-triage"
+    input: "Triage accessibility risk across contrast, focus visibility, ARIA labels, and error announcements before release."
     expect_activation: true
-  - id: "pos-3"
-    input: "Orchestrate composed skills for this mandate using accessibility-auditor."
+  - id: "pos-a11y-decision-package"
+    input: "Produce an accessibility decision package with severity, remediation owners, and usability mapping for a SaaS dashboard."
     expect_activation: true
-  - id: "neg-1"
-    input: "Please do landing page conversion copywriting."
+  - id: "pos-coordinate-a11y-skills"
+    input: "Coordinate accessibility-audit, color-contrast-check, and usability-mapping for a high-risk onboarding flow."
+    expect_activation: true
+  - id: "neg-brand-voice"
+    input: "Create brand voice guidance and microcopy tone principles for lifecycle emails."
     expect_activation: false
-  - id: "neg-2"
-    input: "Implement backend APIs and database migrations."
+  - id: "neg-token-schema"
+    input: "Design a token schema and theme inheritance model for dark mode surfaces."
+    expect_activation: false
+  - id: "neg-backend"
+    input: "Implement API pagination, database indexes, and queue workers for search ingestion."
     expect_activation: false

@@ -2,18 +2,24 @@ name: "content-hierarchy-routing"
 description: "Routing evaluation — validates trigger activation for content-hierarchy."
 skill: "skills/content-hierarchy/SKILL.md"
 scenarios:
-  - id: "pos-1"
-    input: "Need help with content prioritization for our product experience."
+  - id: "pos-dashboard-priority"
+    input: "Improve content prioritization on an analytics dashboard so admins see urgent exceptions before secondary metrics."
     expect_activation: true
-  - id: "pos-2"
-    input: "Create a plan for scan-path improvement in an upcoming release."
+  - id: "pos-scan-path"
+    input: "Critique the scan path on a dense settings page and recommend hierarchy changes for headings, summaries, and calls to action."
     expect_activation: true
-  - id: "pos-3"
-    input: "Compare approaches for hierarchy critique and recommend one."
+  - id: "pos-hierarchy-triage"
+    input: "Users miss the renewal warning; evaluate visual and information hierarchy and propose prioritized remediation."
     expect_activation: true
-  - id: "neg-1"
-    input: "This request is only about voice/tone strategy."
+  - id: "pos-comprehension-flow"
+    input: "Reorder and weight onboarding content so first-time users understand next steps without reading every paragraph."
+    expect_activation: true
+  - id: "neg-brand-tone"
+    input: "Rewrite product microcopy to match a warmer brand voice and tone matrix."
     expect_activation: false
-  - id: "neg-2"
-    input: "Please focus exclusively on token primitive edits."
+  - id: "neg-token-foundation"
+    input: "Change spacing tokens, primitive color aliases, and theme variables in the design system."
+    expect_activation: false
+  - id: "neg-api"
+    input: "Add API endpoints and persistence tests for notification preferences."
     expect_activation: false
