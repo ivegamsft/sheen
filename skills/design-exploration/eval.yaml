@@ -2,18 +2,24 @@ name: "design-exploration-routing"
 description: "Routing evaluation — validates trigger activation for design-exploration."
 skill: "skills/design-exploration/SKILL.md"
 scenarios:
-  - id: "pos-1"
-    input: "Need help with concept generation for our product experience."
+  - id: "pos-divergent-concepts"
+    input: "Generate three divergent design concepts for a first-run dashboard experience before we choose a direction."
     expect_activation: true
-  - id: "pos-2"
-    input: "Create a plan for divergent direction exploration in an upcoming release."
+  - id: "pos-idea-synthesis"
+    input: "Synthesize workshop notes into several exploratory product directions with constraints, risks, and evidence gaps."
     expect_activation: true
-  - id: "pos-3"
-    input: "Compare approaches for idea synthesis and recommend one."
+  - id: "pos-early-concepting"
+    input: "Explore alternative navigation and content models for a new admin area without making a final decision yet."
     expect_activation: true
-  - id: "neg-1"
-    input: "This request is only about final decision arbitration."
+  - id: "pos-direction-options"
+    input: "Create concept sketches and rationale for possible onboarding flows so stakeholders can compare strategic directions."
+    expect_activation: true
+  - id: "neg-final-arbitration"
+    input: "Facilitate the final design debate and select the approved option with a decision log."
     expect_activation: false
-  - id: "neg-2"
-    input: "Please focus exclusively on wcag audit reporting."
+  - id: "neg-wcag-report"
+    input: "Produce a WCAG audit report with contrast failures and keyboard remediation steps."
+    expect_activation: false
+  - id: "neg-production-code"
+    input: "Implement the selected flow in React and wire it to backend APIs."
     expect_activation: false

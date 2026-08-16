@@ -85,3 +85,56 @@ scenarios:
 - Every skill must appear in `skills/_catalog.md` and `sheen-metadata.json`
   (drift fails CI — spec 05).
 - New skills are authored via the `create-design-skill` skill.
+
+## 7. Eval authoring standard and routing CI gate
+
+Routing evals are production assets. Each `skills/<name>/eval.yaml` and
+`agents/*.agent.eval.yaml` MUST keep the schema shown above: top-level `name`,
+`description`, `skill`, and `scenarios`; each scenario MUST include `id`,
+`input`, and boolean `expect_activation`.
+
+Minimum requirements:
+- At least **3 positive** and **2 negative** scenarios per eval file.
+- Positives use realistic user phrasing with concrete work, context, and desired
+  outcome; avoid scaffold phrases such as "Need help with ..." or "Use <agent> ...".
+- Positives overlap the referenced skill/agent trigger vocabulary, but are not
+  just keyword lists.
+- Negatives include at least one adjacent-but-wrong design request and one clear
+  out-of-domain request so routing boundaries are tested.
+- Every eval must score **>= 7/10** in `scripts/audit-evals.ps1` and pass
+  `scripts/test-eval-routing.ps1`; CI enforces this gate on push and PR.
+
+Specificity rubric used by the scripts:
+- Positive coverage: 0-2 points.
+- Negative coverage: 0-2 points.
+- Realistic input detail and average prompt length: 0-2 points.
+- Diversity of non-generic positive vocabulary: 0-1.5 points.
+- Overlap with referenced trigger terms: 0-1.5 points.
+- Hard adjacent negatives: 0-1 point.
+- Boilerplate or duplicate-like scenarios can subtract confidence.
+
+Good scenarios:
+
+```yaml
+- id: "pos-safe-error-states"
+  input: "Design safe error states for password reset that avoid account enumeration and sensitive internal details."
+  expect_activation: true
+- id: "neg-threat-model"
+  input: "Perform backend threat modeling for API authorization, secrets handling, and service-to-service trust boundaries."
+  expect_activation: false
+```
+
+Weak scenarios:
+
+```yaml
+- id: "pos-1"
+  input: "Need help with this skill for our product experience."
+  expect_activation: true
+- id: "neg-1"
+  input: "Please focus exclusively on something else."
+  expect_activation: false
+```
+
+The good examples provide task context, disambiguating vocabulary, and a clear
+routing boundary. The weak examples are generic enough to activate many skills
+and do not prove the router can distinguish neighboring capabilities.
