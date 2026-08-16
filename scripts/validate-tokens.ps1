@@ -21,6 +21,8 @@ $TokensDir = if ($args.Count -gt 0) { $args[0] } else { Join-Path (git rev-parse
 $Status    = 0
 
 $AllowedTypes = @('color','dimension','fontFamily','fontWeight','duration','cubicBezier','number','shadow')
+# Composite types (DTCG §9; spec 01 §2): typography, elevation, material
+$AllowedTypes += @('typography','elevation','material')
 
 # Contrast pairs: [on-token-key, background-token-key, min-ratio]
 # min-ratio 4.5 = WCAG AA text; 7.0 = enhanced (high-contrast)

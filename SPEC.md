@@ -400,10 +400,11 @@ phase, not v1 blockers.
 |---|---|---|
 | D1 | Ship validated `tokens/` system | **Confirmed: yes** |
 | D2 | Initial skill breadth (full / lean / scaffold-first) | Open |
-| D3 | Standalone repo vs. basecoat subtree | Proposed: standalone sibling |
-| D4 | Token format = DTCG JSON, aligned with M3 + Fluent 2 | Proposed |
-| D5 | License | Open (default: match basecoat) |
-| D6 | Docs stack = mkdocs (match basecoat) | Proposed |
-| D7 | Conformance baseline = WCAG 2.2 AA + ISO 9241/25010 + OWASP UX (spec 08) | Proposed |
+| D2 | Initial skill breadth (full / lean / scaffold-first) | **Confirmed: full breadth — all 46 skills shipped** |
+| D3 | Standalone repo vs. basecoat subtree | **Confirmed: standalone sibling** |
+| D4 | Token format = DTCG JSON, aligned with M3 + Fluent 2 | **Confirmed: DTCG JSON, three-tier (core / semantic / themes)** |
+| D5 | License | **Confirmed: MIT (matching basecoat)** |
+| D6 | Docs stack = mkdocs (match basecoat) | **Confirmed: mkdocs-material** |
+| D7 | Conformance baseline = WCAG 2.2 AA + ISO 9241/25010 + OWASP UX (spec 08) | **Confirmed: WCAG 2.2 AA + ISO 9241/25010 + OWASP UX** |
 | D8 | Integrate basecoat by **vendoring** it into `vendor/basecoat/` | **Confirmed: yes** |
 | D9 | CI/CD onboarding profile = **solo-dev** (local authoring ceremony only). Runs on a **shared enterprise EMU instance**; enterprise/org rulesets (PR-required, CodeQL + code-quality, Copilot review, SHA-pinned actions, agent-path restriction) are the authoritative merge governance — no admin/self bypass. | **Confirmed: yes** |
