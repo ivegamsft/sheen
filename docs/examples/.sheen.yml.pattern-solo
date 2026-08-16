@@ -1,0 +1,20 @@
+# Solo Designer Mode — lean setup for individual design work
+source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+ref: main
+
+# Include only design-focused skills (no engineering agents)
+skills:
+  - design-review
+  - token-audit
+  - accessibility-audit
+  - design-system-audit
+
+# Include core design principles for ambient guidance
+instructions:
+  - sheen-10-core-design-principles
+  - sheen-40-web-usability
+  - sheen-90-standards-conformance
+
+# Optional: tokens for local design system
+# Omit if using Figma design tokens instead
+themes: []  # exclude tokens (or include if doing CSS/component work)
