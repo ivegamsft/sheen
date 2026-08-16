@@ -39,6 +39,7 @@ nav:
   - Integration Patterns:
       - Consumption Patterns: guides/consumption-patterns.md
       - Token Build & CI Integration: guides/token-build-ci.md
+      - Sync Diagnostics: guides/diagnostics.md
       - Skill / Agent / Instruction Usage: guides/asset-usage.md
       - .sheen.yml Guide: guides/sheen-yml.md
       - Adopting Tokens: guides/adopting-tokens.md
@@ -98,4 +99,3 @@ nav:
       - Legacy onboarding pages:
           - Adoption Modes (legacy): adoption-modes.md
           - Onboarding FAQ (legacy): onboarding-faq.md
-
