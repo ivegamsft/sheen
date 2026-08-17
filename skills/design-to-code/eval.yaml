@@ -1,0 +1,22 @@
+name: "design-to-code-routing"
+description: "Routing evaluation — validates trigger activation for design-to-code."
+skill: "skills/design-to-code/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Generate a React functional component from the card component spec with token-bound CSS"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Scaffold a Vue 3 SFC for the modal wireframe using semantic design tokens"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Produce a TypeScript props interface from the component anatomy table in the spec"
+    expect_activation: true
+  - id: "pos-4"
+    input: "Create a Storybook CSF3 story shell covering all states in the button spec"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Implement the backend REST endpoint that powers the card data feed"
+    expect_activation: false
+  - id: "neg-2"
+    input: "Run a WCAG contrast audit on the card component colour tokens"
+    expect_activation: false

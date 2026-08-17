@@ -1,0 +1,22 @@
+name: "ethical-design-routing"
+description: "Routing evaluation — validates trigger activation for ethical-design."
+skill: "skills/ethical-design/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Audit the checkout wireframe for dark patterns including hidden costs and misdirection"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Assess whether the cookie consent dialog meets GDPR Article 7 equal-prominence requirements"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Evaluate the subscription cancellation flow — does it constitute a roach motel pattern?"
+    expect_activation: true
+  - id: "pos-4"
+    input: "Suggest an ethical, neutral alternative to the confirmshaming copy on the downgrade modal"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Review the privacy policy document for GDPR legal compliance and data retention wording"
+    expect_activation: false
+  - id: "neg-2"
+    input: "Penetration-test the consent management API for injection vulnerabilities"
+    expect_activation: false

@@ -1,0 +1,22 @@
+name: "ai-output-governance-routing"
+description: "Routing evaluation — validates trigger activation for ai-output-governance."
+skill: "skills/ai-output-governance/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Review this AI-generated onboarding copy for representational bias and brand tone compliance"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Audit the AI-generated hero imagery set for stereotyped depictions and brand guideline adherence"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Check this AI-generated React component for hardcoded values that bypass the design token system"
+    expect_activation: true
+  - id: "pos-4"
+    input: "Determine whether the AI-generated product descriptions require an AI-assisted disclosure label"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Fine-tune the language model on the new product catalogue to improve recommendation accuracy"
+    expect_activation: false
+  - id: "neg-2"
+    input: "Run a WCAG contrast audit on the manually authored card component colour tokens"
+    expect_activation: false

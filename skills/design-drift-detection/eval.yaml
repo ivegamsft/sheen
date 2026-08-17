@@ -1,0 +1,22 @@
+name: "design-drift-detection-routing"
+description: "Routing evaluation — validates trigger activation for design-drift-detection."
+skill: "skills/design-drift-detection/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Compare the live Button component CSS against the button spec and list drifts"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Identify which semantic token bindings in src/components diverge from the current token set"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Produce a variant coverage matrix for the Card component against its spec"
+    expect_activation: true
+  - id: "pos-4"
+    input: "Generate a spec-vs-DOM parity report with severity ratings for the checkout form"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Rewrite the button hover state so it matches the design spec"
+    expect_activation: false
+  - id: "neg-2"
+    input: "Produce a visual critique of the card component layout and typography choices"
+    expect_activation: false

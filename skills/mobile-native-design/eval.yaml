@@ -1,0 +1,22 @@
+name: "mobile-native-design-routing"
+description: "Routing evaluation — validates trigger activation for mobile-native-design."
+skill: "skills/mobile-native-design/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Map the card component web spec to iOS HIG conventions including tap target and corner radius"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Adapt the semantic colour tokens to Android Material You dynamic theming roles"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Generate a cross-platform parity report comparing iOS and Android specs for the navigation component"
+    expect_activation: true
+  - id: "pos-4"
+    input: "Specify the gesture interactions for the swipe-to-dismiss notification component on both platforms"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Implement the SwiftUI view layer for the iOS card component in the mobile app"
+    expect_activation: false
+  - id: "neg-2"
+    input: "Configure CSS media queries to make the marketing landing page responsive at mobile breakpoints"
+    expect_activation: false

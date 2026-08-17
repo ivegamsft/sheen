@@ -1,0 +1,22 @@
+name: "data-visualisation-routing"
+description: "Routing evaluation — validates trigger activation for data-visualisation."
+skill: "skills/data-visualisation/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Recommend the best chart type for showing monthly revenue across 5 product categories over a year"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Audit the dashboard wireframe for colour-blind safety and ARIA labelling of chart elements"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Define data density and hierarchy rules for a metrics dashboard with 12 KPI cards and 3 charts"
+    expect_activation: true
+  - id: "pos-4"
+    input: "Generate a component spec for a 4-series line chart with a legend, tooltips, and a data table fallback"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Write the SQL aggregation query that computes monthly revenue per product category"
+    expect_activation: false
+  - id: "neg-2"
+    input: "Implement the D3.js rendering logic for the revenue trend chart in the dashboard"
+    expect_activation: false

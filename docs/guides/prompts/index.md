@@ -94,7 +94,24 @@ All 46 intents mapped to their agent, skill, and trigger keywords.
 
 ---
 
-## Multi-agent factory patterns
+## Wave 4 Skills (August 2026)
+
+The following 11 skills were added to close identified governance gaps. They extend sheen
+beyond single-layer tools to cover the full design-to-production lifecycle.
+
+| Skill | Priority | Invoke with | Description |
+|---|---|---|---|
+| `design-to-code` | P1 | `/sheen codegen`, `/sheen scaffold` | Scaffold components from specs + tokens |
+| `design-drift-detection` | P1 | `/sheen drift`, `/sheen parity` | Spec-vs-implementation audit |
+| `sheen-onboard` | P2 | `/sheen onboard`, `/sheen lifecycle` | Full consumer onboarding orchestration |
+| `design-system-versioning` | P2 | `/sheen semver`, `/sheen migration` | Semver, migration guides, deprecations |
+| `performance-aware-design` | P2 | `/sheen perf`, `/sheen cwv` | Core Web Vitals design impact |
+| `data-visualisation` | P2 | `/sheen dataviz`, `/sheen chart` | Chart design, data density, colour encoding |
+| `ai-output-governance` | P2 | `/sheen ai-review`, `/sheen ai-gov` | AI content bias, safety, and token audit |
+| `ethical-design` | P2 | `/sheen ethics`, `/sheen dark-pattern` | Dark patterns and consent UI |
+| `design-adoption-telemetry` | P3 | `/sheen adoption`, `/sheen telemetry` | Design system adoption measurement |
+| `mobile-native-design` | P3 | `/sheen ios`, `/sheen android`, `/sheen mobile` | iOS HIG and Material You mapping |
+| `design-sprint` | P3 | `/sheen sprint`, `/sheen hmw` | Design sprint facilitation |
 
 For requests that span multiple pillars, use a factory pattern instead of a single agent.
 Templates are in `.github/skills/sheen/references/factory-patterns.md`.
