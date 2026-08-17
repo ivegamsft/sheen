@@ -44,6 +44,14 @@ nav:
       - .sheen.yml Guide: guides/sheen-yml.md
       - Adopting Tokens: guides/adopting-tokens.md
       - Authoring a Skill: guides/authoring-a-skill.md
+  - Prompt Guide:
+      - Overview & Intent Index: guides/prompts/index.md
+      - "🎨 Tokens & System": guides/prompts/tokens-system.md
+      - "🖼️ Brand": guides/prompts/brand.md
+      - "📐 Usability": guides/prompts/usability.md
+      - "🗂️ Information Architecture": guides/prompts/information-architecture.md
+      - "♿ Accessibility": guides/prompts/accessibility.md
+      - "✅ Governance": guides/prompts/governance.md
   - Quick Refs:
       - Onboarding Checklist: quick-refs/onboarding-checklist.md
       - Adoption Mode Picker: quick-refs/adoption-mode-picker.md
