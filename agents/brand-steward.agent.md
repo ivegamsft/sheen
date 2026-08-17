@@ -1,7 +1,7 @@
 ---
 name: brand-steward
 compatibility: [github-copilot-cli]
-description: "Design-role agent for brand identity, voice, logo, and imagery integrity. Invoke for design requests in this mandate."
+description: "Brand identity, voice, logo usage, and imagery integrity for sheen design surfaces. USE FOR: review or define brand identity guidelines, audit logo placement for trademark compliance, establish voice and tone rules, evaluate illustration and imagery direction, reconcile brand consistency across product surfaces. DO NOT USE FOR: token architecture, navigation taxonomy, accessibility conformance audits, engineering implementation."
 metadata:
   maturity: draft
   pillar: brand
@@ -11,7 +11,9 @@ composes:
     - brand-voice-tone
     - logo-usage
     - imagery-illustration
-  instructions: []
+  instructions:
+    - sheen-50-brand-voice
+    - sheen-80-content-multilingual
 allowed-tools: []
 ---
 # brand-steward

@@ -1,4 +1,4 @@
-{
+﻿{
   "$description": "High-contrast theme — WCAG enhanced contrast (>=7:1 for text, >=4.5:1 non-text). Black canvas, white text, cyan primary, yellow highlight. Validated by scripts/validate-tokens.",
   "color": {
     "background":       { "$type": "color", "$value": "#000000" },
@@ -46,5 +46,74 @@
     "caption":    { "$type": "typography", "$value": { "fontFamily": "{type.font-family.sans}", "fontWeight": "{type.font-weight.regular}",  "fontSize": "{type.font-size.sm}",   "lineHeight": "{type.line-height.normal}",  "letterSpacing": "{type.letter-spacing.normal}" } },
     "code":       { "$type": "typography", "$value": { "fontFamily": "{type.font-family.mono}", "fontWeight": "{type.font-weight.regular}",  "fontSize": "{type.font-size.md}",   "lineHeight": "{type.line-height.relaxed}", "letterSpacing": "{type.letter-spacing.normal}" } },
     "code-sm":    { "$type": "typography", "$value": { "fontFamily": "{type.font-family.mono}", "fontWeight": "{type.font-weight.regular}",  "fontSize": "{type.font-size.sm}",   "lineHeight": "{type.line-height.relaxed}", "letterSpacing": "{type.letter-spacing.normal}" } }
+  }
+  ,
+  "space": {
+    "$description": "Spacing role tokens — theme override layer. Values identical to semantic; included for completeness.",
+    "component": {
+      "padding-xs": { "$type": "dimension", "$value": "{space.1}" },
+      "padding-sm": { "$type": "dimension", "$value": "{space.2}" },
+      "padding-md": { "$type": "dimension", "$value": "{space.4}" },
+      "padding-lg": { "$type": "dimension", "$value": "{space.6}" },
+      "padding-xl": { "$type": "dimension", "$value": "{space.8}" },
+      "gap-xs":     { "$type": "dimension", "$value": "{space.1}" },
+      "gap-sm":     { "$type": "dimension", "$value": "{space.2}" },
+      "gap-md":     { "$type": "dimension", "$value": "{space.4}" },
+      "gap-lg":     { "$type": "dimension", "$value": "{space.6}" }
+    },
+    "layout": {
+      "section-gap":   { "$type": "dimension", "$value": "{space.12}" },
+      "page-margin":   { "$type": "dimension", "$value": "{space.16}" },
+      "sidebar-width": { "$type": "dimension", "$value": "{space.24}" }
+    }
+  }
+  ,
+  "elevation": {
+    "$description": "Elevation role tokens — high-contrast theme. Shadows suppressed; use border outlines for elevation differentiation (a11y).",
+    "flat":       { "$type": "shadow", "$value": { "offsetX": "0px", "offsetY": "0px", "blur": "0px", "spread": "0px", "color": "rgba(0,0,0,0)" } },
+    "card":       { "$type": "shadow", "$value": { "offsetX": "0px", "offsetY": "0px", "blur": "0px", "spread": "0px", "color": "rgba(0,0,0,0)" } },
+    "card-hover": { "$type": "shadow", "$value": { "offsetX": "0px", "offsetY": "0px", "blur": "0px", "spread": "0px", "color": "rgba(0,0,0,0)" } },
+    "dropdown":   { "$type": "shadow", "$value": { "offsetX": "0px", "offsetY": "0px", "blur": "0px", "spread": "0px", "color": "rgba(0,0,0,0)" } },
+    "popover":    { "$type": "shadow", "$value": { "offsetX": "0px", "offsetY": "0px", "blur": "0px", "spread": "0px", "color": "rgba(0,0,0,0)" } },
+    "dialog":     { "$type": "shadow", "$value": { "offsetX": "0px", "offsetY": "0px", "blur": "0px", "spread": "0px", "color": "rgba(0,0,0,0)" } },
+    "overlay":    { "$type": "shadow", "$value": { "offsetX": "0px", "offsetY": "0px", "blur": "0px", "spread": "0px", "color": "rgba(0,0,0,0)" } }
+  }
+  ,
+  "motion": {
+    "$description": "Motion role tokens — theme override layer. Values identical to semantic; included for completeness.",
+    "transition": {
+      "micro":       { "$type": "duration", "$value": "{motion.duration.fast}" },
+      "default":     { "$type": "duration", "$value": "{motion.duration.normal}" },
+      "enter":       { "$type": "duration", "$value": "{motion.duration.moderate}" },
+      "exit":        { "$type": "duration", "$value": "{motion.duration.moderate}" },
+      "page":        { "$type": "duration", "$value": "{motion.duration.slow}" },
+      "orchestrated":{ "$type": "duration", "$value": "{motion.duration.deliberate}" }
+    },
+    "easing": {
+      "enter":      { "$type": "cubicBezier", "$value": [0.0, 0.0, 0.2, 1.0] },
+      "exit":       { "$type": "cubicBezier", "$value": [0.4, 0.0, 1.0, 1.0] },
+      "move":       { "$type": "cubicBezier", "$value": [0.4, 0.0, 0.2, 1.0] },
+      "expressive": { "$type": "cubicBezier", "$value": [0.175, 0.885, 0.32, 1.275] }
+    }
+  }
+  ,
+  "radius": {
+    "$description": "Radius role tokens — theme override layer. Values identical to semantic; included for completeness.",
+    "none":    { "$type": "dimension", "$value": "{radius.none}" },
+    "subtle":  { "$type": "dimension", "$value": "{radius.small}" },
+    "default": { "$type": "dimension", "$value": "{radius.medium}" },
+    "card":    { "$type": "dimension", "$value": "{radius.large}" },
+    "pill":    { "$type": "dimension", "$value": "{radius.full}" },
+    "circle":  { "$type": "dimension", "$value": "{radius.full}" }
+  }
+  ,
+  "border": {
+    "$description": "Border-width role tokens — theme override layer. Values identical to semantic; included for completeness.",
+    "width": {
+      "none":   { "$type": "dimension", "$value": "0px" },
+      "thin":   { "$type": "dimension", "$value": "1px" },
+      "medium": { "$type": "dimension", "$value": "2px" },
+      "thick":  { "$type": "dimension", "$value": "4px" }
+    }
   }
 }

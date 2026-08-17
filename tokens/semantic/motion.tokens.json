@@ -1,0 +1,19 @@
+{
+  "$description": "Semantic motion tokens — role aliases into the core motion scale. (spec 01 §3.2)",
+  "motion": {
+    "transition": {
+      "micro":      { "$type": "duration", "$value": "{motion.duration.fast}",      "$description": "Icon swap, toggle, chip badge update" },
+      "default":    { "$type": "duration", "$value": "{motion.duration.normal}",    "$description": "Hover, focus, colour change" },
+      "enter":      { "$type": "duration", "$value": "{motion.duration.moderate}",  "$description": "Component enter (dropdown slide, tooltip fade-in)" },
+      "exit":       { "$type": "duration", "$value": "{motion.duration.moderate}",  "$description": "Component exit (mirror of enter)" },
+      "page":       { "$type": "duration", "$value": "{motion.duration.slow}",      "$description": "Page-level transitions (sheet, drawer slide)" },
+      "orchestrated":{ "$type": "duration", "$value": "{motion.duration.deliberate}","$description": "Complex orchestrations (wizard, multi-step onboarding)" }
+    },
+    "easing": {
+      "enter":      { "$type": "cubicBezier", "$value": "{motion.easing.ease-out}",    "$description": "Default easing for entering elements" },
+      "exit":       { "$type": "cubicBezier", "$value": "{motion.easing.ease-in}",     "$description": "Default easing for exiting elements" },
+      "move":       { "$type": "cubicBezier", "$value": "{motion.easing.ease-in-out}", "$description": "Cross-screen movement" },
+      "expressive": { "$type": "cubicBezier", "$value": "{motion.easing.spring}",      "$description": "Playful moments (success animation, reward)" }
+    }
+  }
+}

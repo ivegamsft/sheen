@@ -166,3 +166,7 @@ jobs:
       - name: Validate - tokens (DTCG schema, references, contrast gate)
         if: ${{ hashFiles('tokens/**/*.tokens.json') != '' }}
         run: pwsh -NonInteractive -File scripts/validate-tokens.ps1 tokens
+
+      - name: Build - tokens (DTCG → CSS/JS/TS, spec 01 §4)
+        if: ${{ hashFiles('tokens/**/*.tokens.json') != '' }}
+        run: pwsh -NonInteractive -File scripts/build-tokens.ps1 -Quiet

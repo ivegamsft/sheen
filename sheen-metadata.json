@@ -16,7 +16,7 @@
     "templates": 8,
     "tokens": {
       "core": 7,
-      "semantic": 2,
+      "semantic": 6,
       "themes": 3
     }
   },
@@ -575,48 +575,48 @@
         "path": "agents/accessibility-auditor.agent.md",
         "pillar": "a11y",
         "maturity": "draft",
-        "description": "Design-role agent for WCAG conformance, contrast, and accessibility risk triage. Invoke for design requests in this mandate.",
-        "hash": "c99a8160d7e7d1446dd3a7ca38f1f49edff2f5b362b0347d5ba9d4fcb56f406c"
+        "description": "WCAG conformance auditing, colour contrast checks, and accessibility risk triage for design and code surfaces. USE FOR: audit screens or components for WCAG 2.2 AA/AAA compliance, check foreground/background colour contrast ratios, triage keyboard navigation and ARIA implementation risks, create accessibility review reports, evaluate high-contrast theme coverage. DO NOT USE FOR: brand identity direction, token architecture, IA taxonomy, engineering backend implementation.",
+        "hash": "dc54046e1ff20ddcba93481f2e71708911484e2a2f3b6320e970e345cc629480"
       },
       {
         "name": "brand-steward",
         "path": "agents/brand-steward.agent.md",
         "pillar": "brand",
         "maturity": "draft",
-        "description": "Design-role agent for brand identity, voice, logo, and imagery integrity. Invoke for design requests in this mandate.",
-        "hash": "3e854bc1b0b303e97aad61f96d36bededee678710cf48016b37800cfca68c860"
+        "description": "Brand identity, voice, logo usage, and imagery integrity for sheen design surfaces. USE FOR: review or define brand identity guidelines, audit logo placement for trademark compliance, establish voice and tone rules, evaluate illustration and imagery direction, reconcile brand consistency across product surfaces. DO NOT USE FOR: token architecture, navigation taxonomy, accessibility conformance audits, engineering implementation.",
+        "hash": "ab5164e803d3bdc18cc458c9933f70c568ab240785a168c7c1f809d39ff29fb9"
       },
       {
         "name": "design-reviewer",
         "path": "agents/design-reviewer.agent.md",
         "pillar": "governance",
         "maturity": "draft",
-        "description": "Design-role agent for craft-bar critiques and structured design tradeoff decisions. Invoke for design requests in this mandate.",
-        "hash": "e2b6c314c88c88451cc6a5be410ce2b6a946238ad05376e2b79f26c846656a6d"
+        "description": "Craft-bar critiques, structured design tradeoff decisions, and design governance for sheen surfaces. USE FOR: run craft-quality reviews against design bar criteria, facilitate structured design debates with weighted tradeoffs, produce design decision packages with risks and rationale, govern design consistency and standards conformance across a product portfolio, evaluate design system adoption health. DO NOT USE FOR: pixel-level implementation, brand campaign direction, accessibility WCAG audit, backend engineering.",
+        "hash": "68592fae58e16261904714213f5526b64f855aa49fbbe3b75927f864a63d0095"
       },
       {
         "name": "design-system-architect",
         "path": "agents/design-system-architect.agent.md",
         "pillar": "foundations",
         "maturity": "draft",
-        "description": "Design-role agent for token architecture, theming, and component-system coherence. Invoke for design requests in this mandate.",
-        "hash": "2492a35995d545c606c645f2c63ca10c53cf0a127c997f34610907a72be8ace6"
+        "description": "Token architecture, theming, and component-system coherence for design systems. USE FOR: design or audit semantic token layers, define theming strategies, review component-system coherence, create token migration guides, evaluate design-system adoption plans. DO NOT USE FOR: brand voice or campaign direction, navigation taxonomy, accessibility audits, backend implementation.",
+        "hash": "4a9997fa630a04a5d19d2003c7144dff3e8411703dde68912ae7bf65f532e80e"
       },
       {
         "name": "information-architect",
         "path": "agents/information-architect.agent.md",
         "pillar": "ia",
         "maturity": "draft",
-        "description": "Design-role agent for content structure, navigation, taxonomy, and ontology. Invoke for design requests in this mandate.",
-        "hash": "6992666a581a3248abe4ae506b27c43ad9566c878dac55fee6a869ae6bb5e7b0"
+        "description": "Content structure, navigation taxonomy, and ontology design for complex product surfaces. USE FOR: design or audit site maps and navigation hierarchies, define taxonomy and labeling systems, evaluate ontology relationships and content models, create IA deliverables for admin or multi-tenant surfaces, assess findability and wayfinding patterns. DO NOT USE FOR: visual brand identity, token architecture, accessibility WCAG conformance, backend data modeling.",
+        "hash": "cf19ce1c3e6e27568e474733e25a1693d70ff6db495566c9f080c298d6db0f4c"
       },
       {
         "name": "ux-designer",
         "path": "agents/ux-designer.agent.md",
         "pillar": "usability",
         "maturity": "draft",
-        "description": "Design-role agent for user journeys, interaction states, and usability optimization. Invoke for design requests in this mandate.",
-        "hash": "a1503c12ab2f6aec3d5c7512071edc186a471b4d0a4f1903c19bb2de8f0ddb7b"
+        "description": "User journeys, interaction states, and usability optimization for web and app surfaces. USE FOR: design or critique user flows and wireframes, define interaction and component states, run usability reviews against heuristics, evaluate responsive layout strategies, coordinate usability research findings into design decisions. DO NOT USE FOR: brand identity campaigns, token naming, accessibility WCAG audits, backend implementation.",
+        "hash": "cedbc9144228fbc1e8c9c0a97178e6aa5b4d937c70fb3a586212562e4ef7cff6"
       }
     ],
     "instructions": [
@@ -705,17 +705,17 @@
       {
         "name": "dark",
         "path": "tokens/themes/dark.tokens.json",
-        "hash": "e9c4e043b6f6f1b4075b2df6b2eff918286f609274e0e69c29ecafec51cd2f55"
+        "hash": "1b6934d169d060be291e00565ff0019041a7e2188169c06d6e4c3df4ac99302d"
       },
       {
         "name": "high-contrast",
         "path": "tokens/themes/high-contrast.tokens.json",
-        "hash": "cc96a6fc10ba342035fa7da77b092e9cf9af054f7336d90fe6e73b1ea15de7f3"
+        "hash": "7654ef8168cb1584fa928337f327ce6d59278afd7a7deac41a92b3b4f687dbbd"
       },
       {
         "name": "light",
         "path": "tokens/themes/light.tokens.json",
-        "hash": "e2efe3b21b76dfd5fc676872a35eae3c8b1e9d8b06f0d5fe7ddf1e0ee8a35f9c"
+        "hash": "7e12bc37ebf4abb7ac0d9944d33c4538e7f8015c1ef57511a37a27ec33e7d8b3"
       }
     ]
   }

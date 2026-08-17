@@ -1,7 +1,7 @@
 ---
 name: accessibility-auditor
 compatibility: [github-copilot-cli]
-description: "Design-role agent for WCAG conformance, contrast, and accessibility risk triage. Invoke for design requests in this mandate."
+description: "WCAG conformance auditing, colour contrast checks, and accessibility risk triage for design and code surfaces. USE FOR: audit screens or components for WCAG 2.2 AA/AAA compliance, check foreground/background colour contrast ratios, triage keyboard navigation and ARIA implementation risks, create accessibility review reports, evaluate high-contrast theme coverage. DO NOT USE FOR: brand identity direction, token architecture, IA taxonomy, engineering backend implementation."
 metadata:
   maturity: draft
   pillar: a11y
@@ -10,7 +10,9 @@ composes:
     - accessibility-audit
     - color-contrast-check
     - usability-mapping
-  instructions: []
+  instructions:
+    - sheen-10-core-accessibility
+    - sheen-90-standards-conformance
 allowed-tools: []
 ---
 # accessibility-auditor

@@ -1,0 +1,19 @@
+{
+  "$description": "Semantic border-radius and border-width tokens — component roles into the core radius scale. (spec 01 §3.2)",
+  "radius": {
+    "none":   { "$type": "dimension", "$value": "{radius.none}",   "$description": "No rounding — flush/edge elements" },
+    "subtle": { "$type": "dimension", "$value": "{radius.small}",  "$description": "Subtle rounding — chips, tags, table cells" },
+    "default":{ "$type": "dimension", "$value": "{radius.medium}", "$description": "Default button / input radius" },
+    "card":   { "$type": "dimension", "$value": "{radius.large}",  "$description": "Card surface, dialogs, menus" },
+    "pill":   { "$type": "dimension", "$value": "{radius.full}",   "$description": "Full pill — badges, toggle, FABs" },
+    "circle": { "$type": "dimension", "$value": "{radius.full}",   "$description": "Perfect circle — avatars" }
+  },
+  "border": {
+    "width": {
+      "none":   { "$type": "dimension", "$value": "0px",  "$description": "No border" },
+      "thin":   { "$type": "dimension", "$value": "1px",  "$description": "Default border / divider" },
+      "medium": { "$type": "dimension", "$value": "2px",  "$description": "Focus ring, selected state" },
+      "thick":  { "$type": "dimension", "$value": "4px",  "$description": "Error border, high-contrast focus" }
+    }
+  }
+}
