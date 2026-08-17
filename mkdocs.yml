@@ -37,6 +37,7 @@ nav:
       - Adoption Modes: getting-started/adoption-modes.md
       - Installation & Setup: getting-started.md
   - Integration Patterns:
+      - Consumer Lifecycle (Integrate→Use): guides/consumer-lifecycle.md
       - Consumption Patterns: guides/consumption-patterns.md
       - Token Build & CI Integration: guides/token-build-ci.md
       - Sync Diagnostics: guides/diagnostics.md
