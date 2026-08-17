@@ -104,6 +104,7 @@ nav:
       - Overview: decisions/index.md
       - "ADR-001: Sheen Router": decisions/adr-001-sheen-router.md
       - "ADR-002: Intent Disambiguation": decisions/adr-002-intent-disambiguation.md
+      - "AUDIT-001: Spec Gap Audit": decisions/spec-gap-audit-2026-08-16.md
   - Support:
       - FAQ: support/faq.md
       - Troubleshooting: support/troubleshooting.md
