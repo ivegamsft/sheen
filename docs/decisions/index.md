@@ -10,6 +10,7 @@ chosen direction — so future contributors understand *why* the system is shape
 |---|-------|------|--------|
 | [ADR-001](adr-001-sheen-router.md) | Sheen router: intents, vocabulary, skill & agent routing, factory patterns | 2026-08-16 | Accepted |
 | [ADR-002](adr-002-intent-disambiguation.md) | Intent disambiguation strategy | 2026-08-16 | Accepted |
+| [AUDIT-001](spec-gap-audit-2026-08-16.md) | Spec gap audit — all specs vs implementation | 2026-08-16 | Published |
 
 ## Conventions
 
