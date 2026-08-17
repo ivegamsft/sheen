@@ -49,6 +49,12 @@ ref: main
 #   - dark
 #   - high-contrast
 
+# materialize_tokens: when true, runs scripts/build-tokens.ps1 after sync to
+# generate dist/tokens/sheen.css, sheen.js, sheen.esm.js, and sheen.d.ts from
+# the synced DTCG token source (spec 01 §4 / spec 06 §2).
+# Set to true if your project consumes tokens directly (web, design tools, CI).
+# materialize_tokens: true
+
 # sync: sync behaviour overrides (one mapping --- combine the keys you need).
 #   script  --- path to the sync entrypoint, relative to repo root. Set this when
 #               your sync script is not the canonical root sync.ps1/sync.sh.

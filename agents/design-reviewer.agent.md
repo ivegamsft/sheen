@@ -1,7 +1,7 @@
 ---
 name: design-reviewer
 compatibility: [github-copilot-cli]
-description: "Design-role agent for craft-bar critiques and structured design tradeoff decisions. Invoke for design requests in this mandate."
+description: "Craft-bar critiques, structured design tradeoff decisions, and design governance for sheen surfaces. USE FOR: run craft-quality reviews against design bar criteria, facilitate structured design debates with weighted tradeoffs, produce design decision packages with risks and rationale, govern design consistency and standards conformance across a product portfolio, evaluate design system adoption health. DO NOT USE FOR: pixel-level implementation, brand campaign direction, accessibility WCAG audit, backend engineering."
 metadata:
   maturity: draft
   pillar: governance
@@ -10,7 +10,9 @@ composes:
     - design-review
     - design-debate
     - craft-quality
-  instructions: []
+  instructions:
+    - sheen-10-core-design-principles
+    - sheen-90-standards-conformance
 allowed-tools: []
 ---
 # design-reviewer

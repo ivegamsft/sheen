@@ -1,0 +1,12 @@
+{
+  "$description": "Semantic elevation tokens — component-role aliases into the core shadow scale. Themes MAY override to adjust opacity/colour per brand. (spec 01 §3.2)",
+  "elevation": {
+    "flat":     { "$type": "shadow", "$value": "{elevation.0}", "$description": "No raised appearance — default surface" },
+    "card":     { "$type": "shadow", "$value": "{elevation.1}", "$description": "Card at rest" },
+    "card-hover":     { "$type": "shadow", "$value": "{elevation.2}", "$description": "Card on hover / focused" },
+    "dropdown": { "$type": "shadow", "$value": "{elevation.2}", "$description": "Dropdown / select menu" },
+    "popover":  { "$type": "shadow", "$value": "{elevation.3}", "$description": "Popover, tooltip" },
+    "dialog":   { "$type": "shadow", "$value": "{elevation.4}", "$description": "Modal dialog" },
+    "overlay":  { "$type": "shadow", "$value": "{elevation.5}", "$description": "Full-screen overlay or sheet" }
+  }
+}

@@ -1,7 +1,7 @@
 ---
 name: information-architect
 compatibility: [github-copilot-cli]
-description: "Design-role agent for content structure, navigation, taxonomy, and ontology. Invoke for design requests in this mandate."
+description: "Content structure, navigation taxonomy, and ontology design for complex product surfaces. USE FOR: design or audit site maps and navigation hierarchies, define taxonomy and labeling systems, evaluate ontology relationships and content models, create IA deliverables for admin or multi-tenant surfaces, assess findability and wayfinding patterns. DO NOT USE FOR: visual brand identity, token architecture, accessibility WCAG conformance, backend data modeling."
 metadata:
   maturity: draft
   pillar: ia
@@ -11,7 +11,9 @@ composes:
     - navigation-design
     - taxonomy
     - ontology
-  instructions: []
+  instructions:
+    - sheen-60-ia-navigation
+    - sheen-70-taxonomy-ontology
 allowed-tools: []
 ---
 # information-architect

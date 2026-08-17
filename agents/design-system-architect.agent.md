@@ -1,7 +1,7 @@
 ---
 name: design-system-architect
 compatibility: [github-copilot-cli]
-description: "Design-role agent for token architecture, theming, and component-system coherence. Invoke for design requests in this mandate."
+description: "Token architecture, theming, and component-system coherence for design systems. USE FOR: design or audit semantic token layers, define theming strategies, review component-system coherence, create token migration guides, evaluate design-system adoption plans. DO NOT USE FOR: brand voice or campaign direction, navigation taxonomy, accessibility audits, backend implementation."
 metadata:
   maturity: draft
   pillar: foundations
@@ -11,7 +11,10 @@ composes:
     - theming
     - component-spec
     - design-system-audit
-  instructions: []
+  instructions:
+    - sheen-10-core-design-principles
+    - sheen-20-tokens-naming
+    - sheen-30-components-states
 allowed-tools: []
 ---
 # design-system-architect

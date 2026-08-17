@@ -129,6 +129,19 @@ try {
     $manifestPath = Join-Path $manifestDir 'manifest.json'
     ($manifest | ConvertTo-Json -Depth 6) | Set-Content -LiteralPath $manifestPath -Encoding utf8
     Write-Host ("sheen sync: wrote {0} item(s); manifest at .sheen/manifest.json" -f $manifest.files.Count)
+
+    # Run token build if the consumer opts into materialized tokens (spec 01 §4 / spec 06 §2)
+    $materialize = Get-SheenYmlValue -Key 'materialize_tokens' -RepoRoot $repoRoot
+    if ($materialize -and $materialize -notin @('false', 'no', '0')) {
+        $buildScript = Join-Path $repoRoot 'scripts' 'build-tokens.ps1'
+        if (Test-Path -LiteralPath $buildScript) {
+            Write-Host 'sheen sync: running token build (materialize_tokens=true)...'
+            & $buildScript
+            if ($LASTEXITCODE -and $LASTEXITCODE -ne 0) { throw "token build failed (exit $LASTEXITCODE)" }
+        } else {
+            Write-Warning 'sheen sync: materialize_tokens=true but scripts/build-tokens.ps1 not found; skipping token build'
+        }
+    }
 }
 finally {
     if (Test-Path -LiteralPath $work) { Remove-Item -LiteralPath $work -Recurse -Force -ErrorAction SilentlyContinue }

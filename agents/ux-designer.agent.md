@@ -1,7 +1,7 @@
 ---
 name: ux-designer
 compatibility: [github-copilot-cli]
-description: "Design-role agent for user journeys, interaction states, and usability optimization. Invoke for design requests in this mandate."
+description: "User journeys, interaction states, and usability optimization for web and app surfaces. USE FOR: design or critique user flows and wireframes, define interaction and component states, run usability reviews against heuristics, evaluate responsive layout strategies, coordinate usability research findings into design decisions. DO NOT USE FOR: brand identity campaigns, token naming, accessibility WCAG audits, backend implementation."
 metadata:
   maturity: draft
   pillar: usability
@@ -11,7 +11,10 @@ composes:
     - ui-states-interaction
     - web-usability-review
     - responsive-design
-  instructions: []
+  instructions:
+    - sheen-10-core-design-principles
+    - sheen-30-components-states
+    - sheen-40-web-usability
 allowed-tools: []
 ---
 # ux-designer
