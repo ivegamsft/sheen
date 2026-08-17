@@ -91,6 +91,12 @@
         "id": "locale-tags",
         "applies_to": ["tokens/**/*.json", "instructions/*.instructions.md"],
         "description": "Localized strings not using BCP 47 tags (spec 08 s2.9)."
+      },
+      {
+        "id": "router-contract",
+        "applies_to": ["sheen.vocab.yaml", ".github/skills/sheen/**"],
+        "command": "pwsh -NonInteractive -File scripts/lint-router.ps1",
+        "description": "Router contract violations: missing discriminator, unknown skill/agent ref, duplicate intent (spec 09)."
       }
     ]
   }

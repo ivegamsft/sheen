@@ -129,4 +129,16 @@ $FILES_JSON
 }
 EOF
 
-echo "sheen sync: wrote $COUNT item(s); manifest at .sheen/manifest.json"
+echo "sheen sync: wrote ${COUNT} item(s); manifest at .sheen/manifest.json"
+
+# Run token build if the consumer opts into materialized tokens (spec 01 §4 / spec 06 §2)
+MATERIALIZE="$(yml_value 'materialize_tokens')"
+if [ "$MATERIALIZE" = 'true' ]; then
+  BUILD_PS="$REPO_ROOT/scripts/build-tokens.ps1"
+  if command -v pwsh >/dev/null 2>&1 && [ -f "$BUILD_PS" ]; then
+    echo 'sheen sync: running token build (materialize_tokens=true)...'
+    pwsh -NonInteractive -File "$BUILD_PS" || { echo "sheen sync: token build failed" >&2; exit 1; }
+  else
+    echo 'sheen sync: materialize_tokens=true but pwsh/build-tokens.ps1 not found; skipping token build' >&2
+  fi
+fi
