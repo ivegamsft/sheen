@@ -1,28 +1,22 @@
-id: sheen-onboard
-description: Routes sheen consumer lifecycle onboarding to sheen-onboard skill
-threshold: 7.0
-cases:
-  - input: "onboard this repo to the basecoat-sheen design system"
-    expected_skill: sheen-onboard
-    score: 9.5
-    rationale: Explicit sheen onboarding request — primary use case
-  - input: "run the full sheen consumer lifecycle for my repo"
-    expected_skill: sheen-onboard
-    score: 9.5
-    rationale: Full lifecycle orchestration is the primary capability
-  - input: "bootstrap .sheen.yml and sync vendor assets"
-    expected_skill: sheen-onboard
-    score: 9.0
-    rationale: Config bootstrap + sync is Phase 1-2 of the lifecycle
-  - input: "generate a sheen health report for this repo"
-    expected_skill: sheen-onboard
-    score: 8.5
-    rationale: Health report generation is the Phase 4-5 output
-  - input: "implement the login feature for the app"
-    expected_skill: backend-dev
-    score: 2.0
-    rationale: Feature implementation is not onboarding
-  - input: "audit accessibility of my design tokens"
-    expected_skill: accessibility-auditor
-    score: 2.0
-    rationale: Standalone token audit routes to accessibility-auditor
+name: "sheen-onboard-routing"
+description: "Routing evaluation — validates trigger activation for sheen-onboard."
+skill: "skills/sheen-onboard/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Run the full sheen consumer lifecycle from integration through first agent use for this repo"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Bootstrap a .sheen.yml config, run vendor sync, and build the token output for my project"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Generate a sheen onboarding health report showing token coverage and audit results"
+    expect_activation: true
+  - id: "pos-4"
+    input: "Orchestrate the 5-phase sheen lifecycle: integrate, onboard, inventory, audit, use"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Write the login screen component for the consumer app we are building"
+    expect_activation: false
+  - id: "neg-2"
+    input: "Run a standalone WCAG contrast audit on the semantic token palette"
+    expect_activation: false

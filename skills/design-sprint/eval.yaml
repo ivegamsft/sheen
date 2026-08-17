@@ -1,28 +1,22 @@
-id: design-sprint
-description: Routes design sprint facilitation to design-sprint skill
-threshold: 7.0
-cases:
-  - input: "facilitate a 5-day GV design sprint for our checkout problem"
-    expected_skill: design-sprint
-    score: 9.5
-    rationale: GV sprint facilitation is the primary use case
-  - input: "generate How Might We questions for our onboarding problem"
-    expected_skill: design-sprint
-    score: 9.0
-    rationale: HMW generation is a core sprint capability
-  - input: "run a 4-hour lightning sprint for the new search feature"
-    expected_skill: design-sprint
-    score: 9.0
-    rationale: Lightning sprint facilitation is a direct use case
-  - input: "convert this storyboard to a prototype spec"
-    expected_skill: design-sprint
-    score: 8.5
-    rationale: Storyboard-to-prototype conversion is a Day 3-4 output
-  - input: "implement the checkout flow from the sprint prototype"
-    expected_skill: frontend-dev
-    score: 2.0
-    rationale: Production implementation routes to frontend-dev
-  - input: "recruit users for usability testing"
-    expected_skill: ux
-    score: 2.0
-    rationale: Research recruitment is not sprint facilitation
+name: "design-sprint-routing"
+description: "Routing evaluation — validates trigger activation for design-sprint."
+skill: "skills/design-sprint/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Facilitate a 5-day GV design sprint targeting the 68 percent checkout abandonment rate"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Generate How Might We questions from the problem brief: designers manually audit token compliance"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Run a 4-hour lightning sprint to redesign the search and filter experience"
+    expect_activation: true
+  - id: "pos-4"
+    input: "Convert the Day 3 sprint storyboard into a prototype spec for the ux wireframing skill"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Implement the checkout redesign proposed in the sprint prototype as production code"
+    expect_activation: false
+  - id: "neg-2"
+    input: "Recruit usability study participants and schedule sessions for the sprint validation day"
+    expect_activation: false

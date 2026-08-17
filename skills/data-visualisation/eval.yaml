@@ -1,28 +1,22 @@
-id: data-visualisation
-description: Routes chart, dashboard, and data-dense UI design to data-visualisation skill
-threshold: 7.0
-cases:
-  - input: "what chart type should I use for revenue by category over time?"
-    expected_skill: data-visualisation
-    score: 9.5
-    rationale: Chart type selection is the primary use case
-  - input: "audit this dashboard for colour-blind accessibility"
-    expected_skill: data-visualisation
-    score: 9.0
-    rationale: Data viz a11y audit is a core capability
-  - input: "specify density rules for a 12-KPI dashboard"
-    expected_skill: data-visualisation
-    score: 8.5
-    rationale: Data density specification is a direct use case
-  - input: "generate a component spec for a line chart with 4 series"
-    expected_skill: data-visualisation
-    score: 9.0
-    rationale: Data viz component spec generation
-  - input: "write the SQL query to aggregate monthly revenue"
-    expected_skill: data-tier
-    score: 2.0
-    rationale: SQL queries are not data visualisation design
-  - input: "implement the chart rendering with D3.js"
-    expected_skill: frontend-dev
-    score: 2.0
-    rationale: Chart implementation routes to frontend-dev
+name: "data-visualisation-routing"
+description: "Routing evaluation — validates trigger activation for data-visualisation."
+skill: "skills/data-visualisation/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Recommend the best chart type for showing monthly revenue across 5 product categories over a year"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Audit the dashboard wireframe for colour-blind safety and ARIA labelling of chart elements"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Define data density and hierarchy rules for a metrics dashboard with 12 KPI cards and 3 charts"
+    expect_activation: true
+  - id: "pos-4"
+    input: "Generate a component spec for a 4-series line chart with a legend, tooltips, and a data table fallback"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Write the SQL aggregation query that computes monthly revenue per product category"
+    expect_activation: false
+  - id: "neg-2"
+    input: "Implement the D3.js rendering logic for the revenue trend chart in the dashboard"
+    expect_activation: false

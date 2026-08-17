@@ -1,28 +1,22 @@
-id: ethical-design
-description: Routes dark pattern detection and consent UI audits to ethical-design skill
-threshold: 7.0
-cases:
-  - input: "audit this checkout flow for dark patterns"
-    expected_skill: ethical-design
-    score: 9.5
-    rationale: Dark pattern audit is the primary use case
-  - input: "is our cookie consent dialog GDPR-compliant?"
-    expected_skill: ethical-design
-    score: 9.0
-    rationale: Consent UI GDPR review is a core capability
-  - input: "our cancel flow takes 3 screens — is this a roach motel?"
-    expected_skill: ethical-design
-    score: 9.0
-    rationale: Roach motel pattern detection
-  - input: "suggest an ethical alternative to this confirmshaming button"
-    expected_skill: ethical-design
-    score: 8.5
-    rationale: Ethical alternative recommendation
-  - input: "review the privacy policy text for legal compliance"
-    expected_skill: governance
-    score: 2.0
-    rationale: Legal text review is not ethical design
-  - input: "penetration test the consent API endpoint"
-    expected_skill: penetration-testing
-    score: 2.0
-    rationale: Security testing is not ethical UX design
+name: "ethical-design-routing"
+description: "Routing evaluation — validates trigger activation for ethical-design."
+skill: "skills/ethical-design/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Audit the checkout wireframe for dark patterns including hidden costs and misdirection"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Assess whether the cookie consent dialog meets GDPR Article 7 equal-prominence requirements"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Evaluate the subscription cancellation flow — does it constitute a roach motel pattern?"
+    expect_activation: true
+  - id: "pos-4"
+    input: "Suggest an ethical, neutral alternative to the confirmshaming copy on the downgrade modal"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Review the privacy policy document for GDPR legal compliance and data retention wording"
+    expect_activation: false
+  - id: "neg-2"
+    input: "Penetration-test the consent management API for injection vulnerabilities"
+    expect_activation: false

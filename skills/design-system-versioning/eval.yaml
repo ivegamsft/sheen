@@ -1,28 +1,22 @@
-id: design-system-versioning
-description: Routes design system semver and migration guide work
-threshold: 7.0
-cases:
-  - input: "what semver bump is needed for renaming this token?"
-    expected_skill: design-system-versioning
-    score: 9.5
-    rationale: Semver classification is the primary use case
-  - input: "write a migration guide for the v2 to v3 upgrade"
-    expected_skill: design-system-versioning
-    score: 9.0
-    rationale: Migration guide authoring is a core output
-  - input: "plan the deprecation of the old elevation tokens"
-    expected_skill: design-system-versioning
-    score: 9.0
-    rationale: Deprecation planning is a direct use case
-  - input: "generate a changelog entry for the semantic token PR"
-    expected_skill: design-system-versioning
-    score: 8.5
-    rationale: Changelog generation from design diffs
-  - input: "bump the npm package version for the release"
-    expected_skill: release-notes
-    score: 2.0
-    rationale: Package release automation is not design system versioning
-  - input: "what version of the API should I use?"
-    expected_skill: api-design
-    score: 2.0
-    rationale: API versioning is not design system versioning
+name: "design-system-versioning-routing"
+description: "Routing evaluation — validates trigger activation for design-system-versioning."
+skill: "skills/design-system-versioning/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Classify renaming --color-brand-blue to --color-action-primary — major, minor, or patch?"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Author a consumer-facing migration guide for upgrading from design system v2 to v3"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Draft a deprecation notice and timeline for removing the legacy elevation tokens"
+    expect_activation: true
+  - id: "pos-4"
+    input: "Generate a CHANGELOG.md entry summarising the semantic token additions in this PR"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Bump the npm package version and cut a GitHub release for the component library"
+    expect_activation: false
+  - id: "neg-2"
+    input: "Decide the REST API versioning strategy for the new user profile endpoints"
+    expect_activation: false

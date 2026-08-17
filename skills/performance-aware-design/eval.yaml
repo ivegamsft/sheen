@@ -1,28 +1,22 @@
-id: performance-aware-design
-description: Routes performance-impact design assessments to performance-aware-design skill
-threshold: 7.0
-cases:
-  - input: "will this hero image hurt my LCP score?"
-    expected_skill: performance-aware-design
-    score: 9.5
-    rationale: LCP impact assessment is the primary use case
-  - input: "recommend a font loading strategy for my type scale"
-    expected_skill: performance-aware-design
-    score: 9.0
-    rationale: Font loading strategy is a core capability
-  - input: "will these animation durations cause INP issues?"
-    expected_skill: performance-aware-design
-    score: 9.0
-    rationale: Animation token INP evaluation is a direct use case
-  - input: "score my homepage design against Core Web Vitals"
-    expected_skill: performance-aware-design
-    score: 8.5
-    rationale: CWV scoring of a design spec
-  - input: "optimise the database query for the product listing"
-    expected_skill: backend-dev
-    score: 2.0
-    rationale: Backend query optimisation is not design performance
-  - input: "scale the API server for high traffic"
-    expected_skill: ha-resilience
-    score: 2.0
-    rationale: Infrastructure scaling is not design performance
+name: "performance-aware-design-routing"
+description: "Routing evaluation — validates trigger activation for performance-aware-design."
+skill: "skills/performance-aware-design/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Assess whether a 1920px hero image with a custom display font will degrade LCP"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Recommend a font loading strategy for the type scale defined in the token file"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Evaluate the motion token duration values for potential INP regressions on mobile"
+    expect_activation: true
+  - id: "pos-4"
+    input: "Score the homepage wireframe spec against Largest Contentful Paint and CLS budgets"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Optimise the Postgres query that fetches product listings for the catalogue page"
+    expect_activation: false
+  - id: "neg-2"
+    input: "Configure horizontal pod autoscaling for the checkout microservice under peak load"
+    expect_activation: false
