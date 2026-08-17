@@ -10,7 +10,8 @@ $repoRoot = git rev-parse --show-toplevel 2>$null
 if (-not $repoRoot) { throw 'Run this inside a git repository' }
 Set-Location $repoRoot
 
-$outPath = Join-Path $repoRoot 'sheen-metadata.json'
+$outPath   = Join-Path $repoRoot 'sheen-metadata.json'
+$vocabPath = Join-Path $repoRoot 'sheen.vocab.yaml'
 $version = if (Test-Path 'version.json') { (Get-Content version.json -Raw | ConvertFrom-Json).version } else { '0.0.0' }
 
 function Get-FrontmatterLines([string]$path) {
@@ -184,10 +185,104 @@ if ($Check) {
         }
         exit 1
     }
+    # Also verify sheen.vocab.yaml is present (content drift check is not needed for
+    # the vocab file since it re-derives from the same intents table in this script)
+    if (-not (Test-Path $vocabPath)) {
+        Write-Host "::error::sheen.vocab.yaml missing. Run scripts/build-metadata.ps1"
+        exit 1
+    }
     Write-Host "build-metadata --check: OK"
     exit 0
 }
 
 Set-Content -LiteralPath $outPath -Value $newJson -Encoding utf8NoBOM
 Write-Host "build-metadata: wrote sheen-metadata.json"
+
+# ---------------------------------------------------------------------------
+# Emit sheen.vocab.yaml — intent vocabulary derived from skill/agent inventory
+# ---------------------------------------------------------------------------
+
+# Static intent definitions keyed to canonical skills and agents.
+# When a new intent is needed, add an entry here and re-run this script.
+$intents = @(
+    [ordered]@{ intent = 'wireframe-a-flow';       keywords = @('wireframe','lo-fi','sketch','flow-diagram');          skill = 'wireframing';         agent = 'ux-designer' }
+    [ordered]@{ intent = 'debate-design-options';  keywords = @('debate','tradeoff','adr','compare','options');        skill = 'design-debate';       agent = 'design-reviewer' }
+    [ordered]@{ intent = 'audit-accessibility';    keywords = @('a11y','accessibility','wcag','aria');                 skill = 'accessibility-audit'; agent = 'accessibility-auditor' }
+    [ordered]@{ intent = 'design-token-schema';    keywords = @('token','tokens','semantic-token','alias');            skill = 'design-tokens';       agent = 'design-system-architect' }
+    [ordered]@{ intent = 'color-system-design';    keywords = @('color','colour','palette','hue');                    skill = 'color-system';        agent = 'design-system-architect' }
+    [ordered]@{ intent = 'typography-scale';       keywords = @('typography','typeface','font','type-scale');         skill = 'typography';          agent = 'design-system-architect' }
+    [ordered]@{ intent = 'theming';                keywords = @('theme','theming','dark-mode','light-mode','high-contrast'); skill = 'theming'; agent = 'design-system-architect' }
+    [ordered]@{ intent = 'css-token-mapping';      keywords = @('css','css-variable','component-token');              skill = 'css-mapping';         agent = 'design-system-architect' }
+    [ordered]@{ intent = 'motion-elevation-design';keywords = @('motion','animation','elevation','shadow');            skill = 'motion-elevation';    agent = 'design-system-architect' }
+    [ordered]@{ intent = 'font-mapping';           keywords = @('font-stack','font-mapping','web-font');              skill = 'font-mapping';        agent = 'design-system-architect' }
+    [ordered]@{ intent = 'brand-identity-review';  keywords = @('brand','brand-identity','visual-identity');          skill = 'brand-identity';      agent = 'brand-steward' }
+    [ordered]@{ intent = 'logo-usage-review';      keywords = @('logo','logotype','mark','logo-usage');               skill = 'logo-usage';          agent = 'brand-steward' }
+    [ordered]@{ intent = 'imagery-illustration';   keywords = @('imagery','illustration','photography');              skill = 'imagery-illustration';agent = 'brand-steward' }
+    [ordered]@{ intent = 'brand-voice-tone';       keywords = @('voice','tone','microcopy','brand-voice');            skill = 'brand-voice-tone';    agent = 'brand-steward' }
+    [ordered]@{ intent = 'iconography-review';     keywords = @('icon','iconography','pictogram');                    skill = 'iconography';         agent = 'brand-steward' }
+    [ordered]@{ intent = 'responsive-layout';      keywords = @('responsive','mobile','breakpoint','viewport');       skill = 'responsive-design';   agent = 'ux-designer' }
+    [ordered]@{ intent = 'layout-grid-spacing';    keywords = @('layout','grid','spacing','density');                 skill = 'layout-grid-spacing'; agent = 'ux-designer' }
+    [ordered]@{ intent = 'navigation-design';      keywords = @('navigation','nav','menu','wayfinding');              skill = 'navigation-design';   agent = 'ux-designer' }
+    [ordered]@{ intent = 'user-journey-mapping';   keywords = @('user-journey','journey-map','flow','user-flow');    skill = 'user-research';       agent = 'ux-designer' }
+    [ordered]@{ intent = 'ux-writing';             keywords = @('ux-writing','label','cta','help-text','error-text'); skill = 'ux-writing';         agent = 'ux-designer' }
+    [ordered]@{ intent = 'ui-states-interaction';  keywords = @('interaction','state','hover','focus','active');      skill = 'ui-states-interaction'; agent = 'ux-designer' }
+    [ordered]@{ intent = 'landing-page-design';    keywords = @('landing-page','hero','above-fold');                  skill = 'landing-page-design'; agent = 'ux-designer' }
+    [ordered]@{ intent = 'web-usability-review';   keywords = @('usability','heuristic','web-usability');            skill = 'web-usability-review'; agent = 'ux-designer' }
+    [ordered]@{ intent = 'color-contrast-check';   keywords = @('contrast','color-contrast','luminance');            skill = 'color-contrast-check'; agent = 'accessibility-auditor' }
+    [ordered]@{ intent = 'keyboard-focus-audit';   keywords = @('keyboard','focus-ring','tab-order','screen-reader'); skill = 'accessibility-audit'; agent = 'accessibility-auditor' }
+    [ordered]@{ intent = 'usability-mapping';      keywords = @('usability-mapping','usability-score','heuristic-check'); skill = 'usability-mapping'; agent = 'accessibility-auditor' }
+    [ordered]@{ intent = 'ia-taxonomy-design';     keywords = @('taxonomy','classification','hierarchy','category');  skill = 'taxonomy';            agent = 'information-architect' }
+    [ordered]@{ intent = 'ontology-design';        keywords = @('ontology','vocabulary','controlled-vocabulary');    skill = 'ontology';            agent = 'information-architect' }
+    [ordered]@{ intent = 'sitemap-ia';             keywords = @('ia','information-architecture','sitemap');          skill = 'information-architecture'; agent = 'information-architect' }
+    [ordered]@{ intent = 'content-hierarchy';      keywords = @('content-hierarchy','content-model','content-type'); skill = 'content-hierarchy';   agent = 'information-architect' }
+    [ordered]@{ intent = 'multilingual-i18n';      keywords = @('multilingual','i18n','l10n','locale','translation'); skill = 'multilingual';        agent = 'information-architect' }
+    [ordered]@{ intent = 'craft-critique';         keywords = @('critique','craft','polish','craft-bar');            skill = 'craft-quality';       agent = 'design-reviewer' }
+    [ordered]@{ intent = 'design-audit';           keywords = @('audit','design-audit','system-audit');              skill = 'design-audit';        agent = 'design-reviewer' }
+    [ordered]@{ intent = 'pattern-library-review'; keywords = @('pattern','pattern-library','component-pattern');   skill = 'pattern-library';     agent = 'design-reviewer' }
+    [ordered]@{ intent = 'secure-ux-review';       keywords = @('secure-ux','privacy-ux','security-design');        skill = 'secure-ux';           agent = 'design-reviewer' }
+    [ordered]@{ intent = 'visual-regression';      keywords = @('regression','visual-regression','snapshot');       skill = 'visual-regression';   agent = 'design-reviewer' }
+    [ordered]@{ intent = 'style-guide-authoring';  keywords = @('style-guide','document-guidelines','component-spec-page'); skill = 'style-guide-authoring'; agent = 'design-reviewer' }
+    [ordered]@{ intent = 'design-system-audit';    keywords = @('design-system-audit','system-health','ds-audit');  skill = 'design-system-audit'; agent = 'design-reviewer' }
+    [ordered]@{ intent = 'component-spec';         keywords = @('component-spec','component-anatomy','spec');       skill = 'component-spec';      agent = 'ux-designer' }
+    [ordered]@{ intent = 'design-handoff';         keywords = @('handoff','design-handoff','dev-handoff');          skill = 'design-handoff';      agent = 'ux-designer' }
+    [ordered]@{ intent = 'design-exploration';     keywords = @('exploration','ideation','concepts');               skill = 'design-exploration';  agent = 'ux-designer' }
+    [ordered]@{ intent = 'design-suggest';         keywords = @('suggest','recommend','design-suggest');            skill = 'design-suggest';      agent = 'design-reviewer' }
+    [ordered]@{ intent = 'design-update';          keywords = @('update','revision','design-update');               skill = 'design-update';       agent = 'design-reviewer' }
+    [ordered]@{ intent = 'design-bootstrap';       keywords = @('bootstrap','scaffold','kick-off');                 skill = 'design-bootstrap';    agent = 'design-system-architect' }
+    [ordered]@{ intent = 'accessibility-conformance'; keywords = @('conformance','section-508','en-301-549');       skill = 'accessibility-audit'; agent = 'accessibility-auditor' }
+    [ordered]@{ intent = 'i18n-framework-mapping'; keywords = @('i18n-framework','rtl','bidi','language-support');  skill = 'i18n-framework-mapping'; agent = 'information-architect' }
+)
+
+# Validate every intent references a real skill and agent from the inventory
+$knownSkills  = $skillItems | ForEach-Object { $_.name }
+$knownAgents  = $agentItems | ForEach-Object { $_.name }
+$vocabErrors  = @()
+foreach ($entry in $intents) {
+    if ($entry.skill -notin $knownSkills)  { $vocabErrors += "intent '$($entry.intent)': unknown skill '$($entry.skill)'" }
+    if ($entry.agent -notin $knownAgents)  { $vocabErrors += "intent '$($entry.intent)': unknown agent '$($entry.agent)'" }
+}
+if ($vocabErrors.Count -gt 0) {
+    Write-Host "::warning::sheen.vocab.yaml has references to unknown skills/agents:"
+    $vocabErrors | ForEach-Object { Write-Host "  $_" }
+}
+
+# Emit YAML manually (no external module required)
+$vocabLines  = @()
+$vocabLines += "# GENERATED FILE — do not hand-edit. Produced by scripts/build-metadata.ps1."
+$vocabLines += "# Intent vocabulary for the sheen router (skills/sheen/). Edit intents in"
+$vocabLines += "# scripts/build-metadata.ps1 and re-run to update this file."
+$vocabLines += "schema: sheen-vocab/v1"
+$vocabLines += "version: `"$version`""
+$vocabLines += "intents:"
+foreach ($entry in $intents) {
+    $kws = ($entry.keywords | ForEach-Object { "`"$_`"" }) -join ', '
+    $vocabLines += "  - intent: `"$($entry.intent)`""
+    $vocabLines += "    keywords: [$kws]"
+    $vocabLines += "    skill: `"$($entry.skill)`""
+    $vocabLines += "    agent: `"$($entry.agent)`""
+}
+
+$vocabContent = $vocabLines -join "`n"
+Set-Content -LiteralPath $vocabPath -Value $vocabContent -Encoding utf8NoBOM
+Write-Host "build-metadata: wrote sheen.vocab.yaml ($($intents.Count) intents)"
 exit 0

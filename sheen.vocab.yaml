@@ -1,0 +1,190 @@
+# GENERATED FILE — do not hand-edit. Produced by scripts/build-metadata.ps1.
+# Intent vocabulary for the sheen router (skills/sheen/). Edit intents in
+# scripts/build-metadata.ps1 and re-run to update this file.
+schema: sheen-vocab/v1
+version: "0.5.0"
+intents:
+  - intent: "wireframe-a-flow"
+    keywords: ["wireframe", "lo-fi", "sketch", "flow-diagram"]
+    skill: "wireframing"
+    agent: "ux-designer"
+  - intent: "debate-design-options"
+    keywords: ["debate", "tradeoff", "adr", "compare", "options"]
+    skill: "design-debate"
+    agent: "design-reviewer"
+  - intent: "audit-accessibility"
+    keywords: ["a11y", "accessibility", "wcag", "aria"]
+    skill: "accessibility-audit"
+    agent: "accessibility-auditor"
+  - intent: "design-token-schema"
+    keywords: ["token", "tokens", "semantic-token", "alias"]
+    skill: "design-tokens"
+    agent: "design-system-architect"
+  - intent: "color-system-design"
+    keywords: ["color", "colour", "palette", "hue"]
+    skill: "color-system"
+    agent: "design-system-architect"
+  - intent: "typography-scale"
+    keywords: ["typography", "typeface", "font", "type-scale"]
+    skill: "typography"
+    agent: "design-system-architect"
+  - intent: "theming"
+    keywords: ["theme", "theming", "dark-mode", "light-mode", "high-contrast"]
+    skill: "theming"
+    agent: "design-system-architect"
+  - intent: "css-token-mapping"
+    keywords: ["css", "css-variable", "component-token"]
+    skill: "css-mapping"
+    agent: "design-system-architect"
+  - intent: "motion-elevation-design"
+    keywords: ["motion", "animation", "elevation", "shadow"]
+    skill: "motion-elevation"
+    agent: "design-system-architect"
+  - intent: "font-mapping"
+    keywords: ["font-stack", "font-mapping", "web-font"]
+    skill: "font-mapping"
+    agent: "design-system-architect"
+  - intent: "brand-identity-review"
+    keywords: ["brand", "brand-identity", "visual-identity"]
+    skill: "brand-identity"
+    agent: "brand-steward"
+  - intent: "logo-usage-review"
+    keywords: ["logo", "logotype", "mark", "logo-usage"]
+    skill: "logo-usage"
+    agent: "brand-steward"
+  - intent: "imagery-illustration"
+    keywords: ["imagery", "illustration", "photography"]
+    skill: "imagery-illustration"
+    agent: "brand-steward"
+  - intent: "brand-voice-tone"
+    keywords: ["voice", "tone", "microcopy", "brand-voice"]
+    skill: "brand-voice-tone"
+    agent: "brand-steward"
+  - intent: "iconography-review"
+    keywords: ["icon", "iconography", "pictogram"]
+    skill: "iconography"
+    agent: "brand-steward"
+  - intent: "responsive-layout"
+    keywords: ["responsive", "mobile", "breakpoint", "viewport"]
+    skill: "responsive-design"
+    agent: "ux-designer"
+  - intent: "layout-grid-spacing"
+    keywords: ["layout", "grid", "spacing", "density"]
+    skill: "layout-grid-spacing"
+    agent: "ux-designer"
+  - intent: "navigation-design"
+    keywords: ["navigation", "nav", "menu", "wayfinding"]
+    skill: "navigation-design"
+    agent: "ux-designer"
+  - intent: "user-journey-mapping"
+    keywords: ["user-journey", "journey-map", "flow", "user-flow"]
+    skill: "user-research"
+    agent: "ux-designer"
+  - intent: "ux-writing"
+    keywords: ["ux-writing", "label", "cta", "help-text", "error-text"]
+    skill: "ux-writing"
+    agent: "ux-designer"
+  - intent: "ui-states-interaction"
+    keywords: ["interaction", "state", "hover", "focus", "active"]
+    skill: "ui-states-interaction"
+    agent: "ux-designer"
+  - intent: "landing-page-design"
+    keywords: ["landing-page", "hero", "above-fold"]
+    skill: "landing-page-design"
+    agent: "ux-designer"
+  - intent: "web-usability-review"
+    keywords: ["usability", "heuristic", "web-usability"]
+    skill: "web-usability-review"
+    agent: "ux-designer"
+  - intent: "color-contrast-check"
+    keywords: ["contrast", "color-contrast", "luminance"]
+    skill: "color-contrast-check"
+    agent: "accessibility-auditor"
+  - intent: "keyboard-focus-audit"
+    keywords: ["keyboard", "focus-ring", "tab-order", "screen-reader"]
+    skill: "accessibility-audit"
+    agent: "accessibility-auditor"
+  - intent: "usability-mapping"
+    keywords: ["usability-mapping", "usability-score", "heuristic-check"]
+    skill: "usability-mapping"
+    agent: "accessibility-auditor"
+  - intent: "ia-taxonomy-design"
+    keywords: ["taxonomy", "classification", "hierarchy", "category"]
+    skill: "taxonomy"
+    agent: "information-architect"
+  - intent: "ontology-design"
+    keywords: ["ontology", "vocabulary", "controlled-vocabulary"]
+    skill: "ontology"
+    agent: "information-architect"
+  - intent: "sitemap-ia"
+    keywords: ["ia", "information-architecture", "sitemap"]
+    skill: "information-architecture"
+    agent: "information-architect"
+  - intent: "content-hierarchy"
+    keywords: ["content-hierarchy", "content-model", "content-type"]
+    skill: "content-hierarchy"
+    agent: "information-architect"
+  - intent: "multilingual-i18n"
+    keywords: ["multilingual", "i18n", "l10n", "locale", "translation"]
+    skill: "multilingual"
+    agent: "information-architect"
+  - intent: "craft-critique"
+    keywords: ["critique", "craft", "polish", "craft-bar"]
+    skill: "craft-quality"
+    agent: "design-reviewer"
+  - intent: "design-audit"
+    keywords: ["audit", "design-audit", "system-audit"]
+    skill: "design-audit"
+    agent: "design-reviewer"
+  - intent: "pattern-library-review"
+    keywords: ["pattern", "pattern-library", "component-pattern"]
+    skill: "pattern-library"
+    agent: "design-reviewer"
+  - intent: "secure-ux-review"
+    keywords: ["secure-ux", "privacy-ux", "security-design"]
+    skill: "secure-ux"
+    agent: "design-reviewer"
+  - intent: "visual-regression"
+    keywords: ["regression", "visual-regression", "snapshot"]
+    skill: "visual-regression"
+    agent: "design-reviewer"
+  - intent: "style-guide-authoring"
+    keywords: ["style-guide", "document-guidelines", "component-spec-page"]
+    skill: "style-guide-authoring"
+    agent: "design-reviewer"
+  - intent: "design-system-audit"
+    keywords: ["design-system-audit", "system-health", "ds-audit"]
+    skill: "design-system-audit"
+    agent: "design-reviewer"
+  - intent: "component-spec"
+    keywords: ["component-spec", "component-anatomy", "spec"]
+    skill: "component-spec"
+    agent: "ux-designer"
+  - intent: "design-handoff"
+    keywords: ["handoff", "design-handoff", "dev-handoff"]
+    skill: "design-handoff"
+    agent: "ux-designer"
+  - intent: "design-exploration"
+    keywords: ["exploration", "ideation", "concepts"]
+    skill: "design-exploration"
+    agent: "ux-designer"
+  - intent: "design-suggest"
+    keywords: ["suggest", "recommend", "design-suggest"]
+    skill: "design-suggest"
+    agent: "design-reviewer"
+  - intent: "design-update"
+    keywords: ["update", "revision", "design-update"]
+    skill: "design-update"
+    agent: "design-reviewer"
+  - intent: "design-bootstrap"
+    keywords: ["bootstrap", "scaffold", "kick-off"]
+    skill: "design-bootstrap"
+    agent: "design-system-architect"
+  - intent: "accessibility-conformance"
+    keywords: ["conformance", "section-508", "en-301-549"]
+    skill: "accessibility-audit"
+    agent: "accessibility-auditor"
+  - intent: "i18n-framework-mapping"
+    keywords: ["i18n-framework", "rtl", "bidi", "language-support"]
+    skill: "i18n-framework-mapping"
+    agent: "information-architect"

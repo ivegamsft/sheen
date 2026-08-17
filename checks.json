@@ -50,8 +50,8 @@
       },
       {
         "id": "catalog-drift",
-        "applies_to": ["skills/_catalog.md", "sheen-metadata.json", "specs/07-skill-catalog.spec.md"],
-        "description": "Catalog, metadata inventory, and per-skill specs list the same set.",
+        "applies_to": ["skills/_catalog.md", "sheen-metadata.json", "sheen.vocab.yaml", "specs/07-skill-catalog.spec.md"],
+        "description": "Catalog, metadata inventory, vocab registry, and per-skill specs list the same set.",
         "script": "scripts/build-metadata"
       },
       {
