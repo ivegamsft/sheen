@@ -13,7 +13,7 @@
     "agents": 6,
     "instructions": 10,
     "prompts": 0,
-    "templates": 8,
+    "templates": 9,
     "tokens": {
       "core": 7,
       "semantic": 6,
@@ -98,7 +98,8 @@
       "design-review",
       "README",
       "README",
-      "style-guide"
+      "style-guide",
+      "vpat-statement"
     ],
     "themes": [
       "dark",
