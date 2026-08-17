@@ -92,6 +92,10 @@ nav:
       - Validation Checks: reference/validation-checks.md
       - Model Capabilities: reference/model-capabilities.md
       - Incident Learnings: reference/incident-learnings.md
+  - Decisions:
+      - Overview: decisions/index.md
+      - "ADR-001: Sheen Router": decisions/adr-001-sheen-router.md
+      - "ADR-002: Intent Disambiguation": decisions/adr-002-intent-disambiguation.md
   - Support:
       - FAQ: support/faq.md
       - Troubleshooting: support/troubleshooting.md
