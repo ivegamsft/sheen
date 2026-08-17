@@ -1,0 +1,28 @@
+id: ai-output-governance
+description: Routes AI-generated content review to ai-output-governance skill
+threshold: 7.0
+cases:
+  - input: "review this AI-generated copy for bias and brand safety"
+    expected_skill: ai-output-governance
+    score: 9.5
+    rationale: AI copy review is the primary use case
+  - input: "check these AI-generated images for representational fairness"
+    expected_skill: ai-output-governance
+    score: 9.0
+    rationale: AI imagery fairness review is a core capability
+  - input: "audit this AI-generated component for token compliance"
+    expected_skill: ai-output-governance
+    score: 9.0
+    rationale: AI component token/a11y audit is a direct use case
+  - input: "does this AI-generated content need a disclosure label?"
+    expected_skill: ai-output-governance
+    score: 8.5
+    rationale: Disclosure compliance is a governance check
+  - input: "train the AI model on this dataset"
+    expected_skill: backend-dev
+    score: 2.0
+    rationale: ML training pipeline is not content governance
+  - input: "review accessibility of the hand-written component"
+    expected_skill: accessibility-auditor
+    score: 2.0
+    rationale: Non-AI component a11y routes to accessibility-auditor

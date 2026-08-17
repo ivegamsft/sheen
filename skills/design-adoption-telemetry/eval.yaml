@@ -1,0 +1,28 @@
+id: design-adoption-telemetry
+description: Routes design system adoption measurement to design-adoption-telemetry skill
+threshold: 7.0
+cases:
+  - input: "how many of our CSS files are using design tokens vs hardcoded values?"
+    expected_skill: design-adoption-telemetry
+    score: 9.5
+    rationale: Token coverage measurement is the primary use case
+  - input: "generate a design system adoption scorecard for Q3"
+    expected_skill: design-adoption-telemetry
+    score: 9.0
+    rationale: Adoption scorecard generation is a core output
+  - input: "which teams are still using hardcoded colours instead of tokens?"
+    expected_skill: design-adoption-telemetry
+    score: 9.0
+    rationale: Team-level drift measurement
+  - input: "find all references to deprecated tokens in the codebase"
+    expected_skill: design-adoption-telemetry
+    score: 8.5
+    rationale: Stale token reference scan is a direct capability
+  - input: "track user page views in production"
+    expected_skill: observability
+    score: 2.0
+    rationale: User analytics is not design adoption telemetry
+  - input: "monitor API error rates"
+    expected_skill: observability
+    score: 2.0
+    rationale: Error monitoring is not design adoption measurement

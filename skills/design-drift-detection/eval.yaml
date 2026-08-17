@@ -1,0 +1,28 @@
+id: design-drift-detection
+description: Routes spec-vs-implementation parity audits to design-drift-detection skill
+threshold: 7.0
+cases:
+  - input: "audit Button component against its spec for drift"
+    expected_skill: design-drift-detection
+    score: 9.5
+    rationale: Explicit spec-vs-impl audit — primary use case
+  - input: "check if CSS token values match the design spec"
+    expected_skill: design-drift-detection
+    score: 9.0
+    rationale: Token value drift is a core detection dimension
+  - input: "which component states are missing compared to the wireframe"
+    expected_skill: design-drift-detection
+    score: 8.5
+    rationale: Missing variant/state coverage audit
+  - input: "generate a parity report between spec and DOM"
+    expected_skill: design-drift-detection
+    score: 9.0
+    rationale: Parity report generation is the primary output
+  - input: "fix the button hover state in CSS"
+    expected_skill: frontend-dev
+    score: 2.0
+    rationale: Fixing implementation routes to frontend-dev, not drift detection
+  - input: "review the visual design of the card"
+    expected_skill: design-reviewer
+    score: 2.0
+    rationale: Visual design review routes to design-reviewer

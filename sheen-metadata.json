@@ -9,7 +9,7 @@
     ]
   },
   "counts": {
-    "skills": 46,
+    "skills": 57,
     "agents": 6,
     "instructions": 10,
     "prompts": 0,
@@ -23,6 +23,7 @@
   "assets": {
     "skills": [
       "accessibility-audit",
+      "ai-output-governance",
       "brand-identity",
       "brand-voice-tone",
       "color-contrast-check",
@@ -32,16 +33,23 @@
       "craft-quality",
       "create-design-skill",
       "css-mapping",
+      "data-visualisation",
+      "design-adoption-telemetry",
       "design-audit",
       "design-bootstrap",
       "design-debate",
+      "design-drift-detection",
       "design-exploration",
       "design-handoff",
       "design-review",
+      "design-sprint",
       "design-suggest",
       "design-system-audit",
+      "design-system-versioning",
+      "design-to-code",
       "design-tokens",
       "design-update",
+      "ethical-design",
       "font-mapping",
       "i18n-framework-mapping",
       "iconography",
@@ -50,13 +58,16 @@
       "landing-page-design",
       "layout-grid-spacing",
       "logo-usage",
+      "mobile-native-design",
       "motion-elevation",
       "multilingual",
       "navigation-design",
       "ontology",
       "pattern-library",
+      "performance-aware-design",
       "responsive-design",
       "secure-ux",
+      "sheen-onboard",
       "style-guide-authoring",
       "taxonomy",
       "theming",
@@ -118,6 +129,16 @@
         "maturity": "stable",
         "description": "Use when this skill is the right fit for the request. WCAG 2.2 AA accessibility conformance audit for UI surfaces. USE FOR: a11y issue discovery and triage, remediation planning, conformance statement drafting. DO NOT USE FOR: only checking color-pair contrast, non-accessibility style preference reviews.",
         "hash": "d0f9263a3a2cb8ceb74fb39187795f6a9ce919c8f71192299f2b006ab81e9b26"
+      },
+      {
+        "name": "ai-output-governance",
+        "path": "skills/ai-output-governance/SKILL.md",
+        "folder": "skills/ai-output-governance",
+        "category": "development",
+        "pillar": null,
+        "maturity": "stable",
+        "description": "Use when reviewing AI-generated UI copy, imagery, or components for bias, hallucination, brand safety, and accessibility compliance. USE FOR: audit AI-generated copy for harmful bias or hallucinated facts, review AI-generated images for brand compliance and representational fairness, flag AI-generated UI components that violate accessibility or token standards, enforce content moderation thresholds before AI output reaches users. DO NOT USE FOR: implementing AI model inference, training data curation, backend ML pipeline design.",
+        "hash": "1f6de2c7051be96e820593c263b233bad48912acca688ea890bc1ded4b2e6095"
       },
       {
         "name": "brand-identity",
@@ -210,6 +231,26 @@
         "hash": "23ecfe8665f350d926db05174c1e7c154d2edd3c2b50c3848f11bc7950ff8c88"
       },
       {
+        "name": "data-visualisation",
+        "path": "skills/data-visualisation/SKILL.md",
+        "folder": "skills/data-visualisation",
+        "category": "development",
+        "pillar": null,
+        "maturity": "stable",
+        "description": "Use when designing charts, graphs, dashboards, or any data-dense UI. USE FOR: choose the right chart type for a data relationship, design a colour encoding scheme for a multi-series chart, specify data density rules for a dashboard layout, audit a chart design for accessibility (colour-blind safe, axis labels, ARIA), generate a data visualisation component spec. DO NOT USE FOR: implementing chart rendering code, data pipeline design, backend analytics query optimisation.",
+        "hash": "bddc36df47caa0ebc744c69f4bbe3517cc43ccfc57a1dd495e89dc8ce48aee21"
+      },
+      {
+        "name": "design-adoption-telemetry",
+        "path": "skills/design-adoption-telemetry/SKILL.md",
+        "folder": "skills/design-adoption-telemetry",
+        "category": "development",
+        "pillar": null,
+        "maturity": "stable",
+        "description": "Use when measuring design system adoption in production — tracking token usage, component usage, and drift from the design system in live codebases. USE FOR: generate a design token usage report from a codebase, identify components using hardcoded values instead of tokens, measure design system adoption percentage across a product, track which teams are using vs. drifting from the design system, produce a design adoption scorecard. DO NOT USE FOR: application performance monitoring, error tracking, user analytics unrelated to design system usage.",
+        "hash": "6427e66a831458a4d4ba687d4dedb36b068cdf57cec105fcd467cfe0579059e1"
+      },
+      {
         "name": "design-audit",
         "path": "skills/design-audit/SKILL.md",
         "folder": "skills/design-audit",
@@ -238,6 +279,16 @@
         "maturity": "beta",
         "description": "Use when you need to choose between competing design approaches with explicit criteria and documented tradeoffs. USE FOR: option tradeoff analysis, design decision records (ADRs), criteria-based comparisons with evidence. DO NOT USE FOR: single artifact polish reviews, token-only mechanical edits.",
         "hash": "85bb3b5b05b77b7f6821bd6528b28dc7d08d3749665b2d7a51209390ee1111be"
+      },
+      {
+        "name": "design-drift-detection",
+        "path": "skills/design-drift-detection/SKILL.md",
+        "folder": "skills/design-drift-detection",
+        "category": "development",
+        "pillar": null,
+        "maturity": "stable",
+        "description": "Use when auditing whether a live implementation matches its design spec or token definitions. USE FOR: compare rendered DOM against a component spec, detect token value drift between spec and CSS, flag missing ARIA attributes not in wireframe, generate a spec-vs-implementation parity report. DO NOT USE FOR: writing new component code, creating design specs, infrastructure monitoring.",
+        "hash": "c65b430b1f77818853b362d2bf29b63a51eb6fc948ff4b5611c748e868510e73"
       },
       {
         "name": "design-exploration",
@@ -270,6 +321,16 @@
         "hash": "a7b62085b48eaa620b49dc31f78027941ae9149c63f3cd3b5cf25a429660a261"
       },
       {
+        "name": "design-sprint",
+        "path": "skills/design-sprint/SKILL.md",
+        "folder": "skills/design-sprint",
+        "category": "development",
+        "pillar": null,
+        "maturity": "stable",
+        "description": "Use when facilitating a design sprint — from problem framing through ideation, prototyping, and user validation. USE FOR: run a GV-style 5-day design sprint, facilitate a 2-hour lightning design sprint, generate How Might We (HMW) questions from a problem brief, produce a sprint map and decision log, create a prototype spec from sprint day-3 storyboard. DO NOT USE FOR: implementing the prototyped solution in production code, project management tooling, user research recruitment.",
+        "hash": "4f8891dbc3f1e71b3a3ecee587b78ad5c83399041b433f12392fa3ecc72eb158"
+      },
+      {
         "name": "design-suggest",
         "path": "skills/design-suggest/SKILL.md",
         "folder": "skills/design-suggest",
@@ -290,6 +351,26 @@
         "hash": "2327a4542ab9c90d5909c84fcd0f872bfd3f459ce196cbfd9ef0aaa4a97d2339"
       },
       {
+        "name": "design-system-versioning",
+        "path": "skills/design-system-versioning/SKILL.md",
+        "folder": "skills/design-system-versioning",
+        "category": "development",
+        "pillar": null,
+        "maturity": "stable",
+        "description": "Use when managing design system versioning, planning breaking changes, or authoring migration guides. USE FOR: bump design system semver, classify a token rename as breaking vs non-breaking, author a migration guide for a major version, generate a changelog from token and component diffs, plan a deprecation timeline. DO NOT USE FOR: application feature versioning, API semver decisions unrelated to design, package release automation.",
+        "hash": "6d2159478bf5e8a3b35da118fc2898b34f2eb05d0d65e0decf8d9d0f8d7c139f"
+      },
+      {
+        "name": "design-to-code",
+        "path": "skills/design-to-code/SKILL.md",
+        "folder": "skills/design-to-code",
+        "category": "development",
+        "pillar": null,
+        "maturity": "stable",
+        "description": "Use when generating component code scaffolds from design specs, tokens, or Figma exports. USE FOR: scaffold a React/Vue/Web Component from a component spec, generate token-bound CSS/SCSS from a design spec, convert a wireframe spec to a typed component interface, produce Storybook story shells from component anatomy. DO NOT USE FOR: business logic implementation, backend API design, infrastructure provisioning.",
+        "hash": "37a777cc987d9487c358c8625b91f6c910da08ae0ba51443738a8828aeba905b"
+      },
+      {
         "name": "design-tokens",
         "path": "skills/design-tokens/SKILL.md",
         "folder": "skills/design-tokens",
@@ -308,6 +389,16 @@
         "maturity": "beta",
         "description": "Use when this skill is the right fit for the request. USE FOR: design system modernization, token migration planning, theme evolution rollout. DO NOT USE FOR: from-scratch bootstrap, single-component specs.",
         "hash": "7cd159763cd4320c44b312f6c5d62ecfabd7860b7c02f70b746f6cbffba2293c"
+      },
+      {
+        "name": "ethical-design",
+        "path": "skills/ethical-design/SKILL.md",
+        "folder": "skills/ethical-design",
+        "category": "development",
+        "pillar": null,
+        "maturity": "stable",
+        "description": "Use when detecting dark patterns, coercive UX, deceptive consent flows, or ethically problematic design choices. USE FOR: audit a checkout flow for dark patterns (hidden costs, confirmshaming, roach motel), review a consent UI against GDPR/ISO 29184, detect coercive or manipulative UX patterns, score a design against ethical design principles, recommend ethical alternatives to a problematic pattern. DO NOT USE FOR: legal advice or GDPR compliance certification, backend data processing audits, security penetration testing.",
+        "hash": "475c163b58f7415739f2a75bc185411b30fa96b9af59a091e5f62ef21f4695e1"
       },
       {
         "name": "font-mapping",
@@ -390,6 +481,16 @@
         "hash": "474909ef96deceae3b3c5a896581bd71e3447340ef74e6a16d8168eddea3d380"
       },
       {
+        "name": "mobile-native-design",
+        "path": "skills/mobile-native-design/SKILL.md",
+        "folder": "skills/mobile-native-design",
+        "category": "development",
+        "pillar": null,
+        "maturity": "stable",
+        "description": "Use when designing for iOS, Android, or cross-platform mobile/native experiences. USE FOR: map a web component spec to iOS HIG conventions, adapt a design system to Android Material You dynamic theming, spec gesture interactions for a mobile screen, audit a mobile design for platform-native accessibility, generate a cross-platform parity report between iOS and Android specs. DO NOT USE FOR: web-only responsive design, backend mobile API design, mobile CI/CD pipeline setup.",
+        "hash": "1a9d758c30cdae8a1406b028bdf5c91a6a5b7427caa8a60c8fc0258f5ca3bcab"
+      },
+      {
         "name": "motion-elevation",
         "path": "skills/motion-elevation/SKILL.md",
         "folder": "skills/motion-elevation",
@@ -440,6 +541,16 @@
         "hash": "9bf3b6b8dc59c522fd31f7db3da7a6eaedce54489e873c56fe2bb3ffef4afb40"
       },
       {
+        "name": "performance-aware-design",
+        "path": "skills/performance-aware-design/SKILL.md",
+        "folder": "skills/performance-aware-design",
+        "category": "development",
+        "pillar": null,
+        "maturity": "stable",
+        "description": "Use when evaluating design decisions for their impact on Core Web Vitals, font loading, image strategy, or animation performance. USE FOR: assess whether a design choice will degrade LCP or CLS, recommend a font loading strategy for the type scale, evaluate hero image design for LCP budget, flag animation token values that will cause jank, score a design against INP thresholds. DO NOT USE FOR: backend performance tuning, database query optimization, server infrastructure scaling.",
+        "hash": "41066c024416e95839dfdcfe0716a0535694ed6109329633eb51e6d756d8464d"
+      },
+      {
         "name": "responsive-design",
         "path": "skills/responsive-design/SKILL.md",
         "folder": "skills/responsive-design",
@@ -458,6 +569,16 @@
         "maturity": "beta",
         "description": "Use when this skill is the right fit for the request. USE FOR: safe error-state design, auth/consent ux hardening, input-feedback privacy safety. DO NOT USE FOR: backend threat modeling, penetration testing.",
         "hash": "2d5d82743bd177037c532691f2d47ae6f022a3083eabefc8f70030e00691045a"
+      },
+      {
+        "name": "sheen-onboard",
+        "path": "skills/sheen-onboard/SKILL.md",
+        "folder": "skills/sheen-onboard",
+        "category": "development",
+        "pillar": null,
+        "maturity": "stable",
+        "description": "Use when onboarding a new consumer repository to the basecoat-sheen design governance framework. USE FOR: run the full 5-phase sheen consumer lifecycle (integrate, onboard, inventory, audit, use), bootstrap a .sheen.yml config, run sync against basecoat-sheen, generate an onboarding health report. DO NOT USE FOR: implementing product features, writing application business logic, deploying infrastructure.",
+        "hash": "b2bd45be8827089fb6c306407a233960074463b0c837c571504da46dd76ffed6"
       },
       {
         "name": "style-guide-authoring",

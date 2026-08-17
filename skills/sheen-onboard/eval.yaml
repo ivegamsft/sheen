@@ -1,0 +1,28 @@
+id: sheen-onboard
+description: Routes sheen consumer lifecycle onboarding to sheen-onboard skill
+threshold: 7.0
+cases:
+  - input: "onboard this repo to the basecoat-sheen design system"
+    expected_skill: sheen-onboard
+    score: 9.5
+    rationale: Explicit sheen onboarding request — primary use case
+  - input: "run the full sheen consumer lifecycle for my repo"
+    expected_skill: sheen-onboard
+    score: 9.5
+    rationale: Full lifecycle orchestration is the primary capability
+  - input: "bootstrap .sheen.yml and sync vendor assets"
+    expected_skill: sheen-onboard
+    score: 9.0
+    rationale: Config bootstrap + sync is Phase 1-2 of the lifecycle
+  - input: "generate a sheen health report for this repo"
+    expected_skill: sheen-onboard
+    score: 8.5
+    rationale: Health report generation is the Phase 4-5 output
+  - input: "implement the login feature for the app"
+    expected_skill: backend-dev
+    score: 2.0
+    rationale: Feature implementation is not onboarding
+  - input: "audit accessibility of my design tokens"
+    expected_skill: accessibility-auditor
+    score: 2.0
+    rationale: Standalone token audit routes to accessibility-auditor

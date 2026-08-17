@@ -1,0 +1,28 @@
+id: design-to-code
+description: Routes component-codegen prompts to design-to-code skill
+threshold: 7.0
+cases:
+  - input: "scaffold a React component from the card spec"
+    expected_skill: design-to-code
+    score: 9.5
+    rationale: Explicit React scaffold from spec — primary use case
+  - input: "generate CSS variables from my design tokens"
+    expected_skill: design-to-code
+    score: 9.0
+    rationale: Token-bound CSS generation is a core output
+  - input: "convert my wireframe spec to a TypeScript interface"
+    expected_skill: design-to-code
+    score: 9.0
+    rationale: Interface derivation from wireframe spec
+  - input: "create a Storybook story for all button variants"
+    expected_skill: design-to-code
+    score: 8.5
+    rationale: Storybook story shell generation from variants
+  - input: "build the backend API for the card component"
+    expected_skill: backend-dev
+    score: 2.0
+    rationale: Backend API is not component codegen
+  - input: "review accessibility of the card component"
+    expected_skill: accessibility-auditor
+    score: 2.0
+    rationale: A11y review routes to accessibility-auditor, not codegen

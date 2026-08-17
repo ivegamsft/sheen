@@ -1,0 +1,28 @@
+id: data-visualisation
+description: Routes chart, dashboard, and data-dense UI design to data-visualisation skill
+threshold: 7.0
+cases:
+  - input: "what chart type should I use for revenue by category over time?"
+    expected_skill: data-visualisation
+    score: 9.5
+    rationale: Chart type selection is the primary use case
+  - input: "audit this dashboard for colour-blind accessibility"
+    expected_skill: data-visualisation
+    score: 9.0
+    rationale: Data viz a11y audit is a core capability
+  - input: "specify density rules for a 12-KPI dashboard"
+    expected_skill: data-visualisation
+    score: 8.5
+    rationale: Data density specification is a direct use case
+  - input: "generate a component spec for a line chart with 4 series"
+    expected_skill: data-visualisation
+    score: 9.0
+    rationale: Data viz component spec generation
+  - input: "write the SQL query to aggregate monthly revenue"
+    expected_skill: data-tier
+    score: 2.0
+    rationale: SQL queries are not data visualisation design
+  - input: "implement the chart rendering with D3.js"
+    expected_skill: frontend-dev
+    score: 2.0
+    rationale: Chart implementation routes to frontend-dev

@@ -1,0 +1,28 @@
+id: design-sprint
+description: Routes design sprint facilitation to design-sprint skill
+threshold: 7.0
+cases:
+  - input: "facilitate a 5-day GV design sprint for our checkout problem"
+    expected_skill: design-sprint
+    score: 9.5
+    rationale: GV sprint facilitation is the primary use case
+  - input: "generate How Might We questions for our onboarding problem"
+    expected_skill: design-sprint
+    score: 9.0
+    rationale: HMW generation is a core sprint capability
+  - input: "run a 4-hour lightning sprint for the new search feature"
+    expected_skill: design-sprint
+    score: 9.0
+    rationale: Lightning sprint facilitation is a direct use case
+  - input: "convert this storyboard to a prototype spec"
+    expected_skill: design-sprint
+    score: 8.5
+    rationale: Storyboard-to-prototype conversion is a Day 3-4 output
+  - input: "implement the checkout flow from the sprint prototype"
+    expected_skill: frontend-dev
+    score: 2.0
+    rationale: Production implementation routes to frontend-dev
+  - input: "recruit users for usability testing"
+    expected_skill: ux
+    score: 2.0
+    rationale: Research recruitment is not sprint facilitation

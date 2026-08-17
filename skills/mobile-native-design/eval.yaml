@@ -1,0 +1,28 @@
+id: mobile-native-design
+description: Routes iOS/Android native design work to mobile-native-design skill
+threshold: 7.0
+cases:
+  - input: "map this web component spec to iOS HIG conventions"
+    expected_skill: mobile-native-design
+    score: 9.5
+    rationale: iOS HIG mapping is the primary use case
+  - input: "adapt our design system to Android Material You theming"
+    expected_skill: mobile-native-design
+    score: 9.0
+    rationale: Material You adaptation is a core capability
+  - input: "generate a cross-platform parity report for iOS and Android"
+    expected_skill: mobile-native-design
+    score: 9.0
+    rationale: Cross-platform parity report is a direct output
+  - input: "spec the swipe-to-dismiss gesture for the notification component"
+    expected_skill: mobile-native-design
+    score: 8.5
+    rationale: Mobile gesture specification
+  - input: "implement the iOS SwiftUI view for the card component"
+    expected_skill: frontend-dev
+    score: 2.0
+    rationale: Native implementation routes to frontend-dev
+  - input: "make the web layout responsive for mobile viewports"
+    expected_skill: ux
+    score: 2.0
+    rationale: Responsive web is not native mobile design

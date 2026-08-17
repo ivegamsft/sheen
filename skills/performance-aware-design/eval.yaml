@@ -1,0 +1,28 @@
+id: performance-aware-design
+description: Routes performance-impact design assessments to performance-aware-design skill
+threshold: 7.0
+cases:
+  - input: "will this hero image hurt my LCP score?"
+    expected_skill: performance-aware-design
+    score: 9.5
+    rationale: LCP impact assessment is the primary use case
+  - input: "recommend a font loading strategy for my type scale"
+    expected_skill: performance-aware-design
+    score: 9.0
+    rationale: Font loading strategy is a core capability
+  - input: "will these animation durations cause INP issues?"
+    expected_skill: performance-aware-design
+    score: 9.0
+    rationale: Animation token INP evaluation is a direct use case
+  - input: "score my homepage design against Core Web Vitals"
+    expected_skill: performance-aware-design
+    score: 8.5
+    rationale: CWV scoring of a design spec
+  - input: "optimise the database query for the product listing"
+    expected_skill: backend-dev
+    score: 2.0
+    rationale: Backend query optimisation is not design performance
+  - input: "scale the API server for high traffic"
+    expected_skill: ha-resilience
+    score: 2.0
+    rationale: Infrastructure scaling is not design performance
