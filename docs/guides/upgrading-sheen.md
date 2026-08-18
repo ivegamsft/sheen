@@ -203,3 +203,52 @@ previous sync. If you see a `preserving consumer-owned path` warning, review
 those files manually and decide whether to keep or overwrite them.
 
 For expanded troubleshooting, see the [sync troubleshooting guide](../quick-refs/sync-troubleshooting.md).
+
+---
+
+## Resetting Copilot context after upgrade ⚠️
+
+> **Copilot does not hot-reload skills or agents.** After syncing new or updated
+> files into `.github/skills/` and `.github/agents/`, the changes are **not
+> visible** in the `/` skill picker until the Copilot session or editor window
+> is reset.
+
+**This applies to both first-time integration and every subsequent upgrade.**
+
+### Copilot CLI
+
+```bash
+exit        # end the current session (Ctrl+D or type exit)
+gh copilot  # start a new session — skills reload from .github/ automatically
+```
+
+### VS Code Copilot Chat
+
+1. Open the Command Palette: `Ctrl + Shift + P` (Windows/Linux) or `Cmd + Shift + P` (macOS)
+2. Run: **Developer: Reload Window**
+3. Open a new Copilot Chat and type `/` — the updated skills should appear in the picker with their new descriptions.
+
+> **Alternative (VS Code):** Open the Command Palette and run
+> **GitHub Copilot: Reset Extension** if it is available in your version.
+
+### JetBrains / other editors
+
+Restart the editor to force a full Copilot context refresh.
+
+### Verify the context loaded correctly
+
+After resetting, run a quick check:
+
+```text
+/sheen What skills are available?
+```
+
+The router should list the skills that are present in `.github/skills/`. If a
+skill is missing from the picker:
+
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Skill not visible after reset | SKILL.md in wrong directory | Confirm `path = .github/skills/<name>/SKILL.md` (not `skills/<name>/`) |
+| Old description shown | Context not fully reset | Reload VS Code window again or restart Copilot CLI |
+| `/sheen` routes to wrong skill | Skill description too generic | Check `description:` frontmatter in `SKILL.md`; update and reload |
+

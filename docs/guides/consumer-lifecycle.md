@@ -19,6 +19,7 @@ existing project.
 | [3 — Inventory](#phase-3-inventory) | Scan and report current design-system coverage | Any team member | ~15 min |
 | [4 — Audit](#phase-4-audit) | Validate tokens, WCAG, skill & agent compliance | Designer / QA | ~1 hr |
 | [5 — Use](#phase-5-use) | Day-to-day design work with the right agent | Designer | ongoing |
+| [6 — Upgrade](#phase-6-upgrade) | Update to a new sheen release and reload context | Engineer / lead | ~20 min |
 
 ---
 
@@ -26,22 +27,115 @@ existing project.
 
 **Goal:** Pull sheen assets into your consumer repo for the first time.
 
-### Prompt
+### Quick-start prompt
+
+Paste this into Copilot CLI or Copilot Chat:
+
+```text
+@sheen integrate basecoat-sheen into <YOUR-ORG>/<YOUR-REPO>
+```
+
+Or use the detailed prompt below for full control.
+
+### Detailed prompt
 
 ```text
 I want to integrate basecoat-sheen into my repo at <YOUR-ORG>/<YOUR-REPO>.
 
 Please:
 1. Create a .sheen.yml at the repo root configured for <TEAM-SIZE: solo|team|org>,
-   pinned to ref: main (or <release-tag> for production stability).
+   pinned to ref: v0.7.0 (or main for the latest).
 2. Run sync.ps1 (Windows) or sync.sh (POSIX) to pull the selected assets.
 3. Confirm what was synced by reading .sheen/manifest.json.
 4. Verify the sync was successful by running scripts/diagnose-sheen.ps1.
 5. Summarise what was installed, what was skipped, and any errors to resolve.
+6. Tell me how to reset the Copilot context so the new skills and agents appear.
 
 Target asset set: <ALL | subset: skills, agents, tokens, instructions>
 Themes to materialise: <light, dark, high-contrast | all>
 ```
+
+### Step-by-step (manual path)
+
+#### Step 1 — Create `.sheen.yml`
+
+```yaml
+# .sheen.yml — basecoat-sheen consumer config. Commit this file.
+source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+ref: v0.7.0          # pin to a release tag for stability
+
+sync:
+  skills: []         # [] = sync none; omit key = sync all
+  agents: []
+  instructions: []
+  prompts: []
+  tokens: []
+  themes: [light, dark, high-contrast]
+  exclude: []
+
+# materialize_tokens: true   # uncomment to build CSS/JS output after sync
+```
+
+Adjust the allow-lists to include only the assets your team needs. Names must
+match the upstream file base-name **without** the type suffix — e.g. `ux-designer`
+not `ux-designer.agent.md`.
+
+#### Step 2 — Run the sync
+
+```powershell
+# Windows
+pwsh -NonInteractive -File sync.ps1
+
+# macOS / Linux
+bash sync.sh
+```
+
+Sync clones the upstream at `ref`, copies selected assets, and writes
+`.sheen/manifest.json`. Watch for any `WARNING: allow-list entry … did not match`
+lines — these indicate a typo in your allow-list.
+
+#### Step 3 — Verify
+
+```powershell
+pwsh -NonInteractive -File scripts/diagnose-sheen.ps1
+```
+
+Expect `sheen: OK` on all checks. Any `ERROR` must be resolved before proceeding.
+
+#### Step 4 — Commit
+
+```bash
+git add .sheen.yml .sheen/manifest.json .github/ sheen/
+git commit -m "chore: integrate basecoat-sheen v0.7.0"
+```
+
+#### Step 5 — Reset Copilot context ⚠️
+
+> **Copilot does not hot-reload skills or agents.** After syncing new files into
+> `.github/skills/` and `.github/agents/`, you **must** reset the session or the
+> new capabilities will not appear.
+
+**Copilot CLI:**
+```bash
+# End the current session and start a new one
+exit        # or Ctrl+D / Ctrl+C
+gh copilot  # start fresh — skills are reloaded from .github/
+```
+
+**VS Code Copilot Chat:**
+1. Open the Command Palette (`Ctrl/Cmd + Shift + P`)
+2. Run **"GitHub Copilot: Reset Extension"** (or reload the VS Code window: `Developer: Reload Window`)
+3. Open a new chat — type `/` to confirm the synced skills appear in the picker
+
+**Copilot in JetBrains / other editors:**
+- Restart the editor, or sign out and back in to force a context refresh.
+
+**Verification — after reset:**
+```text
+/          ← type a slash in Copilot Chat; you should see your synced skills listed
+```
+If a skill is missing, confirm its folder contains a `SKILL.md`, and that the
+folder is under `.github/skills/` (not `skills/`).
 
 ### What the agent does
 
@@ -50,6 +144,7 @@ Themes to materialise: <light, dark, high-contrast | all>
 3. Reads `.sheen/manifest.json` to confirm files written.
 4. Runs `scripts/diagnose-sheen.ps1` to validate the installed state.
 5. Returns a summary report: installed count, skipped assets, errors.
+6. Provides the exact reset steps for your Copilot client.
 
 ### Output
 
@@ -62,6 +157,7 @@ Themes to materialise: <light, dark, high-contrast | all>
 - Console summary from `diagnose-sheen.ps1`
 
 ### Gate ✅
+
 
 Diagnose passes with 0 errors before moving to Phase 2.
 
@@ -311,16 +407,110 @@ Then: /sheen token Build the token and show me the CSS output.
 
 ---
 
+## Phase 6 — Upgrade
+
+**Goal:** Bring an existing consumer repo up to a newer sheen release, resolve
+breaking changes, and reload Copilot context.
+
+### Quick-start prompt
+
+```text
+@sheen upgrade basecoat-sheen in this repo to v<NEW-VERSION>
+```
+
+### Detailed prompt
+
+```text
+Upgrade basecoat-sheen in <YOUR-ORG>/<YOUR-REPO> from <CURRENT-VERSION> to <TARGET-VERSION>.
+
+Please:
+1. Show me the CHANGELOG entries between the two versions so I can review breaking changes.
+2. Run sync.ps1 (Windows) or sync.sh (POSIX) pointed at the target ref.
+3. Report any allow-list warnings — entries that no longer match upstream files.
+4. Report any files that were removed because they were pruned from the allow-list.
+5. Run scripts/diagnose-sheen.ps1 to validate the upgraded state.
+6. Tell me how to reset Copilot context so the updated skills and agents load.
+7. Summarise what changed: new assets, updated assets, removed assets, errors.
+```
+
+### Step-by-step (manual path)
+
+#### Step 1 — Review the changelog
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/IBuySpy-Shared/basecoat-sheen/<TARGET-VERSION>/CHANGELOG.md
+```
+
+Look for `### Breaking` or renamed assets before running sync.
+
+#### Step 2 — Update `ref` in `.sheen.yml`
+
+```yaml
+ref: v<NEW-VERSION>   # was: v<OLD-VERSION>
+```
+
+#### Step 3 — Run sync
+
+```powershell
+pwsh -NonInteractive -File sync.ps1
+# or: bash sync.sh
+```
+
+Watch for `WARNING: allow-list entry … did not match` — these indicate an
+upstream rename. Update your `.sheen.yml` allow-list and re-run.
+
+#### Step 4 — Run diagnose
+
+```powershell
+pwsh -NonInteractive -File scripts/diagnose-sheen.ps1
+```
+
+#### Step 5 — Commit
+
+```bash
+git add .sheen.yml .sheen/manifest.json .github/ sheen/
+git commit -m "chore: upgrade basecoat-sheen to v<NEW-VERSION>"
+```
+
+#### Step 6 — Reset Copilot context ⚠️
+
+> Skills and agents are **not** reloaded automatically. Reset after every upgrade.
+
+**Copilot CLI:**
+```bash
+exit        # end current session
+gh copilot  # new session — updated skills and agents reload automatically
+```
+
+**VS Code Copilot Chat:**
+1. Command Palette (`Ctrl/Cmd + Shift + P`) → **Developer: Reload Window**
+2. Open a new chat and type `/` — confirm updated skill descriptions appear
+
+**Confirm the upgrade loaded:**
+```text
+/sheen What version am I on?
+```
+
+### Gate ✅
+
+`diagnose-sheen.ps1` passes with 0 errors; Copilot context reset; `/sheen` routes correctly.
+
+---
+
 ## Troubleshooting
 
 | Symptom | Likely cause | Fix |
 |---------|-------------|-----|
+| New skills not visible after sync | Copilot context not reset | Restart session / reload VS Code window (see Phase 1 Step 5, Phase 6 Step 6) |
+| Skills in picker but with wrong description | Old context cached | Reload VS Code window or restart Copilot CLI session |
+| Files in `.github/skills/` but not in `/` picker | Wrong directory level | Confirm path is `.github/skills/<name>/SKILL.md` (not `skills/<name>/SKILL.md`) |
 | `sync.ps1` fails with auth error | Private fork needs credential | Set `SHEEN_REPO` env var with auth token in URL |
-| `validate-tokens` fails on contrast | Theme pair below WCAG threshold | Check `tokens/themes/` — update hex values to pass 4.5:1 minimum |
+| `WARNING: allow-list entry X did not match` | Typo or renamed upstream asset | Check spelling in `.sheen.yml`; consult upstream `sheen-metadata.json` |
+| `validate-tokens` fails on contrast | Theme pair below WCAG threshold | Check `sheen/tokens/themes/` — update hex values to pass 4.5:1 minimum |
 | Eval audit scores below 7.0 | Generic or boilerplate input prompts | Add 4+ specific pos/neg scenarios; avoid "Use @agent to…" scaffolding |
 | Agent description fails USE FOR check | Legacy template description | Update `description:` in agent frontmatter with trigger phrases |
 | `catalog-drift` CI gate fails | `sheen-metadata.json` out of date | Run `scripts/build-metadata.ps1` and commit updated file |
-| `build-tokens.ps1` dangling ref error | Semantic token aliases point to missing core key | Check `{...}` path exists in `tokens/core/*.tokens.json` |
+| `build-tokens.ps1` dangling ref error | Semantic token aliases point to missing core key | Check `{...}` path exists in `sheen/tokens/core/*.tokens.json` |
 
 ---
 
@@ -328,7 +518,7 @@ Then: /sheen token Build the token and show me the CSS output.
 
 - [Prompt Guide](prompts/index.md) — Full 46-intent reference by agent
 - [Consumption Patterns](consumption-patterns.md) — Solo / Team / Org adoption paths
+- [Upgrading Sheen](upgrading-sheen.md) — Full upgrade guide with CI automation
 - [Token Build & CI](token-build-ci.md) — Wiring token validation into your pipeline
 - [Sheen Router](../decisions/adr-001-sheen-router.md) — Router design decision record
-- [ADR-001](../decisions/adr-001-sheen-router.md) — Router design decision record
 - [Spec Gap Audit](../decisions/spec-gap-audit-2026-08-16.md) — Known gaps and open issues

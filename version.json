@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.7.0",
-  "releaseDate": "2026-08-19",
-  "notes": "v0.7.0: sync wave fixes (#80-#85), materialize_tokens provisioning (#86), lifecycle script consumer path auto-detection (#87), agent allow-list unmatched warnings (#88), skill descriptions, and upgrade process."
+  "version": "0.7.1",
+  "releaseDate": "2026-08-18",
+  "notes": "v0.7.1: updated integration steps with context-reset guidance, sheen-integrate and sheen-upgrade agent prompts, Phase 6 Upgrade in consumer lifecycle guide."
 }

@@ -7,6 +7,29 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.7.1] — 2026-08-18
+
+### Added
+- **Integration steps** — Phase 1 of `docs/guides/consumer-lifecycle.md` now includes a
+  full step-by-step manual path with concrete `.sheen.yml` examples, allow-list warnings
+  guidance, and a **Reset Copilot context** step (Step 5) explaining how to reload skills
+  after sync in Copilot CLI, VS Code, and JetBrains.
+- **Phase 6 — Upgrade** added to `consumer-lifecycle.md` with quick-start prompt, manual
+  steps, and context reset guidance.
+- **`vendor/basecoat/prompts/sheen-integrate.prompt.md`** — agent-invocable prompt that
+  drives the full first-time integration workflow (discover → generate `.sheen.yml` → sync
+  → validate → commit → reset context → summary report).
+- **`vendor/basecoat/prompts/sheen-upgrade.prompt.md`** — agent-invocable prompt that
+  drives a safe upgrade workflow (discover → changelog → sync → allow-list reconciliation
+  → validate → commit → reset context → summary report).
+- **`docs/guides/upgrading-sheen.md`** — new "Resetting Copilot context after upgrade"
+  section with per-client instructions (CLI, VS Code, JetBrains) and a verification table.
+
+### Fixed
+- Troubleshooting table in `consumer-lifecycle.md` updated to include context-reload
+  symptoms and the correct `sheen/tokens/` path (was `tokens/`).
+- Duplicate `ADR-001` link in "See also" removed.
+
 ## [0.7.0] — 2026-08-19
 
 ### Added
