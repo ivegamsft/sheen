@@ -170,21 +170,12 @@ jobs:
           #   IBuySpy-Shared/basecoat-sheen  →  ivegamsft/sheen
           #   ibuyspy-shared.github.io/basecoat-sheen  →  ivegamsft.github.io/sheen
           #   raw.githubusercontent.com/IBuySpy-Shared/basecoat-sheen  →  raw.githubusercontent.com/ivegamsft/sheen
+          # Use git grep to find ALL tracked text files with these patterns regardless of extension.
 
-          TEXT_FILES=$(git ls-files -- \
-            '*.md' '*.yml' '*.yaml' '*.json' '*.ps1' '*.sh' '*.txt' \
-            '*.ts' '*.js' '*.py' '*.html' \
-            | grep -v '^$' || true)
-
-          if [ -z "$TEXT_FILES" ]; then
-            echo "No text files to rewrite."
-            exit 0
-          fi
-
-          TARGETS=$(echo "$TEXT_FILES" | xargs grep -lI \
+          TARGETS=$(git grep -rlI \
             -e 'IBuySpy-Shared/basecoat-sheen' \
             -e 'ibuyspy-shared\.github\.io/basecoat-sheen' \
-            2>/dev/null || true)
+            -- . 2>/dev/null || true)
 
           if [ -n "$TARGETS" ]; then
             echo "$TARGETS" | while IFS= read -r f; do
