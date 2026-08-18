@@ -1,7 +1,7 @@
 ---
 name: css-mapping
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: css inventory mapping, framework detection, token candidate extraction. DO NOT USE FOR: creating new semantic token models, design review facilitation."
+description: "Use when inventorying existing CSS to identify token candidates, detect framework usage, or map raw values to design tokens. USE FOR: css inventory mapping, framework detection, token candidate extraction. DO NOT USE FOR: creating new semantic token models, design review facilitation."
 category: mapping
 metadata:
   category: mapping

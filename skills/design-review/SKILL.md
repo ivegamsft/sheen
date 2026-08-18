@@ -1,7 +1,7 @@
 ---
 name: design-review
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: artifact critique, principle-based review, craft issue identification. DO NOT USE FOR: multi-option debate facilitation, full repo audits."
+description: "Use when critiquing a design artifact against principles, craft standards, or system guidelines. USE FOR: artifact critique, principle-based review, craft issue identification. DO NOT USE FOR: multi-option debate facilitation, full repo audits."
 category: governance
 metadata:
   category: governance

@@ -87,6 +87,7 @@ nav:
       - Skill / Agent / Instruction Usage: guides/asset-usage.md
       - .sheen.yml Guide: guides/sheen-yml.md
       - Adopting Tokens: guides/adopting-tokens.md
+      - Upgrading sheen: guides/upgrading-sheen.md
       - Authoring a Skill: guides/authoring-a-skill.md
   - Prompt Guide:
       - Overview & Intent Index: guides/prompts/index.md

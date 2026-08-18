@@ -1,7 +1,7 @@
 ---
 name: typography
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: type ramp definition, font pairing, text role mapping. DO NOT USE FOR: font inventory mapping, full usability audits."
+description: "Use when defining a type ramp, font pairing rules, or mapping text roles to type tokens. USE FOR: type ramp definition, font pairing, text role mapping. DO NOT USE FOR: font inventory mapping, full usability audits."
 category: foundation
 metadata:
   category: foundation

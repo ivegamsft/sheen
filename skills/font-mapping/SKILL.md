@@ -1,7 +1,7 @@
 ---
 name: font-mapping
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: font usage inventory, weight/style mapping, type token candidate mapping. DO NOT USE FOR: new typography scale creation, a11y conformance statements."
+description: "Use when inventorying font usage in a codebase to map weights, styles, and sizes to type token candidates. USE FOR: font usage inventory, weight/style mapping, type token candidate mapping. DO NOT USE FOR: new typography scale creation, a11y conformance statements."
 category: mapping
 metadata:
   category: mapping

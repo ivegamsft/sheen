@@ -1,7 +1,7 @@
 ---
 name: logo-usage
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: logo variant guidance, clear-space rules, misuse prevention examples. DO NOT USE FOR: icon system grids, usability audits."
+description: "Use when documenting or enforcing logo variant rules, clear-space requirements, and misuse prevention guidance. USE FOR: logo variant guidance, clear-space rules, misuse prevention examples. DO NOT USE FOR: icon system grids, usability audits."
 category: brand
 metadata:
   category: brand

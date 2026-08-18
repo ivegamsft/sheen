@@ -1,7 +1,7 @@
 ---
 name: secure-ux
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: safe error-state design, auth/consent ux hardening, input-feedback privacy safety. DO NOT USE FOR: backend threat modeling, penetration testing."
+description: "Use when hardening UX for auth flows, consent surfaces, error states, and input privacy safety. USE FOR: safe error-state design, auth/consent ux hardening, input-feedback privacy safety. DO NOT USE FOR: backend threat modeling, penetration testing."
 category: security
 metadata:
   category: security

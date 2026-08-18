@@ -61,9 +61,12 @@ if ($Fg -and $Bg) {
 
 # --- theme file mode ---
 $repoRoot = git rev-parse --show-toplevel 2>$null
-$ThemesDir = Join-Path $repoRoot 'tokens/themes'
-$SemanticDir = Join-Path $repoRoot 'tokens/semantic'
-$CoreDir = Join-Path $repoRoot 'tokens/core'
+# Auto-detect consumer repo: if .sheen/manifest.json present, use consumer token paths (#87)
+$IsConsumer = Test-Path (Join-Path $repoRoot '.sheen' 'manifest.json')
+$TokensBase  = if ($IsConsumer) { Join-Path $repoRoot 'sheen/tokens' } else { Join-Path $repoRoot 'tokens' }
+$ThemesDir   = Join-Path $TokensBase 'themes'
+$SemanticDir = Join-Path $TokensBase 'semantic'
+$CoreDir     = Join-Path $TokensBase 'core'
 
 # Semantic contrast pairs (foreground / background / min-ratio)
 $Pairs = @(

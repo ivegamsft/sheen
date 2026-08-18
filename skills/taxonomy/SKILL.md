@@ -1,7 +1,7 @@
 ---
 name: taxonomy
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: controlled vocabulary design, category hierarchy rules, tag schema definition. DO NOT USE FOR: entity relationship modeling, component state specs."
+description: "Use when designing controlled vocabularies, category hierarchies, or tag schema definitions. USE FOR: controlled vocabulary design, category hierarchy rules, tag schema definition. DO NOT USE FOR: entity relationship modeling, component state specs."
 category: ia
 metadata:
   category: ia

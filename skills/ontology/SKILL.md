@@ -1,7 +1,7 @@
 ---
 name: ontology
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: entity relationship modeling, semantic schema definition, attribute constraint mapping. DO NOT USE FOR: flat category taxonomies, brand color work."
+description: "Use when modeling entity relationships, semantic schemas, or attribute constraint definitions for a content or data system. USE FOR: entity relationship modeling, semantic schema definition, attribute constraint mapping. DO NOT USE FOR: flat category taxonomies, brand color work."
 category: ia
 metadata:
   category: ia

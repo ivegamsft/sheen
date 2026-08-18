@@ -1,7 +1,7 @@
 ---
 name: ux-writing
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: microcopy authoring, error/empty-state text, plain-language rewriting. DO NOT USE FOR: brand identity systems, token architecture."
+description: "Use when authoring microcopy, error/empty-state text, or rewriting UI strings for plain language and clarity. USE FOR: microcopy authoring, error/empty-state text, plain-language rewriting. DO NOT USE FOR: brand identity systems, token architecture."
 category: content
 metadata:
   category: content

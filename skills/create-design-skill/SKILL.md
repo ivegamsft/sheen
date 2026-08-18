@@ -1,7 +1,7 @@
 ---
 name: create-design-skill
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. Scaffold a new sheen skill that conforms to the skill contract. USE FOR: creating new skill folders and frontmatter, authoring routing eval scenarios, updating catalog entries safely. DO NOT USE FOR: writing instruction-layer files, implementing product feature code."
+description: "Scaffold a new sheen skill that conforms to the skill contract. USE FOR: creating new skill folders and frontmatter, authoring routing eval scenarios, updating catalog entries safely. DO NOT USE FOR: writing instruction-layer files, implementing product feature code."
 category: governance
 metadata:
   category: governance

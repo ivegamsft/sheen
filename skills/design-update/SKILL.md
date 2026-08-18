@@ -1,7 +1,7 @@
 ---
 name: design-update
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: design system modernization, token migration planning, theme evolution rollout. DO NOT USE FOR: from-scratch bootstrap, single-component specs."
+description: "Use when planning or executing a design system modernization, token migration, or theme evolution rollout. USE FOR: design system modernization, token migration planning, theme evolution rollout. DO NOT USE FOR: from-scratch bootstrap, single-component specs."
 category: lifecycle
 metadata:
   category: lifecycle

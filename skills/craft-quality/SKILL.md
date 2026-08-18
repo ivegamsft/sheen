@@ -1,7 +1,7 @@
 ---
 name: craft-quality
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: craft checklist passes, polish quality assessments, consistency refinements. DO NOT USE FOR: formal usability audits, framework detection scans."
+description: "Use when running a craft and polish pass to assess consistency, refinement, and visual quality. USE FOR: craft checklist passes, polish quality assessments, consistency refinements. DO NOT USE FOR: formal usability audits, framework detection scans."
 category: governance
 metadata:
   category: governance

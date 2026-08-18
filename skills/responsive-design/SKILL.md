@@ -1,7 +1,7 @@
 ---
 name: responsive-design
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: breakpoint behavior definition, responsive reflow planning, adaptive layout guidance. DO NOT USE FOR: spacing-scale authoring, brand tone guidance."
+description: "Use when defining breakpoint behaviors, responsive reflow strategies, or adaptive layout guidance. USE FOR: breakpoint behavior definition, responsive reflow planning, adaptive layout guidance. DO NOT USE FOR: spacing-scale authoring, brand tone guidance."
 category: usability
 metadata:
   category: usability

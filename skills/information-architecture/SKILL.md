@@ -1,7 +1,7 @@
 ---
 name: information-architecture
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: site map structuring, content model definition, navigation architecture planning. DO NOT USE FOR: pixel-level component specs, palette generation."
+description: "Use when structuring site maps, content models, or navigation architectures. USE FOR: site map structuring, content model definition, navigation architecture planning. DO NOT USE FOR: pixel-level component specs, palette generation."
 category: ia
 metadata:
   category: ia

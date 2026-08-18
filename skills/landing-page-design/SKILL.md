@@ -1,7 +1,7 @@
 ---
 name: landing-page-design
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: landing page structure, hero/cta hierarchy, conversion-focused section planning. DO NOT USE FOR: full IA maps, WCAG conformance audits."
+description: "Use when planning or reviewing landing page structure, hero/CTA hierarchy, and conversion-focused section layout. USE FOR: landing page structure, hero/cta hierarchy, conversion-focused section planning. DO NOT USE FOR: full IA maps, WCAG conformance audits."
 category: usability
 metadata:
   category: usability

@@ -1,7 +1,7 @@
 ---
 name: navigation-design
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: global/local nav patterns, wayfinding design, menu/breadcrumb strategy. DO NOT USE FOR: content ontology modeling, theme token changes."
+description: "Use when designing global or local navigation patterns, wayfinding flows, or menu and breadcrumb structures. USE FOR: global/local nav patterns, wayfinding design, menu/breadcrumb strategy. DO NOT USE FOR: content ontology modeling, theme token changes."
 category: ia
 metadata:
   category: ia

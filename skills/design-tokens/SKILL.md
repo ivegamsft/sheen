@@ -1,7 +1,7 @@
 ---
 name: design-tokens
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. Author and evolve DTCG token source-of-truth. USE FOR: creating or editing core/semantic tokens, adding token aliases safely, maintaining token schema integrity. DO NOT USE FOR: choosing brand palette strategy alone, running full-repo UX audits."
+description: "Author and evolve DTCG token source-of-truth. USE FOR: creating or editing core/semantic tokens, adding token aliases safely, maintaining token schema integrity. DO NOT USE FOR: choosing brand palette strategy alone, running full-repo UX audits."
 category: foundation
 metadata:
   category: foundation

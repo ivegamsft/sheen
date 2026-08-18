@@ -1,7 +1,7 @@
 ---
 name: component-spec
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. Author complete component specifications with anatomy, variants, states, and accessibility behavior. USE FOR: defining component contracts, documenting ARIA/keyboard behavior, producing implementation-ready redlines. DO NOT USE FOR: whole-system design audits, broad UX strategy documents."
+description: "Author complete component specifications with anatomy, variants, states, and accessibility behavior. USE FOR: defining component contracts, documenting ARIA/keyboard behavior, producing implementation-ready redlines. DO NOT USE FOR: whole-system design audits, broad UX strategy documents."
 category: design
 metadata:
   category: design

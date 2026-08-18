@@ -1,7 +1,7 @@
 ---
 name: user-research
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: research planning, interview/persona synthesis, usability test protocol design. DO NOT USE FOR: heuristic-only reviews, token schema authoring."
+description: "Use when planning user research, synthesizing interview findings, or designing usability test protocols. USE FOR: research planning, interview/persona synthesis, usability test protocol design. DO NOT USE FOR: heuristic-only reviews, token schema authoring."
 category: governance
 metadata:
   category: governance

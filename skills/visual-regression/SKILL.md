@@ -1,7 +1,7 @@
 ---
 name: visual-regression
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: snapshot baseline setup, visual diff triage, design QA drift detection. DO NOT USE FOR: functional test authoring, security threat modeling."
+description: "Use when setting up visual snapshot baselines, triaging visual diffs, or detecting design QA drift. USE FOR: snapshot baseline setup, visual diff triage, design QA drift detection. DO NOT USE FOR: functional test authoring, security threat modeling."
 category: governance
 metadata:
   category: governance

@@ -7,6 +7,44 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.7.0] — 2026-08-19
+
+### Added
+- **Upgrade process** — `scripts/upgrade-sheen.ps1` and `scripts/upgrade-sheen.sh`: six-phase
+  consumer upgrade workflow (prereqs → detect → changelog preview → sync → diagnose → PR).
+  Mirrors the basecoat `bootstrap-basecoat.ps1` pattern. (`docs/guides/upgrading-sheen.md`,
+  `docs/examples/sheen-upgrade.workflow.yml`).
+
+### Fixed
+- **Sync multi-source path resolution** (#80, #81): `sync.ps1` and `sync.sh` now check multiple
+  source locations per asset type (`.github/skills`, `.github/agents`, `.github/prompts`, etc.)
+  so all skills and prompts reach downstream consumers — not only `sheen-onboard`.
+- **Sync allow-list normalization** (#80): `Normalize-Name` / `normalize_name` strips asset-type
+  suffixes (`.agent`, `.instructions`, `.prompt`, `.tokens`) from both source filenames and
+  allow-list values, enabling consistent matching regardless of suffix style.
+- **Sync empty allow-list semantics** (#82): `sync: agents: []` now means "sync none" and
+  removes previously-synced entries on re-sync, rather than syncing all agents.
+- **Sync collision protection** (#83): existing consumer-authored files are preserved when their
+  path matches an upstream asset; a warning is emitted and the upstream copy is skipped.
+- **Sync nested exclude support** (#84): `sync.exclude` patterns are now evaluated per asset
+  type using the source-relative path, matching documented `.sheen.yml` behavior.
+- **Sync themes allow-list filtering** (#85): `sync.tokens.themes` allow-list correctly prunes
+  theme files after directory copy and normalizes `.tokens` suffixes during comparison.
+- **Rollback consumer safety** (#80): `rollback.ps1` and `rollback.sh` now remove only
+  manifest-recorded individual files, preserving consumer-authored additions.
+- **`materialize_tokens` fresh consumer** (#86): when `materialize_tokens: true` is set and
+  `scripts/build-tokens.ps1` is absent in the consumer repo, `sync.ps1` / `sync.sh` now
+  provisions the script from the upstream clone before invoking it.
+- **Agent allow-list unmatched warning** (#88): `sync.ps1` and `sync.sh` now emit a warning
+  for each allow-list entry that did not match any source file, making typos immediately visible.
+- **Lifecycle scripts consumer path auto-detection** (#87): `validate-tokens.ps1`,
+  `warn-rules.ps1`, `contrast-check.ps1`, and `build-metadata.ps1` now auto-detect consumer
+  repos (presence of `.sheen/manifest.json`) and resolve canonical consumer asset paths
+  (`.github/skills`, `sheen/tokens`, etc.) without requiring manual path flags.
+- **Skill descriptions** — stripped boilerplate `"Use when this skill is the right fit..."`
+  prefix from all 45 consumer-facing `skills/*/SKILL.md` files; each now opens with a specific
+  trigger sentence followed by `USE FOR:` / `DO NOT USE FOR:`.
+
 ## [0.6.4] — 2026-08-18
 
 ### Fixed

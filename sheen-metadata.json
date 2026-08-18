@@ -2,7 +2,7 @@
   "$comment": "GENERATED FILE — do not hand-edit. Produced by scripts/build-metadata.ps1 from repo-root assets (vendor/ excluded).",
   "schema": "sheen-metadata/v1",
   "name": "basecoat-sheen",
-  "version": "0.6.4",
+  "version": "0.7.0",
   "source": {
     "excluded": [
       "vendor/"
@@ -127,8 +127,8 @@
         "category": "a11y",
         "pillar": "a11y",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. WCAG 2.2 AA accessibility conformance audit for UI surfaces. USE FOR: a11y issue discovery and triage, remediation planning, conformance statement drafting. DO NOT USE FOR: only checking color-pair contrast, non-accessibility style preference reviews.",
-        "hash": "d0f9263a3a2cb8ceb74fb39187795f6a9ce919c8f71192299f2b006ab81e9b26"
+        "description": "WCAG 2.2 AA accessibility conformance audit for UI surfaces. USE FOR: a11y issue discovery and triage, remediation planning, conformance statement drafting. DO NOT USE FOR: only checking color-pair contrast, non-accessibility style preference reviews.",
+        "hash": "c9b1c0a91f50d499bd20ca930fb53019a8bad0f36cc59f0bec0f63850309e0df"
       },
       {
         "name": "ai-output-governance",
@@ -147,8 +147,8 @@
         "category": "brand",
         "pillar": "brand",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. USE FOR: brand principles definition, visual identity codification, brand consistency guidance. DO NOT USE FOR: microcopy editing, component redline specs.",
-        "hash": "59178d5ccbea186b0cce4bfd2f547aef0c07f32136f5cd00b1b3c08de6c74121"
+        "description": "Use when defining, documenting, or evaluating visual brand principles, identity systems, and brand consistency rules. USE FOR: brand principles definition, visual identity codification, brand consistency guidance. DO NOT USE FOR: microcopy editing, component redline specs.",
+        "hash": "acd7e444cee60c23ff100844a64e19df82f307d4dfd4d5a5262ab93defbda3c9"
       },
       {
         "name": "brand-voice-tone",
@@ -157,8 +157,8 @@
         "category": "brand",
         "pillar": "brand",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. USE FOR: voice and tone rules, messaging style guidance, tone-by-context matrix. DO NOT USE FOR: UI state behavior, token schema changes.",
-        "hash": "a57e92944f7a6364bfa198dcb42ae67bd4ceb43a095faf89f964613d7b350a91"
+        "description": "Use when authoring or reviewing voice, tone, and messaging style guidance across product surfaces. USE FOR: voice and tone rules, messaging style guidance, tone-by-context matrix. DO NOT USE FOR: UI state behavior, token schema changes.",
+        "hash": "df38922ab16d4dc69e8f26dab9c299487ef3fe44533f10dfe0e64f15212d5916"
       },
       {
         "name": "color-contrast-check",
@@ -167,8 +167,8 @@
         "category": "a11y",
         "pillar": "a11y",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. USE FOR: contrast ratio checks, theme pair validation, wcag contrast triage. DO NOT USE FOR: full accessibility audits, navigation IA design.",
-        "hash": "2ed96ccd7aeb66380d9bac8d75c78b94c7f0e933b334945fb3e1d2f70d62269b"
+        "description": "Use when validating color pair contrast ratios for accessibility compliance or theme readiness. USE FOR: contrast ratio checks, theme pair validation, wcag contrast triage. DO NOT USE FOR: full accessibility audits, navigation IA design.",
+        "hash": "770959a643d2d47911126aea76117906667215600107c905e1af29d47b4bd7e7"
       },
       {
         "name": "color-system",
@@ -177,8 +177,8 @@
         "category": "foundation",
         "pillar": "foundations",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. Build accessible palette ramps and semantic color roles. USE FOR: generating color ramps, mapping brand hues to semantic roles, validating cross-theme contrast readiness. DO NOT USE FOR: isolated per-pair contrast reporting only, non-color token authoring.",
-        "hash": "a4c6073f6dfff82e8b14fcc0617ff97bdf769e5efec43762ce4fefb0200cc585"
+        "description": "Build accessible palette ramps and semantic color roles. USE FOR: generating color ramps, mapping brand hues to semantic roles, validating cross-theme contrast readiness. DO NOT USE FOR: isolated per-pair contrast reporting only, non-color token authoring.",
+        "hash": "b65a1aa975fe83106cf419276e743bc32ed33210723da53412956f800b89d5b1"
       },
       {
         "name": "component-spec",
@@ -187,8 +187,8 @@
         "category": "design",
         "pillar": "components",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. Author complete component specifications with anatomy, variants, states, and accessibility behavior. USE FOR: defining component contracts, documenting ARIA/keyboard behavior, producing implementation-ready redlines. DO NOT USE FOR: whole-system design audits, broad UX strategy documents.",
-        "hash": "1df7cd47adb0edaf0fb68fa60b33c2b53909d6fad5f8cb20ace4910364c5a210"
+        "description": "Author complete component specifications with anatomy, variants, states, and accessibility behavior. USE FOR: defining component contracts, documenting ARIA/keyboard behavior, producing implementation-ready redlines. DO NOT USE FOR: whole-system design audits, broad UX strategy documents.",
+        "hash": "299d679a6c41b7b0815be686516b5fb080c924150824b4b7f7f16c83643ef893"
       },
       {
         "name": "content-hierarchy",
@@ -197,8 +197,8 @@
         "category": "usability",
         "pillar": "usability",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: content prioritization, scan-path improvement, hierarchy critique. DO NOT USE FOR: voice/tone strategy, token primitive edits.",
-        "hash": "6168e1d08a80391636f2303873033516c12acf972d73d08131b4ef0b64f681ba"
+        "description": "Use when analyzing or improving the prioritization and visual scan-path of content on a surface. USE FOR: content prioritization, scan-path improvement, hierarchy critique. DO NOT USE FOR: voice/tone strategy, token primitive edits.",
+        "hash": "33ffa62ef3176ae978ea43ef09be327b7500effee4c3b60f5a6bb13ee35d812f"
       },
       {
         "name": "craft-quality",
@@ -207,8 +207,8 @@
         "category": "governance",
         "pillar": "governance",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. USE FOR: craft checklist passes, polish quality assessments, consistency refinements. DO NOT USE FOR: formal usability audits, framework detection scans.",
-        "hash": "c908efc910b8f089479cfe8d98a1203078b5eed722758b5453184cbc7a16b98f"
+        "description": "Use when running a craft and polish pass to assess consistency, refinement, and visual quality. USE FOR: craft checklist passes, polish quality assessments, consistency refinements. DO NOT USE FOR: formal usability audits, framework detection scans.",
+        "hash": "444f63333513d6634c5b0677630105a9c8399160ccc575dc928bd81b2843a4c5"
       },
       {
         "name": "create-design-skill",
@@ -217,8 +217,8 @@
         "category": "governance",
         "pillar": "governance",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. Scaffold a new sheen skill that conforms to the skill contract. USE FOR: creating new skill folders and frontmatter, authoring routing eval scenarios, updating catalog entries safely. DO NOT USE FOR: writing instruction-layer files, implementing product feature code.",
-        "hash": "e292d99892caef0f56a88f27977013cca9a2ffaf7db4dd633b92f5ac15b69bf2"
+        "description": "Scaffold a new sheen skill that conforms to the skill contract. USE FOR: creating new skill folders and frontmatter, authoring routing eval scenarios, updating catalog entries safely. DO NOT USE FOR: writing instruction-layer files, implementing product feature code.",
+        "hash": "7efd46fb03ebbf7dd94647497624ecba7519d4d1be5797bd52d142620ffb63e3"
       },
       {
         "name": "css-mapping",
@@ -227,8 +227,8 @@
         "category": "mapping",
         "pillar": "mapping",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: css inventory mapping, framework detection, token candidate extraction. DO NOT USE FOR: creating new semantic token models, design review facilitation.",
-        "hash": "23ecfe8665f350d926db05174c1e7c154d2edd3c2b50c3848f11bc7950ff8c88"
+        "description": "Use when inventorying existing CSS to identify token candidates, detect framework usage, or map raw values to design tokens. USE FOR: css inventory mapping, framework detection, token candidate extraction. DO NOT USE FOR: creating new semantic token models, design review facilitation.",
+        "hash": "33c19440324871f5a147aeca5fdcb6da63319ed162e0bcf9b0d147531f7de4e5"
       },
       {
         "name": "data-visualisation",
@@ -257,8 +257,8 @@
         "category": "lifecycle",
         "pillar": "lifecycle",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. Top-level design assessment for an existing repo or product. USE FOR: repo-wide design audits, prioritizing UX/design debt, generating a remediation backlog from evidence. DO NOT USE FOR: editing only token files in isolation, greenfield system bootstrap from zero.",
-        "hash": "e4276b3d0b4cef3cd9844e95cbb55696e2d1e2505c62399c6e0e95c607686a12"
+        "description": "Top-level design assessment for an existing repo or product. USE FOR: repo-wide design audits, prioritizing UX/design debt, generating a remediation backlog from evidence. DO NOT USE FOR: editing only token files in isolation, greenfield system bootstrap from zero.",
+        "hash": "b24f5aa7b319c4540c62a63a1a73e3172af2e5e17b2cefa33d49133fa2014bcf"
       },
       {
         "name": "design-bootstrap",
@@ -267,8 +267,8 @@
         "category": "lifecycle",
         "pillar": "lifecycle",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. Greenfield design-system bootstrap entry point. USE FOR: starting a design system from scratch, seeding initial tokens and themes, defining first-pass IA/component foundations. DO NOT USE FOR: auditing an established system, isolated one-off component tweaks.",
-        "hash": "9696e9e64484bd125594337fa088e7678579f0c17bc23290fa40d3ca9de18783"
+        "description": "Greenfield design-system bootstrap entry point. USE FOR: starting a design system from scratch, seeding initial tokens and themes, defining first-pass IA/component foundations. DO NOT USE FOR: auditing an established system, isolated one-off component tweaks.",
+        "hash": "618786d7fbf567a28af2173011fac1925fedd05e86a4fcc1b55cb27546090b10"
       },
       {
         "name": "design-debate",
@@ -297,8 +297,8 @@
         "category": "lifecycle",
         "pillar": "lifecycle",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: concept generation, divergent direction exploration, idea synthesis. DO NOT USE FOR: final decision arbitration, wcag audit reporting.",
-        "hash": "aadfce7b2525cf1764817c687334738b18535c21e2be915ba86bdadee692909b"
+        "description": "Use when generating new design directions, concepts, or exploring problem spaces before committing to a single path. USE FOR: concept generation, divergent direction exploration, idea synthesis. DO NOT USE FOR: final decision arbitration, wcag audit reporting.",
+        "hash": "af3606cf2063fc805bcfbb7f60fd3550e4e7441f4408539259e7255a00c6da61"
       },
       {
         "name": "design-handoff",
@@ -307,8 +307,8 @@
         "category": "lifecycle",
         "pillar": "lifecycle",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. USE FOR: engineering handoff packaging, redline and annotation bundling, token/spec export preparation. DO NOT USE FOR: authoring core component specs, backend implementation.",
-        "hash": "48b2d0d870a0ebbb453c6669e3152be5e57dea8aec5daea024a4716a31beebfa"
+        "description": "Use when packaging and preparing design artifacts for engineering handoff, including redlines, annotations, and token exports. USE FOR: engineering handoff packaging, redline and annotation bundling, token/spec export preparation. DO NOT USE FOR: authoring core component specs, backend implementation.",
+        "hash": "3d2bd3dc66bed70fa133405586e39c686c2660b304bebeb123ff95a01e67053a"
       },
       {
         "name": "design-review",
@@ -317,8 +317,8 @@
         "category": "governance",
         "pillar": "governance",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. USE FOR: artifact critique, principle-based review, craft issue identification. DO NOT USE FOR: multi-option debate facilitation, full repo audits.",
-        "hash": "a7b62085b48eaa620b49dc31f78027941ae9149c63f3cd3b5cf25a429660a261"
+        "description": "Use when critiquing a design artifact against principles, craft standards, or system guidelines. USE FOR: artifact critique, principle-based review, craft issue identification. DO NOT USE FOR: multi-option debate facilitation, full repo audits.",
+        "hash": "15afd6fc55d41a91499b0b701db6ab44a4e9fdd1d0734e429a9e12d503b20b8a"
       },
       {
         "name": "design-sprint",
@@ -337,8 +337,8 @@
         "category": "lifecycle",
         "pillar": "lifecycle",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: targeted improvement suggestions, quick design wins, prioritized recommendation lists. DO NOT USE FOR: full repository audits, formal conformance claims.",
-        "hash": "3e7707db6c7768ff4dcac54c4f2ce7f11d1bc2ba5d45eb5ade76ae976b72ea43"
+        "description": "Use when generating targeted design improvement suggestions or prioritized quick-win recommendations. USE FOR: targeted improvement suggestions, quick design wins, prioritized recommendation lists. DO NOT USE FOR: full repository audits, formal conformance claims.",
+        "hash": "811f5feee8ea8f5e0d121a38310558f91645042e47105d6d08bd16065eedcccb"
       },
       {
         "name": "design-system-audit",
@@ -347,8 +347,8 @@
         "category": "design",
         "pillar": "components",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. USE FOR: token/component coherence checks, design drift detection, system-level consistency audits. DO NOT USE FOR: repo-wide UX debt triage, new system bootstrap.",
-        "hash": "2327a4542ab9c90d5909c84fcd0f872bfd3f459ce196cbfd9ef0aaa4a97d2339"
+        "description": "Use when auditing a design system for token coherence, component consistency, and system-level drift. USE FOR: token/component coherence checks, design drift detection, system-level consistency audits. DO NOT USE FOR: repo-wide UX debt triage, new system bootstrap.",
+        "hash": "547cc92ec6d8b96741b89553e86f7a2577daa856f7dc1db8eb668fa6ae11f059"
       },
       {
         "name": "design-system-versioning",
@@ -377,8 +377,8 @@
         "category": "foundation",
         "pillar": "foundations",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. Author and evolve DTCG token source-of-truth. USE FOR: creating or editing core/semantic tokens, adding token aliases safely, maintaining token schema integrity. DO NOT USE FOR: choosing brand palette strategy alone, running full-repo UX audits.",
-        "hash": "647225f5fd8ccde94f351d9e6077f20472850e800b9121cfa77c415e81e30dff"
+        "description": "Author and evolve DTCG token source-of-truth. USE FOR: creating or editing core/semantic tokens, adding token aliases safely, maintaining token schema integrity. DO NOT USE FOR: choosing brand palette strategy alone, running full-repo UX audits.",
+        "hash": "420b69188325ca67e7f4181a5319a3f3ba7470b152b5a12817242c196124224e"
       },
       {
         "name": "design-update",
@@ -387,8 +387,8 @@
         "category": "lifecycle",
         "pillar": "lifecycle",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: design system modernization, token migration planning, theme evolution rollout. DO NOT USE FOR: from-scratch bootstrap, single-component specs.",
-        "hash": "7cd159763cd4320c44b312f6c5d62ecfabd7860b7c02f70b746f6cbffba2293c"
+        "description": "Use when planning or executing a design system modernization, token migration, or theme evolution rollout. USE FOR: design system modernization, token migration planning, theme evolution rollout. DO NOT USE FOR: from-scratch bootstrap, single-component specs.",
+        "hash": "7c219ea207950df26de193e0f2bbdc94ec74e1612d9e9e44ca44d75a692aca3b"
       },
       {
         "name": "ethical-design",
@@ -407,8 +407,8 @@
         "category": "mapping",
         "pillar": "mapping",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: font usage inventory, weight/style mapping, type token candidate mapping. DO NOT USE FOR: new typography scale creation, a11y conformance statements.",
-        "hash": "861395b5b55e6202dfacd43127f800bb5c4d2fc3a8e077d43af3efa33edcbe38"
+        "description": "Use when inventorying font usage in a codebase to map weights, styles, and sizes to type token candidates. USE FOR: font usage inventory, weight/style mapping, type token candidate mapping. DO NOT USE FOR: new typography scale creation, a11y conformance statements.",
+        "hash": "834f71174b0f8602f29f4f60c39092e8835374533672235320b6b99fbd03b757"
       },
       {
         "name": "i18n-framework-mapping",
@@ -417,8 +417,8 @@
         "category": "mapping",
         "pillar": "mapping",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: i18n framework detection, locale coverage inventory, translation key gap mapping. DO NOT USE FOR: i18n strategy design, component variants.",
-        "hash": "87f35d13dca1b854c64c65be86e789aff6da1165c0e7313b0df85323cd05d956"
+        "description": "Use when detecting i18n framework usage and inventorying locale coverage and translation key gaps. USE FOR: i18n framework detection, locale coverage inventory, translation key gap mapping. DO NOT USE FOR: i18n strategy design, component variants.",
+        "hash": "b1b9dbf9b7b3c6b8c05b41e9c96e2010587d4cc2add488d1511a641dc669bc2d"
       },
       {
         "name": "iconography",
@@ -427,8 +427,8 @@
         "category": "foundation",
         "pillar": "foundations",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: icon grid definition, stroke and sizing rules, icon naming taxonomy. DO NOT USE FOR: logo standards, full brand identity.",
-        "hash": "ed925d6c7b3f2bf1d4981fff2afc4987317006b4b8251d818711c462f8c06c4b"
+        "description": "Use when defining or auditing an icon system — grid rules, stroke sizing, and icon naming conventions. USE FOR: icon grid definition, stroke and sizing rules, icon naming taxonomy. DO NOT USE FOR: logo standards, full brand identity.",
+        "hash": "6cef3697b307b617026764a720723a1baab765caeb2b73a122e0047be0a5024a"
       },
       {
         "name": "imagery-illustration",
@@ -437,8 +437,8 @@
         "category": "brand",
         "pillar": "brand",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: imagery style direction, illustration system guidance, art-direction constraints. DO NOT USE FOR: logo safe-area rules, token architecture.",
-        "hash": "67c704f0bc0704d60f361115e2e536b9b818270de5973e715c0ac8f8a59e11a4"
+        "description": "Use when defining imagery style direction, illustration system constraints, or art-direction guidelines. USE FOR: imagery style direction, illustration system guidance, art-direction constraints. DO NOT USE FOR: logo safe-area rules, token architecture.",
+        "hash": "25c7f33d2226f8f564e34fd60fa99190cf5166f56a22476f574b064e22f7fc25"
       },
       {
         "name": "information-architecture",
@@ -447,8 +447,8 @@
         "category": "ia",
         "pillar": "ia",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. USE FOR: site map structuring, content model definition, navigation architecture planning. DO NOT USE FOR: pixel-level component specs, palette generation.",
-        "hash": "1c516e52a8f65acb6426a2f73dc77681a5a7cf03e1a1cee364abcb745d5695f8"
+        "description": "Use when structuring site maps, content models, or navigation architectures. USE FOR: site map structuring, content model definition, navigation architecture planning. DO NOT USE FOR: pixel-level component specs, palette generation.",
+        "hash": "ef6ce4f74f689f041675307cde9bb6329d969312501c6ebaeff618c35e19f9e5"
       },
       {
         "name": "landing-page-design",
@@ -457,8 +457,8 @@
         "category": "usability",
         "pillar": "usability",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: landing page structure, hero/cta hierarchy, conversion-focused section planning. DO NOT USE FOR: full IA maps, WCAG conformance audits.",
-        "hash": "313503073d0d7de4330d53b40ff1e37a426e26e8518052c0290c6b32289ed148"
+        "description": "Use when planning or reviewing landing page structure, hero/CTA hierarchy, and conversion-focused section layout. USE FOR: landing page structure, hero/cta hierarchy, conversion-focused section planning. DO NOT USE FOR: full IA maps, WCAG conformance audits.",
+        "hash": "17b8977601e44b0121f76da5cd3acbbca7669aaf8dfc871b1730b749b57037e9"
       },
       {
         "name": "layout-grid-spacing",
@@ -467,8 +467,8 @@
         "category": "foundation",
         "pillar": "foundations",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. USE FOR: spacing scale design, grid and gutters, breakpoint planning. DO NOT USE FOR: single-screen responsive QA, component anatomy specs.",
-        "hash": "b8972f5381a0e66c9e11bfdaea7a39956df95e2d227a4643a996089cfa39b190"
+        "description": "Use when designing spacing scales, grid systems, gutters, or breakpoint planning. USE FOR: spacing scale design, grid and gutters, breakpoint planning. DO NOT USE FOR: single-screen responsive QA, component anatomy specs.",
+        "hash": "aa14621fc18a76a799b42bb21baf0a7c995388288f34e7087eabf081ec9d94e9"
       },
       {
         "name": "logo-usage",
@@ -477,8 +477,8 @@
         "category": "brand",
         "pillar": "brand",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. USE FOR: logo variant guidance, clear-space rules, misuse prevention examples. DO NOT USE FOR: icon system grids, usability audits.",
-        "hash": "474909ef96deceae3b3c5a896581bd71e3447340ef74e6a16d8168eddea3d380"
+        "description": "Use when documenting or enforcing logo variant rules, clear-space requirements, and misuse prevention guidance. USE FOR: logo variant guidance, clear-space rules, misuse prevention examples. DO NOT USE FOR: icon system grids, usability audits.",
+        "hash": "ad40220d9af9f4b42d6890ae78a62b7a673944986f8873987e86dc53789b81c6"
       },
       {
         "name": "mobile-native-design",
@@ -497,8 +497,8 @@
         "category": "foundation",
         "pillar": "foundations",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: duration and easing tokens, elevation level rules, material/translucency guidance. DO NOT USE FOR: full interaction state specs, usability heuristic reviews.",
-        "hash": "46d1e66cfc29b8694366d28d8984a28053f779e2d0a622bd312bca98a4cc44fd"
+        "description": "Use when defining or validating motion tokens, elevation rules, and material/translucency guidance. USE FOR: duration and easing tokens, elevation level rules, material/translucency guidance. DO NOT USE FOR: full interaction state specs, usability heuristic reviews.",
+        "hash": "7b927b9eeb9b0cd0f6d4e8a8028b201577a630876f69912f1227f24777875136"
       },
       {
         "name": "multilingual",
@@ -507,8 +507,8 @@
         "category": "content",
         "pillar": "content",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. USE FOR: i18n/l10n strategy, locale externalization planning, rtl/pluralization guidance. DO NOT USE FOR: framework detection only, color contrast checks.",
-        "hash": "8963ef89a6cdea9638a2f934ca90966466a36cf81e5eea9d45f3a08482c8bdc3"
+        "description": "Use when designing i18n/l10n strategy, locale externalization patterns, or RTL and pluralization guidance. USE FOR: i18n/l10n strategy, locale externalization planning, rtl/pluralization guidance. DO NOT USE FOR: framework detection only, color contrast checks.",
+        "hash": "e4e0564d12a5705835d1b53a9abfe8d66ec6cd40eac7419a433c71da17e6073d"
       },
       {
         "name": "navigation-design",
@@ -517,8 +517,8 @@
         "category": "ia",
         "pillar": "ia",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. USE FOR: global/local nav patterns, wayfinding design, menu/breadcrumb strategy. DO NOT USE FOR: content ontology modeling, theme token changes.",
-        "hash": "a201d759565ffbfd0b745ab28402192da1a6855e1eac801567bba0304332e310"
+        "description": "Use when designing global or local navigation patterns, wayfinding flows, or menu and breadcrumb structures. USE FOR: global/local nav patterns, wayfinding design, menu/breadcrumb strategy. DO NOT USE FOR: content ontology modeling, theme token changes.",
+        "hash": "de3c5c73777ba017824dd59b843c63f5d2cc16622ab5ab01cf82a386e40648e7"
       },
       {
         "name": "ontology",
@@ -527,8 +527,8 @@
         "category": "ia",
         "pillar": "ia",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: entity relationship modeling, semantic schema definition, attribute constraint mapping. DO NOT USE FOR: flat category taxonomies, brand color work.",
-        "hash": "9479462414c2c771707658fde870406abf0f3eb78f4310c669b809be1466e0f6"
+        "description": "Use when modeling entity relationships, semantic schemas, or attribute constraint definitions for a content or data system. USE FOR: entity relationship modeling, semantic schema definition, attribute constraint mapping. DO NOT USE FOR: flat category taxonomies, brand color work.",
+        "hash": "07344232beb0ad6d1c6249e917f4701e7cc6051155d8d93298ec2623faf2f919"
       },
       {
         "name": "pattern-library",
@@ -537,8 +537,8 @@
         "category": "design",
         "pillar": "components",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: pattern documentation, pattern composition guidance, pattern index authoring. DO NOT USE FOR: single component deep specs, token schema validation.",
-        "hash": "9bf3b6b8dc59c522fd31f7db3da7a6eaedce54489e873c56fe2bb3ffef4afb40"
+        "description": "Use when documenting, cataloging, or composing reusable design patterns into a shared pattern library. USE FOR: pattern documentation, pattern composition guidance, pattern index authoring. DO NOT USE FOR: single component deep specs, token schema validation.",
+        "hash": "1e39b48b6112d1e703bd7cc4a625ec8ada96b479a803f9d13c89173fdfb37ab3"
       },
       {
         "name": "performance-aware-design",
@@ -557,8 +557,8 @@
         "category": "usability",
         "pillar": "usability",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. USE FOR: breakpoint behavior definition, responsive reflow planning, adaptive layout guidance. DO NOT USE FOR: spacing-scale authoring, brand tone guidance.",
-        "hash": "6e5dc04679acc48771e6d3d7efc8086983ace25b6978f4f90751c409ebbfc1b5"
+        "description": "Use when defining breakpoint behaviors, responsive reflow strategies, or adaptive layout guidance. USE FOR: breakpoint behavior definition, responsive reflow planning, adaptive layout guidance. DO NOT USE FOR: spacing-scale authoring, brand tone guidance.",
+        "hash": "5864013db7d739690af9b73e01d493bdcf11847ec2d9cf9b534be2f553166f75"
       },
       {
         "name": "secure-ux",
@@ -567,8 +567,8 @@
         "category": "security",
         "pillar": "security",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: safe error-state design, auth/consent ux hardening, input-feedback privacy safety. DO NOT USE FOR: backend threat modeling, penetration testing.",
-        "hash": "2d5d82743bd177037c532691f2d47ae6f022a3083eabefc8f70030e00691045a"
+        "description": "Use when hardening UX for auth flows, consent surfaces, error states, and input privacy safety. USE FOR: safe error-state design, auth/consent ux hardening, input-feedback privacy safety. DO NOT USE FOR: backend threat modeling, penetration testing.",
+        "hash": "cefe023eca3e28ee9d2b40775189e313d6f6dc69fa9e7857cef8f3b87b92e7b4"
       },
       {
         "name": "sheen-onboard",
@@ -587,8 +587,8 @@
         "category": "governance",
         "pillar": "governance",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. USE FOR: style-guide compilation, pattern library publication, guideline consolidation. DO NOT USE FOR: single-component-only specs, token validation scripts.",
-        "hash": "02929ff918d5c8e1c43e079eff9fb7834201cec36c3ce36407f66bfafbb31248"
+        "description": "Use when compiling, publishing, or consolidating a style guide or pattern library for a product or team. USE FOR: style-guide compilation, pattern library publication, guideline consolidation. DO NOT USE FOR: single-component-only specs, token validation scripts.",
+        "hash": "f36452dc65daeac8895888eb10484968e09806ae8621c5a8e8e206ac11146730"
       },
       {
         "name": "taxonomy",
@@ -597,8 +597,8 @@
         "category": "ia",
         "pillar": "ia",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: controlled vocabulary design, category hierarchy rules, tag schema definition. DO NOT USE FOR: entity relationship modeling, component state specs.",
-        "hash": "2b3420fa65b81c19d2f66e41d4f44c2fc3cedacb5db21864d8615f650034b920"
+        "description": "Use when designing controlled vocabularies, category hierarchies, or tag schema definitions. USE FOR: controlled vocabulary design, category hierarchy rules, tag schema definition. DO NOT USE FOR: entity relationship modeling, component state specs.",
+        "hash": "ca93aac58a6eb47b8c29973a7d7dd16019141b3285e8ebbf789af246b08042af"
       },
       {
         "name": "theming",
@@ -607,8 +607,8 @@
         "category": "foundation",
         "pillar": "foundations",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. USE FOR: new theme creation, semantic overrides, theme completeness validation. DO NOT USE FOR: new semantic key creation, brand voice guidance.",
-        "hash": "acd43dc8258396f3b161981ca92de9032fd285eab45e09583efaa0668834458d"
+        "description": "Use when creating new themes, applying semantic token overrides, or validating theme completeness. USE FOR: new theme creation, semantic overrides, theme completeness validation. DO NOT USE FOR: new semantic key creation, brand voice guidance.",
+        "hash": "3440e9cd2b7ce0ff312405518cddee6f1ba1e96724c4237c0c0f00f679ce705b"
       },
       {
         "name": "typography",
@@ -617,8 +617,8 @@
         "category": "foundation",
         "pillar": "foundations",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. USE FOR: type ramp definition, font pairing, text role mapping. DO NOT USE FOR: font inventory mapping, full usability audits.",
-        "hash": "38027ab79b1d32ff11c70bfea3c7174ff728fe91ee5366e6d1c70536d8cf62a7"
+        "description": "Use when defining a type ramp, font pairing rules, or mapping text roles to type tokens. USE FOR: type ramp definition, font pairing, text role mapping. DO NOT USE FOR: font inventory mapping, full usability audits.",
+        "hash": "1b73b1ecc84aa6228866e89dd0f837ebe73f8a548d769d6b961a70fb5ede3aef"
       },
       {
         "name": "ui-states-interaction",
@@ -627,8 +627,8 @@
         "category": "design",
         "pillar": "components",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. USE FOR: interaction state modeling, transition behavior definition, empty/error/loading state guidance. DO NOT USE FOR: component anatomy-only specs, enterprise security pen-tests.",
-        "hash": "791a64bcbabf885fad6e209f1ecce7aa5c429c4e11c6847e30527aa5fca5824a"
+        "description": "Use when modeling interaction states, transition behaviors, or empty/error/loading state guidance for UI components. USE FOR: interaction state modeling, transition behavior definition, empty/error/loading state guidance. DO NOT USE FOR: component anatomy-only specs, enterprise security pen-tests.",
+        "hash": "9ce6ad26cd1b8462436b8eca0c60d73a5896f5c75e74e8a6be27799ee6443d22"
       },
       {
         "name": "usability-mapping",
@@ -637,8 +637,8 @@
         "category": "mapping",
         "pillar": "mapping",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: flow-to-heuristic coverage mapping, screen inventory audits, usability gap mapping. DO NOT USE FOR: full heuristic critique writeups, token schema edits.",
-        "hash": "180de50bae5938b614144ae08d63d4d0de9a1dd62406e5634dc1b66f26ffccad"
+        "description": "Use when mapping screens or flows to usability heuristics and identifying coverage gaps. USE FOR: flow-to-heuristic coverage mapping, screen inventory audits, usability gap mapping. DO NOT USE FOR: full heuristic critique writeups, token schema edits.",
+        "hash": "b63fc31759b34180678480e2030eeac353cd2bf34ab4f6efab97043ab694e84b"
       },
       {
         "name": "user-research",
@@ -647,8 +647,8 @@
         "category": "governance",
         "pillar": "governance",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: research planning, interview/persona synthesis, usability test protocol design. DO NOT USE FOR: heuristic-only reviews, token schema authoring.",
-        "hash": "1fddcb1b5f6042398bb1a28ef3f95cc69778f9672476568a6245e017dfade7b6"
+        "description": "Use when planning user research, synthesizing interview findings, or designing usability test protocols. USE FOR: research planning, interview/persona synthesis, usability test protocol design. DO NOT USE FOR: heuristic-only reviews, token schema authoring.",
+        "hash": "0c3338b59fb95ec81455df9b1e47775e7e601458fce5a7ac9f07778bced64087"
       },
       {
         "name": "ux-writing",
@@ -657,8 +657,8 @@
         "category": "content",
         "pillar": "content",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: microcopy authoring, error/empty-state text, plain-language rewriting. DO NOT USE FOR: brand identity systems, token architecture.",
-        "hash": "9398c624c0c6cdbadca455f1876a657dc47f19d030a4895307f52419081f1d64"
+        "description": "Use when authoring microcopy, error/empty-state text, or rewriting UI strings for plain language and clarity. USE FOR: microcopy authoring, error/empty-state text, plain-language rewriting. DO NOT USE FOR: brand identity systems, token architecture.",
+        "hash": "3869c690d9c973ccdccd75a5d79eda4bba0e28cc695beeac728b4622c200e42d"
       },
       {
         "name": "visual-regression",
@@ -667,8 +667,8 @@
         "category": "governance",
         "pillar": "governance",
         "maturity": "beta",
-        "description": "Use when this skill is the right fit for the request. USE FOR: snapshot baseline setup, visual diff triage, design QA drift detection. DO NOT USE FOR: functional test authoring, security threat modeling.",
-        "hash": "a4f604707218539ee2874bd3c8a1607a2021035f52e963dadf83ba05dfcbd491"
+        "description": "Use when setting up visual snapshot baselines, triaging visual diffs, or detecting design QA drift. USE FOR: snapshot baseline setup, visual diff triage, design QA drift detection. DO NOT USE FOR: functional test authoring, security threat modeling.",
+        "hash": "553f9fd2258dedd53738339471e8fe4d4a92048a19d6be1479eae7418286c7a3"
       },
       {
         "name": "web-usability-review",
@@ -677,8 +677,8 @@
         "category": "usability",
         "pillar": "usability",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. Heuristic usability evaluation grounded in NN/g and ISO 9241 principles. USE FOR: reviewing flow usability, scoring heuristic violations, generating prioritized usability recommendations. DO NOT USE FOR: standards-based accessibility conformance audits, creating new token primitives.",
-        "hash": "a7b587f173212aee15d64a36908a47ccbe543018111b5fe5d893c8705b590584"
+        "description": "Heuristic usability evaluation grounded in NN/g and ISO 9241 principles. USE FOR: reviewing flow usability, scoring heuristic violations, generating prioritized usability recommendations. DO NOT USE FOR: standards-based accessibility conformance audits, creating new token primitives.",
+        "hash": "ad4fd94559c64d4b32cd17e26b5533ffdc65ae146e7ef7b132f99eb15434842d"
       },
       {
         "name": "wireframing",
@@ -687,8 +687,8 @@
         "category": "ia",
         "pillar": "ia",
         "maturity": "stable",
-        "description": "Use when this skill is the right fit for the request. USE FOR: screen wireframe drafting, layout hierarchy planning, flow skeleton definition. DO NOT USE FOR: final visual polish, token refactoring.",
-        "hash": "be82c7a15a8d8eb3817750db265a3192c32bff12eff53e83e18a7ad5ccd5bed2"
+        "description": "Use when drafting screen wireframes, planning layout hierarchies, or defining flow skeletons before visual design. USE FOR: screen wireframe drafting, layout hierarchy planning, flow skeleton definition. DO NOT USE FOR: final visual polish, token refactoring.",
+        "hash": "52d4614a26e377922519fb3f126aafc4f07a15289c556ea710edc99e86b4187f"
       }
     ],
     "agents": [

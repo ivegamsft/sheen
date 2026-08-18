@@ -1,7 +1,7 @@
 ---
 name: accessibility-audit
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. WCAG 2.2 AA accessibility conformance audit for UI surfaces. USE FOR: a11y issue discovery and triage, remediation planning, conformance statement drafting. DO NOT USE FOR: only checking color-pair contrast, non-accessibility style preference reviews."
+description: "WCAG 2.2 AA accessibility conformance audit for UI surfaces. USE FOR: a11y issue discovery and triage, remediation planning, conformance statement drafting. DO NOT USE FOR: only checking color-pair contrast, non-accessibility style preference reviews."
 category: a11y
 metadata:
   category: a11y

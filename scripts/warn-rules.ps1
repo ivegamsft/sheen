@@ -19,6 +19,8 @@ Set-StrictMode -Version 3
 
 $IsCI = $env:GITHUB_ACTIONS -eq 'true'
 $repoRoot = git rev-parse --show-toplevel 2>$null
+# Auto-detect consumer repo: if .sheen/manifest.json present, use consumer asset paths (#87)
+$IsConsumer = Test-Path (Join-Path $repoRoot '.sheen' 'manifest.json')
 $warnings = 0
 
 function Warn([string]$Rule, [string]$Path, [string]$Msg) {
@@ -29,7 +31,7 @@ function Warn([string]$Rule, [string]$Path, [string]$Msg) {
 function Info([string]$Msg) { Write-Host "  $Msg" }
 
 # W01 — token-budget: semantic tier files should have ≤ 120 tokens
-$semanticDir = Join-Path $repoRoot 'tokens/semantic'
+$semanticDir = if ($IsConsumer) { Join-Path $repoRoot 'sheen/tokens/semantic' } else { Join-Path $repoRoot 'tokens/semantic' }
 if (Test-Path $semanticDir) {
     foreach ($f in Get-ChildItem $semanticDir -Filter '*.tokens.json') {
         $content = Get-Content -Raw $f.FullName
@@ -42,7 +44,7 @@ if (Test-Path $semanticDir) {
 }
 
 # W02 — description-overlap: agent descriptions must have USE FOR / DO NOT USE FOR
-$agentsDir = Join-Path $repoRoot 'agents'
+$agentsDir = if ($IsConsumer) { Join-Path $repoRoot '.github/agents' } else { Join-Path $repoRoot 'agents' }
 if (Test-Path $agentsDir) {
     foreach ($f in Get-ChildItem $agentsDir -Filter '*.agent.md') {
         $fm = Get-Content $f.FullName | Select-Object -First 20
@@ -55,7 +57,7 @@ if (Test-Path $agentsDir) {
 }
 
 # W03 — skill-body-size: SKILL.md body should be ≤ 500 tokens (~2000 chars)
-$skillsDir = Join-Path $repoRoot 'skills'
+$skillsDir = if ($IsConsumer) { Join-Path $repoRoot '.github/skills' } else { Join-Path $repoRoot 'skills' }
 if (Test-Path $skillsDir) {
     foreach ($f in Get-ChildItem $skillsDir -Recurse -Filter 'SKILL.md') {
         $lines = Get-Content $f.FullName

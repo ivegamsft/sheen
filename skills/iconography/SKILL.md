@@ -1,7 +1,7 @@
 ---
 name: iconography
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: icon grid definition, stroke and sizing rules, icon naming taxonomy. DO NOT USE FOR: logo standards, full brand identity."
+description: "Use when defining or auditing an icon system — grid rules, stroke sizing, and icon naming conventions. USE FOR: icon grid definition, stroke and sizing rules, icon naming taxonomy. DO NOT USE FOR: logo standards, full brand identity."
 category: foundation
 metadata:
   category: foundation

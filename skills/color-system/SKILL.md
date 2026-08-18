@@ -1,7 +1,7 @@
 ---
 name: color-system
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. Build accessible palette ramps and semantic color roles. USE FOR: generating color ramps, mapping brand hues to semantic roles, validating cross-theme contrast readiness. DO NOT USE FOR: isolated per-pair contrast reporting only, non-color token authoring."
+description: "Build accessible palette ramps and semantic color roles. USE FOR: generating color ramps, mapping brand hues to semantic roles, validating cross-theme contrast readiness. DO NOT USE FOR: isolated per-pair contrast reporting only, non-color token authoring."
 category: foundation
 metadata:
   category: foundation

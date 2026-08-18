@@ -1,7 +1,7 @@
 ---
 name: imagery-illustration
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: imagery style direction, illustration system guidance, art-direction constraints. DO NOT USE FOR: logo safe-area rules, token architecture."
+description: "Use when defining imagery style direction, illustration system constraints, or art-direction guidelines. USE FOR: imagery style direction, illustration system guidance, art-direction constraints. DO NOT USE FOR: logo safe-area rules, token architecture."
 category: brand
 metadata:
   category: brand

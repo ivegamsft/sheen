@@ -1,7 +1,7 @@
 ---
 name: style-guide-authoring
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: style-guide compilation, pattern library publication, guideline consolidation. DO NOT USE FOR: single-component-only specs, token validation scripts."
+description: "Use when compiling, publishing, or consolidating a style guide or pattern library for a product or team. USE FOR: style-guide compilation, pattern library publication, guideline consolidation. DO NOT USE FOR: single-component-only specs, token validation scripts."
 category: governance
 metadata:
   category: governance

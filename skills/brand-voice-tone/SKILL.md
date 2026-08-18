@@ -1,7 +1,7 @@
 ---
 name: brand-voice-tone
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: voice and tone rules, messaging style guidance, tone-by-context matrix. DO NOT USE FOR: UI state behavior, token schema changes."
+description: "Use when authoring or reviewing voice, tone, and messaging style guidance across product surfaces. USE FOR: voice and tone rules, messaging style guidance, tone-by-context matrix. DO NOT USE FOR: UI state behavior, token schema changes."
 category: brand
 metadata:
   category: brand

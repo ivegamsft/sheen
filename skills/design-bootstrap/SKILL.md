@@ -1,7 +1,7 @@
 ---
 name: design-bootstrap
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. Greenfield design-system bootstrap entry point. USE FOR: starting a design system from scratch, seeding initial tokens and themes, defining first-pass IA/component foundations. DO NOT USE FOR: auditing an established system, isolated one-off component tweaks."
+description: "Greenfield design-system bootstrap entry point. USE FOR: starting a design system from scratch, seeding initial tokens and themes, defining first-pass IA/component foundations. DO NOT USE FOR: auditing an established system, isolated one-off component tweaks."
 category: lifecycle
 metadata:
   category: lifecycle

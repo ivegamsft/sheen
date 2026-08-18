@@ -1,7 +1,7 @@
 ---
 name: usability-mapping
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: flow-to-heuristic coverage mapping, screen inventory audits, usability gap mapping. DO NOT USE FOR: full heuristic critique writeups, token schema edits."
+description: "Use when mapping screens or flows to usability heuristics and identifying coverage gaps. USE FOR: flow-to-heuristic coverage mapping, screen inventory audits, usability gap mapping. DO NOT USE FOR: full heuristic critique writeups, token schema edits."
 category: mapping
 metadata:
   category: mapping

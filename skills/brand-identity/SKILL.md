@@ -1,7 +1,7 @@
 ---
 name: brand-identity
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: brand principles definition, visual identity codification, brand consistency guidance. DO NOT USE FOR: microcopy editing, component redline specs."
+description: "Use when defining, documenting, or evaluating visual brand principles, identity systems, and brand consistency rules. USE FOR: brand principles definition, visual identity codification, brand consistency guidance. DO NOT USE FOR: microcopy editing, component redline specs."
 category: brand
 metadata:
   category: brand

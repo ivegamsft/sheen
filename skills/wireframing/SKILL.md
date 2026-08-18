@@ -1,7 +1,7 @@
 ---
 name: wireframing
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: screen wireframe drafting, layout hierarchy planning, flow skeleton definition. DO NOT USE FOR: final visual polish, token refactoring."
+description: "Use when drafting screen wireframes, planning layout hierarchies, or defining flow skeletons before visual design. USE FOR: screen wireframe drafting, layout hierarchy planning, flow skeleton definition. DO NOT USE FOR: final visual polish, token refactoring."
 category: ia
 metadata:
   category: ia

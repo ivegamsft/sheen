@@ -38,7 +38,14 @@ if [ -n "$FILES" ]; then
     [ -n "$rel" ] || continue
     path="$REPO_ROOT/$rel"
     if [ -e "$path" ]; then
-      rm -rf "$path"
+      # New manifests record files only. For compatibility with older manifests that
+      # recorded directories, never recursively delete directories (can remove
+      # consumer-authored files created after sync).
+      if [ -d "$path" ]; then
+        [ -z "$(ls -A "$path" 2>/dev/null)" ] && rmdir "$path" || true
+        continue
+      fi
+      rm -f "$path"
       REMOVED=$((REMOVED + 1))
       parent="$(dirname "$path")"
       while [ "$parent" != "$REPO_ROOT" ] && [ -d "$parent" ] && [ -z "$(ls -A "$parent")" ]; do

@@ -1,7 +1,7 @@
 ---
 name: color-contrast-check
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: contrast ratio checks, theme pair validation, wcag contrast triage. DO NOT USE FOR: full accessibility audits, navigation IA design."
+description: "Use when validating color pair contrast ratios for accessibility compliance or theme readiness. USE FOR: contrast ratio checks, theme pair validation, wcag contrast triage. DO NOT USE FOR: full accessibility audits, navigation IA design."
 category: a11y
 metadata:
   category: a11y

@@ -1,7 +1,7 @@
 ---
 name: pattern-library
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: pattern documentation, pattern composition guidance, pattern index authoring. DO NOT USE FOR: single component deep specs, token schema validation."
+description: "Use when documenting, cataloging, or composing reusable design patterns into a shared pattern library. USE FOR: pattern documentation, pattern composition guidance, pattern index authoring. DO NOT USE FOR: single component deep specs, token schema validation."
 category: design
 metadata:
   category: design

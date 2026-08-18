@@ -1,7 +1,7 @@
 ---
 name: ui-states-interaction
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: interaction state modeling, transition behavior definition, empty/error/loading state guidance. DO NOT USE FOR: component anatomy-only specs, enterprise security pen-tests."
+description: "Use when modeling interaction states, transition behaviors, or empty/error/loading state guidance for UI components. USE FOR: interaction state modeling, transition behavior definition, empty/error/loading state guidance. DO NOT USE FOR: component anatomy-only specs, enterprise security pen-tests."
 category: design
 metadata:
   category: design

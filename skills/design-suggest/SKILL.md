@@ -1,7 +1,7 @@
 ---
 name: design-suggest
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: targeted improvement suggestions, quick design wins, prioritized recommendation lists. DO NOT USE FOR: full repository audits, formal conformance claims."
+description: "Use when generating targeted design improvement suggestions or prioritized quick-win recommendations. USE FOR: targeted improvement suggestions, quick design wins, prioritized recommendation lists. DO NOT USE FOR: full repository audits, formal conformance claims."
 category: lifecycle
 metadata:
   category: lifecycle

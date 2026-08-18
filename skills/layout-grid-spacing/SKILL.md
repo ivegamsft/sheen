@@ -1,7 +1,7 @@
 ---
 name: layout-grid-spacing
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: spacing scale design, grid and gutters, breakpoint planning. DO NOT USE FOR: single-screen responsive QA, component anatomy specs."
+description: "Use when designing spacing scales, grid systems, gutters, or breakpoint planning. USE FOR: spacing scale design, grid and gutters, breakpoint planning. DO NOT USE FOR: single-screen responsive QA, component anatomy specs."
 category: foundation
 metadata:
   category: foundation

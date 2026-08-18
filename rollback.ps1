@@ -29,8 +29,19 @@ $removed = 0
 foreach ($rel in $data.files) {
     $path = Join-Path $repoRoot $rel
     if (Test-Path -LiteralPath $path) {
-        Remove-Item -LiteralPath $path -Recurse -Force
+        # New manifests record files only. For compatibility with older manifests that
+        # recorded directories, do not recursively delete directory trees here — that
+        # can remove consumer-authored files created after sync.
+        if ((Get-Item -LiteralPath $path).PSIsContainer) {
+            if (-not (Get-ChildItem -LiteralPath $path -Force)) {
+                Remove-Item -LiteralPath $path -Force
+            }
+            continue
+        }
+
+        Remove-Item -LiteralPath $path -Force
         $removed++
+
         # Prune now-empty parent directories up to (but not including) repo root.
         $parent = Split-Path -Parent $path
         while ($parent -and ($parent -ne $repoRoot) -and (Test-Path -LiteralPath $parent) -and

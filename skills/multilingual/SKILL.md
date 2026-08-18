@@ -1,7 +1,7 @@
 ---
 name: multilingual
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: i18n/l10n strategy, locale externalization planning, rtl/pluralization guidance. DO NOT USE FOR: framework detection only, color contrast checks."
+description: "Use when designing i18n/l10n strategy, locale externalization patterns, or RTL and pluralization guidance. USE FOR: i18n/l10n strategy, locale externalization planning, rtl/pluralization guidance. DO NOT USE FOR: framework detection only, color contrast checks."
 category: content
 metadata:
   category: content

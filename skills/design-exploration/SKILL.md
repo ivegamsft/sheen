@@ -1,7 +1,7 @@
 ---
 name: design-exploration
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: concept generation, divergent direction exploration, idea synthesis. DO NOT USE FOR: final decision arbitration, wcag audit reporting."
+description: "Use when generating new design directions, concepts, or exploring problem spaces before committing to a single path. USE FOR: concept generation, divergent direction exploration, idea synthesis. DO NOT USE FOR: final decision arbitration, wcag audit reporting."
 category: lifecycle
 metadata:
   category: lifecycle

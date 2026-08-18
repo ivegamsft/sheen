@@ -10,6 +10,15 @@ $repoRoot = git rev-parse --show-toplevel 2>$null
 if (-not $repoRoot) { throw 'Run this inside a git repository' }
 Set-Location $repoRoot
 
+# Auto-detect consumer repo: if .sheen/manifest.json present, use consumer asset paths (#87)
+$IsConsumer    = Test-Path (Join-Path $repoRoot '.sheen' 'manifest.json')
+$SkillsDir     = if ($IsConsumer) { '.github/skills' } else { 'skills' }
+$AgentsDir     = if ($IsConsumer) { '.github/agents' } else { 'agents' }
+$InstructionsDir = if ($IsConsumer) { '.github/instructions' } else { 'instructions' }
+$TokensDir     = if ($IsConsumer) { 'sheen/tokens' } else { 'tokens' }
+$PromptsDir    = if ($IsConsumer) { '.github/prompts' } else { 'prompts' }
+$TemplatesDir  = if ($IsConsumer) { 'sheen/templates' } else { 'templates' }
+
 $outPath   = Join-Path $repoRoot 'sheen-metadata.json'
 $vocabPath = Join-Path $repoRoot 'sheen.vocab.yaml'
 $version = if (Test-Path 'version.json') { (Get-Content version.json -Raw | ConvertFrom-Json).version } else { '0.0.0' }
@@ -52,7 +61,7 @@ function Get-Hash([string]$path) {
 }
 
 $skillItems = @()
-Get-ChildItem skills -Directory -ErrorAction SilentlyContinue | Sort-Object Name | ForEach-Object {
+Get-ChildItem $SkillsDir -Directory -ErrorAction SilentlyContinue | Sort-Object Name | ForEach-Object {
     $skillFile = Join-Path $_.FullName 'SKILL.md'
     if (-not (Test-Path $skillFile)) { return }
     $fm = Get-FrontmatterLines $skillFile
@@ -69,7 +78,7 @@ Get-ChildItem skills -Directory -ErrorAction SilentlyContinue | Sort-Object Name
 }
 
 $agentItems = @()
-Get-ChildItem agents -Filter '*.agent.md' -File -ErrorAction SilentlyContinue | Sort-Object Name | ForEach-Object {
+Get-ChildItem $AgentsDir -Filter '*.agent.md' -File -ErrorAction SilentlyContinue | Sort-Object Name | ForEach-Object {
     $fm = Get-FrontmatterLines $_.FullName
     $agentItems += [ordered]@{
         name        = $_.BaseName -replace '\.agent$',''
@@ -82,7 +91,7 @@ Get-ChildItem agents -Filter '*.agent.md' -File -ErrorAction SilentlyContinue | 
 }
 
 $instructionItems = @()
-Get-ChildItem instructions -Filter '*.instructions.md' -File -ErrorAction SilentlyContinue | Sort-Object Name | ForEach-Object {
+Get-ChildItem $InstructionsDir -Filter '*.instructions.md' -File -ErrorAction SilentlyContinue | Sort-Object Name | ForEach-Object {
     $fm = Get-FrontmatterLines $_.FullName
     $instructionItems += [ordered]@{
         name        = $_.BaseName -replace '\.instructions$',''
@@ -95,7 +104,7 @@ Get-ChildItem instructions -Filter '*.instructions.md' -File -ErrorAction Silent
 }
 
 $themes = @()
-Get-ChildItem tokens\themes -Filter '*.tokens.json' -File -ErrorAction SilentlyContinue | Sort-Object Name | ForEach-Object {
+Get-ChildItem "$TokensDir\themes" -Filter '*.tokens.json' -File -ErrorAction SilentlyContinue | Sort-Object Name | ForEach-Object {
     $themes += [ordered]@{
         name = $_.BaseName -replace '\.tokens$',''
         path = Get-Rel $_.FullName
@@ -103,17 +112,17 @@ Get-ChildItem tokens\themes -Filter '*.tokens.json' -File -ErrorAction SilentlyC
     }
 }
 
-$coreCount = (Get-ChildItem tokens\core -Filter '*.tokens.json' -File -ErrorAction SilentlyContinue | Measure-Object).Count
-$semanticCount = (Get-ChildItem tokens\semantic -Filter '*.tokens.json' -File -ErrorAction SilentlyContinue | Measure-Object).Count
+$coreCount = (Get-ChildItem "$TokensDir\core" -Filter '*.tokens.json' -File -ErrorAction SilentlyContinue | Measure-Object).Count
+$semanticCount = (Get-ChildItem "$TokensDir\semantic" -Filter '*.tokens.json' -File -ErrorAction SilentlyContinue | Measure-Object).Count
 $themeCount = $themes.Count
 $promptNames = @(
-    Get-ChildItem prompts -File -Force -ErrorAction SilentlyContinue |
+    Get-ChildItem $PromptsDir -File -Force -ErrorAction SilentlyContinue |
     Where-Object { $_.Name -ne '.gitkeep' } |
     Sort-Object Name |
     ForEach-Object { $_.BaseName }
 )
 $templateNames = @(
-    Get-ChildItem templates -File -Recurse -Force -ErrorAction SilentlyContinue |
+    Get-ChildItem $TemplatesDir -File -Recurse -Force -ErrorAction SilentlyContinue |
     Where-Object { $_.Name -ne '.gitkeep' } |
     Sort-Object FullName |
     ForEach-Object { $_.BaseName }

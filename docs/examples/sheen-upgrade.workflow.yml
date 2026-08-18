@@ -1,0 +1,58 @@
+# .github/workflows/sheen-upgrade.yml
+#
+# Scheduled sheen upgrade check. Runs upgrade-sheen.sh on a weekly cadence
+# and opens a PR if new assets are available.
+#
+# Usage:
+#   Copy this file to .github/workflows/sheen-upgrade.yml in your consumer
+#   repository. Ensure the workflow has write permission to create branches
+#   and pull requests (GITHUB_TOKEN permissions below).
+#
+# To pin to a specific release instead of main, set the ref input or
+#   set `ref: v0.7.0` in your .sheen.yml.
+
+name: "Sheen — Scheduled Upgrade Check"
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"   # every Monday at 09:00 UTC
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "sheen ref to upgrade to (leave blank to use .sheen.yml ref)"
+        required: false
+        default: ""
+      dry_run:
+        description: "Preview without making changes"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sheen-upgrade
+  cancel-in-progress: false
+
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out consumer repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Upgrade sheen assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SHEEN_REF: ${{ inputs.ref || '' }}
+        run: |
+          FLAGS="--silent"
+          if [[ "${{ inputs.dry_run }}" == "true" ]]; then
+            FLAGS="$FLAGS --dry-run --skip-pr"
+          fi
+          bash scripts/upgrade-sheen.sh $FLAGS

@@ -1,7 +1,7 @@
 ---
 name: theming
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: new theme creation, semantic overrides, theme completeness validation. DO NOT USE FOR: new semantic key creation, brand voice guidance."
+description: "Use when creating new themes, applying semantic token overrides, or validating theme completeness. USE FOR: new theme creation, semantic overrides, theme completeness validation. DO NOT USE FOR: new semantic key creation, brand voice guidance."
 category: foundation
 metadata:
   category: foundation

@@ -1,7 +1,7 @@
 ---
 name: i18n-framework-mapping
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: i18n framework detection, locale coverage inventory, translation key gap mapping. DO NOT USE FOR: i18n strategy design, component variants."
+description: "Use when detecting i18n framework usage and inventorying locale coverage and translation key gaps. USE FOR: i18n framework detection, locale coverage inventory, translation key gap mapping. DO NOT USE FOR: i18n strategy design, component variants."
 category: mapping
 metadata:
   category: mapping

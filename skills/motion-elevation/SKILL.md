@@ -1,7 +1,7 @@
 ---
 name: motion-elevation
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: duration and easing tokens, elevation level rules, material/translucency guidance. DO NOT USE FOR: full interaction state specs, usability heuristic reviews."
+description: "Use when defining or validating motion tokens, elevation rules, and material/translucency guidance. USE FOR: duration and easing tokens, elevation level rules, material/translucency guidance. DO NOT USE FOR: full interaction state specs, usability heuristic reviews."
 category: foundation
 metadata:
   category: foundation

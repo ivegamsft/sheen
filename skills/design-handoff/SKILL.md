@@ -1,7 +1,7 @@
 ---
 name: design-handoff
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: engineering handoff packaging, redline and annotation bundling, token/spec export preparation. DO NOT USE FOR: authoring core component specs, backend implementation."
+description: "Use when packaging and preparing design artifacts for engineering handoff, including redlines, annotations, and token exports. USE FOR: engineering handoff packaging, redline and annotation bundling, token/spec export preparation. DO NOT USE FOR: authoring core component specs, backend implementation."
 category: lifecycle
 metadata:
   category: lifecycle

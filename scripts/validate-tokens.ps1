@@ -17,7 +17,11 @@ $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version 3
 
 $IsCI      = $env:GITHUB_ACTIONS -eq 'true'
-$TokensDir = if ($args.Count -gt 0) { $args[0] } else { Join-Path (git rev-parse --show-toplevel) 'tokens' }
+$repoRoot  = (git rev-parse --show-toplevel 2>$null)
+# Auto-detect consumer repo: if .sheen/manifest.json present, use consumer token path (#87)
+$IsConsumer = Test-Path (Join-Path $repoRoot '.sheen' 'manifest.json')
+$DefaultTokensDir = if ($IsConsumer) { Join-Path $repoRoot 'sheen/tokens' } else { Join-Path $repoRoot 'tokens' }
+$TokensDir = if ($args.Count -gt 0) { $args[0] } else { $DefaultTokensDir }
 $Status    = 0
 
 $AllowedTypes = @('color','dimension','fontFamily','fontWeight','duration','cubicBezier','number','shadow')

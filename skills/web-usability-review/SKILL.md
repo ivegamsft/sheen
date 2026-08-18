@@ -1,7 +1,7 @@
 ---
 name: web-usability-review
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. Heuristic usability evaluation grounded in NN/g and ISO 9241 principles. USE FOR: reviewing flow usability, scoring heuristic violations, generating prioritized usability recommendations. DO NOT USE FOR: standards-based accessibility conformance audits, creating new token primitives."
+description: "Heuristic usability evaluation grounded in NN/g and ISO 9241 principles. USE FOR: reviewing flow usability, scoring heuristic violations, generating prioritized usability recommendations. DO NOT USE FOR: standards-based accessibility conformance audits, creating new token primitives."
 category: usability
 metadata:
   category: usability

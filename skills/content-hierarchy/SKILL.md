@@ -1,7 +1,7 @@
 ---
 name: content-hierarchy
 compatibility: [github-copilot-cli]
-description: "Use when this skill is the right fit for the request. USE FOR: content prioritization, scan-path improvement, hierarchy critique. DO NOT USE FOR: voice/tone strategy, token primitive edits."
+description: "Use when analyzing or improving the prioritization and visual scan-path of content on a surface. USE FOR: content prioritization, scan-path improvement, hierarchy critique. DO NOT USE FOR: voice/tone strategy, token primitive edits."
 category: usability
 metadata:
   category: usability
