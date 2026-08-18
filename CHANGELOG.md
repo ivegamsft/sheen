@@ -7,6 +7,14 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.7.2] — 2026-08-18
+
+### Fixed
+- `scripts/diagnose-sheen.ps1` and `scripts/diagnose-sheen.sh`: repaired logging
+  validation — log-level parsing now handles edge cases that caused false negatives
+  in the diagnose output. Regression coverage added in `scripts/test-diagnose-sheen.ps1`.
+  (closes #91)
+
 ## [0.7.1] — 2026-08-18
 
 ### Added

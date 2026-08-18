@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "releaseDate": "2026-08-18",
-  "notes": "v0.7.1: updated integration steps with context-reset guidance, sheen-integrate and sheen-upgrade agent prompts, Phase 6 Upgrade in consumer lifecycle guide."
+  "notes": "v0.7.2: diagnose-sheen.ps1/sh logging validation fix (#91)."
 }
