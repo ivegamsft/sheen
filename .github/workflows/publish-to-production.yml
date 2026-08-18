@@ -1,0 +1,401 @@
+name: "Sheen - Publish to Production"
+
+# Syncs tagged releases from internal (IBuySpy-Shared/basecoat-sheen) to
+# production (ivegamsft/sheen). Mirrors basecoat's publish-to-production pattern:
+#   1. Preflight — validate PRODUCTION_REPO_TOKEN push access to ivegamsft/sheen
+#   2. Strip     — remove internal-only workflows and CI tooling
+#   3. Sanitize  — rewrite IBuySpy-Shared/basecoat-sheen → ivegamsft/sheen
+#   4. Push      — force-push to ivegamsft/sheen main + re-tag
+#   5. Release   — create matching GitHub release on production repo
+#   6. Meta      — update description/homepage on production repo
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to publish (e.g. v0.6.0); leave empty to publish the latest semver tag"
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-production
+  cancel-in-progress: false
+
+jobs:
+  preflight-token-check:
+    name: Preflight — PRODUCTION_REPO_TOKEN readiness
+    uses: ./.github/workflows/token-preflight.yml
+    secrets:
+      PRODUCTION_REPO_TOKEN: ${{ secrets.PRODUCTION_REPO_TOKEN }}
+
+  publish:
+    needs: preflight-token-check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Fetch repository for tag resolution
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Resolve publish tag
+        id: resolve_tag
+        run: |
+          set -euo pipefail
+          if [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
+            TAG="${GITHUB_REF_NAME}"
+          elif [[ -n "${{ inputs.tag }}" ]]; then
+            TAG="${{ inputs.tag }}"
+          else
+            TAG=$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | head -1)
+            if [[ -z "${TAG}" ]]; then
+              echo "::error::No semver tags found; provide inputs.tag or push a version tag"
+              exit 1
+            fi
+            echo "Resolved latest semver tag: ${TAG}"
+          fi
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Check out repository at tag
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v4
+        with:
+          ref: refs/tags/${{ steps.resolve_tag.outputs.tag }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Remove internal-only content before publish
+        env:
+          TAG: ${{ steps.resolve_tag.outputs.tag }}
+        run: |
+          set -euo pipefail
+
+          # Strip files that are internal CI/governance tooling.
+          # Only docs.yml is kept in the mirror; it is dispatched by the source repo
+          # after publishing. All other workflows are source-repo automation only.
+          # Consumer-facing scripts (sync, rollback, build-tokens, contrast-check,
+          # validate-tokens, diagnose-sheen) are preserved.
+          INTERNAL_PATTERNS=(
+            'checks.json'
+            '.markdownlint.json'
+            '.github/dependabot.yml'
+            'scripts/build-metadata.ps1'
+            'scripts/build-metadata.sh'
+            'scripts/lint-frontmatter.ps1'
+            'scripts/lint-frontmatter.sh'
+            'scripts/lint-router.ps1'
+            'scripts/warn-rules.ps1'
+            'scripts/test-eval-routing.ps1'
+            'scripts/eval-routing-lib.ps1'
+            'scripts/generate-release-notes.sh'
+            'scripts/audit-evals.ps1'
+          )
+          # Only docs.yml stays; all other workflows are internal
+          PUBLIC_WORKFLOWS=(
+            '.github/workflows/docs.yml'
+          )
+
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+
+          REMOVED=0
+          for pat in "${INTERNAL_PATTERNS[@]}"; do
+            MATCHES=$(git ls-files -- "$pat" 2>/dev/null || true)
+            if [ -n "$MATCHES" ]; then
+              echo "$MATCHES" | xargs git rm -f --cached --ignore-unmatch 2>/dev/null || true
+              echo "$MATCHES" | xargs rm -f 2>/dev/null || true
+              REMOVED=$((REMOVED + $(echo "$MATCHES" | wc -l)))
+            fi
+          done
+
+          is_public_workflow() {
+            local candidate="$1"
+            local allowed
+            for allowed in "${PUBLIC_WORKFLOWS[@]}"; do
+              if [[ "$candidate" == "$allowed" ]]; then
+                return 0
+              fi
+            done
+            return 1
+          }
+
+          while IFS= read -r workflow; do
+            if is_public_workflow "$workflow"; then
+              echo "Keeping public workflow: $workflow"
+              continue
+            fi
+            git rm -f -- "$workflow"
+            REMOVED=$((REMOVED + 1))
+          done < <(git ls-files -- ':(glob).github/workflows/**')
+
+          if [ "$REMOVED" -gt 0 ]; then
+            git diff --cached --quiet || git commit -m "chore(publish): remove internal-only content for ${TAG}"
+            echo "Removed ${REMOVED} internal file(s) from publish payload."
+          else
+            echo "No internal-only files found — nothing to remove."
+          fi
+
+      - name: Stamp published version
+        env:
+          TAG: ${{ steps.resolve_tag.outputs.tag }}
+        run: |
+          set -euo pipefail
+
+          VERSION=$(jq -r '.version' version.json 2>/dev/null || echo "${TAG#v}")
+          echo "${VERSION}" > VERSION
+
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add VERSION
+          git diff --cached --quiet || git commit -m "chore(publish): stamp build version ${TAG}"
+          echo "Published version stamped: ${VERSION}"
+
+      - name: Sanitize internal identifiers for production
+        env:
+          TAG: ${{ steps.resolve_tag.outputs.tag }}
+        run: |
+          set -euo pipefail
+
+          # Rewrite source-repository references to their public equivalents:
+          #   IBuySpy-Shared/basecoat-sheen  →  ivegamsft/sheen
+          #   ibuyspy-shared.github.io/basecoat-sheen  →  ivegamsft.github.io/sheen
+          #   raw.githubusercontent.com/IBuySpy-Shared/basecoat-sheen  →  raw.githubusercontent.com/ivegamsft/sheen
+
+          TEXT_FILES=$(git ls-files -- \
+            '*.md' '*.yml' '*.yaml' '*.json' '*.ps1' '*.sh' '*.txt' \
+            '*.ts' '*.js' '*.py' '*.html' \
+            | grep -v '^$' || true)
+
+          if [ -z "$TEXT_FILES" ]; then
+            echo "No text files to rewrite."
+            exit 0
+          fi
+
+          TARGETS=$(echo "$TEXT_FILES" | xargs grep -lI \
+            -e 'IBuySpy-Shared/basecoat-sheen' \
+            -e 'ibuyspy-shared\.github\.io/basecoat-sheen' \
+            2>/dev/null || true)
+
+          if [ -n "$TARGETS" ]; then
+            echo "$TARGETS" | while IFS= read -r f; do
+              perl -pi -e '
+                s{\QIBuySpy-Shared/basecoat-sheen.git\E}{ivegamsft/sheen.git}g;
+                s{IBuySpy-Shared/basecoat-sheen\.(?![A-Za-z0-9_-])}{ivegamsft/sheen.}g;
+                s{IBuySpy-Shared/basecoat-sheen(?![A-Za-z0-9_.-])}{ivegamsft/sheen}g;
+                s{ibuyspy-shared\.github\.io/basecoat-sheen}{ivegamsft.github.io/sheen}g;
+                s{raw\.githubusercontent\.com/IBuySpy-Shared/basecoat-sheen}{raw.githubusercontent.com/ivegamsft/sheen}g;
+              ' -- "$f"
+            done
+            echo "Rewrote source-repo references in matched files."
+          else
+            echo "No source-repository references found."
+          fi
+
+          # Rewrite IBuySpy-Shared org references in the docs.yml mirror workflow
+          # so the published version builds against ivegamsft/sheen URLs.
+          if git ls-files --error-unmatch .github/workflows/docs.yml >/dev/null 2>&1; then
+            sed -i \
+              -e 's|IBuySpy-Shared contributors|Sheen contributors|g' \
+              .github/workflows/docs.yml
+          fi
+
+          # Final safety gate: no IBuySpy-Shared references should remain outside LICENSE.
+          FORBIDDEN_MATCHES=$(git grep -inI -E 'ibuyspy-shared' -- . || true)
+          UNEXPECTED_MATCHES=$(printf '%s\n' "$FORBIDDEN_MATCHES" \
+            | grep -v -E '^LICENSE:' \
+            | grep -v '^$' || true)
+          if [ -n "$UNEXPECTED_MATCHES" ]; then
+            echo "::error::Forbidden internal identifiers remain in the public payload:"
+            echo "$UNEXPECTED_MATCHES"
+            exit 1
+          fi
+
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add -u
+          git diff --cached --quiet || git commit -m "chore(publish): sanitize public identifiers for ${TAG}"
+
+      - name: Push to production repository
+        id: push-production
+        env:
+          PRODUCTION_TOKEN: ${{ secrets.PRODUCTION_REPO_TOKEN }}
+          TAG: ${{ steps.resolve_tag.outputs.tag }}
+        run: |
+          set -euo pipefail
+
+          PRODUCTION_REMOTE="https://x-access-token:${PRODUCTION_TOKEN}@github.com/ivegamsft/sheen.git"
+          PROTECTION_API="https://api.github.com/repos/ivegamsft/sheen/branches/main/protection"
+          PROTECTION_BACKUP_FILE=".production-main-protection.json"
+
+          echo "Capturing existing branch protection..."
+          protection_status=$(curl -sS -o "$PROTECTION_BACKUP_FILE" -w "%{http_code}" \
+            -H "Authorization: token ${PRODUCTION_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "$PROTECTION_API")
+
+          if [ "$protection_status" = "200" ]; then
+            echo "had_protection=true" >> "$GITHUB_OUTPUT"
+            echo "Existing branch protection captured."
+            echo "Temporarily disabling branch protection to allow force-push..."
+            curl -sf -X DELETE \
+              -H "Authorization: token ${PRODUCTION_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              "$PROTECTION_API" >/dev/null
+          elif [ "$protection_status" = "404" ]; then
+            echo "had_protection=false" >> "$GITHUB_OUTPUT"
+            echo "Branch protection is currently disabled."
+          else
+            echo "Failed to capture branch protection (HTTP ${protection_status})."
+            exit 1
+          fi
+
+          # Clear any persisted Actions bot credentials so PAT is used for push
+          git config --local --unset-all http.https://github.com/.extraheader || true
+
+          # Force-push: mirror rewritten release content to production main
+          git push "${PRODUCTION_REMOTE}" HEAD:refs/heads/main --force
+
+          # Re-tag on the cleaned HEAD so the published archive is clean
+          git tag -f "${TAG}" HEAD
+          git push "${PRODUCTION_REMOTE}" "refs/tags/${TAG}" --force
+
+          echo "Pushed ${TAG} to ivegamsft/sheen"
+
+      - name: Restore branch protection
+        if: always() && steps.push-production.outputs.had_protection == 'true'
+        env:
+          PRODUCTION_TOKEN: ${{ secrets.PRODUCTION_REPO_TOKEN }}
+        run: |
+          set -euo pipefail
+          PROTECTION_API="https://api.github.com/repos/ivegamsft/sheen/branches/main/protection"
+          PROTECTION_BACKUP_FILE=".production-main-protection.json"
+
+          if [ ! -f "$PROTECTION_BACKUP_FILE" ]; then
+            echo "::warning::No backup file found — branch protection must be restored manually."
+            exit 0
+          fi
+
+          PUT_PAYLOAD=$(jq '{
+            required_status_checks: (
+              if .required_status_checks then {
+                strict: (.required_status_checks.strict // false),
+                contexts: (.required_status_checks.contexts // [])
+              } else null end
+            ),
+            enforce_admins: (.enforce_admins.enabled // false),
+            required_pull_request_reviews: (
+              if .required_pull_request_reviews then {
+                dismissal_restrictions: (
+                  if ((.required_pull_request_reviews.dismissal_restrictions.users // [] | length) > 0)
+                    or ((.required_pull_request_reviews.dismissal_restrictions.teams // [] | length) > 0)
+                  then {
+                    users: [.required_pull_request_reviews.dismissal_restrictions.users[]?.login],
+                    teams: [.required_pull_request_reviews.dismissal_restrictions.teams[]?.slug]
+                  } else {} end
+                ),
+                dismiss_stale_reviews: (.required_pull_request_reviews.dismiss_stale_reviews // false),
+                require_code_owner_reviews: (.required_pull_request_reviews.require_code_owner_reviews // false),
+                required_approving_review_count: (.required_pull_request_reviews.required_approving_review_count // 1),
+                require_last_push_approval: (.required_pull_request_reviews.require_last_push_approval // false)
+              } else null end
+            ),
+            restrictions: null,
+            lock_branch: (.lock_branch.enabled // false),
+            allow_force_pushes: (.allow_force_pushes.enabled // false),
+            allow_deletions: (.allow_deletions.enabled // false),
+            block_creations: (.block_creations.enabled // false),
+            required_linear_history: (.required_linear_history.enabled // false),
+            required_conversation_resolution: (.required_conversation_resolution.enabled // false)
+          }' "$PROTECTION_BACKUP_FILE")
+
+          echo "Restoring branch protection..."
+          restore_status=$(curl -sS -o /dev/null -w "%{http_code}" -X PUT \
+            -H "Authorization: token ${PRODUCTION_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Content-Type: application/json" \
+            "$PROTECTION_API" \
+            -d "${PUT_PAYLOAD}")
+
+          if [ "$restore_status" = "200" ]; then
+            echo "Branch protection restored successfully."
+          else
+            echo "::warning::Branch protection restore returned HTTP ${restore_status}. Manual restore may be needed for ivegamsft/sheen main."
+          fi
+
+          rm -f "$PROTECTION_BACKUP_FILE"
+
+      - name: Update production repo metadata
+        if: always() && steps.push-production.outcome == 'success'
+        env:
+          PRODUCTION_TOKEN: ${{ secrets.PRODUCTION_REPO_TOKEN }}
+        run: |
+          curl -sf -X PATCH \
+            -H "Authorization: token ${PRODUCTION_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/ivegamsft/sheen" \
+            -d '{
+              "description": "AI-assisted UX/UI design governance — design tokens, skills, agents, and instructions for a consistent design system.",
+              "homepage": "https://ivegamsft.github.io/sheen/",
+              "has_issues": true,
+              "has_projects": false,
+              "has_wiki": false
+            }' \
+            && echo "Production repo metadata updated" \
+            || echo "Warning: could not update repo metadata (non-fatal)"
+
+      - name: Create GitHub release on production repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PRODUCTION_TOKEN: ${{ secrets.PRODUCTION_REPO_TOKEN }}
+          TAG: ${{ steps.resolve_tag.outputs.tag }}
+        run: |
+          set -euo pipefail
+
+          SOURCE_RELEASE=$(curl -sf \
+            -H "Authorization: token ${GITHUB_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/tags/${TAG}" || echo "null")
+
+          if [ "$SOURCE_RELEASE" = "null" ] || [ -z "$SOURCE_RELEASE" ]; then
+            echo "No source release found for ${TAG} — skipping release creation."
+            exit 0
+          fi
+
+          RELEASE_BODY=$(echo "$SOURCE_RELEASE" | jq -r '.body // empty')
+
+          EXISTING=$(curl -sf \
+            -H "Authorization: token ${PRODUCTION_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/ivegamsft/sheen/releases/tags/${TAG}" \
+            -o /dev/null -w "%{http_code}" || true)
+
+          if [ "$EXISTING" = "200" ]; then
+            RELEASE_ID=$(curl -sf \
+              -H "Authorization: token ${PRODUCTION_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/ivegamsft/sheen/releases/tags/${TAG}" \
+              | jq -r '.id')
+            curl -sf -X PATCH \
+              -H "Authorization: token ${PRODUCTION_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/ivegamsft/sheen/releases/${RELEASE_ID}" \
+              -d "{\"body\": $(echo "$RELEASE_BODY" | jq -Rs .)}" >/dev/null
+            echo "Updated release ${TAG} on production repo."
+          else
+            curl -sf -X POST \
+              -H "Authorization: token ${PRODUCTION_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/ivegamsft/sheen/releases" \
+              -d "{\"tag_name\": \"${TAG}\", \"name\": \"${TAG}\", \"body\": $(echo "$RELEASE_BODY" | jq -Rs .)}" >/dev/null
+            echo "Created release ${TAG} on production repo."
+          fi
