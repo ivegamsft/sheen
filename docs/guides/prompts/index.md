@@ -26,6 +26,28 @@ Use the router disambiguation rules when a term is ambiguous (see
 
 ---
 
+## BaseCoat intent helpers (prefixes)
+
+Prefix your request to control timing and execution mode before it reaches sheen:
+
+| Prefix | Use for | Example |
+|---|---|---|
+| `bug:` | Immediate remediation | `bug: /sheen review investigate conversion drop after nav redesign` |
+| `pr:` | PR lifecycle context | `pr: /sheen review run full pre-merge design audit for PR #142` |
+| `audit:` | Read-only review | `audit: /sheen review run accessibility + usability audit, no code changes` |
+| `feature:` | New capability design | `feature: /sheen debate decide IA model for multi-product help center` |
+| `later:` | Defer/schedule | `later: /sheen review queue style-guide cleanup for next sprint` |
+| `docs:` | Documentation-first output | `docs: /sheen debate produce ADR and implementation notes only` |
+| `chore:` | Maintenance/cleanup | `chore: /sheen review consolidate duplicate pattern specs` |
+
+For multi-pillar requests, combine a prefix with a factory pattern:
+
+- `bug: /sheen review run Parallel Audit for checkout accessibility + UX regressions`
+- `feature: /sheen debate run Serial Decision-Chain for dashboard navigation redesign`
+- `pr: /sheen token run Token Cascade on PR #311 before release`
+
+---
+
 ## Agent quick-reference
 
 | Agent | Pillar | Invoke with | Page |
@@ -121,3 +143,9 @@ Templates are in `.github/skills/sheen/references/factory-patterns.md`.
 | **Parallel Audit** | Pre-release full review | @accessibility-auditor + @ux-designer + @design-reviewer |
 | **Serial Decision-Chain** | Decide → spec → validate | @design-reviewer → @ux-designer → @accessibility-auditor |
 | **Token Cascade** | New theme / rebrand | @design-system-architect → @brand-steward + @ux-designer → @design-system-architect |
+
+---
+
+## Generated prompt packs (from eval/test fixtures)
+
+- [Generated examples — every agent, skill, and factory pattern](generated-sample-prompts.md)

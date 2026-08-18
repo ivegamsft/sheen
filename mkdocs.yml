@@ -90,6 +90,7 @@ nav:
       - Authoring a Skill: guides/authoring-a-skill.md
   - Prompt Guide:
       - Overview & Intent Index: guides/prompts/index.md
+      - Generated Sample Prompts: guides/prompts/generated-sample-prompts.md
       - "🎨 Tokens & System": guides/prompts/tokens-system.md
       - "🖼️ Brand": guides/prompts/brand.md
       - "📐 Usability": guides/prompts/usability.md

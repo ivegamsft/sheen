@@ -7,6 +7,17 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.6.1] — 2026-08-18
+
+### Fixed
+- Docs rendering parity with basecoat on GitHub Pages:
+  - Material icon shortcodes now render correctly (`:material-*:`) via `pymdownx.emoji`.
+  - Navigation/tabs/theme styling restored with MkDocs Material parity configuration.
+  - Added docs static assets used by the theme (`docs/stylesheets/extra.css`, `docs/javascripts/external-links.js`).
+- Production docs deployment reliability:
+  - `docs.yml` bootstraps GitHub Pages using the repo `GITHUB_TOKEN` on first deployment.
+  - `publish-to-production.yml` dispatches production docs workflow after publish instead of trying PAT-based Pages enablement.
+
 ## [0.6.0] — 2026-08-18
 
 ### Added

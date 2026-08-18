@@ -171,11 +171,15 @@ jobs:
           #   IBuySpy-Shared/basecoat-sheen  →  ivegamsft/sheen
           #   ibuyspy-shared.github.io/basecoat-sheen  →  ivegamsft.github.io/sheen
           #   raw.githubusercontent.com/IBuySpy-Shared/basecoat-sheen  →  raw.githubusercontent.com/ivegamsft/sheen
+          # Also scrub org-internal owner references such as IBuySpy-Shared/basecoat.
           # Use git grep to find ALL tracked text files with these patterns regardless of extension.
 
           TARGETS=$(git grep -rlI \
             -e 'IBuySpy-Shared/basecoat-sheen' \
+            -e 'IBuySpy-Shared/basecoat' \
+            -e 'IBuySpy-Shared/' \
             -e 'ibuyspy-shared\.github\.io/basecoat-sheen' \
+            -e 'ibuyspy-shared\.github\.io' \
             -- . 2>/dev/null || true)
 
           if [ -n "$TARGETS" ]; then
@@ -184,7 +188,12 @@ jobs:
                 s{\QIBuySpy-Shared/basecoat-sheen.git\E}{ivegamsft/sheen.git}g;
                 s{IBuySpy-Shared/basecoat-sheen\.(?![A-Za-z0-9_-])}{ivegamsft/sheen.}g;
                 s{IBuySpy-Shared/basecoat-sheen(?![A-Za-z0-9_.-])}{ivegamsft/sheen}g;
+                s{\Qhttps://github.com/IBuySpy-Shared/basecoat\E}{https://github.com/ivegamsft/sheen}g;
+                s{IBuySpy-Shared/basecoat(?!-sheen)}{upstream-basecoat}g;
+                s{IBuySpy-Shared/}{ivegamsft/}g;
                 s{ibuyspy-shared\.github\.io/basecoat-sheen}{ivegamsft.github.io/sheen}g;
+                s{ibuyspy-shared\.github\.io/basecoat}{ivegamsft.github.io/sheen}g;
+                s{ibuyspy-shared\.github\.io}{ivegamsft.github.io}g;
                 s{raw\.githubusercontent\.com/IBuySpy-Shared/basecoat-sheen}{raw.githubusercontent.com/ivegamsft/sheen}g;
               ' -- "$f"
             done
@@ -201,14 +210,12 @@ jobs:
               .github/workflows/docs.yml
           fi
 
-          # Final safety gate: the internal source repo path must not leak into the public payload.
-          # Bare 'basecoat-sheen' (product name in docs/README) is acceptable.
-          # Only the org-scoped path 'IBuySpy-Shared/basecoat-sheen' must be absent.
-          FORBIDDEN_MATCHES=$(git grep -inI -E 'IBuySpy-Shared[/.]basecoat-sheen|ibuyspy-shared\.github\.io/basecoat-sheen' -- . || true)
+          # Final safety gate: internal owner/repo details must not leak into public payload.
+          FORBIDDEN_MATCHES=$(git grep -inI -E 'IBuySpy-Shared|ibuyspy-shared\.github\.io' -- . || true)
           UNEXPECTED_MATCHES=$(printf '%s\n' "$FORBIDDEN_MATCHES" \
             | grep -v '^$' || true)
           if [ -n "$UNEXPECTED_MATCHES" ]; then
-            echo "::error::Source repo path 'IBuySpy-Shared/basecoat-sheen' remains in the public payload:"
+            echo "::error::Internal owner details remain in the public payload:"
             echo "$UNEXPECTED_MATCHES"
             exit 1
           fi

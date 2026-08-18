@@ -7,6 +7,25 @@ and exit criteria.
 
 ---
 
+## BaseCoat intent helpers for factory patterns
+
+Use BaseCoat intent helpers to set urgency, lifecycle, and execution posture before
+the `/sheen` request body. These helpers are compatible with all patterns below.
+
+| Helper | Meaning | Example |
+|---|---|---|
+| `bug:` | Immediate defect remediation | `bug: /sheen debate resolve conversion-drop caused by onboarding flow changes` |
+| `pr:` | PR lifecycle execution context | `pr: /sheen review run Parallel Audit on PR #142 design diffs` |
+| `audit:` | Read-only assessment, no implementation | `audit: /sheen review run Token Cascade readiness audit for dark-mode launch` |
+| `feature:` | Net-new capability design | `feature: /sheen sprint run Serial Decision-Chain for new billing IA` |
+| `later:` | Defer execution; log and plan | `later: /sheen review schedule Parallel Audit for next sprint` |
+| `docs:` | Documentation-first output | `docs: /sheen debate document Token Cascade decision package and migration notes` |
+| `chore:` | Maintenance and cleanup | `chore: /sheen review run Pattern Library cleanup using Parallel Audit` |
+
+When multiple helpers appear, the first recognized prefix is authoritative.
+
+---
+
 ## Pattern 1 — Parallel Audit
 
 **When to use:** A surface or component requires simultaneous review across accessibility,
@@ -15,6 +34,11 @@ usability, and governance pillars before a release gate or design review board.
 **Trigger conditions:**
 - User says "full design review", "pre-release design audit", or "multi-pillar check"
 - Three or more distinct pillar concerns exist for the same artifact
+
+**Intent-helper examples:**
+- `bug: /sheen review run Parallel Audit for checkout flow regression and accessibility complaints`
+- `pr: /sheen review run Parallel Audit on PR #902 before merge queue entry`
+- `later: /sheen review schedule Parallel Audit for settings IA refactor next sprint`
 
 **Composition:**
 
@@ -70,6 +94,11 @@ The output of one skill is the required input for the next.
 - User says "decide and spec", "design then hand off", or "ADR then implementation"
 - A `design-debate` output is the precondition for `design-handoff`
 
+**Intent-helper examples:**
+- `feature: /sheen debate run Serial Decision-Chain to choose and spec dashboard navigation`
+- `docs: /sheen debate run Serial Decision-Chain and emit ADR + handoff package only`
+- `audit: /sheen debate evaluate existing ADR via Serial Decision-Chain without changing implementation`
+
 **Composition:**
 
 ```
@@ -118,6 +147,11 @@ engineering implementation.
 **Trigger conditions:**
 - User says "new theme", "rebrand tokens", "dark mode launch", or "token architecture"
 - Output must be consumable by engineering (CSS variables, JSON, or style-dictionary config)
+
+**Intent-helper examples:**
+- `feature: /sheen token run Token Cascade for 2027 rebrand rollout`
+- `pr: /sheen token run Token Cascade review on PR #311 token-schema changes`
+- `chore: /sheen token run Token Cascade to normalize legacy hard-coded color usage`
 
 **Composition:**
 

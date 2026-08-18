@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "releaseDate": "2026-08-18",
-  "notes": "v0.6.0 wave: semantic tokens (space/elevation/motion/border), build-tokens pipeline, 11 new governance skills (design-to-code, drift-detection, versioning, performance, data-viz, AI governance, ethical-design, adoption-telemetry, mobile-native, design-sprint, sheen-onboard), spec compliance tools (lint-router, contrast-check, warn-rules, VPAT template), consumer lifecycle guide, and production publish flow to ivegamsft/sheen."
+  "notes": "v0.6.1 docs parity hotfix: MkDocs Material icon rendering, navigation/theme parity with basecoat, Pages bootstrap via GitHub Actions source, and production docs deployment reliability fixes."
 }

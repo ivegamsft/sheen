@@ -92,7 +92,7 @@ Build four layers:
 - **Positive:** `sheen.vocab.yaml` is machine-generated — keyword table never drifts
   from the inventory.
 - **Positive:** Factory patterns give fleet-agent operators concrete prompt templates.
-- **Risk:** Basecoat delegate entry requires a cross-repo PR to `IBuySpy-Shared/basecoat`.
+- **Risk:** Basecoat delegate entry requires an upstream cross-repo PR.
   Until that lands, `/basecoat ux` falls through to basecoat's own `@ux-designer` (narrower
   scope). Tracked as a follow-up issue.
 - **Risk:** Maintenance of the `$intents` table in `build-metadata.ps1` is manual; a
