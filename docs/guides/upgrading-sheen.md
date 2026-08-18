@@ -36,7 +36,7 @@ targeting. You can check it in several ways:
 - **Automatically:** the upgrade scripts fetch and print the upstream
   `CHANGELOG.md` during Phase 3 of the upgrade run.
 - **Manually:** visit the GitHub releases page or the
-  [CHANGELOG.md](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/CHANGELOG.md)
+  [CHANGELOG.md](https://github.com/ivegamsft/sheen/blob/main/CHANGELOG.md)
   in the upstream source repo.
 
 ---
@@ -110,7 +110,7 @@ For stable, reproducible upgrades pin `ref` in `.sheen.yml` to a semver tag:
 
 ```yaml
 # .sheen.yml
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: v0.7.0   # ← pin to a release tag
 ```
 
@@ -183,7 +183,7 @@ not part of the sync.
 
 The upgrade script relies on `sync.ps1` / `sync.sh` being present at the consumer
 repo root. If it is missing, download the latest version from the
-[sheen release assets](https://github.com/IBuySpy-Shared/basecoat-sheen/releases/latest).
+[sheen release assets](https://github.com/ivegamsft/sheen/releases/latest).
 
 ### Upgrade completed but expected assets are missing
 
