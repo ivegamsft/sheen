@@ -7,6 +7,33 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.8.2] — 2026-08-18
+
+### Fixed
+- **Onboarding bootstrap paradox** — consumers could not invoke `/sheen-onboard`
+  because the skill only exists after sync, but no guidance existed on how to
+  get `sync.ps1` before running it. Root cause: documentation assumed `sync.ps1`
+  was already in the consumer repo with no explanation of how to obtain it.
+
+### Added
+- **`bootstrap.ps1`** + **`bootstrap.sh`** — single-file bootstrap scripts that
+  consumers run once from inside their repo. Downloads `sync.ps1`/`sync.sh`,
+  creates a starter `.sheen.yml`, and runs the initial sync in one step.
+  One-liners:
+  - Windows: `pwsh -c "iex (iwr https://raw.githubusercontent.com/ivegamsft/sheen/main/bootstrap.ps1).Content"`
+  - macOS/Linux: `bash <(curl -fsSL https://raw.githubusercontent.com/ivegamsft/sheen/main/bootstrap.sh)`
+- **`README.md`** — new "Getting started in 60 seconds" section with bootstrap
+  one-liners, context reset instructions, and a callout warning about the
+  `/sheen-onboard` paradox.
+- **`consumer-lifecycle.md` Phase 1** — leads with the bootstrap one-liner;
+  "Manual path" section documents `sync.ps1`/`sync.sh` download commands for
+  advanced users.
+- **`sheen-integrate.prompt.md` Phase 0** — new "Bootstrap sync scripts" phase
+  before discover/generate; includes OS-specific one-liners and skip conditions.
+- **`skills/sheen-onboard/SKILL.md`** — added bootstrap error recovery block
+  (shows the one-liner to run when SKILL.md is not found) and Phase 0 in the
+  lifecycle table.
+
 ## [0.8.1] — 2026-08-18
 
 ### Added

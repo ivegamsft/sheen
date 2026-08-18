@@ -2,7 +2,7 @@
   "$comment": "GENERATED FILE — do not hand-edit. Produced by scripts/build-metadata.ps1 from repo-root assets (vendor/ excluded).",
   "schema": "sheen-metadata/v1",
   "name": "basecoat-sheen",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "source": {
     "excluded": [
       "vendor/"
@@ -578,7 +578,7 @@
         "pillar": null,
         "maturity": "stable",
         "description": "Use when onboarding a new consumer repository to the basecoat-sheen design governance framework. USE FOR: run the full 5-phase sheen consumer lifecycle (integrate, onboard, inventory, audit, use), bootstrap a .sheen.yml config, run sync against basecoat-sheen, generate an onboarding health report. DO NOT USE FOR: implementing product features, writing application business logic, deploying infrastructure.",
-        "hash": "b2bd45be8827089fb6c306407a233960074463b0c837c571504da46dd76ffed6"
+        "hash": "404ca76e306ad7b4f471beeddea33c17cef12972be244fcb48b4eb26742c1e39"
       },
       {
         "name": "style-guide-authoring",

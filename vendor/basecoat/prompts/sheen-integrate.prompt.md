@@ -1,5 +1,5 @@
 ---
-description: "Integrate basecoat-sheen into a consumer repository: generate .sheen.yml, run sync, validate, and reset Copilot context. Works in Copilot CLI, VS Code Copilot Chat, and any editor with Copilot Chat support."
+description: "Integrate basecoat-sheen into a consumer repository: bootstrap sync scripts, generate .sheen.yml, run sync, validate, and reset Copilot context. Works in Copilot CLI, VS Code Copilot Chat, and any editor with Copilot Chat support."
 model: claude-sonnet-4.6
 tools: ["codebase", "githubRepo", "changes", "web"]
 ---
@@ -26,9 +26,39 @@ Drives the full first-time integration of basecoat-sheen into a consumer
 repository — from zero to a validated, committed sync with Copilot context
 loaded and all skills visible in the `/` picker.
 
+> **Important:** Skills like `/sheen-onboard` do **not** exist until AFTER the
+> sync completes and Copilot context is reset. This prompt drives the bootstrap
+> that makes those skills available. Do not attempt to invoke sheen skills before
+> running Phase 0–3 below.
+
 ---
 
 ## Workflow
+
+### Phase 0 — Bootstrap sync scripts
+
+Before anything else, the consumer repo needs `sync.ps1` / `sync.sh`. Provide
+the exact one-liner to run **from inside the consumer repo**:
+
+**Windows (PowerShell):**
+```powershell
+pwsh -c "iex (iwr https://raw.githubusercontent.com/ivegamsft/sheen/main/bootstrap.ps1).Content"
+```
+
+**macOS / Linux (Bash):**
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/ivegamsft/sheen/main/bootstrap.sh)
+```
+
+The bootstrap script:
+1. Downloads `sync.ps1` + `sync.sh` to the repo root
+2. Creates a starter `.sheen.yml` if none exists
+3. Runs the initial sync immediately
+
+> If the user already has `sync.ps1` / `sync.sh` in their repo, skip to Phase 1.
+> If they have `.sheen/manifest.json`, sheen is already installed — skip to Phase 4.
+
+---
 
 ### Phase 1 — Discover
 
@@ -96,6 +126,9 @@ Explain each inclusion briefly.
 
 ### Phase 3 — Run sync
 
+> If Phase 0 bootstrap was used, sync already ran. Verify the result and skip
+> to Phase 4. Only run manually if bootstrap was skipped.
+
 Print the exact commands for the detected OS:
 
 **Windows (PowerShell):**
@@ -111,8 +144,9 @@ bash sync.sh
 After the user runs sync, check for success:
 
 1. `.sheen/manifest.json` exists and lists installed files
-2. `.github/skills/<name>/SKILL.md` present for each configured skill
-3. No `WARNING: allow-list entry … did not match` lines (if any, fix `.sheen.yml` and re-run)
+2. `.github/skills/sheen-onboard/SKILL.md` present (this is the onboarding skill)
+3. `.github/skills/<name>/SKILL.md` present for each configured skill
+4. No `WARNING: allow-list entry … did not match` lines (if any, fix `.sheen.yml` and re-run)
 
 ---
 

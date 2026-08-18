@@ -34,18 +34,49 @@ A consumer repository pulls selected assets in with a small config file and the
 sync script. See [`specs/06-consumption-sync.spec.md`](specs/06-consumption-sync.spec.md)
 for the full contract.
 
+### ⚡ Getting started in 60 seconds
+
+Run the bootstrap script **from inside your repo** — it downloads the sync
+scripts, creates a starter `.sheen.yml`, and runs the initial sync in one step:
+
+```powershell
+# Windows / PowerShell
+pwsh -c "iex (iwr https://raw.githubusercontent.com/ivegamsft/sheen/main/bootstrap.ps1).Content"
+```
+
+```bash
+# macOS / Linux
+bash <(curl -fsSL https://raw.githubusercontent.com/ivegamsft/sheen/main/bootstrap.sh)
+```
+
+After the sync completes:
+1. **Commit** the result: `git add .sheen.yml .sheen/manifest.json .github/ sheen/`
+2. **Reset Copilot context** (required for skills to appear — see [context reset guide](docs/guides/consumer-lifecycle.md#resetting-copilot-context)):
+   - CLI: `exit` then `gh copilot`
+   - VS Code: `Ctrl+Shift+P` → **Developer: Reload Window**
+   - JetBrains: restart editor
+3. **Type `/`** in Copilot Chat and confirm `sheen-onboard` appears in the picker.
+
+> ⚠️ **Common mistake:** `/sheen-onboard` is a skill that lives in `.github/skills/`.
+> It does **not** exist until after the bootstrap sync completes and Copilot context
+> is reset. Running bootstrap first is the only required prerequisite.
+
+### Manual setup (advanced)
+
 1. Copy [`.sheen.yml.example`](.sheen.yml.example) to `.sheen.yml` in your repo and
    set `source`, `ref`, and any asset allow-lists.
-2. Run the sync entry point:
+2. Download and run the sync entry point:
 
    ```powershell
-   # Windows PowerShell
-   $env:SHEEN_REPO = 'https://github.com/IBuySpy-Shared/basecoat-sheen.git'; .\sync.ps1
+   # Windows PowerShell — download then run
+   Invoke-WebRequest https://raw.githubusercontent.com/ivegamsft/sheen/main/sync.ps1 -OutFile sync.ps1
+   pwsh sync.ps1
    ```
 
    ```bash
    # macOS / Linux
-   SHEEN_REPO=https://github.com/IBuySpy-Shared/basecoat-sheen.git ./sync.sh
+   curl -fsSL https://raw.githubusercontent.com/ivegamsft/sheen/main/sync.sh -o sync.sh
+   bash sync.sh
    ```
 
 Sync is **idempotent** and records a manifest so [`rollback.ps1`](rollback.ps1) /

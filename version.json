@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "releaseDate": "2026-08-18",
-  "notes": "v0.8.1: DESIGN.md export — generate an AI-readable design context file (Google Stitch format) from DTCG tokens; scripts/build-design-md.ps1 + .sh; generate_design_md sync option; design-md-export vocab intent; consumer-lifecycle Phase 2 DESIGN.md step."
+  "notes": "v0.8.2: Bootstrap scripts (bootstrap.ps1 + .sh) fix the onboarding paradox — consumers can now get sync.ps1 and sheen-onboard with a single curl/iwr one-liner before anything is installed. Updated README, consumer-lifecycle Phase 1, sheen-integrate prompt, and sheen-onboard SKILL.md."
 }

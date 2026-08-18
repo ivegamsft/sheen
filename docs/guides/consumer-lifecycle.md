@@ -27,6 +27,29 @@ existing project.
 
 **Goal:** Pull sheen assets into your consumer repo for the first time.
 
+> ⚠️ **Bootstrap first.** Skills like `/sheen-onboard` live in `.github/skills/`
+> and do not exist until you run the sync below. Do **not** try to invoke
+> `/sheen-onboard` before completing this phase.
+
+### ⚡ One-liner bootstrap (recommended)
+
+Run this **once, from inside your repo**, before anything else:
+
+```powershell
+# Windows — run from your repo root in PowerShell
+pwsh -c "iex (iwr https://raw.githubusercontent.com/ivegamsft/sheen/main/bootstrap.ps1).Content"
+```
+
+```bash
+# macOS / Linux — run from your repo root
+bash <(curl -fsSL https://raw.githubusercontent.com/ivegamsft/sheen/main/bootstrap.sh)
+```
+
+This downloads `sync.ps1`/`sync.sh`, creates a starter `.sheen.yml`, and runs the
+initial sync. After it completes, jump to [Step 5 — Reset Copilot context](#step-5--reset-copilot-context).
+
+---
+
 ### Quick-start prompt
 
 Paste this into Copilot CLI or Copilot Chat:
@@ -43,13 +66,13 @@ Or use the detailed prompt below for full control.
 I want to integrate basecoat-sheen into my repo at <YOUR-ORG>/<YOUR-REPO>.
 
 Please:
-1. Create a .sheen.yml at the repo root configured for <TEAM-SIZE: solo|team|org>,
-   pinned to ref: v0.7.0 (or main for the latest).
-2. Run sync.ps1 (Windows) or sync.sh (POSIX) to pull the selected assets.
-3. Confirm what was synced by reading .sheen/manifest.json.
-4. Verify the sync was successful by running scripts/diagnose-sheen.ps1.
-5. Summarise what was installed, what was skipped, and any errors to resolve.
-6. Tell me how to reset the Copilot context so the new skills and agents appear.
+1. Run the bootstrap one-liner for my OS to download sync.ps1 and create .sheen.yml.
+2. Edit .sheen.yml for <TEAM-SIZE: solo|team|org>, pinned to ref: main.
+3. Run sync.ps1 (Windows) or sync.sh (POSIX) to pull the selected assets.
+4. Confirm what was synced by reading .sheen/manifest.json.
+5. Verify the sync was successful by running scripts/diagnose-sheen.ps1.
+6. Summarise what was installed, what was skipped, and any errors to resolve.
+7. Tell me how to reset the Copilot context so the new skills and agents appear.
 
 Target asset set: <ALL | subset: skills, agents, tokens, instructions>
 Themes to materialise: <light, dark, high-contrast | all>
@@ -57,12 +80,28 @@ Themes to materialise: <light, dark, high-contrast | all>
 
 ### Step-by-step (manual path)
 
-#### Step 1 — Create `.sheen.yml`
+#### Step 1 — Get the sync scripts
+
+If bootstrap was not used, download the sync scripts manually:
+
+```powershell
+# Windows
+Invoke-WebRequest https://raw.githubusercontent.com/ivegamsft/sheen/main/sync.ps1 -OutFile sync.ps1
+Invoke-WebRequest https://raw.githubusercontent.com/ivegamsft/sheen/main/sync.sh  -OutFile sync.sh
+```
+
+```bash
+# macOS / Linux
+curl -fsSL https://raw.githubusercontent.com/ivegamsft/sheen/main/sync.ps1 -o sync.ps1
+curl -fsSL https://raw.githubusercontent.com/ivegamsft/sheen/main/sync.sh  -o sync.sh
+```
+
+#### Step 2 — Create `.sheen.yml`
 
 ```yaml
 # .sheen.yml — basecoat-sheen consumer config. Commit this file.
 source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
-ref: v0.7.0          # pin to a release tag for stability
+ref: main            # or pin to a release tag e.g. v0.8.1
 
 sync:
   skills: []         # [] = sync none; omit key = sync all
