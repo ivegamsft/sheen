@@ -165,8 +165,9 @@ Diagnose passes with 0 errors before moving to Phase 2.
 
 ## Phase 2 — Onboard
 
-**Goal:** Configure the team workflow, add CI validation gates, and verify the
-first design-system skill runs end-to-end.
+**Goal:** Configure the team workflow, add CI validation gates, verify the
+first design-system skill runs end-to-end, and generate your `DESIGN.md`
+AI-context snapshot.
 
 ### Prompt
 
@@ -182,7 +183,9 @@ Please:
    first CSS output.
 5. Verify one skill end-to-end: invoke the design-tokens skill on our tokens/
    folder and return a gap report.
-6. Create a team onboarding checklist tailored to our context.
+6. Generate DESIGN.md: run pwsh scripts/build-design-md.ps1 (or bash
+   scripts/build-design-md.sh) and commit the file to the repo root.
+7. Create a team onboarding checklist tailored to our context.
 ```
 
 ### What the agent does
@@ -192,18 +195,46 @@ Please:
 3. Updates `.sheen.yml` with `materialize_tokens: true` if opted in.
 4. Runs `scripts/build-tokens.ps1` → emits `dist/tokens/sheen.{css,js,esm.js,d.ts}`.
 5. Invokes `@design-system-architect` via the `design-tokens` skill against your token source.
-6. Generates a checklist: team responsibilities, training links, sprint 1 priorities.
+6. Runs `scripts/build-design-md.ps1` → generates `DESIGN.md` in [Google Stitch format](https://stitch.withgoogle.com/docs/design-md) — a flat, AI-readable snapshot of your resolved tokens (colours, typography, spacing, radii). Understood by Stitch, Cursor, Copilot, and Claude Code.
+7. Generates a checklist: team responsibilities, training links, sprint 1 priorities.
+
+### Generating DESIGN.md manually
+
+```bash
+# PowerShell (Windows / Linux)
+pwsh scripts/build-design-md.ps1
+
+# Bash (macOS / Linux)
+bash scripts/build-design-md.sh
+
+# Use a different theme
+pwsh scripts/build-design-md.ps1 -Theme dark
+
+# Validate that DESIGN.md is current
+pwsh scripts/build-design-md.ps1 -Check
+```
+
+Enable automatic regeneration on every `sync` by setting `generate_design_md: true` in `.sheen.yml`:
+
+```yaml
+generate_design_md: true
+design_md_theme: light   # optional; defaults to light
+```
+
+Commit `DESIGN.md` to version control — AI agents read it as context at chat time.
+Do **not** hand-edit it; re-run the script after any token change.
 
 ### Output
 
 - `.github/workflows/ci.yml` — with token validation and eval routing gates
 - `dist/tokens/sheen.css` — first CSS output (add to `dist/` gitignore)
+- `DESIGN.md` — AI-readable design context (colours, type, spacing, radii)
 - Design-tokens gap report (missing semantic layers, naming violations)
 - Team onboarding checklist (Markdown, commit to `docs/`)
 
 ### Gate ✅
 
-CI passes on `main`; at least one skill runs without errors before Phase 3.
+CI passes on `main`; at least one skill runs without errors; `DESIGN.md` exists at repo root before Phase 3.
 
 ---
 

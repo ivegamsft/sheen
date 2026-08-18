@@ -55,6 +55,17 @@ ref: main
 # Set to true if your project consumes tokens directly (web, design tools, CI).
 # materialize_tokens: true
 
+# generate_design_md: when true, runs scripts/build-design-md.ps1 / .sh after
+# sync to generate a DESIGN.md at the repository root in Google Stitch format.
+# DESIGN.md is a flat, AI-readable snapshot of your resolved design tokens —
+# colours, typography, spacing, radii — understood by Stitch, Cursor, Copilot,
+# and Claude Code. Re-run at any time with: pwsh scripts/build-design-md.ps1
+# generate_design_md: true
+
+# design_md_theme: which resolved theme to export into DESIGN.md.
+# Defaults to "light". Must match a file in sheen/tokens/themes/.
+# design_md_theme: light
+
 # sync: sync behaviour overrides (one mapping --- combine the keys you need).
 #   script  --- path to the sync entrypoint, relative to repo root. Set this when
 #               your sync script is not the canonical root sync.ps1/sync.sh.

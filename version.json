@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "releaseDate": "2026-08-18",
-  "notes": "v0.8.0: PRODUCT.md (product.md spec), design: intent prompt (PRODUCT.md-grounded design requests), debate: intent prompt (structured design debate with weighted matrix and ADR output)."
+  "notes": "v0.8.1: DESIGN.md export — generate an AI-readable design context file (Google Stitch format) from DTCG tokens; scripts/build-design-md.ps1 + .sh; generate_design_md sync option; design-md-export vocab intent; consumer-lifecycle Phase 2 DESIGN.md step."
 }

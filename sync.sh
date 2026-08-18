@@ -320,3 +320,27 @@ if [ "$MATERIALIZE" = 'true' ]; then
       || { echo "sheen sync: token build failed" >&2; exit 1; }
   fi
 fi
+
+# ── generate_design_md: export DESIGN.md from DTCG tokens (Stitch/Google format) ──
+GEN_DESIGN="$(yml_value 'generate_design_md')"
+if [ "$GEN_DESIGN" = 'true' ]; then
+  DESIGN_SH="$REPO_ROOT/scripts/build-design-md.sh"
+  if [ ! -f "$DESIGN_SH" ]; then
+    UPSTREAM_DESIGN_SH="$WORK/scripts/build-design-md.sh"
+    if [ -f "$UPSTREAM_DESIGN_SH" ]; then
+      mkdir -p "$REPO_ROOT/scripts"
+      cp "$UPSTREAM_DESIGN_SH" "$DESIGN_SH"
+      chmod +x "$DESIGN_SH"
+      echo 'sheen sync: provisioned scripts/build-design-md.sh from upstream (generate_design_md=true)'
+    else
+      echo 'sheen sync: generate_design_md=true but build-design-md.sh not found in upstream; skipping' >&2
+    fi
+  fi
+  if [ -f "$DESIGN_SH" ]; then
+    DESIGN_THEME="$(yml_value 'design_md_theme')"
+    DESIGN_THEME="${DESIGN_THEME:-light}"
+    echo "sheen sync: generating DESIGN.md (generate_design_md=true; theme=${DESIGN_THEME})..."
+    bash "$DESIGN_SH" --theme "$DESIGN_THEME" \
+      || { echo "sheen sync: build-design-md failed" >&2; exit 1; }
+  fi
+fi

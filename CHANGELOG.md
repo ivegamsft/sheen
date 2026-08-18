@@ -7,6 +7,26 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.8.1] — 2026-08-18
+
+### Added
+- **`scripts/build-design-md.ps1`** + **`scripts/build-design-md.sh`** — export
+  `DESIGN.md` from DTCG tokens in [Google Stitch format](https://stitch.withgoogle.com/docs/design-md).
+  Resolves all token aliases and emits a flat, AI-readable snapshot of resolved
+  colours, typography, spacing, and corner radii. Supports `--theme` override,
+  `--out` custom path, and `--check` validation mode.
+- **`generate_design_md: true`** sync option — auto-generates `DESIGN.md` at the
+  repo root on every `sync` run.
+- **`design_md_theme: <name>`** sync option — which resolved theme to export
+  (defaults to `light`).
+- **`design-md-export`** vocab intent — triggers via keywords: `design-md`,
+  `design.md`, `export-tokens`, `stitch`, `ai-design-context`.
+- **`docs/guides/consumer-lifecycle.md` Phase 2** — added Step 6 "Generate
+  DESIGN.md", manual usage section, and updated gate to require `DESIGN.md` at
+  repo root before Phase 3.
+- **`.sheen.yml.example`** — documented `generate_design_md` and `design_md_theme`
+  options with inline comments.
+
 ## [0.8.0] — 2026-08-18
 
 ### Added

@@ -318,6 +318,31 @@ try {
             if ($LASTEXITCODE -and $LASTEXITCODE -ne 0) { throw "token build failed (exit $LASTEXITCODE)" }
         }
     }
+
+    # ── generate_design_md: export DESIGN.md from DTCG tokens (Stitch/Google format) ──
+    $genDesign = Get-ConfigScalar -Key 'generate_design_md'
+    if ($genDesign -and $genDesign -notin @('false', 'no', '0')) {
+        $designScript = Join-Path $repoRoot 'scripts' 'build-design-md.ps1'
+        if (-not (Test-Path -LiteralPath $designScript)) {
+            # Provision the build script from the upstream clone
+            $upstreamDesignScript = Join-Path $work 'scripts' 'build-design-md.ps1'
+            if (Test-Path -LiteralPath $upstreamDesignScript) {
+                $scriptsDir = Join-Path $repoRoot 'scripts'
+                New-Item -ItemType Directory -Force -Path $scriptsDir | Out-Null
+                Copy-Item -LiteralPath $upstreamDesignScript -Destination $designScript -Force
+                Write-Host 'sheen sync: provisioned scripts/build-design-md.ps1 from upstream (generate_design_md=true)'
+            } else {
+                Write-Warning 'sheen sync: generate_design_md=true but build-design-md.ps1 not found in upstream; skipping'
+            }
+        }
+        if (Test-Path -LiteralPath $designScript) {
+            $themeArg = Get-ConfigScalar -Key 'design_md_theme'
+            if (-not $themeArg) { $themeArg = 'light' }
+            Write-Host "sheen sync: generating DESIGN.md (generate_design_md=true; theme=$themeArg)..."
+            & $designScript -Theme $themeArg
+            if ($LASTEXITCODE -and $LASTEXITCODE -ne 0) { throw "build-design-md failed (exit $LASTEXITCODE)" }
+        }
+    }
 }
 finally {
     if (Test-Path -LiteralPath $work) { Remove-Item -LiteralPath $work -Recurse -Force -ErrorAction SilentlyContinue }
