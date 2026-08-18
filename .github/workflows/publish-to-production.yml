@@ -209,15 +209,14 @@ jobs:
               .github/workflows/docs.yml
           fi
 
-          # Final safety gate: no IBuySpy-Shared references should remain outside LICENSE or vendor/.
-          # vendor/basecoat/ legitimately references IBuySpy-Shared/basecoat (upstream parent repo).
-          FORBIDDEN_MATCHES=$(git grep -inI -E 'ibuyspy-shared' -- . || true)
+          # Final safety gate: the internal source repo path must not leak into the public payload.
+          # Bare 'basecoat-sheen' (product name in docs/README) is acceptable.
+          # Only the org-scoped path 'IBuySpy-Shared/basecoat-sheen' must be absent.
+          FORBIDDEN_MATCHES=$(git grep -inI -E 'IBuySpy-Shared[/.]basecoat-sheen|ibuyspy-shared\.github\.io/basecoat-sheen' -- . || true)
           UNEXPECTED_MATCHES=$(printf '%s\n' "$FORBIDDEN_MATCHES" \
-            | grep -v -E '^LICENSE:' \
-            | grep -v -E '^vendor/' \
             | grep -v '^$' || true)
           if [ -n "$UNEXPECTED_MATCHES" ]; then
-            echo "::error::Forbidden internal identifiers remain in the public payload:"
+            echo "::error::Source repo path 'IBuySpy-Shared/basecoat-sheen' remains in the public payload:"
             echo "$UNEXPECTED_MATCHES"
             exit 1
           fi
