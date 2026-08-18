@@ -384,20 +384,29 @@ if token_root.exists():
                 add(tokens, 'error', f"Theme introduces non-semantic token '{key}'", relf)
         for key in flat:
             for ref in token_refs(flat[key].get('$value')):
-                def resolve(ref_name, seen=None):
+                def resolve(ref_name, seen=None, current_scope=None, current_key=None):
                     if seen is None:
                         seen = set()
-                    if ref_name in seen:
-                        return None
-                    seen.add(ref_name)
                     for scope in (flat, semantic_map, core_map):
                         if ref_name in scope:
+                            # A role may intentionally alias to a lower-level
+                            # token with the same name. Skip only a direct
+                            # self-alias; other cycles remain errors.
+                            candidate_refs = token_refs(scope[ref_name].get('$value'))
+                            if ref_name == current_key and ref_name in candidate_refs:
+                                continue
+                            seen_key = (id(scope), ref_name)
+                            if seen_key in seen:
+                                return None
+                            next_seen = set(seen)
+                            next_seen.add(seen_key)
                             for nested in token_refs(scope[ref_name].get('$value')):
-                                if resolve(nested, seen) is None:
+                                nested_scope = 'theme' if scope is flat else ('semantic' if scope is semantic_map else 'core')
+                                if resolve(nested, next_seen, nested_scope, ref_name) is None:
                                     return None
                             return scope[ref_name].get('$value')
                     return '__MISSING__'
-                resolved = resolve(ref)
+                resolved = resolve(ref, current_scope='theme', current_key=key)
                 if resolved == '__MISSING__':
                     add(tokens, 'error', f"Theme token '{key}' references missing token '{{{ref}}}'", relf)
                 elif resolved is None:

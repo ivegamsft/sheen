@@ -156,15 +156,25 @@ function Resolve-TokenRef {
         [Parameter(Mandatory)][string]$Ref,
         [Parameter(Mandatory)][hashtable]$Maps,
         [Parameter(Mandatory)][string[]]$Order,
-        [Parameter(Mandatory)][hashtable]$Seen
+        [Parameter(Mandatory)][hashtable]$Seen,
+        [string]$CurrentScope = $null,
+        [string]$CurrentKey = $null
     )
-    if ($Seen.Contains($Ref)) { return $null }
     foreach ($scope in $Order) {
         $map = $Maps[$scope]
         if ($map.Contains($Ref)) {
-            $Seen[$Ref] = $true
+            # A role may intentionally alias to a lower-level token with the
+            # same name. Skip only a direct self-alias; other cycles remain
+            # errors.
+            $candidateRefs = @(Get-TokenRefs -Node $map[$Ref].'$value')
+            if ($Ref -eq $CurrentKey -and $candidateRefs -contains $Ref) { continue }
+            $seenKey = "$scope`:$Ref"
+            if ($Seen.Contains($seenKey)) { return $null }
+            $nextSeen = @{}
+            foreach ($key in $Seen.Keys) { $nextSeen[$key] = $true }
+            $nextSeen[$seenKey] = $true
             foreach ($nested in @(Get-TokenRefs -Node $map[$Ref].'$value')) {
-                if (-not (Resolve-TokenRef -Ref $nested -Maps $Maps -Order $Order -Seen $Seen)) { return $null }
+                if (-not (Resolve-TokenRef -Ref $nested -Maps $Maps -Order $Order -Seen $nextSeen -CurrentScope $scope -CurrentKey $Ref)) { return $null }
             }
             return $map[$Ref].'$value'
         }
@@ -613,7 +623,7 @@ try {
             }
             foreach ($k in $themeFlat.Keys) {
                 foreach ($ref in @(Get-TokenRefs -Node $themeFlat[$k].'$value')) {
-                    $resolver = Resolve-TokenRef -Ref $ref -Maps $maps -Order @('theme','semantic','core') -Seen @{}
+                    $resolver = Resolve-TokenRef -Ref $ref -Maps $maps -Order @('theme','semantic','core') -Seen @{} -CurrentScope 'theme' -CurrentKey $k
                     if ($resolver -eq '__MISSING__') {
                         Add-Message -Section $tokensSection -Level 'error' -Message "Theme token '$k' references missing token '{$ref}'" -Path $rel
                     }

@@ -38,6 +38,7 @@ function New-ConsumerFixture {
         Copy-Entry (Join-Path $repoRoot 'agents\design-reviewer.agent.md') (Join-Path $Path '.github\agents\design-reviewer.agent.md')
         Copy-Entry (Join-Path $repoRoot 'agents\design-reviewer.agent.eval.yaml') (Join-Path $Path '.github\agents\design-reviewer.agent.eval.yaml')
         Copy-Entry (Join-Path $repoRoot 'instructions\sheen-10-core-design-principles.instructions.md') (Join-Path $Path '.github\instructions\sheen-10-core-design-principles.instructions.md')
+        Copy-Entry (Join-Path $repoRoot 'instructions\sheen-90-standards-conformance.instructions.md') (Join-Path $Path '.github\instructions\sheen-90-standards-conformance.instructions.md')
         Copy-Entry (Join-Path $repoRoot 'tokens') (Join-Path $Path 'sheen\tokens')
         New-Item -ItemType Directory -Force -Path (Join-Path $Path '.github\prompts') | Out-Null
         New-Item -ItemType Directory -Force -Path (Join-Path $Path 'sheen\templates') | Out-Null
