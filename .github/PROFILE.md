@@ -81,7 +81,7 @@ in the profile JSON.
 
 ## Repo security posture (matches basecoat)
 
-GHAS repo-security features are enabled to **match `IBuySpy-Shared/basecoat`**.
+GHAS repo-security features are enabled to **match `ivegamsft/basecoat`**.
 These harden the shared enterprise instance and are **independent of the
 `solo-dev` authoring ceremony — the profile stays `solo-dev`.**
 

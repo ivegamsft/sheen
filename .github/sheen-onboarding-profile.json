@@ -55,7 +55,7 @@
   },
   "repo_security_posture": {
     "note": "Repo-level GHAS security features, enabled to match basecoat. These harden the SHARED enterprise instance and are independent of the solo-dev authoring ceremony - the profile stays 'solo-dev'.",
-    "matches": "IBuySpy-Shared/basecoat security_and_analysis",
+    "matches": "ivegamsft/basecoat security_and_analysis",
     "enabled": {
       "code_security": true,
       "dependabot_security_updates": true,

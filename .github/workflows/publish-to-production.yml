@@ -209,10 +209,12 @@ jobs:
               .github/workflows/docs.yml
           fi
 
-          # Final safety gate: no IBuySpy-Shared references should remain outside LICENSE.
+          # Final safety gate: no IBuySpy-Shared references should remain outside LICENSE or vendor/.
+          # vendor/basecoat/ legitimately references IBuySpy-Shared/basecoat (upstream parent repo).
           FORBIDDEN_MATCHES=$(git grep -inI -E 'ibuyspy-shared' -- . || true)
           UNEXPECTED_MATCHES=$(printf '%s\n' "$FORBIDDEN_MATCHES" \
             | grep -v -E '^LICENSE:' \
+            | grep -v -E '^vendor/' \
             | grep -v '^$' || true)
           if [ -n "$UNEXPECTED_MATCHES" ]; then
             echo "::error::Forbidden internal identifiers remain in the public payload:"
