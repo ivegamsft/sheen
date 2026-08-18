@@ -7,6 +7,20 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.7.3] — 2026-08-18
+
+### Fixed
+- **Consumer token materialization path** (#92): `sync.ps1` / `sync.sh` now invoke
+  `scripts/build-tokens.ps1` with explicit `-TokensDir sheen/tokens` and
+  `-OutDir dist/tokens`. `build-tokens.ps1` also auto-detects consumer layout via
+  `.sheen/manifest.json` or `sheen/tokens` when those parameters are omitted, so
+  provisioned builders no longer default to a missing root `tokens/` directory.
+- **Diagnostics scope in mixed BaseCoat consumers** (#93): `diagnose-sheen.ps1` /
+  `diagnose-sheen.sh` structure and collision checks now prefer
+  `.sheen/manifest.json` (then `.sheen.yml` allow-lists) so unrelated BaseCoat
+  skills/agents under `.github/` are not validated against Sheen rules. Regression
+  coverage added in `scripts/test-diagnose-sheen.ps1`.
+
 ## [0.7.2] — 2026-08-18
 
 ### Fixed

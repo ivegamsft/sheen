@@ -81,6 +81,62 @@ themes:
     }
 }
 
+function Write-ConsumerManifest {
+    param(
+        [Parameter(Mandatory)][string]$Path,
+        [string[]]$SkillNames = @('design-review','design-debate','craft-quality'),
+        [string[]]$AgentNames = @('design-reviewer'),
+        [string[]]$InstructionNames = @('sheen-10-core-design-principles','sheen-90-standards-conformance')
+    )
+    $files = New-Object System.Collections.Generic.List[string]
+    foreach ($skill in $SkillNames) {
+        [void]$files.Add(".github/skills/$skill/SKILL.md")
+        [void]$files.Add(".github/skills/$skill/eval.yaml")
+    }
+    foreach ($agent in $AgentNames) {
+        [void]$files.Add(".github/agents/$agent.agent.md")
+        [void]$files.Add(".github/agents/$agent.agent.eval.yaml")
+    }
+    foreach ($ins in $InstructionNames) {
+        [void]$files.Add(".github/instructions/$ins.instructions.md")
+    }
+    [void]$files.Add('sheen/tokens/core/.gitkeep')
+    $manifestDir = Join-Path $Path '.sheen'
+    New-Item -ItemType Directory -Force -Path $manifestDir | Out-Null
+    $manifest = [ordered]@{
+        schema = 'sheen-manifest/v1'
+        source = 'https://example.com/basecoat-sheen.git'
+        ref    = 'main'
+        files  = @($files)
+    }
+    ($manifest | ConvertTo-Json -Depth 6) | Set-Content -LiteralPath (Join-Path $manifestDir 'manifest.json') -Encoding utf8
+}
+
+function New-ForeignBaseCoatAsset {
+    param([Parameter(Mandatory)][string]$Path)
+    $foreignSkill = Join-Path $Path '.github\skills\backend-dev'
+    New-Item -ItemType Directory -Force -Path $foreignSkill | Out-Null
+    @"
+---
+name: backend-dev
+description: BaseCoat skill that must not be validated by sheen diagnostics.
+---
+# backend-dev
+"@ | Set-Content -LiteralPath (Join-Path $foreignSkill 'SKILL.md') -Encoding utf8
+    # Intentionally omit eval.yaml and USE FOR / DO NOT USE FOR markers so a
+    # broad scan would fail — scoped diagnostics must ignore this asset (#93).
+
+    $foreignAgent = Join-Path $Path '.github\agents'
+    New-Item -ItemType Directory -Force -Path $foreignAgent | Out-Null
+    @"
+---
+name: basecoat-10-core-backend-dev
+description: BaseCoat agent that must not be validated by sheen diagnostics.
+---
+# backend-dev agent
+"@ | Set-Content -LiteralPath (Join-Path $foreignAgent 'basecoat-10-core-backend-dev.agent.md') -Encoding utf8
+}
+
 function Assert-Exit {
     param([int]$Actual, [int]$Expected, [string]$Label, [string]$Output = '')
     if ($Actual -ne $Expected) {
@@ -113,8 +169,12 @@ function Invoke-Diagnostics {
 try {
     $clean = Join-Path $workspace 'consumer-clean'
     $dirty = Join-Path $workspace 'consumer-dirty'
+    $scoped = Join-Path $workspace 'consumer-scoped'
     New-ConsumerFixture -Path $clean
     New-ConsumerFixture -Path $dirty -WithIssues
+    New-ConsumerFixture -Path $scoped
+    New-ForeignBaseCoatAsset -Path $scoped
+    Write-ConsumerManifest -Path $scoped
 
     $cleanResult = Invoke-Diagnostics -Path $clean -ScriptName 'scripts\diagnose-sheen.ps1'
     Assert-Exit -Actual $cleanResult.ExitCode -Expected 0 -Label 'PowerShell clean fixture' -Output $cleanResult.Output
@@ -133,6 +193,14 @@ try {
         throw 'PowerShell dirty fixture did not report token errors'
     }
 
+    # #93: unrelated BaseCoat assets under .github must not fail sheen diagnostics
+    # when .sheen/manifest.json scopes the managed set.
+    $scopedResult = Invoke-Diagnostics -Path $scoped -ScriptName 'scripts\diagnose-sheen.ps1'
+    Assert-Exit -Actual $scopedResult.ExitCode -Expected 0 -Label 'PowerShell scoped consumer fixture' -Output $scopedResult.Output
+    if ($scopedResult.Output -match 'backend-dev|basecoat-10-core-backend-dev') {
+        throw 'PowerShell scoped fixture incorrectly reported unrelated BaseCoat assets'
+    }
+
     $bashAvailable = $false
     if (Get-Command bash -ErrorAction SilentlyContinue) {
         & bash --version >$null 2>$null
@@ -143,6 +211,8 @@ try {
         Assert-Exit -Actual $cleanShell.ExitCode -Expected 0 -Label 'Bash clean fixture' -Output $cleanShell.Output
         $dirtyShell = Invoke-Diagnostics -Path $dirty -ScriptName 'scripts\diagnose-sheen.sh' -Shell 'bash'
         Assert-Exit -Actual $dirtyShell.ExitCode -Expected 1 -Label 'Bash dirty fixture' -Output $dirtyShell.Output
+        $scopedShell = Invoke-Diagnostics -Path $scoped -ScriptName 'scripts\diagnose-sheen.sh' -Shell 'bash'
+        Assert-Exit -Actual $scopedShell.ExitCode -Expected 0 -Label 'Bash scoped consumer fixture' -Output $scopedShell.Output
     }
 
     Write-Host 'diagnose-sheen self-test: OK'

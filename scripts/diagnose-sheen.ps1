@@ -227,6 +227,102 @@ function Get-CoreAssets {
     }
 }
 
+function Get-ManagedAssetScope {
+    <#
+      Consumer structure checks must only cover Sheen-managed assets (#93).
+      Priority:
+        1. Source layout (upstream sheen repo) → validate everything on disk
+        2. .sheen/manifest.json → only paths recorded by sync
+        3. .sheen.yml allow-lists → only listed skills/agents/instructions
+        4. Otherwise → no structure scope (validate everything; fixtures / bare trees)
+    #>
+    param(
+        [Parameter(Mandatory)][string]$Root,
+        [Parameter(Mandatory)][bool]$SourceLayout,
+        $ConfigData
+    )
+
+    $scope = [ordered]@{
+        scoped       = $false
+        skills       = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+        agents       = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+        instructions = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+        source       = 'all'
+    }
+
+    if ($SourceLayout) {
+        return $scope
+    }
+
+    $manifestPath = Join-Path $Root '.sheen' 'manifest.json'
+    if (Test-Path -LiteralPath $manifestPath) {
+        try {
+            $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+            foreach ($item in @($manifest.files)) {
+                $rel = [string]$item
+                if ($rel -match '(?:^|/)\.github/skills/([^/]+)/') {
+                    [void]$scope.skills.Add($Matches[1])
+                }
+                elseif ($rel -match '(?:^|/)skills/([^/]+)/') {
+                    [void]$scope.skills.Add($Matches[1])
+                }
+                if ($rel -match '(?:^|/)\.github/agents/([^/]+)\.agent\.md$') {
+                    [void]$scope.agents.Add($Matches[1])
+                }
+                elseif ($rel -match '(?:^|/)agents/([^/]+)\.agent\.md$') {
+                    [void]$scope.agents.Add($Matches[1])
+                }
+                if ($rel -match '(?:^|/)\.github/instructions/([^/]+)\.instructions\.md$') {
+                    [void]$scope.instructions.Add($Matches[1])
+                }
+                elseif ($rel -match '(?:^|/)instructions/([^/]+)\.instructions\.md$') {
+                    [void]$scope.instructions.Add($Matches[1])
+                }
+            }
+            $scope.scoped = $true
+            $scope.source = 'manifest'
+            return $scope
+        } catch {
+            # Fall through to allow-list scoping if the manifest is unreadable.
+        }
+    }
+
+    $hasAllowList = $false
+    foreach ($key in @('skills', 'agents', 'instructions')) {
+        if ($ConfigData -is [System.Collections.IDictionary] -and $ConfigData.Contains($key)) {
+            $hasAllowList = $true
+            foreach ($item in @($ConfigData[$key])) {
+                if (-not $item) { continue }
+                switch ($key) {
+                    'skills'       { [void]$scope.skills.Add([string]$item) }
+                    'agents'       { [void]$scope.agents.Add([string]$item) }
+                    'instructions' { [void]$scope.instructions.Add([string]$item) }
+                }
+            }
+        }
+    }
+    if ($hasAllowList) {
+        $scope.scoped = $true
+        $scope.source = 'allow-list'
+    }
+    return $scope
+}
+
+function Test-InManagedScope {
+    param(
+        $Scope,
+        [Parameter(Mandatory)][ValidateSet('skills','agents','instructions')][string]$Kind,
+        [Parameter(Mandatory)][string]$Name
+    )
+    if (-not $Scope.scoped) { return $true }
+    switch ($Kind) {
+        'skills'       { return $Scope.skills.Contains($Name) }
+        'agents'       { return $Scope.agents.Contains($Name) }
+        'instructions' { return $Scope.instructions.Contains($Name) }
+    }
+    return $true
+}
+
 function Parse-SheenConfig {
     param([Parameter(Mandatory)][string]$Path)
     $result = [ordered]@{
@@ -353,6 +449,13 @@ try {
     if (-not $ref) { Add-Message -Section $configSection -Level 'error' -Message 'Missing required key ref' -Path $configDisplayPath }
 
     $assetSets = Get-CoreAssets -Root $repoRoot
+    $sourceLayout = (Test-Path -LiteralPath (Join-Path $repoRoot 'skills')) -or
+        (Test-Path -LiteralPath (Join-Path $repoRoot 'agents')) -or
+        (Test-Path -LiteralPath (Join-Path $repoRoot 'tokens'))
+    $managedScope = Get-ManagedAssetScope -Root $repoRoot -SourceLayout:$sourceLayout -ConfigData $configData
+
+    # Disk presence is still used for allow-list membership (entry must exist).
+    # Structure/collision checks below are filtered through $managedScope (#93).
     $selectable = @{
         skills       = $assetSets.skills
         agents       = $assetSets.agents
@@ -371,15 +474,16 @@ try {
         }
     }
 
-    $sourceLayout = (Test-Path -LiteralPath (Join-Path $repoRoot 'skills')) -or
-        (Test-Path -LiteralPath (Join-Path $repoRoot 'agents')) -or
-        (Test-Path -LiteralPath (Join-Path $repoRoot 'tokens'))
     $skillPath = if ($sourceLayout) { 'skills' } else { '.github/skills' }
     $agentPath = if ($sourceLayout) { 'agents' } else { '.github/agents' }
     $instructionPath = if ($sourceLayout) { 'instructions' } else { '.github/instructions' }
     $promptPath = if ($sourceLayout) { 'prompts' } else { '.github/prompts' }
     $templatePath = if ($sourceLayout) { 'templates' } else { 'sheen/templates' }
     $tokenPath = if ($sourceLayout) { 'tokens' } else { 'sheen/tokens' }
+
+    if ($managedScope.scoped -and $IsVerbose) {
+        Add-Message -Section $structureSection -Level 'pass' -Message ("Structure scope source=$($managedScope.source); skills=$($managedScope.skills.Count) agents=$($managedScope.agents.Count) instructions=$($managedScope.instructions.Count)")
+    }
 
     $expectedDirs = New-Object System.Collections.Generic.List[object]
     $expectedDirs.Add(@{ path = $skillPath; required = (-not $configData.Contains('skills') -or (@($configData['skills']).Count -gt 0)) }) | Out-Null
@@ -402,10 +506,11 @@ try {
         }
     }
 
-    # Skill validation.
+    # Skill validation (Sheen-managed assets only in consumers — #93).
     $skillRoot = Join-Path $repoRoot $skillPath.Replace('/','\')
     if (Test-Path -LiteralPath $skillRoot) {
         foreach ($skillDir in Get-ChildItem -LiteralPath $skillRoot -Directory -ErrorAction SilentlyContinue) {
+            if (-not (Test-InManagedScope -Scope $managedScope -Kind 'skills' -Name $skillDir.Name)) { continue }
             $skillFile = Join-Path $skillDir.FullName 'SKILL.md'
             $evalFile = Join-Path $skillDir.FullName 'eval.yaml'
             if (-not (Test-Path -LiteralPath $skillFile)) {
@@ -461,11 +566,12 @@ try {
         }
     }
 
-    # Agent validation.
+    # Agent validation (Sheen-managed assets only in consumers — #93).
     $agentRoot = Join-Path $repoRoot $agentPath.Replace('/','\')
     if (Test-Path -LiteralPath $agentRoot) {
         foreach ($agentFile in Get-ChildItem -LiteralPath $agentRoot -Filter '*.agent.md' -File -ErrorAction SilentlyContinue) {
             $expectedBase = $agentFile.BaseName -replace '\.agent$',''
+            if (-not (Test-InManagedScope -Scope $managedScope -Kind 'agents' -Name $expectedBase)) { continue }
             $fm = Get-FrontMatterLines -Path $agentFile.FullName
             if (-not $fm) {
                 Add-Message -Section $structureSection -Level 'error' -Message 'Missing valid frontmatter' -Path (Get-RelativePath -Root $repoRoot -Path $agentFile.FullName)
@@ -501,11 +607,12 @@ try {
         }
     }
 
-    # Instruction validation.
+    # Instruction validation (Sheen-managed assets only in consumers — #93).
     $instructionRoot = Join-Path $repoRoot $instructionPath.Replace('/','\')
     if (Test-Path -LiteralPath $instructionRoot) {
         foreach ($insFile in Get-ChildItem -LiteralPath $instructionRoot -Filter '*.instructions.md' -File -ErrorAction SilentlyContinue) {
             $expectedBase = $insFile.BaseName -replace '\.instructions$',''
+            if (-not (Test-InManagedScope -Scope $managedScope -Kind 'instructions' -Name $expectedBase)) { continue }
             $fm = Get-FrontMatterLines -Path $insFile.FullName
             if (-not $fm) {
                 Add-Message -Section $structureSection -Level 'error' -Message 'Missing valid frontmatter' -Path (Get-RelativePath -Root $repoRoot -Path $insFile.FullName)
@@ -635,11 +742,11 @@ try {
         }
     }
 
-    # Namespace collisions against vendored basecoat.
+    # Namespace collisions against vendored basecoat (Sheen-managed locals only — #93).
     $vendorRoot = Join-Path $repoRoot 'vendor\basecoat'
     if (Test-Path -LiteralPath $vendorRoot) {
-        $localSkills = @($assetSets.skills)
-        $localAgents = @($assetSets.agents)
+        $localSkills = @($assetSets.skills | Where-Object { Test-InManagedScope -Scope $managedScope -Kind 'skills' -Name $_ })
+        $localAgents = @($assetSets.agents | Where-Object { Test-InManagedScope -Scope $managedScope -Kind 'agents' -Name $_ })
         $vendorSkills = @()
         $vendorAgents = @()
         $vendorSkillRoot = Join-Path $vendorRoot 'skills'

@@ -37,9 +37,9 @@ The script emits four sections:
 | Section | What it covers |
 |---|---|
 | `config` | `.sheen.yml` presence, YAML validity, required keys, allow-list membership |
-| `structure` | synced directory layout, frontmatter, naming rules, eval coverage |
+| `structure` | synced directory layout, frontmatter, naming rules, eval coverage. In consumers, only Sheen-managed assets from `.sheen/manifest.json` (or `.sheen.yml` allow-lists) are scanned — co-located BaseCoat assets are ignored |
 | `tokens` | JSON validity, alias resolution, theme completeness, semantic/core rules |
-| `collisions` | duplicate names and reserved-prefix conflicts against vendored `basecoat` |
+| `collisions` | duplicate Sheen-managed names and reserved-prefix conflicts against vendored `basecoat` |
 
 Severity is simple:
 

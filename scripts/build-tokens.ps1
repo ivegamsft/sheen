@@ -11,10 +11,13 @@
 #
 # Exits 0 on success, 1 on failure (unresolved ref, cycle, bad JSON).
 # Output is reproducible in CI; no network access required.
+#
+# Consumer auto-detect (#92): when TokensDir/OutDir are omitted, prefer
+# sheen/tokens (and dist/tokens) if .sheen/manifest.json or sheen/tokens exists.
 
 param(
-    [string]$OutDir    = (Join-Path (git rev-parse --show-toplevel 2>$null) 'dist/tokens'),
-    [string]$TokensDir = (Join-Path (git rev-parse --show-toplevel 2>$null) 'tokens'),
+    [string]$OutDir,
+    [string]$TokensDir,
     [switch]$Quiet
 )
 
@@ -22,6 +25,23 @@ $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version 3
 
 $IsCI = $env:GITHUB_ACTIONS -eq 'true'
+
+$repoRoot = $null
+try { $repoRoot = (git rev-parse --show-toplevel 2>$null).Trim() } catch { $repoRoot = $null }
+if (-not $repoRoot) { $repoRoot = (Get-Location).Path }
+
+$isConsumer = (Test-Path -LiteralPath (Join-Path $repoRoot '.sheen' 'manifest.json')) -or
+    (Test-Path -LiteralPath (Join-Path $repoRoot 'sheen' 'tokens'))
+if (-not $TokensDir) {
+    $TokensDir = if ($isConsumer) {
+        Join-Path $repoRoot 'sheen' 'tokens'
+    } else {
+        Join-Path $repoRoot 'tokens'
+    }
+}
+if (-not $OutDir) {
+    $OutDir = Join-Path $repoRoot 'dist' 'tokens'
+}
 
 function Log([string]$msg) { if (-not $Quiet) { Write-Host $msg } }
 function Err([string]$msg) {

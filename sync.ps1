@@ -309,8 +309,12 @@ try {
             }
         }
         if (Test-Path -LiteralPath $buildScript) {
-            Write-Host 'sheen sync: running token build (materialize_tokens=true)...'
-            & $buildScript
+            # Always pass consumer token paths explicitly (#92). build-tokens.ps1 also
+            # auto-detects sheen/tokens, but sync must not rely on defaults alone.
+            $tokensDir = Join-Path $repoRoot 'sheen' 'tokens'
+            $outDir = Join-Path $repoRoot 'dist' 'tokens'
+            Write-Host "sheen sync: running token build (materialize_tokens=true; TokensDir=$tokensDir)..."
+            & $buildScript -TokensDir $tokensDir -OutDir $outDir
             if ($LASTEXITCODE -and $LASTEXITCODE -ne 0) { throw "token build failed (exit $LASTEXITCODE)" }
         }
     }

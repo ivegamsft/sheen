@@ -311,7 +311,12 @@ if [ "$MATERIALIZE" = 'true' ]; then
     fi
   fi
   if command -v pwsh >/dev/null 2>&1 && [ -f "$BUILD_PS" ]; then
-    echo 'sheen sync: running token build (materialize_tokens=true)...'
-    pwsh -NonInteractive -File "$BUILD_PS" || { echo "sheen sync: token build failed" >&2; exit 1; }
+    # Always pass consumer token paths explicitly (#92). build-tokens.ps1 also
+    # auto-detects sheen/tokens, but sync must not rely on defaults alone.
+    TOKENS_DIR="$REPO_ROOT/sheen/tokens"
+    OUT_DIR="$REPO_ROOT/dist/tokens"
+    echo "sheen sync: running token build (materialize_tokens=true; TokensDir=$TOKENS_DIR)..."
+    pwsh -NonInteractive -File "$BUILD_PS" -TokensDir "$TOKENS_DIR" -OutDir "$OUT_DIR" \
+      || { echo "sheen sync: token build failed" >&2; exit 1; }
   fi
 fi

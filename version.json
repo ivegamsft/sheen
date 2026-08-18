@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "releaseDate": "2026-08-18",
-  "notes": "v0.7.2: diagnose-sheen.ps1/sh logging validation fix (#91)."
+  "notes": "v0.7.3: consumer token build path (#92) and diagnose scope to sheen-managed assets (#93)."
 }

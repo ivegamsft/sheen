@@ -35,9 +35,9 @@ The default report prints four sections:
 | Section | Checks |
 |---|---|
 | `config` | `.sheen.yml` syntax, required keys, and allow-list entries |
-| `structure` | synced directories, frontmatter, naming, eval files, and references |
+| `structure` | synced directories, frontmatter, naming, eval files, and references (consumer runs scope to `.sheen/manifest.json` or allow-lists so unrelated BaseCoat assets are ignored) |
 | `tokens` | token JSON validity, semantic/core references, theme completeness, and cycles |
-| `collisions` | duplicate asset names and reserved `basecoat-*` prefixes |
+| `collisions` | duplicate Sheen-managed asset names and reserved `basecoat-*` prefixes |
 
 Messages are reported as `pass`, `warn`, or `error`. Errors produce exit code
 `1`.

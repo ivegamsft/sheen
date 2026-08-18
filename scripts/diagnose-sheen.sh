@@ -218,6 +218,56 @@ def asset_names(path: Path, pattern, transform=lambda p: p.name):
         return set()
     return {transform(p) for p in path.glob(pattern)}
 
+def managed_asset_scope(root: Path, source_layout: bool, cfg: dict, cfg_seen: set):
+    """Scope structure checks to Sheen-managed assets in consumers (#93)."""
+    scope = {
+        'scoped': False,
+        'skills': set(),
+        'agents': set(),
+        'instructions': set(),
+        'source': 'all',
+    }
+    if source_layout:
+        return scope
+
+    manifest_path = root / '.sheen' / 'manifest.json'
+    if manifest_path.exists():
+        try:
+            manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+            for item in manifest.get('files') or []:
+                rel = str(item).replace('\\', '/')
+                m = re.search(r'(?:^|/)\.github/skills/([^/]+)/', rel) or re.search(r'(?:^|/)skills/([^/]+)/', rel)
+                if m:
+                    scope['skills'].add(m.group(1))
+                m = re.search(r'(?:^|/)\.github/agents/([^/]+)\.agent\.md$', rel) or re.search(r'(?:^|/)agents/([^/]+)\.agent\.md$', rel)
+                if m:
+                    scope['agents'].add(m.group(1))
+                m = re.search(r'(?:^|/)\.github/instructions/([^/]+)\.instructions\.md$', rel) or re.search(r'(?:^|/)instructions/([^/]+)\.instructions\.md$', rel)
+                if m:
+                    scope['instructions'].add(m.group(1))
+            scope['scoped'] = True
+            scope['source'] = 'manifest'
+            return scope
+        except Exception:
+            pass
+
+    has_allow = False
+    for key in ('skills', 'agents', 'instructions'):
+        if key in cfg_seen:
+            has_allow = True
+            for item in cfg.get(key) or []:
+                if item:
+                    scope[key].add(str(item))
+    if has_allow:
+        scope['scoped'] = True
+        scope['source'] = 'allow-list'
+    return scope
+
+def in_scope(scope, kind, name):
+    if not scope.get('scoped'):
+        return True
+    return name in scope.get(kind, set())
+
 source_layout = (repo_root / 'skills').exists() or (repo_root / 'agents').exists() or (repo_root / 'tokens').exists()
 skill_path = 'skills' if source_layout else '.github/skills'
 agent_path = 'agents' if source_layout else '.github/agents'
@@ -227,15 +277,22 @@ template_path = 'templates' if source_layout else 'sheen/templates'
 token_path = 'tokens' if source_layout else 'sheen/tokens'
 
 skills = asset_names(repo_root / skill_path, '*', lambda p: p.name) if (repo_root / skill_path).exists() else set()
+# Only keep directories for skill names
+if (repo_root / skill_path).exists():
+    skills = {p.name for p in (repo_root / skill_path).iterdir() if p.is_dir()}
 agents = asset_names(repo_root / agent_path, '*.agent.md', lambda p: p.name[:-9]) if (repo_root / agent_path).exists() else set()
 instructions = asset_names(repo_root / instruction_path, '*.instructions.md', lambda p: p.name[:-15]) if (repo_root / instruction_path).exists() else set()
 themes = asset_names(repo_root / token_path / 'themes', '*.tokens.json', lambda p: p.name[:-12]) if (repo_root / token_path / 'themes').exists() else set()
+managed_scope = managed_asset_scope(repo_root, source_layout, config_data, config_seen)
 
 for key, names in [('skills', skills), ('agents', agents), ('instructions', instructions), ('themes', themes)]:
     if key in config_seen:
         for item in config_data.get(key, []):
             if item and item not in names:
                 add(config, 'error', f"Allow-list entry '{item}' for {key} does not match any synced asset", config_display_path)
+
+if managed_scope['scoped'] and verbose:
+    add(structure, 'pass', f"Structure scope source={managed_scope['source']}; skills={len(managed_scope['skills'])} agents={len(managed_scope['agents'])} instructions={len(managed_scope['instructions'])}")
 
 required_dirs = [
     (skill_path, 'skills' not in config_seen or len(config_data.get('skills', [])) > 0),
@@ -256,6 +313,8 @@ for path_str, required in required_dirs:
 
 for skill_dir in sorted((repo_root / skill_path).glob('*')) if (repo_root / skill_path).exists() else []:
     if not skill_dir.is_dir():
+        continue
+    if not in_scope(managed_scope, 'skills', skill_dir.name):
         continue
     skill_file = skill_dir / 'SKILL.md'
     eval_file = skill_dir / 'eval.yaml'
@@ -296,6 +355,8 @@ for skill_dir in sorted((repo_root / skill_path).glob('*')) if (repo_root / skil
 
 for agent_file in sorted((repo_root / agent_path).glob('*.agent.md')) if (repo_root / agent_path).exists() else []:
     expected = agent_file.name[:-9]
+    if not in_scope(managed_scope, 'agents', expected):
+        continue
     fm = frontmatter_lines(agent_file)
     if not fm:
         add(structure, 'error', 'Missing valid frontmatter', rel(agent_file))
@@ -318,6 +379,8 @@ for agent_file in sorted((repo_root / agent_path).glob('*.agent.md')) if (repo_r
 
 for ins_file in sorted((repo_root / instruction_path).glob('*.instructions.md')) if (repo_root / instruction_path).exists() else []:
     expected = ins_file.name[:-15]
+    if not in_scope(managed_scope, 'instructions', expected):
+        continue
     fm = frontmatter_lines(ins_file)
     if not fm:
         add(structure, 'error', 'Missing valid frontmatter', rel(ins_file))
@@ -413,14 +476,19 @@ if token_root.exists():
                     add(tokens, 'error', f"Theme token '{key}' contains a circular reference through '{{{ref}}}'", relf)
 
 if (repo_root / 'vendor/basecoat').exists():
-    vendor_skills = asset_names(repo_root / 'vendor/basecoat/skills', '*', lambda p: p.name) if (repo_root / 'vendor/basecoat/skills').exists() else set()
-    vendor_agents = asset_names(repo_root / 'vendor/basecoat/agents', '*.agent.md', lambda p: p.name[:-9]) if (repo_root / 'vendor/basecoat/agents').exists() else set()
-    for name in skills:
+    vendor_skill_root = repo_root / 'vendor/basecoat/skills'
+    vendor_agent_root = repo_root / 'vendor/basecoat/agents'
+    vendor_skills = {p.name for p in vendor_skill_root.iterdir() if p.is_dir()} if vendor_skill_root.exists() else set()
+    vendor_agents = asset_names(vendor_agent_root, '*.agent.md', lambda p: p.name[:-9]) if vendor_agent_root.exists() else set()
+    # Only Sheen-managed locals participate in collision checks (#93).
+    scoped_skills = {n for n in skills if in_scope(managed_scope, 'skills', n)}
+    scoped_agents = {n for n in agents if in_scope(managed_scope, 'agents', n)}
+    for name in scoped_skills:
         if name.startswith('basecoat-'):
             add(collisions, 'error', f"Reserved prefix conflict: local skill '{name}' must not use basecoat-* naming", skill_path)
         if name in vendor_skills:
             add(collisions, 'error', f'Duplicate skill name collides with vendored basecoat: {name}', skill_path)
-    for name in agents:
+    for name in scoped_agents:
         if name.startswith('basecoat-'):
             add(collisions, 'error', f"Reserved prefix conflict: local agent '{name}' must not use basecoat-* naming", agent_path)
         if name in vendor_agents:
