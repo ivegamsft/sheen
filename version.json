@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "releaseDate": "2026-08-18",
-  "notes": "v0.6.3 publish sanitization hotfix: scrubs plain internal owner tokens (IBuySpy-Shared) that appear without repo paths in release docs."
+  "notes": "v0.6.4 publish sanitization hotfix: scrubs plain internal owner tokens that appear without repo paths in release docs."
 }

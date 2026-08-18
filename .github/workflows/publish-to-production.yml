@@ -180,6 +180,7 @@ jobs:
             -e 'IBuySpy-Shared/basecoat-sheen' \
             -e 'IBuySpy-Shared/basecoat' \
             -e 'IBuySpy-Shared/' \
+            -e 'IBuySpy-Shared' \
             -e 'ibuyspy-shared\.github\.io/basecoat-sheen' \
             -e 'ibuyspy-shared\.github\.io' \
             -- . 2>/dev/null || true)

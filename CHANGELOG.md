@@ -7,6 +7,13 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.6.4] — 2026-08-18
+
+### Fixed
+- Publish sanitizer target expansion:
+  - Includes plain internal owner tokens in scan targets, not only owner/repo path forms.
+  - Prevents leakage from release metadata fields such as `version.json` notes.
+
 ## [0.6.3] — 2026-08-18
 
 ### Fixed
