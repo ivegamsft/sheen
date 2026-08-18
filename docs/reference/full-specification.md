@@ -6,8 +6,8 @@ exact rules.
 
 ## Read first
 
-- [SPEC.md](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/SPEC.md)
-- [`specs/`](https://github.com/IBuySpy-Shared/basecoat-sheen/tree/main/specs)
+- [SPEC.md](https://github.com/ivegamsft/sheen/blob/main/SPEC.md)
+- [`specs/`](https://github.com/ivegamsft/sheen/tree/main/specs)
 
 ## Use this page for
 
