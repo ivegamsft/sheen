@@ -193,6 +193,7 @@ jobs:
                 s{\Qhttps://github.com/IBuySpy-Shared/basecoat\E}{https://github.com/ivegamsft/sheen}g;
                 s{IBuySpy-Shared/basecoat(?!-sheen)}{upstream-basecoat}g;
                 s{IBuySpy-Shared/}{ivegamsft/}g;
+                s{IBuySpy-Shared}{ivegamsft}g;
                 s{ibuyspy-shared\.github\.io/basecoat-sheen}{ivegamsft.github.io/sheen}g;
                 s{ibuyspy-shared\.github\.io/basecoat}{ivegamsft.github.io/sheen}g;
                 s{ibuyspy-shared\.github\.io}{ivegamsft.github.io}g;

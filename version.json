@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "releaseDate": "2026-08-18",
-  "notes": "v0.6.2 publish sanitization hardening: strips internal vendor/skills payload from public mirror and blocks leaked internal owner identifiers outside LICENSE."
+  "notes": "v0.6.3 publish sanitization hotfix: scrubs plain internal owner tokens (IBuySpy-Shared) that appear without repo paths in release docs."
 }

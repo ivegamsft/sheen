@@ -7,6 +7,12 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.6.3] — 2026-08-18
+
+### Fixed
+- Publish sanitization hotfix: scrubs plain internal owner tokens (`IBuySpy-Shared`)
+  in addition to owner/repo paths, preventing leakage from release notes/changelog text.
+
 ## [0.6.2] — 2026-08-18
 
 ### Fixed
