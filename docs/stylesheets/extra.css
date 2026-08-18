@@ -1,0 +1,32 @@
+/* ── Mermaid diagram sizing ───────────────────────────────────────────────── */
+
+.mermaid {
+  display: block;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.mermaid svg {
+  width: 100% !important;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── Figures / embedded images ────────────────────────────────────────────── */
+
+figure img,
+article img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* ── Admonition tweaks ────────────────────────────────────────────────────── */
+
+.admonition {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}

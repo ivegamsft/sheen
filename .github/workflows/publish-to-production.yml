@@ -8,6 +8,7 @@ name: "Sheen - Publish to Production"
 #   4. Push      — force-push to ivegamsft/sheen main + re-tag
 #   5. Release   — create matching GitHub release on production repo
 #   6. Meta      — update description/homepage on production repo
+#   7. Docs      — dispatch docs.yml on ivegamsft/sheen (bootstrap Pages + deploy)
 
 on:
   push:
@@ -345,32 +346,6 @@ jobs:
             && echo "Production repo metadata updated" \
             || echo "Warning: could not update repo metadata (non-fatal)"
 
-      - name: Enable GitHub Pages (GitHub Actions source)
-        if: always() && steps.push-production.outcome == 'success'
-        env:
-          PRODUCTION_TOKEN: ${{ secrets.PRODUCTION_REPO_TOKEN }}
-        run: |
-          set -euo pipefail
-          PAGES_API="https://api.github.com/repos/ivegamsft/sheen/pages"
-          pages_status=$(curl -sS -o /dev/null -w "%{http_code}" \
-            -H "Authorization: token ${PRODUCTION_TOKEN}" \
-            -H "Accept: application/vnd.github+json" \
-            "$PAGES_API")
-          if [ "$pages_status" = "200" ]; then
-            echo "GitHub Pages already enabled — skipping."
-          else
-            enable_status=$(curl -sS -o /dev/null -w "%{http_code}" -X POST \
-              -H "Authorization: token ${PRODUCTION_TOKEN}" \
-              -H "Accept: application/vnd.github+json" \
-              "$PAGES_API" \
-              -d '{"build_type": "workflow"}')
-            if [ "$enable_status" = "201" ] || [ "$enable_status" = "409" ]; then
-              echo "GitHub Pages enabled with GitHub Actions source (HTTP ${enable_status})."
-            else
-              echo "::warning::Could not enable GitHub Pages (HTTP ${enable_status}) — enable manually at https://github.com/ivegamsft/sheen/settings/pages"
-            fi
-          fi
-
       - name: Create GitHub release on production repository
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -423,13 +398,18 @@ jobs:
         env:
           PRODUCTION_TOKEN: ${{ secrets.PRODUCTION_REPO_TOKEN }}
         run: |
+          # Dispatch docs.yml on ivegamsft/sheen. The docs workflow will:
+          #   1. Bootstrap GitHub Pages (enable with GitHub Actions source) using
+          #      its own GITHUB_TOKEN, which has pages:write on that repo.
+          #   2. Build and deploy the MkDocs site.
           dispatch_status=$(curl -sS -o /dev/null -w "%{http_code}" -X POST \
             -H "Authorization: token ${PRODUCTION_TOKEN}" \
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/ivegamsft/sheen/actions/workflows/docs.yml/dispatches" \
             -d '{"ref": "main"}')
           if [ "$dispatch_status" = "204" ]; then
-            echo "Docs build dispatched on ivegamsft/sheen."
+            echo "Docs build dispatched on ivegamsft/sheen — Pages will be bootstrapped and deployed."
           else
-            echo "::warning::Could not dispatch docs build (HTTP ${dispatch_status}) — run manually at https://github.com/ivegamsft/sheen/actions/workflows/docs.yml"
+            echo "::warning::Could not dispatch docs build (HTTP ${dispatch_status})."
+            echo "Run manually: https://github.com/ivegamsft/sheen/actions/workflows/docs.yml"
           fi

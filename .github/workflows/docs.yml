@@ -1,9 +1,12 @@
 name: "Sheen - Docs"
 
 # Builds the mkdocs site (strict) on PRs, and deploys it to GitHub Pages on push
-# to main. Mirrors basecoat's "Deploy Docs" flow (its .github/ is excluded from
-# vendor/), adapted to sheen: no basecoat-only inventory/scorecard generators, and
-# mkdocs.yml already carries this repo's site_url/repo_url.
+# to main. Mirrors basecoat's "Deploy Docs" flow, adapted to sheen.
+#
+# Bootstrap: on first run the workflow calls POST /repos/{repo}/pages with the
+# built-in GITHUB_TOKEN (which has pages:write on this repo) to enable GitHub
+# Pages with the GitHub Actions source. Subsequent runs detect Pages is already
+# enabled and skip that step.
 
 on:
   push:
@@ -22,7 +25,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -59,7 +62,7 @@ jobs:
       - name: Build mkdocs site (strict)
         if: steps.check.outputs.configured == 'true'
         run: |
-          pip install mkdocs mkdocs-material
+          pip install mkdocs mkdocs-material mkdocs-awesome-pages-plugin
           mkdocs build --strict
 
       - name: Upload Pages artifact
@@ -68,10 +71,75 @@ jobs:
         with:
           path: site/
 
+  bootstrap-pages:
+    # Enable GitHub Pages (GitHub Actions source) on first deployment.
+    # GITHUB_TOKEN has pages:write on this repo, so this works without any PAT.
+    # Runs only on push to main / manual dispatch, not on PRs.
+    if: github.event_name != 'pull_request' && needs.build-docs.outputs.configured == 'true'
+    needs: build-docs
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Enable GitHub Pages if not already enabled
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          pages_status=$(gh api "repos/${{ github.repository }}/pages" \
+            -H "Accept: application/vnd.github+json" \
+            --silent -i 2>&1 | grep -m1 "^HTTP" | awk '{print $2}' || echo "000")
+
+          if [ "$pages_status" = "200" ]; then
+            echo "GitHub Pages already enabled — skipping bootstrap."
+          else
+            echo "Enabling GitHub Pages with GitHub Actions source..."
+            enable_status=$(gh api -X POST "repos/${{ github.repository }}/pages" \
+              -H "Accept: application/vnd.github+json" \
+              -f build_type=workflow \
+              --silent -i 2>&1 | grep -m1 "^HTTP" | awk '{print $2}' || echo "000")
+            if [ "$enable_status" = "201" ] || [ "$enable_status" = "409" ]; then
+              echo "GitHub Pages enabled successfully (HTTP ${enable_status})."
+            else
+              echo "::warning::Pages bootstrap returned HTTP ${enable_status}. If Pages is not yet enabled, visit: https://github.com/${{ github.repository }}/settings/pages"
+            fi
+          fi
+
+      - name: Verify github-pages environment allows this deployment branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          DEPLOY_BRANCH="${{ github.ref_name }}"
+          DEFAULT_BRANCH="${{ github.event.repository.default_branch }}"
+
+          ENV_PAYLOAD="$(gh api "repos/${{ github.repository }}/environments/github-pages" 2>/dev/null || true)"
+          if [[ -z "$ENV_PAYLOAD" ]]; then
+            echo "::notice::Environment 'github-pages' is not yet configured. GitHub may create it automatically on first deployment."
+            exit 0
+          fi
+
+          CUSTOM_POLICY="$(echo "$ENV_PAYLOAD" | jq -r '.deployment_branch_policy.custom_branch_policies // false')"
+          PROTECTED_ONLY="$(echo "$ENV_PAYLOAD" | jq -r '.deployment_branch_policy.protected_branches // false')"
+
+          if [[ "$CUSTOM_POLICY" == "true" ]]; then
+            BRANCHES="$(gh api "repos/${{ github.repository }}/environments/github-pages/deployment-branch-policies" \
+              --jq '.branch_policies[].name' 2>/dev/null || true)"
+            if ! echo "$BRANCHES" | grep -Fqx "$DEPLOY_BRANCH"; then
+              echo "::error::Environment 'github-pages' allows selected branches, but '${DEPLOY_BRANCH}' is not included."
+              echo "Add '${DEPLOY_BRANCH}' at: https://github.com/${{ github.repository }}/settings/environments"
+              exit 1
+            fi
+          elif [[ "$PROTECTED_ONLY" != "true" ]]; then
+            echo "::notice::No branch restrictions on github-pages environment."
+          fi
+
+          echo "github-pages environment policy permits deployments from ${DEPLOY_BRANCH}."
+
   deploy:
     # Publish only on push to main / manual dispatch; PRs validate the build only.
     if: github.event_name != 'pull_request' && needs.build-docs.outputs.configured == 'true'
-    needs: build-docs
+    needs: [build-docs, bootstrap-pages]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment:
@@ -81,3 +149,14 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v4
+
+      - name: Update repository homepage URL
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          OWNER="${{ github.repository_owner }}"
+          REPO="${{ github.event.repository.name }}"
+          gh api --method PATCH "repos/${{ github.repository }}" \
+            -f homepage="https://${OWNER}.github.io/${REPO}/" 2>/dev/null \
+            && echo "Homepage URL updated." \
+            || echo "Warning: could not update homepage URL (non-fatal)."

@@ -1,29 +1,72 @@
-site_name: basecoat-sheen
-site_description: basecoat-sheen packages design tokens, skills, agents, and governance docs so designers, engineers, and platform teams can adopt a consistent UX system fast.
-site_url: https://ibuyspy-shared.github.io/basecoat-sheen/
-repo_url: https://github.com/IBuySpy-Shared/basecoat-sheen
+site_name: sheen
+site_description: AI-assisted UX/UI design governance — design tokens, skills, agents, and instructions for a consistent design system.
+site_url: https://ivegamsft.github.io/sheen/
+repo_url: https://github.com/ivegamsft/sheen
+repo_name: ivegamsft/sheen
+edit_uri: edit/main/docs/
+
 theme:
   name: material
   custom_dir: overrides
+  icon:
+    logo: material/brush
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
   features:
+    - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.sections
     - navigation.expand
     - navigation.path
-    - navigation.tabs
-    - navigation.tabs.sticky
     - navigation.top
     - search.highlight
     - search.suggest
-    - toc.follow
     - content.code.copy
+    - content.tabs.link
+    - toc.follow
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/external-links.js
+
 markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - admonition
+  - pymdownx.details
   - attr_list
   - md_in_html
+  - tables
   - toc:
       permalink: true
+
 plugins:
-  - search # Built-in MkDocs search keeps the docs site self-contained and fast without external indexing.
+  - search
 nav:
   - Discovery:
       - Home: index.md
@@ -113,3 +156,10 @@ nav:
       - Legacy onboarding pages:
           - Adoption Modes (legacy): adoption-modes.md
           - Onboarding FAQ (legacy): onboarding-faq.md
+
+copyright: 'Copyright &copy; ivegamsft contributors. Licensed under MIT.'
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ivegamsft/sheen
