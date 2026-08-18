@@ -70,6 +70,7 @@ plugins:
 nav:
   - Discovery:
       - Home: index.md
+      - Product: product.md
       - What is sheen?: discovery/what-is-sheen.md
       - Core concepts: discovery/core-concepts.md
       - Catalog: discovery/catalog.md

@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.7.3",
+  "version": "0.8.0",
   "releaseDate": "2026-08-18",
-  "notes": "v0.7.3: consumer token build path (#92) and diagnose scope to sheen-managed assets (#93)."
+  "notes": "v0.8.0: PRODUCT.md (product.md spec), design: intent prompt (PRODUCT.md-grounded design requests), debate: intent prompt (structured design debate with weighted matrix and ADR output)."
 }

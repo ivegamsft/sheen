@@ -7,6 +7,25 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.8.0] — 2026-08-18
+
+### Added
+- **`PRODUCT.md`** — product specification for basecoat-sheen following the
+  [product.md spec](https://product.md/): Register, Users, Problem, Product Purpose,
+  Brand Personality/Tone, Anti-references, Design Principles (5), Accessibility &
+  Inclusion (WCAG 2.2 AA/AAA), Offer (MIT/OSS), Boundaries, Stack. Machine islands
+  for pricing and stack in spec-qualified fenced blocks. MDXLD frontmatter
+  (`$type: Product`). Published to docs as `docs/product.md` via snippets include.
+- **`vendor/basecoat/prompts/design.prompt.md`** — `design:` intent prompt. Anchors
+  every design request to `PRODUCT.md` (design principles, brand personality, a11y
+  floor, boundaries), routes to the correct sheen pillar agent, and produces
+  PRODUCT.md-grounded output. Also handles `design: create PRODUCT.md for this product`
+  discovery and generation workflow.
+- **`vendor/basecoat/prompts/debate.prompt.md`** — `debate:` intent prompt. Structured
+  design debate: generates 2–4 options, scores each against PRODUCT.md design principles
+  using a weighted matrix, applies WCAG hard gate, declares a winner, and produces an
+  ADR-style decision record ready to commit to `docs/decisions/`.
+
 ## [0.7.3] — 2026-08-18
 
 ### Fixed
