@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.5.0",
-  "releaseDate": "2026-08-16",
-  "notes": "v0.5.0 wave: consumer onboarding + adoption modes, real-world consumption patterns, docs-site UX/search, token build/CI docs + example consumer, cross-repo diagnostics tooling, eval routing audit + CI gate, basecoat-aligned publish/release tooling, and Dependabot remediation."
+  "version": "0.6.0",
+  "releaseDate": "2026-08-18",
+  "notes": "v0.6.0 wave: semantic tokens (space/elevation/motion/border), build-tokens pipeline, 11 new governance skills (design-to-code, drift-detection, versioning, performance, data-viz, AI governance, ethical-design, adoption-telemetry, mobile-native, design-sprint, sheen-onboard), spec compliance tools (lint-router, contrast-check, warn-rules, VPAT template), consumer lifecycle guide, and production publish flow to ivegamsft/sheen."
 }

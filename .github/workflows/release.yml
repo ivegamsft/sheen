@@ -1,9 +1,8 @@
 name: "Sheen - Release"
 
-# Ported from basecoat's release.yml (vendor/basecoat excludes upstream .github/).
-# Adapted for sheen: drops basecoat's internal production-mirror + PRODUCTION_REPO_TOKEN
-# and reusable-Actions audit steps (basecoat-only), and reads sheen's Keep a Changelog
-# notes via scripts/generate-release-notes.sh.
+# Creates a GitHub release on the source repo (IBuySpy-Shared/basecoat-sheen) and
+# gates on production token readiness before tagging, mirroring basecoat's release
+# pattern. The publish-to-production.yml workflow handles the ivegamsft/sheen mirror.
 
 on:
   push:
@@ -12,7 +11,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Existing tag to (re)publish, e.g. v0.4.0"
+        description: "Existing tag to (re)publish, e.g. v0.6.0"
         type: string
         required: true
 
@@ -24,7 +23,14 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  production-token-preflight:
+    name: Preflight — PRODUCTION_REPO_TOKEN readiness
+    uses: ./.github/workflows/token-preflight.yml
+    secrets:
+      PRODUCTION_REPO_TOKEN: ${{ secrets.PRODUCTION_REPO_TOKEN }}
+
   release:
+    needs: production-token-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

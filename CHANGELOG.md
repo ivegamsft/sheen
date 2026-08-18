@@ -7,7 +7,55 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
-## [0.5.0] — 2026-08-16
+## [0.6.0] — 2026-08-18
+
+### Added
+- **Wave 1/2 — Semantic tokens + token pipeline** (#43, #44, #49):
+  - 4 new semantic token files: `tokens/semantic/space.tokens.json`,
+    `elevation.tokens.json`, `motion.tokens.json`, `border.tokens.json` (80 keys).
+  - All 3 theme files (light/dark/high-contrast) updated to cover all 80 semantic keys;
+    high-contrast elevation uses flat/transparent shadows for accessibility.
+  - `scripts/build-tokens.ps1` — DTCG→CSS/JS/ESM/TypeScript pipeline with cycle detection.
+  - `materialize_tokens` opt-in added to `sync.ps1` and `sync.sh`; documented in `.sheen.yml.example`.
+- **Wave 2 — Agent quality** (#47, #51):
+  - All 6 agent descriptions updated with `USE FOR` / `DO NOT USE FOR` triggers.
+  - `composes.instructions` wired on all 6 agents.
+- **Wave 2 — Consumer lifecycle guide** (`docs/guides/consumer-lifecycle.md`):
+  - 5-phase Integrate→Onboard→Inventory→Audit→Use playbook with copy-paste prompts,
+    agent flows, output shapes, gate conditions, and a troubleshooting table.
+- **Wave 3 — Spec compliance tools** (#40, #41, #45, #48, #50, #52, #56):
+  - `discriminator` field added to all 46 intents; vocab schema bumped to `sheen-vocab/v2`.
+  - `scripts/lint-router.ps1` + `router-contract` CI job (6 validation checks).
+  - `scripts/contrast-check.ps1` — standalone WCAG contrast checker (21 pairs, all-themes mode).
+  - `scripts/warn-rules.ps1` — 5 warn-level governance rules (W01 token-budget,
+    W02 description-overlap, W03 skill-body-size, W04 aria-keyboard, W05 eval-coverage).
+  - `templates/vpat-statement.md` — WCAG 2.2 AA conformance statement (47 criteria, AT test matrix).
+  - `.markdownlint.json` + markdownlint CI step (warn-only).
+  - `sync.sh` `materialize_tokens` block for parity with `sync.ps1`.
+- **Wave 4 — 11 comprehensive governance skills** (#55, #59–#68), growing skills from 46→57:
+  - `design-to-code` — scaffold React/Vue/Web Components from spec + tokens.
+  - `design-drift-detection` — spec-vs-implementation parity audit.
+  - `sheen-onboard` — agent-driven 5-phase consumer lifecycle orchestration.
+  - `design-system-versioning` — semver classification, migration guides, deprecation timelines.
+  - `performance-aware-design` — Core Web Vitals (LCP/CLS/INP) impact assessment for design decisions.
+  - `data-visualisation` — chart type selection, data density rules, accessible colour encoding.
+  - `ai-output-governance` — review AI-generated copy/imagery/UI for bias, hallucination, brand safety.
+  - `ethical-design` — dark pattern detection (10 patterns), consent UI, GDPR/ISO 29184 review.
+  - `design-adoption-telemetry` — token and component usage analytics in production codebases.
+  - `mobile-native-design` — iOS HIG and Android Material You design mapping with parity reports.
+  - `design-sprint` — full GV-style sprint facilitation (HMW, storyboard, prototype spec, test script).
+  - Each skill ships with `SKILL.md` (workflow, sample prompts, output schema, agent pairing)
+    and `eval.yaml` (4 positive + 2 negative routing scenarios ≥ 7.0 threshold).
+- **Publishing flow** — `publish-to-production.yml` + `token-preflight.yml`:
+  - Mirrors tagged releases to the public production repo (`ivegamsft/sheen`).
+  - Strips internal CI tooling; sanitizes `IBuySpy-Shared/basecoat-sheen` → `ivegamsft/sheen`.
+  - `release.yml` updated to gate on `PRODUCTION_REPO_TOKEN` preflight before creating release.
+
+### Changed
+- `sheen-metadata.json` skill count: 46 → 57; `sheen.vocab.yaml` schema: v1 → v2.
+- Docs: `reference/skills-catalog.md` and `guides/prompts/index.md` updated with Wave 4 skills.
+
+
 
 ### Added
 - Consumer onboarding quick-start guide with three adoption modes (lean,
