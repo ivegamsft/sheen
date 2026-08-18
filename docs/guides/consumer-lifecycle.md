@@ -100,7 +100,7 @@ curl -fsSL https://raw.githubusercontent.com/ivegamsft/sheen/main/sync.sh  -o sy
 
 ```yaml
 # .sheen.yml — basecoat-sheen consumer config. Commit this file.
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: main            # or pin to a release tag e.g. v0.8.1
 
 sync:
@@ -508,7 +508,7 @@ Please:
 #### Step 1 — Review the changelog
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/IBuySpy-Shared/basecoat-sheen/<TARGET-VERSION>/CHANGELOG.md
+curl -fsSL https://raw.githubusercontent.com/ivegamsft/sheen/<TARGET-VERSION>/CHANGELOG.md
 ```
 
 Look for `### Breaking` or renamed assets before running sync.
