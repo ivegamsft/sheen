@@ -48,7 +48,7 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
     and `eval.yaml` (4 positive + 2 negative routing scenarios ≥ 7.0 threshold).
 - **Publishing flow** — `publish-to-production.yml` + `token-preflight.yml`:
   - Mirrors tagged releases to the public production repo (`ivegamsft/sheen`).
-  - Strips internal CI tooling; sanitizes `IBuySpy-Shared/basecoat-sheen` → `ivegamsft/sheen`.
+  - Strips internal CI tooling; sanitizes `ivegamsft/sheen` → `ivegamsft/sheen`.
   - `release.yml` updated to gate on `PRODUCTION_REPO_TOKEN` preflight before creating release.
 
 ### Changed
@@ -172,8 +172,8 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 - The upstream `basecoat` framework remains vendored read-only under
   `vendor/basecoat/` and is not modified by sheen.
 
-[Unreleased]: https://github.com/IBuySpy-Shared/basecoat-sheen/compare/v0.4.0...HEAD
-[0.4.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.4.0
-[0.3.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.3.0
-[0.2.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.2.0
-[0.1.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.1.0
+[Unreleased]: https://github.com/ivegamsft/sheen/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/ivegamsft/sheen/releases/tag/v0.4.0
+[0.3.0]: https://github.com/ivegamsft/sheen/releases/tag/v0.3.0
+[0.2.0]: https://github.com/ivegamsft/sheen/releases/tag/v0.2.0
+[0.1.0]: https://github.com/ivegamsft/sheen/releases/tag/v0.1.0

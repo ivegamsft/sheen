@@ -1,7 +1,7 @@
 site_name: basecoat-sheen
 site_description: basecoat-sheen packages design tokens, skills, agents, and governance docs so designers, engineers, and platform teams can adopt a consistent UX system fast.
-site_url: https://ibuyspy-shared.github.io/basecoat-sheen/
-repo_url: https://github.com/IBuySpy-Shared/basecoat-sheen
+site_url: https://ivegamsft.github.io/sheen/
+repo_url: https://github.com/ivegamsft/sheen
 theme:
   name: material
   custom_dir: overrides

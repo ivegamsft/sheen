@@ -100,7 +100,7 @@ git log --oneline -1  # note current commit
 Change `ref: main` (or tag) to `ref: v0.5.0`:
 
 ```yaml
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: v0.5.0  # changed from main or v0.3.x
 ```
 
