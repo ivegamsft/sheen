@@ -61,7 +61,7 @@ Themes to materialise: <light, dark, high-contrast | all>
 
 ```yaml
 # .sheen.yml — basecoat-sheen consumer config. Commit this file.
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: v0.7.0          # pin to a release tag for stability
 
 sync:
@@ -438,7 +438,7 @@ Please:
 #### Step 1 — Review the changelog
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/IBuySpy-Shared/basecoat-sheen/<TARGET-VERSION>/CHANGELOG.md
+curl -fsSL https://raw.githubusercontent.com/ivegamsft/sheen/<TARGET-VERSION>/CHANGELOG.md
 ```
 
 Look for `### Breaking` or renamed assets before running sync.

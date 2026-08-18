@@ -1,5 +1,5 @@
 # Token-only mode: design token governance and instructions, no skills or agents.
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: main
 skills: []
 agents: []

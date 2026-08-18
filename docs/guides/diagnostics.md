@@ -51,7 +51,7 @@ Messages are reported as `pass`, `warn`, or `error`. Errors produce exit code
   "timestamp": "2026-08-16T09:49:00Z",
   "config": {
     "valid": true,
-    "source": "https://github.com/IBuySpy-Shared/basecoat-sheen.git",
+    "source": "https://github.com/ivegamsft/sheen.git",
     "ref": "main",
     "skills": 3,
     "agents": 1,
