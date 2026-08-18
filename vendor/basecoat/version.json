@@ -1,6 +1,0 @@
-{
-  "name": "base-coat",
-  "version": "4.1.0",
-  "releaseDate": "2026-08-10",
-  "notes": "Release: adds continuous backlog autopilot, a generated prompt library, capability-aware model routing, reliable downstream refresh flows, and an adapter-free MCP dependency graph"
-}
