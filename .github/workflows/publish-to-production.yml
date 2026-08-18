@@ -353,6 +353,32 @@ jobs:
             && echo "Production repo metadata updated" \
             || echo "Warning: could not update repo metadata (non-fatal)"
 
+      - name: Enable GitHub Pages (GitHub Actions source)
+        if: always() && steps.push-production.outcome == 'success'
+        env:
+          PRODUCTION_TOKEN: ${{ secrets.PRODUCTION_REPO_TOKEN }}
+        run: |
+          set -euo pipefail
+          PAGES_API="https://api.github.com/repos/ivegamsft/sheen/pages"
+          pages_status=$(curl -sS -o /dev/null -w "%{http_code}" \
+            -H "Authorization: token ${PRODUCTION_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "$PAGES_API")
+          if [ "$pages_status" = "200" ]; then
+            echo "GitHub Pages already enabled — skipping."
+          else
+            enable_status=$(curl -sS -o /dev/null -w "%{http_code}" -X POST \
+              -H "Authorization: token ${PRODUCTION_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              "$PAGES_API" \
+              -d '{"build_type": "workflow"}')
+            if [ "$enable_status" = "201" ] || [ "$enable_status" = "409" ]; then
+              echo "GitHub Pages enabled with GitHub Actions source (HTTP ${enable_status})."
+            else
+              echo "::warning::Could not enable GitHub Pages (HTTP ${enable_status}) — enable manually at https://github.com/ivegamsft/sheen/settings/pages"
+            fi
+          fi
+
       - name: Create GitHub release on production repository
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -398,4 +424,20 @@ jobs:
               "https://api.github.com/repos/ivegamsft/sheen/releases" \
               -d "{\"tag_name\": \"${TAG}\", \"name\": \"${TAG}\", \"body\": $(echo "$RELEASE_BODY" | jq -Rs .)}" >/dev/null
             echo "Created release ${TAG} on production repo."
+          fi
+
+      - name: Trigger docs build on production repository
+        if: always() && steps.push-production.outcome == 'success'
+        env:
+          PRODUCTION_TOKEN: ${{ secrets.PRODUCTION_REPO_TOKEN }}
+        run: |
+          dispatch_status=$(curl -sS -o /dev/null -w "%{http_code}" -X POST \
+            -H "Authorization: token ${PRODUCTION_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/ivegamsft/sheen/actions/workflows/docs.yml/dispatches" \
+            -d '{"ref": "main"}')
+          if [ "$dispatch_status" = "204" ]; then
+            echo "Docs build dispatched on ivegamsft/sheen."
+          else
+            echo "::warning::Could not dispatch docs build (HTTP ${dispatch_status}) — run manually at https://github.com/ivegamsft/sheen/actions/workflows/docs.yml"
           fi
