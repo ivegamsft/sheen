@@ -32,7 +32,7 @@ template below (or copy from `.sheen.yml.example` in this repo).
 ```yaml
 # .sheen.yml
 # Minimal starter for first-time onboarding
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: main
 
 # Optional allow-lists; uncomment as you narrow scope
@@ -145,7 +145,7 @@ can switch modes later without changing tooling, only configuration.
 ### Lean mode
 
 ```yaml
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: main
 skills:
   - design-review
@@ -157,7 +157,7 @@ instructions:
 ### Token-only mode
 
 ```yaml
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: main
 skills: []
 agents: []
@@ -172,7 +172,7 @@ themes:
 ### Full mode
 
 ```yaml
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: main
 # Omit allow-lists to sync the full catalog
 ```

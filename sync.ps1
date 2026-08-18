@@ -14,7 +14,7 @@
 
 $ErrorActionPreference = 'Stop'
 
-$DefaultSource = 'https://github.com/IBuySpy-Shared/basecoat-sheen.git'
+$DefaultSource = 'https://github.com/ivegamsft/sheen.git'
 $DefaultRef    = 'main'
 
 # Asset type -> consumer target directory. Skills/agents live under .github so the

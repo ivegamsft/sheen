@@ -14,7 +14,7 @@
 
 set -euo pipefail
 
-DEFAULT_SOURCE="https://github.com/IBuySpy-Shared/basecoat-sheen.git"
+DEFAULT_SOURCE="https://github.com/ivegamsft/sheen.git"
 DEFAULT_REF="main"
 
 # Asset type -> consumer target directory (parallel arrays; keep in sync).

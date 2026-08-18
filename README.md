@@ -1,6 +1,6 @@
 # basecoat-sheen
 
-**The design/UX "finish coat" for [basecoat](https://github.com/IBuySpy-Shared/basecoat).**
+**The design/UX "finish coat" for [basecoat](https://github.com/ivegamsft/sheen).**
 
 basecoat-sheen is a shared repository of GitHub Copilot customizations — skills,
 agents, instructions, prompts, and a validated design-token system — focused on
@@ -40,12 +40,12 @@ for the full contract.
 
    ```powershell
    # Windows PowerShell
-   $env:SHEEN_REPO = 'https://github.com/IBuySpy-Shared/basecoat-sheen.git'; .\sync.ps1
+   $env:SHEEN_REPO = 'https://github.com/ivegamsft/sheen.git'; .\sync.ps1
    ```
 
    ```bash
    # macOS / Linux
-   SHEEN_REPO=https://github.com/IBuySpy-Shared/basecoat-sheen.git ./sync.sh
+   SHEEN_REPO=https://github.com/ivegamsft/sheen.git ./sync.sh
    ```
 
 Sync is **idempotent** and records a manifest so [`rollback.ps1`](rollback.ps1) /
