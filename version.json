@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "releaseDate": "2026-08-18",
-  "notes": "v0.6.1 docs parity hotfix: MkDocs Material icon rendering, navigation/theme parity with basecoat, Pages bootstrap via GitHub Actions source, and production docs deployment reliability fixes."
+  "notes": "v0.6.2 publish sanitization hardening: strips internal vendor/skills payload from public mirror and blocks leaked internal owner identifiers outside LICENSE."
 }

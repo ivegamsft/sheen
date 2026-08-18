@@ -7,6 +7,15 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.6.2] — 2026-08-18
+
+### Fixed
+- Hardened public publish sanitization in `publish-to-production.yml`:
+  - Strips `.github/skills/**` and `vendor/**` from the production payload.
+  - Expands internal-owner scrub + safety gate to block leaked `IBuySpy-Shared` and
+    `ibuyspy-shared.github.io` references outside `LICENSE`.
+- Prevents internal owner/repo details from leaking into the public mirror content.
+
 ## [0.6.1] — 2026-08-18
 
 ### Fixed

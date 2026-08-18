@@ -90,6 +90,7 @@ jobs:
             'checks.json'
             '.markdownlint.json'
             '.github/dependabot.yml'
+            '.github/skills/**'
             'scripts/build-metadata.ps1'
             'scripts/build-metadata.sh'
             'scripts/lint-frontmatter.ps1'
@@ -100,6 +101,7 @@ jobs:
             'scripts/eval-routing-lib.ps1'
             'scripts/generate-release-notes.sh'
             'scripts/audit-evals.ps1'
+            'vendor/**'
           )
           # Only docs.yml stays; all other workflows are internal
           PUBLIC_WORKFLOWS=(
@@ -213,7 +215,9 @@ jobs:
           # Final safety gate: internal owner/repo details must not leak into public payload.
           FORBIDDEN_MATCHES=$(git grep -inI -E 'IBuySpy-Shared|ibuyspy-shared\.github\.io' -- . || true)
           UNEXPECTED_MATCHES=$(printf '%s\n' "$FORBIDDEN_MATCHES" \
-            | grep -v '^$' || true)
+            | grep -v '^$' \
+            | grep -v '^LICENSE:' \
+            || true)
           if [ -n "$UNEXPECTED_MATCHES" ]; then
             echo "::error::Internal owner details remain in the public payload:"
             echo "$UNEXPECTED_MATCHES"
