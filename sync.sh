@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-DEFAULT_SOURCE="https://github.com/IBuySpy-Shared/basecoat-sheen.git"
+DEFAULT_SOURCE="https://github.com/ivegamsft/sheen.git"
 DEFAULT_REF="main"
 
 TYPES="skills agents instructions prompts templates tokens"

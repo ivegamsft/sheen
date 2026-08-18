@@ -1,5 +1,5 @@
 # Solo Designer Mode — lean setup for individual design work
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: main
 
 # Include only design-focused skills (no engineering agents)
