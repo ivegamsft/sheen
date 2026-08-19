@@ -161,10 +161,39 @@ any `ERROR` before proceeding.
 
 ---
 
+### Phase 4b — Generate DESIGN.md (optional but recommended)
+
+> Requires `sheen/tokens/` to be present (synced when `sync_tokens: true` in `.sheen.yml`).
+
+If the repo has design tokens, generate `DESIGN.md` — a
+[Stitch-compatible](https://stitch.withgoogle.com/docs/design-md) design system
+spec that Copilot agents use as a single authoritative source of truth for
+colors, typography, spacing, and radii.
+
+**Windows (PowerShell):**
+```powershell
+pwsh -NonInteractive -File scripts/build-design-md.ps1
+```
+
+**macOS / Linux (Bash):**
+```bash
+bash scripts/build-design-md.sh
+```
+
+To keep `DESIGN.md` current on every future sync, add to `.sheen.yml`:
+```yaml
+generate_design_md: true
+```
+
+If the user doesn't have custom tokens yet, skip this step. They can add it
+later by running the command above or enabling the option in `.sheen.yml`.
+
+---
+
 ### Phase 5 — Commit
 
 ```bash
-git add .sheen.yml .sheen/manifest.json .github/ sheen/
+git add .sheen.yml .sheen/manifest.json .github/ sheen/ DESIGN.md
 git commit -m "chore: integrate basecoat-sheen v0.7.0"
 git push
 ```

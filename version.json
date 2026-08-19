@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.8.3",
+  "version": "0.9.0",
   "releaseDate": "2026-08-18",
-  "notes": "v0.8.3: Auto-update workflow — sheen-sync.yml callable + consumer template; sync now deploys .github/workflows/sheen-sync.yml on first run, giving consumers the same scheduled PR auto-update experience as basecoat."
+  "notes": "v0.9.0: DESIGN.md consumer tooling — audit script for org-wide DESIGN.md status, callable generate workflow, and DESIGN.md generation steps in integrate/upgrade prompts."
 }

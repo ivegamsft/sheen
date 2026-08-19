@@ -101,6 +101,26 @@ re-run sync until no warnings remain.
 
 ---
 
+### Phase 4b — Refresh DESIGN.md (if present)
+
+If the repo has a `DESIGN.md` or has `generate_design_md: true` in `.sheen.yml`,
+regenerate it to pick up any token changes introduced by the upgrade:
+
+**Windows (PowerShell):**
+```powershell
+pwsh -NonInteractive -File scripts/build-design-md.ps1
+```
+
+**macOS / Linux (Bash):**
+```bash
+bash scripts/build-design-md.sh
+```
+
+If no `DESIGN.md` exists yet and the repo has `sheen/tokens/`, offer to generate
+it now. See [DESIGN.md docs](https://ibuyspy-shared.github.io/basecoat-sheen/guides/consumer-lifecycle/#phase-2-step-6).
+
+---
+
 ### Phase 5 — Validate
 
 ```powershell
@@ -121,7 +141,7 @@ proceeding. Common causes:
 ### Phase 6 — Commit
 
 ```bash
-git add .sheen.yml .sheen/manifest.json .github/ sheen/
+git add .sheen.yml .sheen/manifest.json .github/ sheen/ DESIGN.md
 git commit -m "chore: upgrade basecoat-sheen to v<NEW-VERSION>"
 git push
 ```

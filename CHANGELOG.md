@@ -7,7 +7,32 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
-## [0.8.3] — 2026-08-18
+## [0.9.0] — 2026-08-18
+
+### Added
+- **`scripts/audit-design-md.ps1`** — PowerShell org-wide DESIGN.md audit. Scans
+  a GitHub org (or explicit repo list) for sheen consumers, reports DESIGN.md
+  presence, token tier coverage, and sheen version. Emits a markdown audit report
+  to stdout or `-Out <file>`. Supports `-GenerateMissing` to dispatch the
+  `generate-design-md-callable.yml` workflow for any repo missing DESIGN.md.
+- **`.github/workflows/generate-design-md-callable.yml`** — reusable callable
+  workflow (`workflow_call` + `workflow_dispatch`) that generates `DESIGN.md` from
+  a consumer's `sheen/tokens/` and opens a PR. Mirrors the callable pattern of
+  `check-sheen-version-callable.yml`. Consumer repos can also trigger it directly
+  via `gh workflow run`.
+- **`sheen-integrate.prompt.md` Phase 4b** — DESIGN.md generation step in the
+  integration workflow; offers `generate_design_md: true` config for persistent
+  auto-generation.
+- **`sheen-upgrade.prompt.md` Phase 4b** — DESIGN.md regeneration step in the
+  upgrade workflow; surfaces the generate option for repos that don't have it yet.
+
+### Why this matters
+With v0.8.1 (DESIGN.md export) the tooling existed but was not surfaced in
+consumer-facing workflows. This release closes the loop: operators can now audit
+an entire org for DESIGN.md status in one command, auto-generate for missing repos,
+and have DESIGN.md generation baked into every integrate and upgrade flow.
+
+
 
 ### Added
 - **`check-sheen-version-callable.yml`** — reusable GitHub Actions workflow
