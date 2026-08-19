@@ -2,7 +2,7 @@
   "$comment": "GENERATED FILE — do not hand-edit. Produced by scripts/build-metadata.ps1 from repo-root assets (vendor/ excluded).",
   "schema": "sheen-metadata/v1",
   "name": "basecoat-sheen",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "source": {
     "excluded": [
       "vendor/"
@@ -13,7 +13,7 @@
     "agents": 6,
     "instructions": 10,
     "prompts": 0,
-    "templates": 9,
+    "templates": 10,
     "tokens": {
       "core": 7,
       "semantic": 6,
@@ -108,6 +108,7 @@
       "README",
       "design-review",
       "README",
+      "sheen-sync",
       "README",
       "style-guide",
       "vpat-statement"

@@ -66,6 +66,14 @@ ref: main
 # Defaults to "light". Must match a file in sheen/tokens/themes/.
 # design_md_theme: light
 
+# Auto-update workflow:
+# On first sync, sheen deploys .github/workflows/sheen-sync.yml to your repo.
+# This scheduled workflow checks for new sheen versions weekly and opens a PR
+# — the same auto-update experience as basecoat. No extra configuration needed.
+# The workflow is callable from sheen's release pipeline and can also be
+# triggered manually from the GitHub Actions tab.
+# To disable, delete .github/workflows/sheen-sync.yml after your first sync.
+
 # sync: sync behaviour overrides (one mapping --- combine the keys you need).
 #   script  --- path to the sync entrypoint, relative to repo root. Set this when
 #               your sync script is not the canonical root sync.ps1/sync.sh.

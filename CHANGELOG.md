@@ -7,6 +7,30 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.8.3] — 2026-08-18
+
+### Added
+- **`check-sheen-version-callable.yml`** — reusable GitHub Actions workflow
+  (`workflow_call`) that consumer repos reference to auto-sync sheen assets and
+  open a PR when a new version is available. Mirrors the `check-basecoat-version-callable.yml`
+  model: checks out the consumer repo, runs `sync.sh`, detects changes, commits
+  to a branch, and opens a governed PR. Supports `source_repo`, `source_ref`,
+  `auto_merge`, custom `pr_branch_prefix`, and `fetch_token` / `update_token` secrets.
+- **`templates/sheen-sync.yml`** — consumer-side workflow template (weekly schedule
+  + manual dispatch) that calls the callable. Distributed to consumer repos on
+  first sync — no extra setup required.
+- **`sync.ps1` / `sync.sh`** — now deploys `templates/sheen-sync.yml` to
+  `.github/workflows/sheen-sync.yml` in the consumer repo on first sync (if the
+  file doesn't already exist). Provides the same auto-update experience as basecoat
+  from the very first `pwsh sync.ps1` run.
+- **`.sheen.yml.example`** — documented the auto-update workflow with guidance on
+  how to disable it if needed.
+
+### Why this matters
+The gap between basecoat and sheen onboarding experience was architectural:
+basecoat uses a **callable reusable workflow** that consumer repos schedule;
+sheen was **pull-only** (manual `sync.ps1`). This release closes that gap.
+
 ## [0.8.2] — 2026-08-18
 
 ### Fixed

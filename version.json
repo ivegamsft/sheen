@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "releaseDate": "2026-08-18",
-  "notes": "v0.8.2: Bootstrap scripts (bootstrap.ps1 + .sh) fix the onboarding paradox — consumers can now get sync.ps1 and sheen-onboard with a single curl/iwr one-liner before anything is installed. Updated README, consumer-lifecycle Phase 1, sheen-integrate prompt, and sheen-onboard SKILL.md."
+  "notes": "v0.8.3: Auto-update workflow — sheen-sync.yml callable + consumer template; sync now deploys .github/workflows/sheen-sync.yml on first run, giving consumers the same scheduled PR auto-update experience as basecoat."
 }

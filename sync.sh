@@ -344,3 +344,16 @@ if [ "$GEN_DESIGN" = 'true' ]; then
       || { echo "sheen sync: build-design-md failed" >&2; exit 1; }
   fi
 fi
+
+# ── Deploy sheen-sync.yml to consumer .github/workflows/ ─────────────────────
+# Provides the same auto-update experience as basecoat: a scheduled workflow
+# opens a PR whenever a new sheen version is available.
+SHEEN_SYNC_WF="$REPO_ROOT/.github/workflows/sheen-sync.yml"
+if [ ! -f "$SHEEN_SYNC_WF" ]; then
+  UPSTREAM_SYNC_WF="$WORK/templates/sheen-sync.yml"
+  if [ -f "$UPSTREAM_SYNC_WF" ]; then
+    mkdir -p "$REPO_ROOT/.github/workflows"
+    cp "$UPSTREAM_SYNC_WF" "$SHEEN_SYNC_WF"
+    echo 'sheen sync: deployed .github/workflows/sheen-sync.yml (auto-update workflow)'
+  fi
+fi

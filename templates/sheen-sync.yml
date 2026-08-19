@@ -1,0 +1,51 @@
+name: "Sheen - Sync Assets"
+
+# Consumer-side workflow: checks for sheen updates on a schedule and opens
+# a PR when new assets are available. Mirrors the basecoat consumer-update
+# experience — updates arrive as governed PRs, not manual script runs.
+#
+# This file was synced into your repo by basecoat-sheen.
+# Do not edit directly — changes will be overwritten on the next sync.
+# To customise, override inputs below.
+
+on:
+  # Run weekly on Monday morning
+  schedule:
+    - cron: "0 9 * * 1"
+
+  # Also allow manual trigger from Actions tab
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: "Sheen ref to sync (tag, branch, or SHA). Defaults to .sheen.yml setting."
+        type: string
+        required: false
+        default: ""
+      auto_merge:
+        description: "Auto-merge the sync PR if checks pass"
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sheen-sync:
+    name: Sync sheen assets
+    uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@main
+    with:
+      source_repo: IBuySpy-Shared/basecoat-sheen
+      # source_ref is read from .sheen.yml by the callable workflow.
+      # Override here or via workflow_dispatch input to force a specific ref.
+      source_ref: ${{ inputs.source_ref || '' }}
+      auto_merge: ${{ inputs.auto_merge || false }}
+    secrets:
+      # update_token: token with contents:write + pull-requests:write
+      # Defaults to GITHUB_TOKEN if not provided. Set this secret if you need
+      # to trigger further workflows on the resulting PR.
+      update_token: ${{ secrets.SHEEN_UPDATE_TOKEN || '' }}
+      # fetch_token: read token for the (private) source repo.
+      # Not required when using the public ivegamsft/sheen mirror.
+      fetch_token: ${{ secrets.SHEEN_FETCH_TOKEN || '' }}

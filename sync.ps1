@@ -343,6 +343,21 @@ try {
             if ($LASTEXITCODE -and $LASTEXITCODE -ne 0) { throw "build-design-md failed (exit $LASTEXITCODE)" }
         }
     }
+
+    # ── Deploy sheen-sync.yml to consumer .github/workflows/ ─────────────────
+    # Provides the same auto-update experience as basecoat: a scheduled workflow
+    # opens a PR whenever a new sheen version is available.
+    $sheenSyncWorkflow = Join-Path $repoRoot '.github' 'workflows' 'sheen-sync.yml'
+    if (-not (Test-Path -LiteralPath $sheenSyncWorkflow)) {
+        $upstreamTemplate = Join-Path $work 'templates' 'sheen-sync.yml'
+        if (Test-Path -LiteralPath $upstreamTemplate) {
+            $workflowsDir = Join-Path $repoRoot '.github' 'workflows'
+            New-Item -ItemType Directory -Force -Path $workflowsDir | Out-Null
+            Copy-Item -LiteralPath $upstreamTemplate -Destination $sheenSyncWorkflow -Force
+            Add-ManifestFile -ManifestFiles $manifest.files -RepoRoot $repoRoot -Path $sheenSyncWorkflow
+            Write-Host 'sheen sync: deployed .github/workflows/sheen-sync.yml (auto-update workflow)'
+        }
+    }
 }
 finally {
     if (Test-Path -LiteralPath $work) { Remove-Item -LiteralPath $work -Recurse -Force -ErrorAction SilentlyContinue }
