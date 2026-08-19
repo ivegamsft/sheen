@@ -18,7 +18,7 @@
 **basecoat-sheen** is a governance repository of reusable AI customization assets
 (skills, agents, instructions, prompts, templates) for **design, brand, and UI
 craft**. It is the "finish coat" sibling to
-[`basecoat`](https://github.com/IBuySpy-Shared/basecoat/): where basecoat governs
+[`basecoat`](https://github.com/ivegamsft/sheen/): where basecoat governs
 the engineering SDLC, sheen governs how products *look, feel, read, and hold up to
 a craft bar*.
 
