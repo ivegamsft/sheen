@@ -39,7 +39,7 @@ Use this when one person or a small team wants immediate value with minimal sync
 surface.
 
 ```yaml
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: main
 skills:
   - design-review
@@ -60,7 +60,7 @@ Use this when the main goal is design-system consistency and platform output
 generation.
 
 ```yaml
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: main
 skills: []
 agents: []
@@ -83,7 +83,7 @@ Good fit when:
 Use this when the team is ready to consume the entire catalog.
 
 ```yaml
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: main
 # Omit allow-lists to sync the full catalog
 ```
