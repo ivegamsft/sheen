@@ -31,7 +31,37 @@
     "on-accent":        { "$type": "color", "$value": "#ffffff" },
     "link":             { "$type": "color", "$value": "#0969da" },
     "link-hover":       { "$type": "color", "$value": "#0550ae" },
-    "link-visited":     { "$type": "color", "$value": "#6e40c9" }
+    "link-visited":     { "$type": "color", "$value": "#6e40c9" },
+    "data": {
+      "categorical": {
+        "1": { "$type": "color", "$value": "#0969da" },
+        "2": { "$type": "color", "$value": "#bc4c00" },
+        "3": { "$type": "color", "$value": "#1a7f37" },
+        "4": { "$type": "color", "$value": "#6e40c9" },
+        "5": { "$type": "color", "$value": "#cf222e" },
+        "6": { "$type": "color", "$value": "#0f7b6c" },
+        "7": { "$type": "color", "$value": "#b83280" },
+        "8": { "$type": "color", "$value": "#8a6d3b" }
+      },
+      "series": {
+        "1": { "$type": "color", "$value": "#0969da" },
+        "2": { "$type": "color", "$value": "#bc4c00" },
+        "3": { "$type": "color", "$value": "#1a7f37" },
+        "4": { "$type": "color", "$value": "#6e40c9" },
+        "5": { "$type": "color", "$value": "#cf222e" },
+        "6": { "$type": "color", "$value": "#0f7b6c" },
+        "7": { "$type": "color", "$value": "#b83280" },
+        "8": { "$type": "color", "$value": "#8a6d3b" }
+      },
+      "sequential": {
+        "1": { "$type": "color", "$value": "#b6e3ff" },
+        "2": { "$type": "color", "$value": "#54aeff" },
+        "3": { "$type": "color", "$value": "#0969da" },
+        "4": { "$type": "color", "$value": "#033d8b" },
+        "5": { "$type": "color", "$value": "#002155" }
+      },
+      "neutral": { "$type": "color", "$value": "#57606a" }
+    }
   }
   ,
   "type": {

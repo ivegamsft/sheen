@@ -31,6 +31,37 @@
     "on-accent":        { "$type": "color", "$value": "{color.neutral.0}",    "$description": "Text/icon on accent background" },
     "link":             { "$type": "color", "$value": "{color.blue.50}",      "$description": "Hyperlink colour" },
     "link-hover":       { "$type": "color", "$value": "{color.blue.60}",      "$description": "Hyperlink on hover" },
-    "link-visited":     { "$type": "color", "$value": "{color.purple.60}",    "$description": "Visited hyperlink" }
+    "link-visited":     { "$type": "color", "$value": "{color.purple.60}",    "$description": "Visited hyperlink" },
+    "data": {
+      "$description": "Chart/graph colour encoding tokens. Reused by skills/data-visualisation. Categorical and series share identical values (two names for the same 8-hue qualitative set) so either reference style resolves. Never the sole means of encoding meaning -- pair with pattern, shape, or label per the data-visualisation accessibility rules.",
+      "categorical": {
+        "1": { "$type": "color", "$value": "{color.blue.50}",    "$description": "Categorical series 1 of 8" },
+        "2": { "$type": "color", "$value": "{color.orange.50}",  "$description": "Categorical series 2 of 8" },
+        "3": { "$type": "color", "$value": "{color.green.50}",   "$description": "Categorical series 3 of 8" },
+        "4": { "$type": "color", "$value": "{color.purple.60}",  "$description": "Categorical series 4 of 8" },
+        "5": { "$type": "color", "$value": "{color.red.50}",     "$description": "Categorical series 5 of 8" },
+        "6": { "$type": "color", "$value": "{color.teal.50}",    "$description": "Categorical series 6 of 8" },
+        "7": { "$type": "color", "$value": "{color.magenta.50}", "$description": "Categorical series 7 of 8" },
+        "8": { "$type": "color", "$value": "{color.brown.50}",   "$description": "Categorical series 8 of 8" }
+      },
+      "series": {
+        "1": { "$type": "color", "$value": "{color.blue.50}",    "$description": "Series 1 of 8 (alias set of categorical.1)" },
+        "2": { "$type": "color", "$value": "{color.orange.50}",  "$description": "Series 2 of 8 (alias set of categorical.2)" },
+        "3": { "$type": "color", "$value": "{color.green.50}",   "$description": "Series 3 of 8 (alias set of categorical.3)" },
+        "4": { "$type": "color", "$value": "{color.purple.60}",  "$description": "Series 4 of 8 (alias set of categorical.4)" },
+        "5": { "$type": "color", "$value": "{color.red.50}",     "$description": "Series 5 of 8 (alias set of categorical.5)" },
+        "6": { "$type": "color", "$value": "{color.teal.50}",    "$description": "Series 6 of 8 (alias set of categorical.6)" },
+        "7": { "$type": "color", "$value": "{color.magenta.50}", "$description": "Series 7 of 8 (alias set of categorical.7)" },
+        "8": { "$type": "color", "$value": "{color.brown.50}",   "$description": "Series 8 of 8 (alias set of categorical.8)" }
+      },
+      "sequential": {
+        "1": { "$type": "color", "$value": "{color.blue.10}", "$description": "Sequential ramp step 1 of 5 (lowest magnitude)" },
+        "2": { "$type": "color", "$value": "{color.blue.30}", "$description": "Sequential ramp step 2 of 5" },
+        "3": { "$type": "color", "$value": "{color.blue.50}", "$description": "Sequential ramp step 3 of 5 (midpoint)" },
+        "4": { "$type": "color", "$value": "{color.blue.70}", "$description": "Sequential ramp step 4 of 5" },
+        "5": { "$type": "color", "$value": "{color.blue.90}", "$description": "Sequential ramp step 5 of 5 (highest magnitude). Low end intentionally approaches background by design (ColorBrewer convention) -- pair with a legend/axis label, never colour alone." }
+      },
+      "neutral": { "$type": "color", "$value": "{color.neutral.60}", "$description": "Baseline / zero-line / unselected-series colour for charts" }
+    }
   }
 }

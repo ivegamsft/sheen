@@ -100,6 +100,24 @@
     },
     "hc-cyan": {
       "50":  { "$type": "color", "$value": "#1aebff",  "$description": "High-contrast link/active cyan (14.6:1 on black)" }
+    },
+    "teal": {
+      "50":  { "$type": "color", "$value": "#0f7b6c",  "$description": "Data-viz categorical hue 6 (light mode). Not tied to any alert semantic." }
+    },
+    "teal-dark": {
+      "40":  { "$type": "color", "$value": "#3fc9b4",  "$description": "Data-viz categorical hue 6 (dark mode)" }
+    },
+    "magenta": {
+      "50":  { "$type": "color", "$value": "#b83280",  "$description": "Data-viz categorical hue 7 (light mode). Not tied to any alert semantic." }
+    },
+    "magenta-dark": {
+      "40":  { "$type": "color", "$value": "#e0a6cf",  "$description": "Data-viz categorical hue 7 (dark mode)" }
+    },
+    "brown": {
+      "50":  { "$type": "color", "$value": "#8a6d3b",  "$description": "Data-viz categorical hue 8 (light mode). Not tied to any alert semantic." }
+    },
+    "brown-dark": {
+      "40":  { "$type": "color", "$value": "#c9a876",  "$description": "Data-viz categorical hue 8 (dark mode)" }
     }
   }
 }

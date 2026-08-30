@@ -828,17 +828,17 @@
       {
         "name": "dark",
         "path": "tokens/themes/dark.tokens.json",
-        "hash": "1b6934d169d060be291e00565ff0019041a7e2188169c06d6e4c3df4ac99302d"
+        "hash": "b83c29db29386514ab181149dd45a3139604939f6948c6dca42983a48e59c6b3"
       },
       {
         "name": "high-contrast",
         "path": "tokens/themes/high-contrast.tokens.json",
-        "hash": "7654ef8168cb1584fa928337f327ce6d59278afd7a7deac41a92b3b4f687dbbd"
+        "hash": "c99a9ea4cc08b6f2ab585641c0c41dd6e9b6e53386801c0b42fa9975aef0efa0"
       },
       {
         "name": "light",
         "path": "tokens/themes/light.tokens.json",
-        "hash": "7e12bc37ebf4abb7ac0d9944d33c4538e7f8015c1ef57511a37a27ec33e7d8b3"
+        "hash": "122ba7b15d8a3f025fcaff37d2cbae4346a58fb4ea1d13bc26d1dbac7a328b9e"
       }
     ]
   }
