@@ -9,9 +9,10 @@ foundation that basecoat provides: basecoat governs the *engineering* surface,
 sheen governs the *design* surface, and the two namespaces (`basecoat-*` /
 `sheen-*`) never collide, so a consumer can adopt both together.
 
-> **Status:** v0.2.0 release. The contract is specified in
-> [`SPEC.md`](SPEC.md) and [`specs/`](specs/); the repo now contains published
-> assets and validation coverage across the catalog.
+> **Status:** v0.10.0 release — 58 skills, 6 agents, 10 instruction layers, and
+> 10 templates, all validated against [`checks.json`](checks.json) in CI. The
+> contract is specified in [`SPEC.md`](SPEC.md) and [`specs/`](specs/); see
+> [`CHANGELOG.md`](CHANGELOG.md) for release history.
 
 ---
 
@@ -50,6 +51,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/ivegamsft/sheen/main/bootstr
 ```
 
 After the sync completes:
+
 1. **Commit** the result: `git add .sheen.yml .sheen/manifest.json .github/ sheen/`
 2. **Reset Copilot context** (required for skills to appear — see [context reset guide](docs/guides/consumer-lifecycle.md#resetting-copilot-context)):
    - CLI: `exit` then `gh copilot`

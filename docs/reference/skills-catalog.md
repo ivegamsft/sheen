@@ -4,10 +4,11 @@ Canonical source: `.github/skills/` (each subdirectory contains a `SKILL.md`)
 
 Current catalog summary:
 
-- 57 skills across foundations, brand, IA, components, usability, content,
+- 58 skills across foundations, brand, IA, components, usability, content,
   accessibility, security UX, mapping, lifecycle, governance, design-to-code,
-  drift detection, versioning, performance, data visualisation, AI governance,
-  ethical design, mobile native, adoption telemetry, and design sprint facilitation.
+  drift detection, versioning, performance, data visualisation and diagram
+  rendering, AI governance, ethical design, mobile native, adoption
+  telemetry, and design sprint facilitation.
 
 For authoritative behavior and boundaries, read each skill's `SKILL.md`.
 
