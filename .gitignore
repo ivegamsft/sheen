@@ -30,6 +30,14 @@ tokens/**/build/
 tokens/**/dist/
 tokens/**/*.generated.*
 
+# --- Playwright visual-regression (#129): rendered fixtures + run artifacts.
+# Baseline PNGs under tests/visual-regression/*-snapshots/ ARE committed
+# (they are the regression reference, not build output) and must not match
+# these patterns.
+playwright-report/
+test-results/
+blob-report/
+
 # --- Python (scripts) ---
 __pycache__/
 *.py[cod]

@@ -1,0 +1,13 @@
+{
+  "name": "basecoat-sheen",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Visual regression tooling for sheen's diagram/design skills (issue #129). No app code lives here — PowerShell/mkdocs remain the primary tooling.",
+  "scripts": {
+    "test:visual": "playwright test",
+    "test:visual:update": "playwright test --update-snapshots"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1"
+  }
+}

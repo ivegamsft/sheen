@@ -680,7 +680,7 @@
         "pillar": "governance",
         "maturity": "beta",
         "description": "Use when setting up visual snapshot baselines, triaging visual diffs, or detecting design QA drift. USE FOR: snapshot baseline setup, visual diff triage, design QA drift detection. DO NOT USE FOR: functional test authoring, security threat modeling.",
-        "hash": "553f9fd2258dedd53738339471e8fe4d4a92048a19d6be1479eae7418286c7a3"
+        "hash": "7f8a650416b823bfd3b04689c71be2c18f9c8d49f55ae2234e53ec46fe9cf8d3"
       },
       {
         "name": "web-usability-review",
