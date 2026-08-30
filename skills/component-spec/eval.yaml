@@ -11,6 +11,9 @@ scenarios:
   - id: "pos-3"
     input: "Create a spec for a button family including ARIA and focus model."
     expect_activation: true
+  - id: "pos-4"
+    input: "Check whether a spec already exists for the checkbox component before writing a new one."
+    expect_activation: true
   - id: "neg-1"
     input: "Audit the entire product for design debt and rank findings."
     expect_activation: false

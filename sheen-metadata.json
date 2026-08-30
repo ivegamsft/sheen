@@ -189,8 +189,8 @@
         "category": "design",
         "pillar": "components",
         "maturity": "stable",
-        "description": "Author complete component specifications with anatomy, variants, states, and accessibility behavior. USE FOR: defining component contracts, documenting ARIA/keyboard behavior, producing implementation-ready redlines. DO NOT USE FOR: whole-system design audits, broad UX strategy documents.",
-        "hash": "299d679a6c41b7b0815be686516b5fb080c924150824b4b7f7f16c83643ef893"
+        "description": "Author complete component specifications with anatomy, variants, states, and accessibility behavior, checking the component inventory first to avoid duplicate specs. USE FOR: defining component contracts, documenting ARIA/keyboard behavior, producing implementation-ready redlines. DO NOT USE FOR: whole-system design audits, broad UX strategy documents.",
+        "hash": "e16ca87a17129a57b567833608699b8b9bcf4923c0da1ff94aa4a2d1cf8d6eef"
       },
       {
         "name": "content-hierarchy",

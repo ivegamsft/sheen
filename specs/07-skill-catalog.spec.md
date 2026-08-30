@@ -142,11 +142,13 @@ Output: ontology model. · Pairs: `taxonomy`.
 ## Components / UI
 
 **`component-spec`** *(components · stable)* — anatomy, variants, states, spacing,
-a11y for one component.
+a11y for one component, backed by a populated component inventory.
 · Use for: spec a component, define variants/states, redlines · Not for:
 whole-system audit (`design-system-audit`)
-· Workflow: anatomy → variants → states → spacing/tokens → a11y (ARIA role,
-states, keyboard model per APG). · Output: component spec (template-backed). ·
+· Workflow: check `docs/components/inventory.md` for an existing spec →
+anatomy → variants → states → spacing/tokens → a11y (ARIA role, states,
+keyboard model per APG) → update inventory row. · Output: component spec
+(inventory-backed). ·
 Pairs: `ui-states-interaction`, `design-handoff`; agent `design-system-architect`.
 · Standards: WAI-ARIA 1.2/APG (spec 08 §2.2).
 
