@@ -82,8 +82,20 @@ jobs:
           ref: ${{ inputs.branch || 'main' }}
 
       - name: Download build-design-md.sh from sheen
+        env:
+          # Reading scripts/build-design-md.sh from IBuySpy-Shared/basecoat-sheen via
+          # raw.githubusercontent.com requires an authenticated request because the
+          # source repo is private/internal — raw.githubusercontent.com 404s on an
+          # unauthenticated request to a private repo instead of returning 401/403.
+          # `secrets.token` (workflow_call) or `github.token` (same-repo workflow_dispatch)
+          # covers the common case. Cross-repo `workflow_dispatch` callers targeting a
+          # different consumer repo must supply `secrets.token` with read access to
+          # IBuySpy-Shared/basecoat-sheen (same requirement as SHEEN_FETCH_TOKEN in
+          # check-sheen-version-callable.yml).
+          FETCH_TOKEN: ${{ secrets.token || github.token }}
         run: |
           curl -fsSL \
+            -H "Authorization: token ${FETCH_TOKEN}" \
             "https://raw.githubusercontent.com/IBuySpy-Shared/basecoat-sheen/${{ inputs.sheen_ref || 'main' }}/scripts/build-design-md.sh" \
             -o /tmp/build-design-md.sh
           chmod +x /tmp/build-design-md.sh
