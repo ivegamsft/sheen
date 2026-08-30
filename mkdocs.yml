@@ -120,6 +120,7 @@ nav:
               - Typography: foundations/typography.md
               - Layout & Spacing: foundations/layout-spacing.md
               - Motion, Elevation, Materials: foundations/motion-elevation-materials.md
+              - Diagram Skin Adapter: foundations/diagram-skin-adapter.md
           - Brand:
               - Overview: brand/index.md
               - Brand Identity: brand/identity.md

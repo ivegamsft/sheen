@@ -170,3 +170,7 @@ jobs:
       - name: Build - tokens (DTCG → CSS/JS/TS, spec 01 §4)
         if: ${{ hashFiles('tokens/**/*.tokens.json') != '' }}
         run: pwsh -NonInteractive -File scripts/build-tokens.ps1 -Quiet
+
+      - name: Build - diagram skins (DTCG → semantic-role skins, #116)
+        if: ${{ hashFiles('tokens/**/*.tokens.json') != '' }}
+        run: pwsh -NonInteractive -File scripts/build-diagram-skins.ps1 -Quiet
