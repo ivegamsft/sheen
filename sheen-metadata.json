@@ -259,7 +259,7 @@
         "pillar": "lifecycle",
         "maturity": "stable",
         "description": "Top-level design assessment for an existing repo or product. USE FOR: repo-wide design audits, prioritizing UX/design debt, generating a remediation backlog from evidence. DO NOT USE FOR: editing only token files in isolation, greenfield system bootstrap from zero.",
-        "hash": "b24f5aa7b319c4540c62a63a1a73e3172af2e5e17b2cefa33d49133fa2014bcf"
+        "hash": "abb39ad6e95aae0bbe4ad912d3066e6f9cfb42e32e6383d61748c7ec6c5ae301"
       },
       {
         "name": "design-bootstrap",

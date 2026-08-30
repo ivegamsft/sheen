@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="120" viewBox="0 0 360 120">
+  <!-- audit-diagram-slop.ps1 clean fixture (#115): should pass every rule -->
+  <rect id="A" x="0" y="0" width="60" height="40" rx="6" fill="#ffffff" stroke="#1f2328"/>
+  <rect id="B" x="150" y="0" width="60" height="40" rx="6" fill="#dbcff2" stroke="#6e40c9"/>
+  <rect id="C" x="300" y="0" width="60" height="40" rx="6" fill="#ffffff" stroke="#1f2328"/>
+
+  <path class="connector" data-from="A" data-to="B" d="M 60,20 L 150,20" stroke="#1f2328" fill="none"/>
+  <path class="connector" data-from="B" data-to="C" d="M 210,20 L 300,20" stroke="#1f2328" fill="none"/>
+
+  <rect x="80" y="8" width="40" height="16" fill="#ffffff"/>
+  <text class="edge-label" x="85" y="20" font-family="sans-serif">step 1</text>
+  <rect x="230" y="8" width="40" height="16" fill="#ffffff"/>
+  <text class="edge-label" x="235" y="20" font-family="sans-serif">step 2</text>
+
+  <text x="10" y="70" font-family="sans-serif" font-weight="600">Pipeline overview</text>
+</svg>

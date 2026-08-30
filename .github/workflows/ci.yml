@@ -188,3 +188,14 @@ jobs:
           else
             echo "broken.svg correctly failed geometry lint."
           fi
+
+      - name: Audit - diagram anti-slop rules (design-audit, #115)
+        if: ${{ hashFiles('tokens/**/*.tokens.json') != '' }}
+        run: |
+          pwsh -NonInteractive -File scripts/audit-diagram-slop.ps1 -SvgPath tests/fixtures/diagrams/clean-sample.svg -Theme light
+          if pwsh -NonInteractive -File scripts/audit-diagram-slop.ps1 -SvgPath tests/fixtures/diagrams/broken-sample.svg -Theme light; then
+            echo "::error::audit-diagram-slop.ps1 passed the intentionally-broken fixture — anti-slop audit is not catching known violations"
+            exit 1
+          else
+            echo "broken-sample.svg correctly failed the anti-slop audit."
+          fi

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="220" viewBox="0 0 400 220">
+  <!-- audit-diagram-slop.ps1 broken fixture (#115): deliberately trips every rule -->
+  <defs>
+    <filter id="shadow1">
+      <feDropShadow dx="2" dy="2" stdDeviation="3"/>
+    </filter>
+    <clipPath id="clip1"><rect x="0" y="0" width="10" height="10"/></clipPath>
+  </defs>
+
+  <!-- DENSITY: 10 nodes, over the 9-node auto-fail threshold -->
+  <rect id="N1" x="0" y="0" width="20" height="20" fill="#ffffff" stroke="#1f2328"/>
+  <rect id="N2" x="30" y="0" width="20" height="20" fill="#ffffff" stroke="#1f2328"/>
+  <rect id="N3" x="60" y="0" width="20" height="20" fill="#ffffff" stroke="#1f2328"/>
+  <rect id="N4" x="90" y="0" width="20" height="20" fill="#ffffff" stroke="#1f2328"/>
+  <rect id="N5" x="120" y="0" width="20" height="20" fill="#ffffff" stroke="#1f2328"/>
+  <rect id="N6" x="150" y="0" width="20" height="20" fill="#ffffff" stroke="#1f2328"/>
+  <rect id="N7" x="180" y="0" width="20" height="20" fill="#ffffff" stroke="#1f2328"/>
+  <rect id="N8" x="210" y="0" width="20" height="20" fill="#ffffff" stroke="#1f2328"/>
+  <rect id="N9" x="240" y="0" width="20" height="20" fill="#ffffff" stroke="#1f2328"/>
+  <rect id="N10" x="270" y="0" width="20" height="20" fill="#ffffff" stroke="#1f2328"/>
+
+  <!-- SHADOW: references a filter with feDropShadow -->
+  <rect id="N11" x="300" y="0" width="20" height="20" fill="#ffffff" stroke="#1f2328" filter="url(#shadow1)"/>
+
+  <!-- RADIUS: 20px corner radius, over the 10px max -->
+  <rect id="N12" x="0" y="40" width="60" height="30" rx="20" fill="#ffffff" stroke="#1f2328"/>
+
+  <!-- ACCENT-BUDGET: 3 elements use accent, over the 2-element budget -->
+  <rect id="N13" x="80" y="40" width="30" height="30" fill="#6e40c9"/>
+  <rect id="N14" x="120" y="40" width="30" height="30" fill="#6e40c9"/>
+  <rect id="N15" x="160" y="40" width="30" height="30" fill="#6e40c9"/>
+
+  <!-- STRAY-HEX: neon green not present in the resolved light skin -->
+  <rect id="N16" x="200" y="40" width="30" height="30" fill="#00ff00"/>
+
+  <!-- MONO-FONT: every text element uses a monospace font, no hierarchy -->
+  <text x="0" y="90" font-family="monospace">Title</text>
+  <text x="0" y="105" font-family="monospace">Subtitle</text>
+
+  <!-- connector rules (same violations as tests/fixtures/diagrams/broken.svg, #118) -->
+  <rect id="A" x="0" y="130" width="40" height="40" fill="#ffffff" stroke="#1f2328"/>
+  <rect id="C" x="100" y="130" width="40" height="40" fill="#ffffff" stroke="#1f2328"/>
+  <rect id="B" x="240" y="130" width="40" height="40" fill="#ffffff" stroke="#1f2328"/>
+  <path class="connector" data-from="A" data-to="B" d="M 40,150 L 240,150" stroke="#1f2328" fill="none"/>
+  <path class="connector" data-from="A" data-to="C" d="M 40,150 L 130,201" stroke="#1f2328" fill="none"/>
+  <path class="connector" data-from="C" data-to="B" d="M 40,150 L 240,150" stroke="#1f2328" fill="none"/>
+  <text class="edge-label" x="140" y="145" font-family="monospace">flow</text>
+  <text clip-path="url(#clip1)" font-family="monospace" x="10" y="210">hidden</text>
+</svg>
