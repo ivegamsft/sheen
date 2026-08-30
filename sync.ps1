@@ -344,6 +344,32 @@ try {
         }
     }
 
+    # ── generate_aesthetic_direction: export AESTHETIC-DIRECTION.md (mood, color
+    # story, type pairing, spacing rhythm, motion character) ─────────────────
+    $genAesthetic = Get-ConfigScalar -Key 'generate_aesthetic_direction'
+    if ($genAesthetic -and $genAesthetic -notin @('false', 'no', '0')) {
+        $aestheticScript = Join-Path $repoRoot 'scripts' 'build-aesthetic-direction.ps1'
+        if (-not (Test-Path -LiteralPath $aestheticScript)) {
+            # Provision the build script from the upstream clone
+            $upstreamAestheticScript = Join-Path $work 'scripts' 'build-aesthetic-direction.ps1'
+            if (Test-Path -LiteralPath $upstreamAestheticScript) {
+                $scriptsDir = Join-Path $repoRoot 'scripts'
+                New-Item -ItemType Directory -Force -Path $scriptsDir | Out-Null
+                Copy-Item -LiteralPath $upstreamAestheticScript -Destination $aestheticScript -Force
+                Write-Host 'sheen sync: provisioned scripts/build-aesthetic-direction.ps1 from upstream (generate_aesthetic_direction=true)'
+            } else {
+                Write-Warning 'sheen sync: generate_aesthetic_direction=true but build-aesthetic-direction.ps1 not found in upstream; skipping'
+            }
+        }
+        if (Test-Path -LiteralPath $aestheticScript) {
+            $themeArg = Get-ConfigScalar -Key 'design_md_theme'
+            if (-not $themeArg) { $themeArg = 'light' }
+            Write-Host "sheen sync: generating AESTHETIC-DIRECTION.md (generate_aesthetic_direction=true; theme=$themeArg)..."
+            & $aestheticScript -Theme $themeArg
+            if ($LASTEXITCODE -and $LASTEXITCODE -ne 0) { throw "build-aesthetic-direction failed (exit $LASTEXITCODE)" }
+        }
+    }
+
     # ── Deploy sheen-sync.yml to consumer .github/workflows/ ─────────────────
     # Provides the same auto-update experience as basecoat: a scheduled workflow
     # opens a PR whenever a new sheen version is available.

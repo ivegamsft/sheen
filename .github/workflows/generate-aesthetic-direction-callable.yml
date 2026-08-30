@@ -1,0 +1,196 @@
+name: Generate AESTHETIC-DIRECTION.md (Callable)
+
+# Reusable callable workflow — mirror of generate-design-md-callable.yml.
+# Checks out a consumer repo, runs build-aesthetic-direction.sh to generate
+# AESTHETIC-DIRECTION.md from the repo's sheen/tokens/ and
+# docs/design-context.md, then opens a PR with the result.
+#
+# Consumer repos can also call this directly via workflow_dispatch.
+# To add to a consumer:
+#   gh workflow run generate-aesthetic-direction-callable.yml \
+#     --repo IBuySpy-Shared/basecoat-sheen \
+#     --field target_repo=<owner/repo>
+
+on:
+  workflow_call:
+    inputs:
+      target_repo:
+        description: "Consumer repo (owner/repo) to generate AESTHETIC-DIRECTION.md for"
+        required: false
+        type: string
+        default: ""
+      theme:
+        description: "Token theme to use (default: light)"
+        required: false
+        type: string
+        default: "light"
+      sheen_ref:
+        description: "Sheen ref to pull build-aesthetic-direction.sh from"
+        required: false
+        type: string
+        default: "main"
+      branch:
+        description: "Branch to open the PR against"
+        required: false
+        type: string
+        default: "main"
+    secrets:
+      token:
+        description: "PAT or App token with contents:write and pull-requests:write on the target repo"
+        required: false
+
+  workflow_dispatch:
+    inputs:
+      target_repo:
+        description: "Consumer repo (owner/repo). Leave blank to run on this repo."
+        required: false
+        default: ""
+      theme:
+        description: "Token theme (light / dark / high-contrast)"
+        required: false
+        default: "light"
+      sheen_ref:
+        description: "Sheen ref to pull build-aesthetic-direction.sh from"
+        required: false
+        default: "main"
+      branch:
+        description: "Base branch in the consumer repo"
+        required: false
+        default: "main"
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Resolve target repo
+        id: resolve
+        run: |
+          TARGET="${{ inputs.target_repo }}"
+          if [ -z "$TARGET" ]; then
+            TARGET="${{ github.repository }}"
+          fi
+          echo "repo=$TARGET" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout consumer repo
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v4
+        with:
+          repository: ${{ steps.resolve.outputs.repo }}
+          token: ${{ secrets.token || secrets.GITHUB_TOKEN }}
+          ref: ${{ inputs.branch || 'main' }}
+
+      - name: Download build-aesthetic-direction.sh and design-context.md from sheen
+        env:
+          # Same private-repo auth requirement as generate-design-md-callable.yml:
+          # raw.githubusercontent.com 404s on an unauthenticated request to a
+          # private repo instead of returning 401/403.
+          FETCH_TOKEN: ${{ secrets.token || github.token }}
+        run: |
+          curl -fsSL \
+            -H "Authorization: token ${FETCH_TOKEN}" \
+            "https://raw.githubusercontent.com/IBuySpy-Shared/basecoat-sheen/${{ inputs.sheen_ref || 'main' }}/scripts/build-aesthetic-direction.sh" \
+            -o /tmp/build-aesthetic-direction.sh
+          chmod +x /tmp/build-aesthetic-direction.sh
+          mkdir -p docs
+          if [ ! -f docs/design-context.md ]; then
+            curl -fsSL \
+              -H "Authorization: token ${FETCH_TOKEN}" \
+              "https://raw.githubusercontent.com/IBuySpy-Shared/basecoat-sheen/${{ inputs.sheen_ref || 'main' }}/docs/design-context.md" \
+              -o docs/design-context.md
+          fi
+
+      - name: Check for sheen tokens
+        id: check_tokens
+        run: |
+          if [ -d "sheen/tokens" ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::No sheen/tokens/ directory found in ${{ steps.resolve.outputs.repo }}. Run sheen sync first."
+          fi
+
+      - name: Generate AESTHETIC-DIRECTION.md
+        if: steps.check_tokens.outputs.found == 'true'
+        run: |
+          bash /tmp/build-aesthetic-direction.sh \
+            --theme "${{ inputs.theme || 'light' }}" \
+            --out AESTHETIC-DIRECTION.md
+          echo "--- AESTHETIC-DIRECTION.md preview (first 40 lines) ---"
+          head -40 AESTHETIC-DIRECTION.md
+
+      - name: Check for changes
+        if: steps.check_tokens.outputs.found == 'true'
+        id: changes
+        run: |
+          if git diff --quiet AESTHETIC-DIRECTION.md 2>/dev/null && git ls-files --others --exclude-standard AESTHETIC-DIRECTION.md | grep -q .; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          elif git diff --quiet AESTHETIC-DIRECTION.md 2>/dev/null; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "AESTHETIC-DIRECTION.md is already up to date — no PR needed."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create PR branch and open pull request
+        if: steps.check_tokens.outputs.found == 'true' && steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.token || secrets.GITHUB_TOKEN }}
+          REPO: ${{ steps.resolve.outputs.repo }}
+          BASE: ${{ inputs.branch || 'main' }}
+          THEME: ${{ inputs.theme || 'light' }}
+        run: |
+          PR_BRANCH="sheen/generate-aesthetic-direction-$(date +%Y%m%d)"
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$PR_BRANCH"
+          git add AESTHETIC-DIRECTION.md
+          git commit -m "chore: generate AESTHETIC-DIRECTION.md from sheen tokens (theme: $THEME)"
+          git push origin "$PR_BRANCH"
+
+          BODY_FILE="$(mktemp)"
+          {
+            echo "## AESTHETIC-DIRECTION.md Generation"
+            echo ""
+            echo "This PR adds \`AESTHETIC-DIRECTION.md\` generated from your sheen design"
+            echo "tokens and design values."
+            echo ""
+            echo "| Field | Value |"
+            echo "|-------|-------|"
+            echo "| Theme | \`$THEME\` |"
+            echo "| Source | \`sheen/tokens/\`, \`docs/design-context.md\` |"
+            echo "| Generator | \`scripts/build-aesthetic-direction.sh\` |"
+            echo "| Sheen ref | \`${{ inputs.sheen_ref || 'main' }}\` |"
+            echo ""
+            echo "### What is AESTHETIC-DIRECTION.md?"
+            echo ""
+            echo "\`AESTHETIC-DIRECTION.md\` is the creative-direction narrative basecoat-sheen"
+            echo "suggests for this app — mood, color story, type pairing, spacing rhythm,"
+            echo "and motion character — additive to \`DESIGN.md\`'s mechanical token facts."
+            echo "It is not a reporting/analytics artifact."
+            echo ""
+            echo "### Next steps"
+            echo ""
+            echo "1. Review the generated file"
+            echo "2. Merge this PR"
+            echo "3. Add \`generate_aesthetic_direction: true\` to your \`.sheen.yml\` so future syncs keep it current"
+            echo ""
+            echo "---"
+            echo "_Generated by [basecoat-sheen](https://github.com/IBuySpy-Shared/basecoat-sheen) \`generate-aesthetic-direction-callable.yml\`_"
+          } > "$BODY_FILE"
+
+          gh pr create \
+            --repo "$REPO" \
+            --base "$BASE" \
+            --head "$PR_BRANCH" \
+            --title "chore: generate AESTHETIC-DIRECTION.md from sheen tokens" \
+            --body-file "$BODY_FILE"
+
+          echo "::notice::PR opened in $REPO"
+
+      - name: No-op summary
+        if: steps.check_tokens.outputs.found == 'false'
+        run: |
+          echo "::error::Cannot generate AESTHETIC-DIRECTION.md — no sheen/tokens/ in ${{ steps.resolve.outputs.repo }}. Integrate sheen first: https://ibuyspy-shared.github.io/basecoat-sheen/guides/consumer-lifecycle/"

@@ -345,6 +345,31 @@ if [ "$GEN_DESIGN" = 'true' ]; then
   fi
 fi
 
+# ── generate_aesthetic_direction: export AESTHETIC-DIRECTION.md (mood, color
+# story, type pairing, spacing rhythm, motion character) ─────────────────────
+GEN_AESTHETIC="$(yml_value 'generate_aesthetic_direction')"
+if [ "$GEN_AESTHETIC" = 'true' ]; then
+  AESTHETIC_SH="$REPO_ROOT/scripts/build-aesthetic-direction.sh"
+  if [ ! -f "$AESTHETIC_SH" ]; then
+    UPSTREAM_AESTHETIC_SH="$WORK/scripts/build-aesthetic-direction.sh"
+    if [ -f "$UPSTREAM_AESTHETIC_SH" ]; then
+      mkdir -p "$REPO_ROOT/scripts"
+      cp "$UPSTREAM_AESTHETIC_SH" "$AESTHETIC_SH"
+      chmod +x "$AESTHETIC_SH"
+      echo 'sheen sync: provisioned scripts/build-aesthetic-direction.sh from upstream (generate_aesthetic_direction=true)'
+    else
+      echo 'sheen sync: generate_aesthetic_direction=true but build-aesthetic-direction.sh not found in upstream; skipping' >&2
+    fi
+  fi
+  if [ -f "$AESTHETIC_SH" ]; then
+    AESTHETIC_THEME="$(yml_value 'design_md_theme')"
+    AESTHETIC_THEME="${AESTHETIC_THEME:-light}"
+    echo "sheen sync: generating AESTHETIC-DIRECTION.md (generate_aesthetic_direction=true; theme=${AESTHETIC_THEME})..."
+    bash "$AESTHETIC_SH" --theme "$AESTHETIC_THEME" \
+      || { echo "sheen sync: build-aesthetic-direction failed" >&2; exit 1; }
+  fi
+fi
+
 # ── Deploy sheen-sync.yml to consumer .github/workflows/ ─────────────────────
 # Provides the same auto-update experience as basecoat: a scheduled workflow
 # opens a PR whenever a new sheen version is available.

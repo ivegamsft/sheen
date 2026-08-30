@@ -6,6 +6,12 @@
 > `references/`. `sheen-10-core-design-principles` loads these values as ambient
 > context.
 
+For a rendered, per-consumer creative-direction artifact derived from the
+values and influences below (mood, color story, type pairing, spacing
+rhythm, motion character), see `scripts/build-aesthetic-direction.sh` /
+`.ps1`, which generate `AESTHETIC-DIRECTION.md`. This file remains the
+review rubric; the generated artifact is additive, not a replacement.
+
 ## Design values
 
 sheen adopts a named value set adapted from **Windows 11** and **Material 3**, so
