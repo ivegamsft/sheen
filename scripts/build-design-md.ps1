@@ -41,6 +41,8 @@ $coreColor  = Get-TokenFile 'core/color.tokens.json'
 $coreType   = Get-TokenFile 'core/type.tokens.json'
 $coreRadius = Get-TokenFile 'core/radius.tokens.json'
 $coreSpace  = Get-TokenFile 'core/space.tokens.json'
+$coreMotion    = Get-TokenFile 'core/motion.tokens.json'
+$coreElevation = Get-TokenFile 'core/elevation.tokens.json'
 $themeFile  = Get-TokenFile "themes/$Theme.tokens.json"
 
 if (-not $themeFile) {
@@ -143,6 +145,65 @@ $spacing = [ordered]@{
     'xl' = Resolve-Alias '{space.8}'
 }
 
+# ── Helper: read a motion duration/easing token by key ────────────────────────
+function Get-Duration([string]$Key) {
+    if ($null -eq $coreMotion) { return '' }
+    $val = Get-CoreValue $coreMotion "motion.duration.$Key"
+    if ($null -ne $val) { return "$val" }
+    return ''
+}
+
+function Get-Easing([string]$Key) {
+    if ($null -eq $coreMotion) { return '' }
+    $val = Get-CoreValue $coreMotion "motion.easing.$Key"
+    if ($val -is [System.Collections.IEnumerable] -and -not ($val -is [string])) {
+        $parts = @($val)
+        if ($parts.Count -eq 4) {
+            # Match Python's str(float) formatting: whole numbers render with a trailing ".0"
+            # (JSON's 0.0/1.0 parse as doubles; PowerShell's default ToString drops the decimal).
+            $fmt = $parts | ForEach-Object {
+                if ($_ -eq [math]::Truncate($_)) { '{0:0.0}' -f $_ } else { "$_" }
+            }
+            return "cubic-bezier($($fmt[0]), $($fmt[1]), $($fmt[2]), $($fmt[3]))"
+        }
+    }
+    return ''
+}
+
+$motionDuration = [ordered]@{}
+foreach ($k in @('instant','fast','normal','moderate','slow','deliberate')) { $motionDuration[$k] = Get-Duration $k }
+
+$motionEasing = [ordered]@{}
+foreach ($k in @('linear','ease-in','ease-out','ease-in-out','spring')) { $motionEasing[$k] = Get-Easing $k }
+
+# ── Helper: convert a DTCG shadow object to a CSS box-shadow string ───────────
+function Get-ElevationShadow([string]$Level) {
+    if ($null -eq $coreElevation) { return '' }
+    $node = $null
+    if ($coreElevation -is [System.Collections.IDictionary]) { $node = $coreElevation['elevation'] }
+    else { $node = $coreElevation.PSObject.Properties['elevation']?.Value }
+    if ($null -eq $node) { return '' }
+    $entry = if ($node -is [System.Collections.IDictionary]) { $node[$Level] } else { $node.PSObject.Properties[$Level]?.Value }
+    if ($null -eq $entry) { return '' }
+    $val = if ($entry -is [System.Collections.IDictionary]) { $entry['$value'] } else { $entry.PSObject.Properties['$value']?.Value }
+    if ($null -eq $val) { return '' }
+    $getf = { param($obj, $name, $default)
+        if ($obj -is [System.Collections.IDictionary]) { if ($obj.Contains($name)) { return $obj[$name] } else { return $default } }
+        $p = $obj.PSObject.Properties[$name]
+        if ($p) { return $p.Value } else { return $default }
+    }
+    $offsetX = & $getf $val 'offsetX' '0px'
+    $offsetY = & $getf $val 'offsetY' '0px'
+    $blur    = & $getf $val 'blur' '0px'
+    $spread  = & $getf $val 'spread' '0px'
+    $color   = & $getf $val 'color' ''
+    if ($blur -eq '0px' -and "$color".StartsWith('rgba(0,0,0,0)')) { return 'none' }
+    return "$offsetX $offsetY $blur $spread $color"
+}
+
+$elevationLevels = [ordered]@{}
+foreach ($lvl in @('0','1','2','3','4','5')) { $elevationLevels[$lvl] = Get-ElevationShadow $lvl }
+
 # ── Read product name from version.json or PRODUCT.md ────────────────────────
 $productName = 'basecoat-sheen'
 $versionFile = Join-Path $repoRoot 'version.json'
@@ -179,6 +240,19 @@ foreach ($k in $rounded.Keys) {
 foreach ($k in $spacing.Keys) {
     if ($spacing[$k]) { [void]$fm.AppendLine("  ${k}: $(Write-YamlString $spacing[$k])") }
 }
+[void]$fm.AppendLine("motion:")
+[void]$fm.AppendLine("  duration:")
+foreach ($k in $motionDuration.Keys) {
+    if ($motionDuration[$k]) { [void]$fm.AppendLine("    ${k}: $(Write-YamlString $motionDuration[$k])") }
+}
+[void]$fm.AppendLine("  easing:")
+foreach ($k in $motionEasing.Keys) {
+    if ($motionEasing[$k]) { [void]$fm.AppendLine("    ${k}: $(Write-YamlString $motionEasing[$k])") }
+}
+[void]$fm.AppendLine("elevation:")
+foreach ($lvl in $elevationLevels.Keys) {
+    if ($elevationLevels[$lvl]) { [void]$fm.AppendLine("  ""${lvl}"": $(Write-YamlString $elevationLevels[$lvl])") }
+}
 
 # ── Read design overview from PRODUCT.md if present ──────────────────────────
 $overview = "Design token system for $productName. Generated from DTCG tokens by basecoat-sheen."
@@ -199,6 +273,42 @@ if (Test-Path $productMd) {
 
 # ── Build final DESIGN.md content ─────────────────────────────────────────────
 $date = (Get-Date -Format 'yyyy-MM-dd')
+
+$durationUse = [ordered]@{
+    'instant'    = 'No-op / immediate state changes'
+    'fast'       = 'Micro-interactions (icon swap, toggle)'
+    'normal'     = 'Default transition (hover, focus)'
+    'moderate'   = 'Component enter/exit (dropdown, tooltip)'
+    'slow'       = 'Page transitions, sheet slide-in'
+    'deliberate' = 'Full-screen or complex orchestration'
+}
+$durationRows = ($motionDuration.Keys | Where-Object { $motionDuration[$_] } | ForEach-Object {
+    "| $_ | ``$($motionDuration[$_])`` | $($durationUse[$_]) |"
+}) -join "`n"
+
+$easingUse = [ordered]@{
+    'linear'      = 'No easing — progress bars, loaders'
+    'ease-in'     = 'Elements leaving the screen'
+    'ease-out'    = 'Elements entering the screen (default)'
+    'ease-in-out' = 'Elements moving across the screen'
+    'spring'      = 'Playful overshoot for expressive moments'
+}
+$easingRows = ($motionEasing.Keys | Where-Object { $motionEasing[$_] } | ForEach-Object {
+    "| $_ | ``$($motionEasing[$_])`` | $($easingUse[$_]) |"
+}) -join "`n"
+
+$elevationUse = [ordered]@{
+    '0' = 'Flat — no elevation'
+    '1' = 'Subtle lift — cards at rest'
+    '2' = 'Cards on hover, dropdowns'
+    '3' = 'Popovers, tooltips'
+    '4' = 'Modals, dialogs'
+    '5' = 'Full-screen overlays, sheets'
+}
+$elevationRows = ($elevationLevels.Keys | Where-Object { $elevationLevels[$_] } | ForEach-Object {
+    "| $_ | ``$($elevationLevels[$_])`` | $($elevationUse[$_]) |"
+}) -join "`n"
+
 $designMd = @"
 ---
 $($fm.ToString().TrimEnd())
@@ -265,6 +375,30 @@ Mono: ``$mono``
 | md | $($rounded.md) | Buttons, inputs |
 | lg | $($rounded.lg) | Cards, dialogs, menus |
 | pill | $($rounded.pill) | Badges, toggles |
+
+## Motion
+
+Calm motion — animation serves the task, never decoration for its own sake.
+
+### Duration
+
+| Token | Value | Use |
+|-------|-------|-----|
+$durationRows
+
+### Easing
+
+| Token | Value | Use |
+|-------|-------|-----|
+$easingRows
+
+## Elevation
+
+Shadow levels 0-5. Use the lowest level that communicates the needed layering.
+
+| Level | Shadow | Use |
+|-------|--------|-----|
+$elevationRows
 
 ## Components
 

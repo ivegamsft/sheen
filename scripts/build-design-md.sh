@@ -54,7 +54,7 @@ from pathlib import Path
 from datetime import date
 
 tokens_base, theme, out_path, product_md_path, version_file, check_mode = sys.argv[1:]
-check_mode = (check_mode == "True")
+check_mode = (check_mode == "true")
 
 def load_json(path):
     p = Path(path)
@@ -62,11 +62,13 @@ def load_json(path):
         return {}
     return json.loads(p.read_text(encoding="utf-8"))
 
-theme_data  = load_json(f"{tokens_base}/themes/{theme}.tokens.json")
-core_type   = load_json(f"{tokens_base}/core/type.tokens.json")
-core_radius = load_json(f"{tokens_base}/core/radius.tokens.json")
-core_space  = load_json(f"{tokens_base}/core/space.tokens.json")
-core_color  = load_json(f"{tokens_base}/core/color.tokens.json")
+theme_data    = load_json(f"{tokens_base}/themes/{theme}.tokens.json")
+core_type     = load_json(f"{tokens_base}/core/type.tokens.json")
+core_radius   = load_json(f"{tokens_base}/core/radius.tokens.json")
+core_space    = load_json(f"{tokens_base}/core/space.tokens.json")
+core_color    = load_json(f"{tokens_base}/core/color.tokens.json")
+core_motion   = load_json(f"{tokens_base}/core/motion.tokens.json")
+core_elevation = load_json(f"{tokens_base}/core/elevation.tokens.json")
 
 core_roots = [core_color, core_type, core_radius, core_space]
 
@@ -157,6 +159,33 @@ spacing = {
     "xl": resolve_alias("{space.8}"),
 }
 
+def duration(key):
+    node = core_motion.get("motion", {}).get("duration", {}).get(key, {})
+    return node.get("$value", "") if isinstance(node, dict) else ""
+
+def easing(key):
+    node = core_motion.get("motion", {}).get("easing", {}).get(key, {})
+    val = node.get("$value") if isinstance(node, dict) else None
+    if isinstance(val, list) and len(val) == 4:
+        return "cubic-bezier({}, {}, {}, {})".format(*val)
+    return ""
+
+motion_duration = {k: duration(k) for k in ["instant", "fast", "normal", "moderate", "slow", "deliberate"]}
+motion_easing = {k: easing(k) for k in ["linear", "ease-in", "ease-out", "ease-in-out", "spring"]}
+
+def elevation_shadow(level):
+    node = core_elevation.get("elevation", {}).get(level, {})
+    val = node.get("$value") if isinstance(node, dict) else None
+    if not isinstance(val, dict):
+        return "", ""
+    desc = node.get("$description", "")
+    if val.get("blur") == "0px" and val.get("color", "").startswith("rgba(0,0,0,0)"):
+        return "none", desc
+    css = f'{val.get("offsetX","0px")} {val.get("offsetY","0px")} {val.get("blur","0px")} {val.get("spread","0px")} {val.get("color","")}'
+    return css, desc
+
+elevation_levels = {lvl: elevation_shadow(lvl) for lvl in ["0", "1", "2", "3", "4", "5"]}
+
 product_name = "basecoat-sheen"
 if Path(version_file).exists():
     vj = json.loads(Path(version_file).read_text(encoding="utf-8"))
@@ -203,6 +232,19 @@ lines_fm.append("spacing:")
 for k, v in spacing.items():
     if v:
         lines_fm.append(f"  {k}: {q(v)}")
+lines_fm.append("motion:")
+lines_fm.append("  duration:")
+for k, v in motion_duration.items():
+    if v:
+        lines_fm.append(f"    {k}: {q(v)}")
+lines_fm.append("  easing:")
+for k, v in motion_easing.items():
+    if v:
+        lines_fm.append(f"    {k}: {q(v)}")
+lines_fm.append("elevation:")
+for lvl, (css, _desc) in elevation_levels.items():
+    if css:
+        lines_fm.append(f'  "{lvl}": {q(css)}')
 
 fm = "\n".join(lines_fm)
 
@@ -224,6 +266,44 @@ color_rows = "\n".join([
     row("accent",     colors_map["accent"],     "Highlight, premium, tertiary actions"),
 ])
 
+duration_use = {
+    "instant": "No-op / immediate state changes",
+    "fast": "Micro-interactions (icon swap, toggle)",
+    "normal": "Default transition (hover, focus)",
+    "moderate": "Component enter/exit (dropdown, tooltip)",
+    "slow": "Page transitions, sheet slide-in",
+    "deliberate": "Full-screen or complex orchestration",
+}
+duration_rows = "\n".join([
+    f"| {k} | `{v}` | {duration_use[k]} |"
+    for k, v in motion_duration.items() if v
+])
+
+easing_use = {
+    "linear": "No easing — progress bars, loaders",
+    "ease-in": "Elements leaving the screen",
+    "ease-out": "Elements entering the screen (default)",
+    "ease-in-out": "Elements moving across the screen",
+    "spring": "Playful overshoot for expressive moments",
+}
+easing_rows = "\n".join([
+    f"| {k} | `{v}` | {easing_use[k]} |"
+    for k, v in motion_easing.items() if v
+])
+
+elevation_use = {
+    "0": "Flat — no elevation",
+    "1": "Subtle lift — cards at rest",
+    "2": "Cards on hover, dropdowns",
+    "3": "Popovers, tooltips",
+    "4": "Modals, dialogs",
+    "5": "Full-screen overlays, sheets",
+}
+elevation_rows = "\n".join([
+    f"| {lvl} | `{css}` | {elevation_use[lvl]} |"
+    for lvl, (css, _desc) in elevation_levels.items() if css
+])
+
 t = typography
 design_md = f"""---
 {fm}
@@ -235,6 +315,7 @@ design_md = f"""---
 
 Generated from DTCG tokens by basecoat-sheen on {today}. Theme: `{theme}`.
 Do not hand-edit — regenerate with `bash scripts/build-design-md.sh` or `pwsh scripts/build-design-md.ps1`.
+
 
 ## Colors
 
@@ -281,6 +362,30 @@ Mono: `{mono}`
 | md | {rounded["md"]} | Buttons, inputs |
 | lg | {rounded["lg"]} | Cards, dialogs, menus |
 | pill | {rounded["pill"]} | Badges, toggles |
+
+## Motion
+
+Calm motion — animation serves the task, never decoration for its own sake.
+
+### Duration
+
+| Token | Value | Use |
+|-------|-------|-----|
+{duration_rows}
+
+### Easing
+
+| Token | Value | Use |
+|-------|-------|-----|
+{easing_rows}
+
+## Elevation
+
+Shadow levels 0-5. Use the lowest level that communicates the needed layering.
+
+| Level | Shadow | Use |
+|-------|--------|-----|
+{elevation_rows}
 
 ## Components
 
