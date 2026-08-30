@@ -102,3 +102,7 @@ instance; enterprise/org rulesets are the authoritative merge governance
 
 To be finalized (defaults to matching basecoat — tracked as decision **D5** in
 [`SPEC.md` §13](SPEC.md#13-open-decisions)).
+
+Third-party attribution for design guidance and rule sets adapted from
+external projects (e.g. the diagram-design integration under epic #110) is
+tracked in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
