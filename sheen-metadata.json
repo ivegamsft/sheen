@@ -579,7 +579,7 @@
         "pillar": null,
         "maturity": "stable",
         "description": "Use when onboarding a new consumer repository to the basecoat-sheen design governance framework. USE FOR: run the full 5-phase sheen consumer lifecycle (integrate, onboard, inventory, audit, use), bootstrap a .sheen.yml config, run sync against basecoat-sheen, generate an onboarding health report. DO NOT USE FOR: implementing product features, writing application business logic, deploying infrastructure.",
-        "hash": "404ca76e306ad7b4f471beeddea33c17cef12972be244fcb48b4eb26742c1e39"
+        "hash": "ca0ae793ec949314d0cdeb4c39e20c2e3bdde1db26ae758e1377b3470b8f7fb7"
       },
       {
         "name": "style-guide-authoring",
