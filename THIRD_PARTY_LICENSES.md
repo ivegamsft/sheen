@@ -80,6 +80,33 @@ no license conflict: MIT permits adaptation and re-implementation under the
 same terms, and this file plus the in-file header comments satisfy MIT's
 attribution expectation for the design concepts and rule sets carried over.
 
+## tabler/tabler-icons (vendored subset)
+
+| Field | Value |
+|---|---|
+| Source | https://github.com/tabler/tabler-icons |
+| License | MIT |
+| Copyright | © 2020-2026 Paweł Kuna |
+| Used under | Epic [#110](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/110), issue [#111](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/111) — icon vendoring for the documentation-diagram renderer |
+
+Unlike the diagram-design entry above, this **is** a literal vendored copy:
+19 `outline`-variant SVG icon files, pinned at commit
+`5a0fe38e97784d94279ce4eb1bf85f9a91bf027e`, live under
+[`vendor/tabler-icons/icons/outline/`](vendor/tabler-icons/icons/outline/),
+alongside the preserved upstream [`LICENSE`](vendor/tabler-icons/LICENSE).
+Full provenance, the curated icon list, and inclusion/exclusion rationale are
+tracked in [`vendor/tabler-icons/VENDOR.md`](vendor/tabler-icons/VENDOR.md).
+
+`scripts/build-icons.ps1` normalizes the vendored SVGs into `dist/icons/`
+(git-ignored, rebuilt on every CI run) and regenerates
+[`docs/foundations/icon-gallery.md`](docs/foundations/icon-gallery.md) — no
+hand-maintained copy of icon markup exists outside `vendor/tabler-icons/`.
+
+Both this repository and tabler-icons are MIT-licensed; the upstream
+copyright and permission notice are preserved verbatim in
+`vendor/tabler-icons/LICENSE`, satisfying MIT's attribution requirement for
+the vendored files.
+
 ## Policy
 
 - Any future work that adapts guidance, rules, or logic from a third-party

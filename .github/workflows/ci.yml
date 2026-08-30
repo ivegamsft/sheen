@@ -175,6 +175,22 @@ jobs:
         if: ${{ hashFiles('tokens/**/*.tokens.json') != '' }}
         run: pwsh -NonInteractive -File scripts/build-diagram-skins.ps1 -Quiet
 
+      - name: Build - icons (vendored subset → dist/icons, #111)
+        if: ${{ hashFiles('vendor/tabler-icons/**') != '' }}
+        run: pwsh -NonInteractive -File scripts/build-icons.ps1
+
+      - name: Verify - icon build is reproducible (#111)
+        if: ${{ hashFiles('vendor/tabler-icons/**') != '' }}
+        run: |
+          cp dist/icons/manifest.json /tmp/manifest-first.json
+          rm -rf dist/icons
+          pwsh -NonInteractive -File scripts/build-icons.ps1
+          if ! diff -q /tmp/manifest-first.json dist/icons/manifest.json > /dev/null; then
+            echo "::error::dist/icons/manifest.json differs between two consecutive builds — build-icons.ps1 is not reproducible"
+            exit 1
+          fi
+          echo "build-icons.ps1 reproducible: two consecutive builds produced an identical manifest."
+
       - name: Lint - diagram skins (skin, polarity, contrast gates, #118)
         if: ${{ hashFiles('tokens/**/*.tokens.json') != '' }}
         run: pwsh -NonInteractive -File scripts/lint-diagram-skins.ps1

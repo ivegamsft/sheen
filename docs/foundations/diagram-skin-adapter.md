@@ -74,3 +74,30 @@ conventions:
   `tests/fixtures/diagrams/baseline.svg` and `broken.svg` are asserted in CI
   to pass and fail (respectively) so the lint's own effectiveness is
   continuously verified, not just its presence.
+
+## Icons (#111)
+
+Node-type annotations (e.g. a person icon on an org-chart node, a
+shield-lock icon on a DP security-matrix cell) are supplied by a small,
+curated vendored icon subset — never a bespoke or hand-picked-hex icon set,
+for the same "bridge, don't fork" reason the colour skin exists.
+
+```pwsh
+pwsh scripts/build-icons.ps1
+```
+
+Reads the vendored [Tabler Icons](https://github.com/tabler/tabler-icons)
+(MIT) subset in `vendor/tabler-icons/icons/outline/` and emits, into
+`dist/icons/` (git-ignored, rebuilt in CI):
+
+- `<name>.svg` — normalized icon markup (24×24, `stroke="currentColor"`)
+- `manifest.json` — `{ name, file, usage, sourceCommit }` per icon
+
+Every vendored icon uses `stroke="currentColor"`, so it inherits its colour
+from the diagram-skin adapter above via CSS `color` — icons never carry a
+hard-coded hex. See the generated
+[Diagram Icon Gallery](icon-gallery.md) for previews, and
+[`vendor/tabler-icons/VENDOR.md`](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/vendor/tabler-icons/VENDOR.md)
+for the full provenance and per-diagram-type mapping. Attribution is tracked
+in [`THIRD_PARTY_LICENSES.md`](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/THIRD_PARTY_LICENSES.md).
+
