@@ -152,6 +152,10 @@ nav:
       - Overview: decisions/index.md
       - "ADR-001: Sheen Router": decisions/adr-001-sheen-router.md
       - "ADR-002: Intent Disambiguation": decisions/adr-002-intent-disambiguation.md
+      - "ADR-003: Diagram Static by Default": decisions/adr-003-diagram-static-by-default.md
+      - "ADR-004: Diagram Taxonomy Discipline": decisions/adr-004-diagram-taxonomy-discipline.md
+      - "ADR-005: Diagram Skin Bridge": decisions/adr-005-diagram-skin-bridge.md
+      - "ADR-006: Diagram Scope": decisions/adr-006-diagram-scope.md
       - "AUDIT-001: Spec Gap Audit": decisions/spec-gap-audit-2026-08-16.md
   - Support:
       - FAQ: support/faq.md
