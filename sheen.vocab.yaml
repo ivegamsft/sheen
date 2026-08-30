@@ -2,7 +2,7 @@
 # Intent vocabulary for the sheen router (skills/sheen/). Edit intents in
 # scripts/build-metadata.ps1 and re-run to update this file.
 schema: sheen-vocab/v2
-version: "0.9.0"
+version: "0.10.0"
 intents:
   - intent: "wireframe-a-flow"
     keywords: ["wireframe", "lo-fi", "sketch", "flow-diagram"]

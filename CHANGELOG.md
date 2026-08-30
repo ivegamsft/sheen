@@ -7,6 +7,70 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.10.0] — 2026-08-30
+
+### Added
+- **Diagram design integration (epic #110, "Position C")** — adapted
+  cathrynlavery/diagram-design's static-by-default, token-skinned diagram
+  approach for code/docs documentation diagrams:
+  - `color.data.*` chart/series DTCG tokens generated from theme palettes
+    (#108, #109, #112).
+  - `documentation-diagram` skill: scoped HTML+SVG renderer covering 35
+    code/docs diagram types — Bar, Line, Sankey, Treemap, Gantt, Kanban,
+    Story map, User journey, Quadrant, Fishbone, Pyramid/funnel, Org chart,
+    Loop/flywheel, Timeline, Venn, DP security matrix, and more (#113).
+  - Diagram semantic-role adapter mapping DTCG tokens to skin roles and
+    series (#116).
+  - Editorial anti-slop rules adopted into `design-audit` (#115).
+  - CI skin/render lints: skin, polarity, label-geometry, contrast (#118).
+  - `data-visualisation` skill templates: chart-spec, dashboard-layout,
+    data-colour-palette (#119).
+  - Vendored icon set + `build-icons` + `THIRD_PARTY_LICENSES`, with MIT
+    attribution and third-party license compliance for adapted assets
+    (#111, #117).
+  - ADRs documenting static-by-default, taxonomy discipline, and
+    token-generated skin scope decisions (#114).
+- **`docs/components/inventory.md`** — populated component inventory: 16
+  foundational atoms/molecules with maturity, spec, and last-reviewed
+  columns, plus a drift-prevention workflow wired into the
+  `component-spec` skill (#141).
+- **UI pattern catalog** — populated design patterns added to the
+  `pattern-library` skill, previously contract-only (#140).
+- **`scripts/build-aesthetic-direction.ps1` / `.sh`** — new per-consumer
+  generator producing `AESTHETIC-DIRECTION.md`, a creative-direction
+  narrative (mood/personality, color story, type pairing, spacing rhythm,
+  motion character, influences, anti-goals) derived from
+  `docs/design-context.md` and resolved DTCG tokens. Ships with a matching
+  callable workflow (`generate-aesthetic-direction-callable.yml`) and
+  `sync.ps1`/`sync.sh` wiring behind a `generate_aesthetic_direction` flag,
+  mirroring the existing `DESIGN.md` generator pattern (#142).
+- **DESIGN.md generator** — added Motion and Elevation sections, previously
+  silently dropped (#137).
+- **Playwright visual-regression testing** — screenshot-based regression
+  coverage for documentation-diagram renders and UI/UX guidance evals
+  (#129).
+- **Unified skills/agents structural audit framework** — cross-reference
+  validation, auto-filed issues, and a CI gate across all skills and
+  agents (#131).
+
+### Fixed
+- YAML syntax errors in `check-sheen-version-callable.yml` and
+  `generate-design-md-callable.yml` (#133).
+- Unauthenticated `raw.githubusercontent.com` download 404s in
+  `generate-design-md-callable.yml` against private/internal repos (#135).
+- Trimmed duplicated `sheen-onboard` skill content to satisfy body-size
+  guidance, with a follow-up metadata regeneration fix (#105, #107).
+
+### Why this matters
+This release closes out the diagram-design integration epic end-to-end —
+tokens, renderer, skin adapter, lint gates, and licensing — and rounds out
+the design-system governance surface with a populated component inventory,
+a populated UI pattern catalog, and a new aesthetic-direction generator that
+gives downstream consumers a creative-direction artifact alongside the
+existing DESIGN.md token export. Visual-regression testing and the unified
+skills/agents audit framework raise confidence in future changes to both
+diagram rendering and the skill/agent catalog.
+
 ## [0.9.0] — 2026-08-18
 
 ### Added
