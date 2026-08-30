@@ -83,8 +83,8 @@ jobs:
           REF="${{ inputs.source_ref }}"
 
           if [[ -f .sheen.yml ]]; then
-            YML_SOURCE="$(grep -E '^source:' .sheen.yml | head -1 | sed 's/^source:[[:space:]]*//' | tr -d '"'\'')" || true
-            YML_REF="$(grep -E '^ref:' .sheen.yml | head -1 | sed 's/^ref:[[:space:]]*//' | tr -d '"'\'')" || true
+            YML_SOURCE="$(grep -E '^source:' .sheen.yml | head -1 | sed 's/^source:[[:space:]]*//' | tr -d "\"'")" || true
+            YML_REF="$(grep -E '^ref:' .sheen.yml | head -1 | sed 's/^ref:[[:space:]]*//' | tr -d "\"'")" || true
             # .sheen.yml values fill gaps but workflow inputs win
             [[ -z "$SOURCE" && -n "$YML_SOURCE" ]] && SOURCE="$YML_SOURCE"
             [[ "$REF" == "main" && -n "$YML_REF" && "$YML_REF" != "main" ]] && REF="$YML_REF"
@@ -182,35 +182,37 @@ jobs:
           REF="${{ steps.config.outputs.ref }}"
           DEFAULT_BRANCH="$(gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name')"
 
+          BODY_FILE="$(mktemp)"
+          {
+            echo "## Sheen asset sync"
+            echo ""
+            echo "<!-- sheen-consumer-sync-pr:v1 -->"
+            echo ""
+            echo "Automated sync of basecoat-sheen assets to **${{ steps.config.outputs.ref }}**."
+            echo ""
+            echo "| Field | Value |"
+            echo "|-------|-------|"
+            echo "| Source | \`${{ steps.config.outputs.source }}\` |"
+            echo "| Ref | \`${{ steps.config.outputs.ref }}\` |"
+            echo "| Triggered by | @${{ github.actor }} |"
+            echo "| Workflow run | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} |"
+            echo ""
+            echo "### What changed"
+            echo "See the commit diff for the full list of synced assets. Assets are governed"
+            echo "by the allow-lists in \`.sheen.yml\`."
+            echo ""
+            echo "### After merging"
+            echo "Reset Copilot context to pick up updated skills:"
+            echo "- **CLI**: \`exit\` then \`gh copilot\`"
+            echo "- **VS Code**: \`Ctrl+Shift+P\` → **Developer: Reload Window**"
+            echo "- **JetBrains**: restart editor"
+          } > "$BODY_FILE"
+
           gh pr create \
             --base "$DEFAULT_BRANCH" \
             --head "${{ steps.config.outputs.branch }}" \
             --title "chore(sheen): sync basecoat-sheen @ ${REF}" \
-            --body "$(cat <<'EOF'
-## Sheen asset sync
-
-<!-- sheen-consumer-sync-pr:v1 -->
-
-Automated sync of basecoat-sheen assets to **${{ steps.config.outputs.ref }}**.
-
-| Field | Value |
-|-------|-------|
-| Source | \`${{ steps.config.outputs.source }}\` |
-| Ref | \`${{ steps.config.outputs.ref }}\` |
-| Triggered by | @${{ github.actor }} |
-| Workflow run | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} |
-
-### What changed
-See the commit diff for the full list of synced assets. Assets are governed
-by the allow-lists in `.sheen.yml`.
-
-### After merging
-Reset Copilot context to pick up updated skills:
-- **CLI**: \`exit\` then \`gh copilot\`
-- **VS Code**: \`Ctrl+Shift+P\` → **Developer: Reload Window**
-- **JetBrains**: restart editor
-EOF
-)"
+            --body-file "$BODY_FILE"
 
           if [[ "${{ inputs.auto_merge }}" == "true" ]]; then
             PR_NUMBER="$(gh pr list --head "${{ steps.config.outputs.branch }}" --json number --jq '.[0].number')"
