@@ -1,0 +1,19 @@
+{
+  "title": "Weekly active users, two cohorts",
+  "series": [
+    {
+      "name": "Cohort A",
+      "points": [
+        { "x": 1, "y": 120 }, { "x": 2, "y": 150 }, { "x": 3, "y": 170 },
+        { "x": 4, "y": 210 }, { "x": 5, "y": 260 }
+      ]
+    },
+    {
+      "name": "Cohort B",
+      "points": [
+        { "x": 1, "y": 80 }, { "x": 2, "y": 95 }, { "x": 3, "y": 130 },
+        { "x": 4, "y": 140 }, { "x": 5, "y": 175 }
+      ]
+    }
+  ]
+}

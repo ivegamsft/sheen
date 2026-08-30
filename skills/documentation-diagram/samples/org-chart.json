@@ -1,0 +1,21 @@
+{
+  "title": "Platform engineering org",
+  "root": {
+    "label": "VP Engineering",
+    "children": [
+      {
+        "label": "Eng Manager, Platform",
+        "children": [
+          { "label": "Staff Engineer" },
+          { "label": "Senior Engineer" }
+        ]
+      },
+      {
+        "label": "Eng Manager, Product",
+        "children": [
+          { "label": "Senior Engineer" }
+        ]
+      }
+    ]
+  }
+}

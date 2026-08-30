@@ -1,0 +1,10 @@
+{
+  "title": "New-customer onboarding journey",
+  "stages": [
+    { "label": "Discover", "action": "Reads landing page", "emotion": 3 },
+    { "label": "Sign up", "action": "Creates account", "emotion": 4 },
+    { "label": "Setup", "action": "Configures workspace", "emotion": 2 },
+    { "label": "First use", "action": "Completes first task", "emotion": 5 },
+    { "label": "Support", "action": "Contacts support", "emotion": 1 }
+  ]
+}

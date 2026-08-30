@@ -1,0 +1,10 @@
+{
+  "title": "Cloud spend by service",
+  "items": [
+    { "label": "Compute", "value": 420 },
+    { "label": "Storage", "value": 180 },
+    { "label": "Networking", "value": 95 },
+    { "label": "Database", "value": 260 },
+    { "label": "Observability", "value": 60 }
+  ]
+}

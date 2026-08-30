@@ -1,0 +1,10 @@
+{
+  "title": "Root cause analysis: failed deploys",
+  "effect": "Failed deploys",
+  "categories": [
+    { "label": "Process", "causes": ["No staging gate", "Manual approval skipped"] },
+    { "label": "People", "causes": ["On-call handoff gap"] },
+    { "label": "Tooling", "causes": ["Flaky CI runner", "Missing rollback script"] },
+    { "label": "Environment", "causes": ["Config drift", "Secret rotation lag"] }
+  ]
+}

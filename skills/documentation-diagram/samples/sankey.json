@@ -1,0 +1,19 @@
+{
+  "title": "Signup funnel sources to conversion",
+  "nodes": [
+    { "id": "organic", "label": "Organic search", "column": 0 },
+    { "id": "paid", "label": "Paid ads", "column": 0 },
+    { "id": "referral", "label": "Referral", "column": 0 },
+    { "id": "signup", "label": "Signed up", "column": 1 },
+    { "id": "bounced", "label": "Bounced", "column": 1 },
+    { "id": "activated", "label": "Activated", "column": 2 }
+  ],
+  "links": [
+    { "source": "organic", "target": "signup", "value": 40 },
+    { "source": "organic", "target": "bounced", "value": 20 },
+    { "source": "paid", "target": "signup", "value": 25 },
+    { "source": "paid", "target": "bounced", "value": 15 },
+    { "source": "referral", "target": "signup", "value": 18 },
+    { "source": "signup", "target": "activated", "value": 60 }
+  ]
+}

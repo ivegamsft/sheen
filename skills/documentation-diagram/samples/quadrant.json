@@ -1,0 +1,12 @@
+{
+  "title": "Feature prioritisation: impact vs. effort",
+  "xAxis": "Effort",
+  "yAxis": "Impact",
+  "items": [
+    { "label": "SSO", "x": 0.75, "y": 0.85 },
+    { "label": "Dark mode", "x": 0.2, "y": 0.35 },
+    { "label": "Bulk export", "x": 0.4, "y": 0.7 },
+    { "label": "Audit log", "x": 0.6, "y": 0.55 },
+    { "label": "Emoji reactions", "x": 0.15, "y": 0.1 }
+  ]
+}

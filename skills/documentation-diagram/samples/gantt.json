@@ -1,0 +1,10 @@
+{
+  "title": "Q3 migration plan",
+  "tasks": [
+    { "label": "Discovery", "start": 0, "duration": 5 },
+    { "label": "Design", "start": 4, "duration": 6 },
+    { "label": "Build", "start": 9, "duration": 12 },
+    { "label": "Test", "start": 18, "duration": 6 },
+    { "label": "Rollout", "start": 23, "duration": 4 }
+  ]
+}

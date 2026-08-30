@@ -195,6 +195,39 @@ jobs:
         if: ${{ hashFiles('tokens/**/*.tokens.json') != '' }}
         run: pwsh -NonInteractive -File scripts/lint-diagram-skins.ps1
 
+      - name: Render - documentation diagrams, all 16 included types (#113)
+        if: ${{ hashFiles('tokens/**/*.tokens.json') != '' && hashFiles('vendor/tabler-icons/**') != '' }}
+        run: |
+          set -e
+          mkdir -p /tmp/documentation-diagram-out
+          for f in skills/documentation-diagram/samples/*.json; do
+            name=$(basename "$f" .json)
+            pwsh -NonInteractive -File scripts/render-diagram.ps1 \
+              -Type "$name" \
+              -SpecPath "$f" \
+              -OutPath "/tmp/documentation-diagram-out/${name}.html" \
+              -Theme light
+          done
+
+      - name: Lint - documentation diagram output (geometry + anti-slop, #113)
+        if: ${{ hashFiles('tokens/**/*.tokens.json') != '' && hashFiles('vendor/tabler-icons/**') != '' }}
+        run: |
+          status=0
+          for f in skills/documentation-diagram/samples/*.json; do
+            name=$(basename "$f" .json)
+            svg="/tmp/documentation-diagram-out/${name}.svg"
+            grep -Pzo '(?s)<svg.*?</svg>' "/tmp/documentation-diagram-out/${name}.html" | tr -d '\0' > "$svg"
+            if ! pwsh -NonInteractive -File scripts/lint-diagram-geometry.ps1 -SvgPath "$svg" -Quiet; then
+              echo "::error::documentation-diagram '${name}' failed lint-diagram-geometry.ps1"
+              status=1
+            fi
+            if ! pwsh -NonInteractive -File scripts/audit-diagram-slop.ps1 -SvgPath "$svg" -Theme light -Quiet; then
+              echo "::error::documentation-diagram '${name}' failed audit-diagram-slop.ps1"
+              status=1
+            fi
+          done
+          exit $status
+
       - name: Lint - diagram geometry (connector/label rules, #118)
         run: |
           pwsh -NonInteractive -File scripts/lint-diagram-geometry.ps1 -SvgPath tests/fixtures/diagrams/baseline.svg

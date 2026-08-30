@@ -1,0 +1,8 @@
+{
+  "title": "Documentation-diagram renderer backlog",
+  "columns": [
+    { "label": "Backlog", "cards": ["Radar excluded-type message", "Icon gallery polish"] },
+    { "label": "In progress", "cards": ["Org chart layout", "Fishbone bones"] },
+    { "label": "Done", "cards": ["Bar renderer", "Line renderer", "Skin adapter"] }
+  ]
+}

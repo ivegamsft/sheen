@@ -1,0 +1,8 @@
+{
+  "title": "Capability overlap: Team A vs Team B",
+  "sets": [
+    { "label": "Team A skills" },
+    { "label": "Team B skills" }
+  ],
+  "overlapLabel": "TypeScript, SQL"
+}

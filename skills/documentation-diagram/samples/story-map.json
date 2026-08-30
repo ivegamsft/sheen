@@ -1,0 +1,24 @@
+{
+  "title": "Onboarding story map",
+  "activities": ["Sign up", "Verify", "Configure", "Invite team"],
+  "releases": [
+    {
+      "label": "Release 1 (MVP)",
+      "storiesByActivity": [
+        ["Email + password"],
+        ["Email link"],
+        ["Default settings"],
+        ["Single invite"]
+      ]
+    },
+    {
+      "label": "Release 2",
+      "storiesByActivity": [
+        ["SSO login"],
+        ["SMS code"],
+        ["Import settings", "Theme picker"],
+        ["Bulk invite"]
+      ]
+    }
+  ]
+}

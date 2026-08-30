@@ -1,0 +1,10 @@
+{
+  "title": "Data platform security control matrix",
+  "rows": ["Customer PII store", "Analytics warehouse", "Public API gateway"],
+  "cols": ["Encryption at rest", "Access logging", "MFA required"],
+  "cells": [
+    [3, 3, 2],
+    [2, 1, 2],
+    [3, 2, 0]
+  ]
+}

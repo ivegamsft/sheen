@@ -1,0 +1,10 @@
+{
+  "title": "Diagram design integration epic timeline",
+  "events": [
+    { "label": "Epic opened", "date": "2026-01-05" },
+    { "label": "Tokens shipped", "date": "2026-01-12" },
+    { "label": "Skin adapter", "date": "2026-01-19" },
+    { "label": "Icons vendored", "date": "2026-01-26" },
+    { "label": "Renderer shipped", "date": "2026-02-02" }
+  ]
+}

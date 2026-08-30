@@ -1,0 +1,25 @@
+name: "documentation-diagram-routing"
+description: "Routing evaluation — validates trigger activation for documentation-diagram."
+skill: "skills/documentation-diagram/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Render a Gantt chart for the Q3 migration plan from a JSON spec for the release runbook"
+    expect_activation: true
+  - id: "pos-2"
+    input: "Generate a fishbone diagram documenting the root causes of failed deploys for the postmortem doc"
+    expect_activation: true
+  - id: "pos-3"
+    input: "Embed a static org chart of the platform engineering team in our onboarding documentation"
+    expect_activation: true
+  - id: "pos-4"
+    input: "I need a diagram type recommendation for documenting a cyclic release process (ship, measure, learn, prioritise)"
+    expect_activation: true
+  - id: "neg-1"
+    input: "Build a live dashboard showing real-time request latency and error rate"
+    expect_activation: false
+  - id: "neg-2"
+    input: "Recommend a chart type for a scatter plot correlating load and latency for a reporting dashboard"
+    expect_activation: false
+  - id: "neg-3"
+    input: "Draw a Wardley map for our platform's evolution strategy"
+    expect_activation: false

@@ -101,3 +101,22 @@ hard-coded hex. See the generated
 for the full provenance and per-diagram-type mapping. Attribution is tracked
 in [`THIRD_PARTY_LICENSES.md`](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/THIRD_PARTY_LICENSES.md).
 
+## Renderer (#113)
+
+`scripts/render-diagram.ps1` (dot-sourcing `scripts/render-diagram-types.ps1`)
+is the consumer of everything above: it loads a `dist/diagram-skins/<theme>.json`
+skin and `dist/icons/manifest.json`, and renders one of the 16 diagram types
+kept in scope by [ADR-006](../decisions/adr-006-diagram-scope.md) into a
+self-contained, static, accessible HTML+SVG file — no Mermaid, no CDN fonts,
+no runtime dependencies, no motion (ADR-003).
+
+```pwsh
+pwsh scripts/render-diagram.ps1 -Type bar -SpecPath spec.json -OutPath out.html -Theme light
+```
+
+Full type list, spec schemas, and runnable sample specs are documented in
+[`skills/documentation-diagram/SKILL.md`](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/skills/documentation-diagram/SKILL.md).
+Every rendered diagram is validated in CI against
+`lint-diagram-geometry.ps1` and `audit-diagram-slop.ps1` above — the
+renderer's output must pass both, unmodified, for every sample spec.
+

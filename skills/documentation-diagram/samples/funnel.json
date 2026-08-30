@@ -1,0 +1,9 @@
+{
+  "title": "Marketing funnel: awareness to purchase",
+  "levels": [
+    { "label": "Awareness", "value": 10000 },
+    { "label": "Interest", "value": 4200 },
+    { "label": "Consideration", "value": 1800 },
+    { "label": "Purchase", "value": 600 }
+  ]
+}

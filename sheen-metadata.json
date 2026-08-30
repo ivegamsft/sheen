@@ -9,7 +9,7 @@
     ]
   },
   "counts": {
-    "skills": 57,
+    "skills": 58,
     "agents": 6,
     "instructions": 10,
     "prompts": 0,
@@ -49,6 +49,7 @@
       "design-to-code",
       "design-tokens",
       "design-update",
+      "documentation-diagram",
       "ethical-design",
       "font-mapping",
       "i18n-framework-mapping",
@@ -390,6 +391,16 @@
         "maturity": "beta",
         "description": "Use when planning or executing a design system modernization, token migration, or theme evolution rollout. USE FOR: design system modernization, token migration planning, theme evolution rollout. DO NOT USE FOR: from-scratch bootstrap, single-component specs.",
         "hash": "7c219ea207950df26de193e0f2bbdc94ec74e1612d9e9e44ca44d75a692aca3b"
+      },
+      {
+        "name": "documentation-diagram",
+        "path": "skills/documentation-diagram/SKILL.md",
+        "folder": "skills/documentation-diagram",
+        "category": "development",
+        "pillar": null,
+        "maturity": "stable",
+        "description": "Use when generating static, skin-aware SVG diagrams for code and product documentation. USE FOR: render a bar/line/sankey/treemap/gantt/kanban/story-map/user-journey/quadrant/fishbone/funnel/org-chart/loop/timeline/venn/security-matrix diagram from a JSON spec, embed an accessible diagram in a docs page, generate a diagram that automatically follows the current theme's diagram skin. DO NOT USE FOR: live/reporting dashboards with real-time data (use skills/data-visualisation), scatter/polar/radar/Wardley-map diagrams (explicitly out of scope, see ADR-006), animated or interactive charts.",
+        "hash": "1278cbad3bc9df0c97cc6b48cee963febd8be3020dda00a08631156f297e2e13"
       },
       {
         "name": "ethical-design",

@@ -1,0 +1,9 @@
+{
+  "title": "Sprint velocity by team",
+  "categories": [
+    { "label": "Alpha", "value": 34 },
+    { "label": "Bravo", "value": 28 },
+    { "label": "Charlie", "value": 41 },
+    { "label": "Delta", "value": 19 }
+  ]
+}
