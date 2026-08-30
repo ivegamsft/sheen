@@ -548,9 +548,9 @@
         "folder": "skills/pattern-library",
         "category": "design",
         "pillar": "components",
-        "maturity": "beta",
-        "description": "Use when documenting, cataloging, or composing reusable design patterns into a shared pattern library. USE FOR: pattern documentation, pattern composition guidance, pattern index authoring. DO NOT USE FOR: single component deep specs, token schema validation.",
-        "hash": "1e39b48b6112d1e703bd7cc4a625ec8ada96b479a803f9d13c89173fdfb37ab3"
+        "maturity": "stable",
+        "description": "Use when documenting, cataloging, or composing reusable design patterns into a shared pattern library. USE FOR: pattern documentation, pattern composition guidance, pattern index authoring, choosing a proven UI pattern (modal, tabs, accordion, card, breadcrumb, dropdown, tooltip, toast, stepper, data table, command palette, empty state). DO NOT USE FOR: single component deep specs, token schema validation.",
+        "hash": "517efa5eefb963efcedff1f4a1123f61dd6382f359b36e67d8693424a9079320"
       },
       {
         "name": "performance-aware-design",

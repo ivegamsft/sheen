@@ -159,12 +159,16 @@ states (no info leak). · Output: state spec. · Pairs: `component-spec`,
 `motion-elevation`, `secure-ux`. · Standards: ISO 9241-110, OWASP error handling
 (spec 08 §2.4, §2.11).
 
-**`pattern-library`** *(components · beta)* — reusable UI patterns above the
-component level.
-· Use for: document a pattern (forms, tables, wizards), pattern index · Not for: a
-single component (`component-spec`)
-· Workflow: identify pattern → composition → usage/anti-usage. · Output: pattern
-entry. · Pairs: `component-spec`, `style-guide-authoring`.
+**`pattern-library`** *(components · stable)* — reusable UI patterns above the
+component level, with a populated catalog of proven patterns.
+· Use for: choose/document a pattern (modal, tabs, accordion, card, breadcrumb,
+dropdown, tooltip, toast, stepper, data table, command palette, empty state) ·
+Not for: a single component (`component-spec`)
+· Workflow: match scenario to catalog entry → compose via `component-spec` +
+`ui-states-interaction` → if no match, define new entry with intent/when-to-use/
+anti-patterns → add to catalog to prevent drift. · Output: pattern entry
+(catalog-backed). · Pairs: `component-spec`, `ui-states-interaction`,
+`style-guide-authoring`.
 
 **`design-system-audit`** *(components · stable)* — audit a design system's tokens
 and components for coherence.
