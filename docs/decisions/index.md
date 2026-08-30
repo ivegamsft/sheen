@@ -14,6 +14,8 @@ chosen direction — so future contributors understand *why* the system is shape
 | [ADR-004](adr-004-diagram-taxonomy-discipline.md) | Diagram taxonomy: semantic pattern vs. layout type | 2026-08-30 | Accepted |
 | [ADR-005](adr-005-diagram-skin-bridge.md) | Diagram skin is generated from DTCG tokens (bridge, not a second style guide) | 2026-08-30 | Accepted |
 | [ADR-006](adr-006-diagram-scope.md) | Documentation diagram scope: included vs. excluded types | 2026-08-30 | Accepted |
+| [ADR-007](adr-007-populated-catalog-drift-prevention.md) | Populated catalogs prevent spec drift (component inventory & UI pattern catalog) | 2026-08-30 | Accepted |
+| [ADR-008](adr-008-aesthetic-direction-generated-artifact.md) | AESTHETIC-DIRECTION.md as a second generated consumer artifact | 2026-08-30 | Accepted |
 | [AUDIT-001](spec-gap-audit-2026-08-16.md) | Spec gap audit — all specs vs implementation | 2026-08-16 | Published |
 
 ## Conventions

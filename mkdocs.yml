@@ -157,6 +157,8 @@ nav:
       - "ADR-004: Diagram Taxonomy Discipline": decisions/adr-004-diagram-taxonomy-discipline.md
       - "ADR-005: Diagram Skin Bridge": decisions/adr-005-diagram-skin-bridge.md
       - "ADR-006: Diagram Scope": decisions/adr-006-diagram-scope.md
+      - "ADR-007: Populated Catalog Drift Prevention": decisions/adr-007-populated-catalog-drift-prevention.md
+      - "ADR-008: Aesthetic Direction Generated Artifact": decisions/adr-008-aesthetic-direction-generated-artifact.md
       - "AUDIT-001: Spec Gap Audit": decisions/spec-gap-audit-2026-08-16.md
   - Support:
       - FAQ: support/faq.md
