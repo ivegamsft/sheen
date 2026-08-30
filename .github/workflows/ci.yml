@@ -174,3 +174,17 @@ jobs:
       - name: Build - diagram skins (DTCG → semantic-role skins, #116)
         if: ${{ hashFiles('tokens/**/*.tokens.json') != '' }}
         run: pwsh -NonInteractive -File scripts/build-diagram-skins.ps1 -Quiet
+
+      - name: Lint - diagram skins (skin, polarity, contrast gates, #118)
+        if: ${{ hashFiles('tokens/**/*.tokens.json') != '' }}
+        run: pwsh -NonInteractive -File scripts/lint-diagram-skins.ps1
+
+      - name: Lint - diagram geometry (connector/label rules, #118)
+        run: |
+          pwsh -NonInteractive -File scripts/lint-diagram-geometry.ps1 -SvgPath tests/fixtures/diagrams/baseline.svg
+          if pwsh -NonInteractive -File scripts/lint-diagram-geometry.ps1 -SvgPath tests/fixtures/diagrams/broken.svg; then
+            echo "::error::lint-diagram-geometry.ps1 passed the intentionally-broken fixture — geometry lint is not catching known violations"
+            exit 1
+          else
+            echo "broken.svg correctly failed geometry lint."
+          fi

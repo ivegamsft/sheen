@@ -20,7 +20,12 @@
 #   soft         -> color.border-muted     (subtle divider / faint gridline)
 #   rule         -> color.border-muted     (default divider — alias of `soft`, kept as a
 #                                            distinct role name for diagram-design parity)
-#   rule-solid   -> color.border           (stronger divider / swimlane edge)
+#   rule-solid   -> color.muted            (stronger divider / swimlane edge — must clear the
+#                                            3:1 non-text contrast floor against `paper`, which
+#                                            `color.border` does not in this token set; `muted`
+#                                            is the nearest role that both reads as a divider
+#                                            and clears the floor. Enforced by
+#                                            scripts/lint-diagram-skins.ps1, issue #118.)
 #   accent       -> color.accent           (emphasis / active-path colour)
 #   accent-tint  -> derived: accent blended 25% into paper (a lighter accent wash for
 #                   highlighted regions). Computed at build time, not a token, because
@@ -164,7 +169,7 @@ $RoleMap = [ordered]@{
     'muted'      = 'color.muted'
     'soft'       = 'color.border-muted'
     'rule'       = 'color.border-muted'
-    'rule-solid' = 'color.border'
+    'rule-solid' = 'color.muted'
     'accent'     = 'color.accent'
     'link'       = 'color.link'
 }

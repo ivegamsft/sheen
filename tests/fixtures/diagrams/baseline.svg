@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="80" viewBox="0 0 300 80">
+  <!-- lint-diagram-geometry.ps1 baseline fixture (#118): should pass every rule -->
+  <rect id="A" x="0" y="0" width="40" height="40" fill="#ffffff" stroke="#1f2328"/>
+  <rect id="B" x="220" y="0" width="40" height="40" fill="#ffffff" stroke="#1f2328"/>
+  <path class="connector" data-from="A" data-to="B" d="M 40,20 L 220,20" stroke="#1f2328" fill="none"/>
+  <rect x="110" y="8" width="40" height="16" fill="#ffffff"/>
+  <text class="edge-label" x="115" y="20">flow</text>
+</svg>

@@ -39,7 +39,7 @@ Reads `tokens/` (core → semantic → themes) and emits, per theme, into
 | `muted` | `color.muted` | Secondary text / de-emphasised nodes |
 | `soft` | `color.border-muted` | Subtle divider / faint gridline |
 | `rule` | `color.border-muted` | Default divider (alias of `soft`, kept distinct for diagram-design parity) |
-| `rule-solid` | `color.border` | Stronger divider / swimlane edge |
+| `rule-solid` | `color.muted` | Stronger divider / swimlane edge — `color.border` fails the 3:1 non-text floor in this token set, so this role uses `muted` instead (enforced by `scripts/lint-diagram-skins.ps1`, #118) |
 | `accent` | `color.accent` | Emphasis / active-path colour |
 | `accent-tint` | *derived* | Accent blended 25% into `paper`. Computed at build time (not a token) because no `accent-subtle` semantic token exists yet. |
 | `link` | `color.link` | Cross-reference / edge-to-doc links |
@@ -56,3 +56,21 @@ Reads `tokens/` (core → semantic → themes) and emits, per theme, into
   silently.
 - CI (`.github/workflows/ci.yml`, `tokens` job) runs this build on every
   push touching `tokens/**/*.tokens.json`, alongside `build-tokens.ps1`.
+
+## Lints (#118)
+
+Two CI-wired lint scripts guard the adapter output and the renderer's SVG
+conventions:
+
+- `scripts/lint-diagram-skins.ps1` — runs after `build-diagram-skins.ps1`;
+  checks every role resolves to a well-formed hex, that light/dark/
+  high-contrast polarity holds (paper/ink inversion + the theme's
+  accessibility contrast floor), and that `accent`, `rule-solid`, and every
+  `series.N` clear the 3:1 non-text contrast floor against `paper`.
+- `scripts/lint-diagram-geometry.ps1` — a static heuristic lint over a single
+  SVG file's connector/label markup, covering the mechanically-checkable
+  connector rules from #115's anti-slop list (`SLANT`, `SHARED-ATTACH`,
+  `OVERLAP-PATH`, `LABEL-UNMASKED`, `CLIPPED-LABEL`, `TRANSIT-BEHIND`).
+  `tests/fixtures/diagrams/baseline.svg` and `broken.svg` are asserted in CI
+  to pass and fail (respectively) so the lint's own effectiveness is
+  continuously verified, not just its presence.

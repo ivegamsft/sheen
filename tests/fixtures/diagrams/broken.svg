@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="90" viewBox="0 0 300 90">
+  <!-- lint-diagram-geometry.ps1 broken fixture (#118): deliberately trips every rule -->
+  <defs>
+    <clipPath id="clip1"><rect x="0" y="0" width="10" height="10"/></clipPath>
+  </defs>
+  <rect id="A" x="0" y="0" width="40" height="40" fill="#ffffff" stroke="#1f2328"/>
+  <rect id="C" x="100" y="0" width="40" height="40" fill="#ffffff" stroke="#1f2328"/>
+  <rect id="B" x="240" y="0" width="40" height="40" fill="#ffffff" stroke="#1f2328"/>
+
+  <!-- TRANSIT-BEHIND: straight A->B connector cuts through non-endpoint box C -->
+  <path class="connector" data-from="A" data-to="B" d="M 40,20 L 240,20" stroke="#1f2328" fill="none"/>
+
+  <!-- SLANT (29.5deg off-axis, not 0/45/90) + SHARED-ATTACH (reuses A's (40,20) attach point) -->
+  <path class="connector" data-from="A" data-to="C" d="M 40,20 L 130,71" stroke="#1f2328" fill="none"/>
+
+  <!-- OVERLAP-PATH: identical 'd' to the first connector -->
+  <path class="connector" data-from="C" data-to="B" d="M 40,20 L 240,20" stroke="#1f2328" fill="none"/>
+
+  <!-- LABEL-UNMASKED: no background rect beneath this label -->
+  <text class="edge-label" x="140" y="15">flow</text>
+
+  <!-- CLIPPED-LABEL -->
+  <text clip-path="url(#clip1)" x="10" y="80">hidden</text>
+</svg>
