@@ -307,3 +307,47 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+
+  skills-agents-audit:
+    # Unified skills/agents structural audit (#131): cross-checks catalog
+    # completeness (both directions), agent composes.skills/instructions
+    # refs, skill "Delegates / pairs with" refs, and wraps lint-router.ps1 +
+    # audit-evals.ps1 (previously referenced only in publish-to-production.yml's
+    # strip-list and never actually executed as a gate). Validate-only here —
+    # findings are turned into tracked issues by the separate scheduled
+    # audit-skills-agents.yml workflow, not on every PR.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v4
+
+      - name: Install PowerShell
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq powershell
+
+      - name: Audit - skills/agents structural integrity (#131)
+        run: pwsh -NonInteractive -File scripts/audit-skills-agents.ps1
+
+      - name: Verify - audit catches a real broken catalog reference (#131)
+        run: |
+          set -e
+          cp skills/_catalog.md /tmp/catalog-good.md
+          grep -v 'skills/wireframing/' skills/_catalog.md > /tmp/catalog-broken.md
+          mv /tmp/catalog-broken.md skills/_catalog.md
+          if pwsh -NonInteractive -File scripts/audit-skills-agents.ps1 -OutFile '' -Quiet; then
+            echo "::error::audit-skills-agents.ps1 passed against an intentionally-broken catalog — catalog-drift detection is not catching known violations"
+            exit 1
+          else
+            echo "Intentionally-broken skills/_catalog.md correctly failed the audit."
+          fi
+          mv /tmp/catalog-good.md skills/_catalog.md
+
+      - name: Upload - findings report on failure
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: skills-agents-findings
+          path: dist/audit/skills-agents-findings.json
+          retention-days: 7
