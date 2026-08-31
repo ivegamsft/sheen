@@ -149,47 +149,89 @@ privacy UX).
     <desc id="diagram-desc">Treemap: Sheen skill catalog by category (58 skills)</desc>
     <rect x="0" y="0" width="640" height="400" fill="#ffffff" />
 <rect x="0" y="0" width="99" height="400" fill="#0969da" stroke="#ffffff" stroke-width="2" />
-<text  x="6" y="18" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Governance / meta</text>
+<clipPath id="tm-clip-0"><rect x="0" y="0" width="99" height="400" /></clipPath>
+<g clip-path="url(#tm-clip-0)">
+<text  x="6" y="18" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Governance …</text>
 <text  x="6" y="34" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">9</text>
+</g>
 <rect x="99" y="0" width="541" height="48" fill="#bc4c00" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-1"><rect x="99" y="0" width="541" height="48" /></clipPath>
+<g clip-path="url(#tm-clip-1)">
 <text  x="105" y="18" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Foundations</text>
 <text  x="105" y="34" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">7</text>
+</g>
 <rect x="99" y="48" width="90" height="352" fill="#1a7f37" stroke="#ffffff" stroke-width="2" />
-<text  x="105" y="66" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Lifecycle / operations</text>
+<clipPath id="tm-clip-2"><rect x="99" y="48" width="90" height="352" /></clipPath>
+<g clip-path="url(#tm-clip-2)">
+<text  x="105" y="66" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Lifecycle…</text>
 <text  x="105" y="82" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">7</text>
+</g>
 <rect x="189" y="48" width="451" height="42" fill="#6e40c9" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-3"><rect x="189" y="48" width="451" height="42" /></clipPath>
+<g clip-path="url(#tm-clip-3)">
 <text  x="195" y="66" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Extended lifecycle &amp; platform-specific design</text>
 <text  x="195" y="82" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">7</text>
+</g>
 <rect x="189" y="90" width="81" height="310" fill="#cf222e" stroke="#ffffff" stroke-width="2" />
-<text  x="195" y="108" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Information architecture</text>
+<clipPath id="tm-clip-4"><rect x="189" y="90" width="81" height="310" /></clipPath>
+<g clip-path="url(#tm-clip-4)">
+<text  x="195" y="108" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Informat…</text>
 <text  x="195" y="124" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">5</text>
+</g>
 <rect x="270" y="90" width="370" height="21" fill="#0f7b6c" stroke="#ffffff" stroke-width="2" />
-<text  x="276" y="108" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Brand</text>
-<text  x="276" y="124" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">4</text>
+<clipPath id="tm-clip-5"><rect x="270" y="90" width="370" height="21" /></clipPath>
+<g clip-path="url(#tm-clip-5)">
+<text  x="276" y="100" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="9" font-weight="bold" text-anchor="start">Brand 4</text>
+</g>
 <rect x="270" y="111" width="78" height="289" fill="#b83280" stroke="#ffffff" stroke-width="2" />
-<text  x="276" y="129" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Components / UI</text>
+<clipPath id="tm-clip-6"><rect x="270" y="111" width="78" height="289" /></clipPath>
+<g clip-path="url(#tm-clip-6)">
+<text  x="276" y="129" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Componen…</text>
 <text  x="276" y="145" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">4</text>
+</g>
 <rect x="348" y="111" width="292" height="20" fill="#8a6d3b" stroke="#ffffff" stroke-width="2" />
-<text  x="354" y="129" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Web design &amp; usability</text>
-<text  x="354" y="145" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">4</text>
+<clipPath id="tm-clip-7"><rect x="348" y="111" width="292" height="20" /></clipPath>
 <rect x="348" y="131" width="106" height="269" fill="#0969da" stroke="#ffffff" stroke-width="2" />
-<text  x="354" y="149" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Mapping / discovery</text>
+<clipPath id="tm-clip-8"><rect x="348" y="131" width="106" height="269" /></clipPath>
+<g clip-path="url(#tm-clip-8)">
+<text  x="354" y="149" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Mapping / di…</text>
 <text  x="354" y="165" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">4</text>
+</g>
 <rect x="454" y="131" width="186" height="9" fill="#bc4c00" stroke="#ffffff" stroke-width="2" />
-<text  x="460" y="149" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Content &amp; localization</text>
-<text  x="460" y="165" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">2</text>
+<clipPath id="tm-clip-9"><rect x="454" y="131" width="186" height="9" /></clipPath>
 <rect x="454" y="140" width="74" height="260" fill="#1a7f37" stroke="#ffffff" stroke-width="2" />
-<text  x="460" y="158" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Accessibility</text>
+<clipPath id="tm-clip-10"><rect x="454" y="140" width="74" height="260" /></clipPath>
+<g clip-path="url(#tm-clip-10)">
+<text  x="460" y="158" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Accessi…</text>
 <text  x="460" y="174" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">2</text>
+</g>
 <rect x="528" y="140" width="112" height="9" fill="#6e40c9" stroke="#ffffff" stroke-width="2" />
-<text  x="534" y="158" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Visualization &amp; diagrams</text>
-<text  x="534" y="174" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">2</text>
+<clipPath id="tm-clip-11"><rect x="528" y="140" width="112" height="9" /></clipPath>
 <rect x="528" y="149" width="112" height="251" fill="#cf222e" stroke="#ffffff" stroke-width="2" />
-<text  x="534" y="167" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Security &amp; privacy UX</text>
+<clipPath id="tm-clip-12"><rect x="528" y="149" width="112" height="251" /></clipPath>
+<g clip-path="url(#tm-clip-12)">
+<text  x="534" y="167" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Security &amp; p…</text>
 <text  x="534" y="183" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">1</text>
+</g>
   </svg>
 <figcaption>Source: <code>skills/_catalog.md</code>, cross-checked against <code>sheen-metadata.json</code>'s <code>counts.skills</code>.</figcaption>
 </figure>
+
+| Category | Skills |
+|---|---|
+| Governance / meta | 9 |
+| Foundations | 7 |
+| Lifecycle / operations | 7 |
+| Extended lifecycle & platform-specific design | 7 |
+| Information architecture | 5 |
+| Brand | 4 |
+| Components / UI | 4 |
+| Web design & usability | 4 |
+| Mapping / discovery | 4 |
+| Content & localization | 2 |
+| Accessibility | 2 |
+| Visualization & diagrams | 2 |
+| Security & privacy UX | 1 |
 
 ## Prompt routing flow
 
@@ -219,29 +261,29 @@ and routed to exactly one agent. This Sankey traces that fan-out: one
 <rect x="40" y="40" width="18" height="350" fill="#1f2328" />
 <text  x="34" y="219" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="end">Prompt</text>
 <rect x="180" y="40" width="18" height="45" fill="#1f2328" />
-<text  x="174" y="66.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="end">🎨 Tokens &amp; System</text>
+<text  x="204" y="66.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">🎨 Tokens &amp; System</text>
 <rect x="320" y="40" width="18" height="45" fill="#1f2328" />
-<text  x="314" y="66.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="end">@design-system-architect</text>
+<text  x="344" y="66.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@design-system-architect</text>
 <rect x="180" y="101" width="18" height="45" fill="#1f2328" />
-<text  x="174" y="127.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="end">🖼️ Brand</text>
+<text  x="204" y="127.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">🖼️ Brand</text>
 <rect x="320" y="101" width="18" height="45" fill="#1f2328" />
-<text  x="314" y="127.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="end">@brand-steward</text>
+<text  x="344" y="127.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@brand-steward</text>
 <rect x="180" y="162" width="18" height="45" fill="#1f2328" />
-<text  x="174" y="188.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="end">📐 Usability</text>
+<text  x="204" y="188.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">📐 Usability</text>
 <rect x="320" y="162" width="18" height="45" fill="#1f2328" />
-<text  x="314" y="188.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="end">@ux-designer</text>
+<text  x="344" y="188.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@ux-designer</text>
 <rect x="180" y="223" width="18" height="45" fill="#1f2328" />
-<text  x="174" y="249.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="end">♿ Accessibility</text>
+<text  x="204" y="249.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">♿ Accessibility</text>
 <rect x="320" y="223" width="18" height="45" fill="#1f2328" />
-<text  x="314" y="249.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="end">@accessibility-auditor</text>
+<text  x="344" y="249.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@accessibility-auditor</text>
 <rect x="180" y="284" width="18" height="45" fill="#1f2328" />
-<text  x="174" y="310.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="end">🗂️ Info Architecture</text>
+<text  x="204" y="310.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">🗂️ Info Architecture</text>
 <rect x="320" y="284" width="18" height="45" fill="#1f2328" />
-<text  x="314" y="310.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="end">@information-architect</text>
+<text  x="344" y="310.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@information-architect</text>
 <rect x="180" y="345" width="18" height="45" fill="#1f2328" />
-<text  x="174" y="371.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="end">✅ Governance</text>
+<text  x="204" y="371.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">✅ Governance</text>
 <rect x="320" y="345" width="18" height="45" fill="#1f2328" />
-<text  x="314" y="371.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="end">@design-reviewer</text>
+<text  x="344" y="371.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@design-reviewer</text>
   </svg>
 <figcaption>Source: <code>.github/skills/sheen/SKILL.md</code> Pillars &amp; Agents table.</figcaption>
 </figure>

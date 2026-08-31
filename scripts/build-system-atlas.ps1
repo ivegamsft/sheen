@@ -176,6 +176,7 @@ $sankeySvg   = Render-Spec 'sankey' $sankey 'sankey'
 # ── 6. Render the markdown page ──────────────────────────────────────────────
 
 $pillarTableRows = ($pillars | ForEach-Object { "| $($_.Pillar) | @$($_.Agent) | $($_.ComposedSkills.Count) |" }) -join "`n"
+$categoryTableRows = ($categories.GetEnumerator() | Sort-Object -Property Value -Descending | ForEach-Object { "| $($_.Key) | $($_.Value) |" }) -join "`n"
 
 $md = @"
 ---
@@ -222,6 +223,10 @@ privacy UX).
 $treemapSvg
 <figcaption>Source: <code>skills/_catalog.md</code>, cross-checked against <code>sheen-metadata.json</code>'s <code>counts.skills</code>.</figcaption>
 </figure>
+
+| Category | Skills |
+|---|---|
+$categoryTableRows
 
 ## Prompt routing flow
 

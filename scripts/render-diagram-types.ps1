@@ -175,12 +175,24 @@ function Render-Sankey($Spec, $Skin) {
         $linkIdx++
     }
     $rows = @()
+    # Label placement must key off *which column* a node is in, not its
+    # absolute X vs. the canvas midpoint: with 3+ columns (Prompt -> pillar
+    # -> agent) every column can sit left of the canvas midpoint, so a
+    # width-based comparison put every column's label on its left side —
+    # squeezing pillar/agent labels into the narrow gap before the node and
+    # visually overlapping the incoming link curve / the node rect itself
+    # (issue: Sankey labels rendered on top of node bars and link paths).
+    # Only the first column has nothing to its left to collide with, so it
+    # alone gets a left-hand ('end') label; every other column's label goes
+    # to the right of its own node, in the open gap before the next column.
+    $minColumn = ($columns | Measure-Object -Minimum).Minimum
     foreach ($node in $nodes) {
         $pos = $nodePos[$node.id]
         if (-not $pos) { continue }
         $svg += Svg-Rect -X $pos.X -Y $pos.Y -W $nodeW -H $pos.H -Fill $Skin['ink']
-        $anchorX = if ($pos.X -lt ($w / 2)) { $pos.X - 6 } else { $pos.X + $nodeW + 6 }
-        $anchor = if ($pos.X -lt ($w / 2)) { 'end' } else { 'start' }
+        $isFirstColumn = ($node.column -eq $minColumn)
+        $anchorX = if ($isFirstColumn) { $pos.X - 6 } else { $pos.X + $nodeW + 6 }
+        $anchor = if ($isFirstColumn) { 'end' } else { 'start' }
         $svg += Svg-Text -X $anchorX -Y ($pos.Y + $pos.H / 2 + 4) -Content $pos.Label -Fill $Skin['ink'] -Size 11 -Anchor $anchor
     }
     foreach ($link in $links) { $rows += , @($link.source, $link.target, [string]$link.value) }
@@ -189,8 +201,27 @@ function Render-Sankey($Spec, $Skin) {
 }
 
 # ── 4. Treemap (flat slice-and-dice) ─────────────────────────────────────────
+# Slice-and-dice alternates horizontal/vertical splits proportional to value,
+# which — with real catalog data spanning a wide value range (e.g. 9 skills
+# down to 1) — produces some genuinely narrow/short slices late in the split
+# order. The label+value text used to be drawn at a fixed offset regardless
+# of slice size, so on narrow slices the text overflowed the slice's own
+# fill and visually overlapped the *next* slice's label (issue: treemap text
+# overlapping/misaligned). Fix: size the text to the slice — skip the value
+# line (or both lines) when there isn't room, truncate long labels to fit the
+# available width, and clip every label to its own slice as a safety net so
+# an estimate that's slightly off still can't bleed into the neighbour.
+function Get-FittedTreemapText([string]$text, [double]$availW, [double]$charW) {
+    if ($availW -le 0) { return '' }
+    $maxChars = [Math]::Max(1, [Math]::Floor($availW / $charW))
+    if ($text.Length -le $maxChars) { return $text }
+    if ($maxChars -le 1) { return '' }
+    return $text.Substring(0, $maxChars - 1) + '…'
+}
+
 function Render-Treemap($Spec, $Skin) {
     $w = 640; $h = 400
+    $pad = 6
     $items = @($Spec.items) | Sort-Object -Property value -Descending
     $total = ($items | Measure-Object -Property value -Sum).Sum
     if (-not $total -or $total -le 0) { $total = 1 }
@@ -206,16 +237,43 @@ function Render-Treemap($Spec, $Skin) {
             $itemW = [Math]::Round($remW * $frac / (1.0 - ($consumed / $total)))
             if ($i -eq $items.Count - 1) { $itemW = $remW }
             $itemW = [Math]::Min($itemW, $remW)
-            $svg += Svg-Rect -X $x -Y $y -W $itemW -H $remH -Fill (Pick-Series $Skin $i) -Stroke $Skin['paper'] -StrokeWidth 2
-            $svg += Svg-Text -X ($x + 6) -Y ($y + 18) -Content $item.label -Fill $Skin['paper'] -Size 12 -Weight 'bold'
-            $svg += Svg-Text -X ($x + 6) -Y ($y + 34) -Content ([string]$item.value) -Fill $Skin['paper'] -Size 11
+            $cellX = $x; $cellY = $y; $cellW = $itemW; $cellH = $remH
+            $svg += Svg-Rect -X $cellX -Y $cellY -W $cellW -H $cellH -Fill (Pick-Series $Skin $i) -Stroke $Skin['paper'] -StrokeWidth 2
             $x += $itemW; $remW -= $itemW
         } else {
             $itemH = [Math]::Round($remH * $frac)
-            $svg += Svg-Rect -X $x -Y $y -W $remW -H $itemH -Fill (Pick-Series $Skin $i) -Stroke $Skin['paper'] -StrokeWidth 2
-            $svg += Svg-Text -X ($x + 6) -Y ($y + 18) -Content $item.label -Fill $Skin['paper'] -Size 12 -Weight 'bold'
-            $svg += Svg-Text -X ($x + 6) -Y ($y + 34) -Content ([string]$item.value) -Fill $Skin['paper'] -Size 11
+            $cellX = $x; $cellY = $y; $cellW = $remW; $cellH = $itemH
+            $svg += Svg-Rect -X $cellX -Y $cellY -W $cellW -H $cellH -Fill (Pick-Series $Skin $i) -Stroke $Skin['paper'] -StrokeWidth 2
             $y += $itemH; $remH -= $itemH
+        }
+        $availW = $cellW - $pad * 2
+        $availH = $cellH - $pad * 2
+        # Clip any text to the cell itself so a char-width estimate that's
+        # slightly generous still can't spill into the neighbouring slice.
+        $clipId = "tm-clip-$i"
+        $svg += "<clipPath id=`"$clipId`"><rect x=`"$cellX`" y=`"$cellY`" width=`"$cellW`" height=`"$cellH`" /></clipPath>"
+        # Slices too short/narrow for the normal 12px label + 11px value pair
+        # still get a compact single-line "label value" at 9px rather than
+        # being left blank — every category stays identifiable on the chart
+        # itself, not just in the table below. Only genuinely tiny slivers
+        # (no room even for one 9px char) are left unlabelled.
+        $textSvg = @()
+        if ($availH -ge 24 -and $availW -ge 14) {
+            $label = Get-FittedTreemapText $item.label $availW 7.2
+            if ($label) { $textSvg += Svg-Text -X ($cellX + $pad) -Y ($cellY + 18) -Content $label -Fill $Skin['paper'] -Size 12 -Weight 'bold' }
+            if ($availH -ge 30) {
+                $value = Get-FittedTreemapText ([string]$item.value) $availW 6.4
+                if ($value) { $textSvg += Svg-Text -X ($cellX + $pad) -Y ($cellY + 34) -Content $value -Fill $Skin['paper'] -Size 11 }
+            }
+        } elseif ($availH -ge 9 -and $availW -ge 9) {
+            $combined = "$($item.label) $($item.value)"
+            $compact = Get-FittedTreemapText $combined $availW 5.2
+            if ($compact) { $textSvg += Svg-Text -X ($cellX + $pad) -Y ($cellY + [Math]::Min($availH, 11) + 1) -Content $compact -Fill $Skin['paper'] -Size 9 -Weight 'bold' }
+        }
+        if ($textSvg.Count -gt 0) {
+            $svg += "<g clip-path=`"url(#$clipId)`">"
+            $svg += $textSvg
+            $svg += '</g>'
         }
         $horizontal = -not $horizontal
         $consumed += $item.value
