@@ -93,6 +93,8 @@ jobs:
             '.github/skills/**'
             'scripts/build-metadata.ps1'
             'scripts/build-metadata.sh'
+            'scripts/build-system-atlas.ps1'
+            'scripts/build-system-atlas.sh'
             'scripts/lint-frontmatter.ps1'
             'scripts/lint-frontmatter.sh'
             'scripts/lint-router.ps1'

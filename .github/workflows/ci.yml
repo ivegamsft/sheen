@@ -249,6 +249,10 @@ jobs:
             echo "broken-sample.svg correctly failed the anti-slop audit."
           fi
 
+      - name: Verify - system atlas docs page is up to date (#149)
+        if: ${{ hashFiles('tokens/**/*.tokens.json') != '' && hashFiles('vendor/tabler-icons/**') != '' }}
+        run: pwsh -NonInteractive -File scripts/build-system-atlas.ps1 -Check
+
   visual-regression:
     # Real pixel-level regression on top of the geometry/anti-slop lints
     # above (#129). Runs inside the official Playwright container so

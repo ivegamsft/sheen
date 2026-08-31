@@ -24,6 +24,15 @@ article img {
   margin: 0 auto;
 }
 
+/* documentation-diagram inline SVGs (e.g. docs/reference/system-atlas.md) —
+   scale to the content column like a Mermaid diagram, keep vector crispness. */
+figure svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
 /* ── Admonition tweaks ────────────────────────────────────────────────────── */
 
 .admonition {
