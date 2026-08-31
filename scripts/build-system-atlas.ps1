@@ -100,12 +100,32 @@ $totalSkills = ($categories.Values | Measure-Object -Sum).Sum
 
 # ── 4. Build diagram specs ───────────────────────────────────────────────────
 
+# Node label widths are fixed by the shared renderer (org-chart boxes are a
+# constant 130px; Sankey mid-column labels must fit the gap before the prior
+# column). Full pillar names (e.g. "Information Architecture") overflow that
+# budget and visually overlap neighbouring nodes/labels. Abbreviate on-chart
+# only — the accompanying tables below each diagram always show the full,
+# un-abbreviated pillar name, so no information is lost, only compacted for
+# the fixed-width chart nodes. Extend this map if a pillar name changes.
+$pillarShortLabel = @{
+    'Information Architecture' = 'Info Architecture'
+}
+function Get-ShortPillarLabel([string]$pillar) {
+    foreach ($full in $pillarShortLabel.Keys) {
+        if ($pillar -match [regex]::Escape($full)) { return $pillar -replace [regex]::Escape($full), $pillarShortLabel[$full] }
+    }
+    return $pillar
+}
+
 $orgChart = [ordered]@{
     title = 'Sheen router: pillars and agents'
     root  = [ordered]@{
         label    = 'sheen router'
         children = @($pillars | ForEach-Object {
-            [ordered]@{ label = "$($_.Pillar) -> @$($_.Agent) ($($_.ComposedSkills.Count) skills)" }
+            [ordered]@{
+                label    = (Get-ShortPillarLabel $_.Pillar)
+                children = @([ordered]@{ label = "@$($_.Agent)" })
+            }
         })
     }
 }
@@ -122,7 +142,7 @@ $colIndex = 1
 foreach ($p in $pillars) {
     $pillarId = 'pillar-' + ($p.Agent)
     $agentId  = 'agent-' + ($p.Agent)
-    $sankeyNodes += [ordered]@{ id = $pillarId; label = $p.Pillar; column = 1 }
+    $sankeyNodes += [ordered]@{ id = $pillarId; label = (Get-ShortPillarLabel $p.Pillar); column = 1 }
     $sankeyNodes += [ordered]@{ id = $agentId; label = "@$($p.Agent)"; column = 2 }
     $sankeyLinks += [ordered]@{ source = 'prompt'; target = $pillarId; value = 1 }
     $sankeyLinks += [ordered]@{ source = $pillarId; target = $agentId; value = 1 }
@@ -178,8 +198,8 @@ system, not hand-authored sample data (issue #149).
 
 The sheen router (``.github/skills/sheen/SKILL.md``) routes a request to one
 of 6 pillar agents; each agent composes a fixed set of skills declared in its
-own frontmatter (``composes.skills``, count shown per node below and detailed
-in the table beneath the chart).
+own frontmatter (``composes.skills``, full names and per-agent skill counts
+listed in the table beneath the chart — node labels are abbreviated to fit).
 
 <figure>
 $orgChartSvg

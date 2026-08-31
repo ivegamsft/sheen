@@ -214,6 +214,7 @@ function Render-Treemap($Spec, $Skin) {
             $itemH = [Math]::Round($remH * $frac)
             $svg += Svg-Rect -X $x -Y $y -W $remW -H $itemH -Fill (Pick-Series $Skin $i) -Stroke $Skin['paper'] -StrokeWidth 2
             $svg += Svg-Text -X ($x + 6) -Y ($y + 18) -Content $item.label -Fill $Skin['paper'] -Size 12 -Weight 'bold'
+            $svg += Svg-Text -X ($x + 6) -Y ($y + 34) -Content ([string]$item.value) -Fill $Skin['paper'] -Size 11
             $y += $itemH; $remH -= $itemH
         }
         $horizontal = -not $horizontal
