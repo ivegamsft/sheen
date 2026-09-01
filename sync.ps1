@@ -4,7 +4,7 @@
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
-$DefaultSource = 'https://github.com/IBuySpy-Shared/basecoat-sheen.git'
+$DefaultSource = 'https://github.com/ivegamsft/sheen.git'
 $DefaultRef    = 'main'
 
 $TargetMap = [ordered]@{
