@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.10.0",
-  "releaseDate": "2026-08-30",
-  "notes": "v0.10.0: diagram design integration epic complete (tokens, renderer, skin adapter, CI lints, licensing), populated component inventory and UI pattern catalog, AESTHETIC-DIRECTION.md generator, visual-regression testing, and unified skills/agents audit framework."
+  "version": "0.11.0",
+  "releaseDate": "2026-08-31",
+  "notes": "v0.11.0: generated agents/skills/prompts system atlas, corrected treemap and Sankey rendering, and surface-scoped Copilot instructions that remove approximately 9.8k tokens from representative non-design edits."
 }

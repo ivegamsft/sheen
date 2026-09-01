@@ -7,14 +7,62 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
-### Changed
+## [0.11.0] — 2026-08-31
+
+| Field | Value |
+|---|---|
+| Version | v0.11.0 |
+| Range | v0.10.0..v0.11.0 |
+| Wave | wave:6 |
+| Sprint | N/A |
+| Release date | 2026-08-31 |
+
+### Highlights
+
+- **Generated system atlas** — added a published, source-generated view of how
+  prompts route through sheen pillars to agents and how the 58-skill catalog is
+  distributed across categories. The atlas is regenerated from live repository
+  metadata rather than maintained by hand (#150).
 - **Surface-scoped Copilot instructions** — replaced the 9 universal design
-  instruction scopes with domain-specific frontend/design globs and corrected
-  the token instruction to match the downstream `sheen/tokens/**` location. Backend,
-  infrastructure, and database edits now load no sheen instructions, while
-  relevant UI, design-documentation, token, asset, navigation, and localization
-  files retain the applicable guidance. Added a CI contract test and ADR-009
-  documenting the boundary (#155).
+  instruction scopes with supported, domain-specific frontend/design globs.
+  Representative backend, infrastructure, database, and backend-only JavaScript
+  or TypeScript edits now load no sheen instructions, reclaiming approximately
+  9.8k context tokens per request. UI/design files retain the relevant guidance
+  layers (#156).
+
+### Breaking changes
+
+- None. Existing instruction files and names are unchanged.
+
+### Fixes and improvements
+
+- Corrected README version/count status after v0.10.0 (#147).
+- Documented catalog drift prevention and the generated aesthetic-direction
+  artifact in ADR-007 and ADR-008 (#148).
+- Corrected missing treemap values and overflowing org-chart/Sankey labels in the
+  system atlas (#152).
+- Added size-aware treemap labels and corrected Sankey label anchoring so narrow
+  slices and three-column flows render without overlap (#154).
+- Corrected the token instruction scope to cover the downstream
+  `sheen/tokens/**` sync location, and added an executable CI contract validating
+  all 10 instruction scopes (#156).
+
+### Known issues
+
+- Consumers using unconventional frontend directories or extensions may need an
+  additional narrow `applyTo` pattern. Add the path plus a regression case
+  upstream rather than restoring a universal scope (#156).
+
+### Upgrade notes
+
+- Update `.sheen.yml` to `ref: v0.11.0`, then run the normal sheen sync command.
+- Reload Copilot context after syncing so the new path-specific instruction
+  scopes take effect.
+- No asset renames or token-schema migrations are required.
+
+### Contributors
+
+- @ibuyspy and GitHub Copilot.
 
 ## [0.10.0] — 2026-08-30
 
