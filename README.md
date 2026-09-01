@@ -25,7 +25,7 @@ sheen governs the *design* surface, and the two namespaces (`basecoat-*` /
 | `tokens/` | DTCG/W3C design tokens — `core/` (global primitives), `semantic/` (alias roles + states), `themes/` (light/dark/high-contrast) |
 | `skills/` | sheen-authored Copilot skills (flat `<name>/` folders: `SKILL.md`, `eval.yaml`) |
 | `agents/` | sheen agents (`*.agent.md`) |
-| `instructions/` | Layered `sheen-<NN>-<layer>-<topic>.instructions.md` |
+| `instructions/` | Path-scoped `sheen-<NN>-<layer>-<topic>.instructions.md` guidance for design/UI surfaces |
 | `prompts/` · `templates/` | Prompt starters and shared cross-skill templates |
 | [`vendor/basecoat/`](vendor/basecoat/) | Pinned, **read-only** copy of basecoat's asset library + tooling (see [`VENDOR.md`](vendor/basecoat/VENDOR.md)) |
 

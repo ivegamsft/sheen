@@ -115,21 +115,19 @@ provenance (pinned commit `daf8364`, 2026-08-10) and the include/exclude list.
 
 ## 4. Asset model
 
-Five primitive types, following basecoat definitions:
+Six primitive types. The first five follow basecoat definitions; the token set is
+net-new to sheen:
 
 1. **Skill** — a discoverable, self-contained workflow (`SKILL.md`) with trigger
    phrases in frontmatter, a short workflow body, guardrails, and optional
    `templates/`. Paired with an `eval.yaml` routing test. Target ≤ ~500 tokens.
 2. **Agent** — a design-role persona (`*.agent.md`) that composes skills and
    instructions; paired with `*.agent.eval.yaml`.
-3. **Instruction** — always-on guidance applied by scope (`*.instructions.md`),
+3. **Instruction** — ambient guidance applied by path scope (`*.instructions.md`),
    layered by the numbering scheme in §7.
 4. **Prompt** — a reusable one-shot design task (generate palette, run critique).
 5. **Template** — starter artifacts consumed by skills (style guide, component
    spec, brand guidelines, design review).
-
-Net-new to sheen:
-
 6. **Token set** — machine-readable design tokens under `tokens/` (see §6),
    validated by `checks.json`. This is the source of truth that many skills read,
    write, or audit against.
@@ -138,7 +136,7 @@ Net-new to sheen:
 
 ## 5. Repository structure
 
-```
+```text
 basecoat-sheen/
 ├── README.md · CONTRIBUTING.md · CHANGELOG.md · LICENSE
 ├── .lexicon.md                    # canonical design vocabulary
@@ -221,7 +219,7 @@ and write these files; `design-system-audit` audits a consumer against them.
 
   | Range | Layer | Example |
   |---|---|---|
-  | 10 | core (always-on principles) | `sheen-10-core-design-principles` |
+  | 10 | core (surface-scoped principles) | `sheen-10-core-design-principles` |
   | 20 | tokens | `sheen-20-tokens-naming` |
   | 30 | components | `sheen-30-components-states` |
   | 40 | web/usability | `sheen-40-web-usability` |

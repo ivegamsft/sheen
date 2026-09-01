@@ -8,6 +8,6 @@
 | **wave** | A planned slice of rollout work |
 | **skill** | A reusable workflow asset |
 | **agent** | A multi-step role that composes skills |
-| **instruction** | Always-on repo guidance |
+| **instruction** | Ambient guidance applied to matching repository paths |
 | **theme** | A semantic override set for tokens |
 | **token** | A DTCG design token |

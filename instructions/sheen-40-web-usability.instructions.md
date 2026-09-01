@@ -1,8 +1,8 @@
 ---
 name: sheen-40-web-usability
 compatibility: [github-copilot-cli]
-description: "Always-on web usability rules grounded in the NN/g ten heuristics and ISO 9241 dialogue principles."
-applyTo: "**/*"
+description: "Path-scoped web usability rules grounded in the NN/g heuristics and ISO 9241 dialogue principles."
+applyTo: "**/*.html,**/*.css,**/*.scss,**/*.sass,**/*.less,**/*.styl,**/*.jsx,**/*.tsx,**/*.vue,**/*.svelte,**/*.astro,**/*.md,**/*.mdx,**/components/**,**/ui/**,**/frontend/**,**/client/**,**/web/**,**/design/**,**/docs/**"
 metadata:
   band: 40
   layer: web-usability
@@ -12,7 +12,7 @@ metadata:
 
 Apply these principles to every design review, audit, and recommendation. They
 implement the Nielsen Norman Group ten heuristics and the ISO 9241-110 dialogue
-principles as ambient, always-on rules.
+principles as ambient rules on matching web and design surfaces.
 
 ## The NN/g ten heuristics
 

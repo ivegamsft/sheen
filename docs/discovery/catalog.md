@@ -22,7 +22,7 @@ layout.
 
 - `skills/` — task-specific workflows
 - `agents/` — orchestrated multi-step roles
-- `instructions/` — always-on guidance layers
+- `instructions/` — path-scoped guidance layers for design/UI surfaces
 - `tokens/` — DTCG core, semantic, and theme tiers
 - `docs/` — the orientation and reference site you are reading now
 

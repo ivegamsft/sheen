@@ -135,7 +135,8 @@ themes: [light, dark, high-contrast]
 
 ### Design principles
 
-- **Source:** sheen instructions (loaded in every Copilot chat)
+- **Source:** sheen instructions (loaded when the active files match their
+  design/UI scopes)
 - **Updates:** Quarterly review by design team
 - **Enforcement:** design-reviewer agent flags violations in PRs
 

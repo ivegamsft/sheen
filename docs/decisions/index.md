@@ -16,6 +16,7 @@ chosen direction — so future contributors understand *why* the system is shape
 | [ADR-006](adr-006-diagram-scope.md) | Documentation diagram scope: included vs. excluded types | 2026-08-30 | Accepted |
 | [ADR-007](adr-007-populated-catalog-drift-prevention.md) | Populated catalogs prevent spec drift (component inventory & UI pattern catalog) | 2026-08-30 | Accepted |
 | [ADR-008](adr-008-aesthetic-direction-generated-artifact.md) | AESTHETIC-DIRECTION.md as a second generated consumer artifact | 2026-08-30 | Accepted |
+| [ADR-009](adr-009-surface-scoped-instructions.md) | Copilot instructions are scoped to design and UI surfaces | 2026-08-31 | Accepted |
 | [AUDIT-001](spec-gap-audit-2026-08-16.md) | Spec gap audit — all specs vs implementation | 2026-08-16 | Published |
 
 ## Conventions

@@ -1,8 +1,8 @@
 ---
 name: sheen-10-core-accessibility
 compatibility: [github-copilot-cli]
-description: "Always-on accessibility baseline: WCAG 2.2 AA and WAI-ARIA rules for every design asset."
-applyTo: "**/*"
+description: "Path-scoped accessibility baseline: WCAG 2.2 AA and WAI-ARIA rules for design and UI surfaces."
+applyTo: "**/*.html,**/*.css,**/*.scss,**/*.sass,**/*.less,**/*.styl,**/*.jsx,**/*.tsx,**/*.vue,**/*.svelte,**/*.astro,**/*.md,**/*.mdx,**/*.svg,**/components/**,**/ui/**,**/frontend/**,**/client/**,**/web/**,**/design/**,**/docs/**,**/tokens/**"
 metadata:
   band: 10
   layer: core

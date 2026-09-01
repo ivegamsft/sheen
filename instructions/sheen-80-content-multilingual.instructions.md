@@ -1,8 +1,8 @@
 ---
 name: sheen-80-content-multilingual
 compatibility: [github-copilot-cli]
-description: "Always-on microcopy, plain language, i18n/l10n, and content design rules."
-applyTo: "**/*"
+description: "Path-scoped microcopy, plain-language, i18n/l10n, and content-design rules."
+applyTo: "**/*.html,**/*.jsx,**/*.tsx,**/*.vue,**/*.svelte,**/*.astro,**/*.md,**/*.mdx,**/components/**,**/ui/**,**/frontend/**,**/client/**,**/web/**,**/design/**,**/docs/**,**/locales/**,**/i18n/**,**/translations/**,**/content/**,**/copy/**"
 metadata:
   band: 80
   layer: content
@@ -33,8 +33,8 @@ Plain language means the audience can find, understand, and use the content. App
 
 - **Labels:** nouns or noun phrases; sentence case; no trailing colon in adjacent
   label/field layouts.
-- **Placeholder text:** a usage example, not a repeat of the label ("e.g.
-  name@company.com", not "Enter email"). Placeholder is not a substitute for a
+- **Placeholder text:** a usage example, not a repeat of the label (for example,
+  `user@example.invalid`, not "Enter email"). Placeholder is not a substitute for a
   visible label.
 - **Button text:** verb + optional noun ("Save changes", "Delete account"). Never
   "OK", "Submit", or "Click here" without context.
@@ -59,7 +59,7 @@ Plain language means the audience can find, understand, and use the content. App
 - Locale tags use **BCP 47** format (`en-US`, `fr-FR`, `zh-Hant-TW`).
 - Never concatenate translated strings (word order differs by language). Use
   **ICU message format** with named placeholders (`{count} items found`, not
-  `items found: ` + count).
+  `items found:` + count).
 - Use **CLDR/ICU** for: plural rules (`one`/`other`/`few`/`many`/`zero`),
   number formatting, currency, date/time, and ordinals. Never hardcode these.
 - **Right-to-left (RTL):** all layouts and components must support RTL direction.

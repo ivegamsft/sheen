@@ -7,7 +7,8 @@ instructions, and themed outputs.
 ## What it does
 
 - gives consumers a controlled sync model through `.sheen.yml`
-- keeps design language, token usage, and workflow guidance consistent
+- keeps design language, token usage, and workflow guidance consistent on the
+  design/UI files where each instruction is actionable
 - helps designers, engineers, and platform teams find the right asset fast
 
 ## What it is not

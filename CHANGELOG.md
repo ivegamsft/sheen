@@ -7,6 +7,15 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+### Changed
+- **Surface-scoped Copilot instructions** — replaced the 9 universal design
+  instruction scopes with domain-specific frontend/design globs and corrected
+  the token instruction to match the downstream `sheen/tokens/**` location. Backend,
+  infrastructure, and database edits now load no sheen instructions, while
+  relevant UI, design-documentation, token, asset, navigation, and localization
+  files retain the applicable guidance. Added a CI contract test and ADR-009
+  documenting the boundary (#155).
+
 ## [0.10.0] — 2026-08-30
 
 ### Added

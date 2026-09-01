@@ -759,80 +759,80 @@
         "path": "instructions/sheen-10-core-accessibility.instructions.md",
         "band": "10",
         "layer": "core",
-        "description": "Always-on accessibility baseline: WCAG 2.2 AA and WAI-ARIA rules for every design asset.",
-        "hash": "46b77119abd846a5dabd0b1c0f80579c3f5b720d2944d46933d1da6441c1ee9b"
+        "description": "Path-scoped accessibility baseline: WCAG 2.2 AA and WAI-ARIA rules for design and UI surfaces.",
+        "hash": "28ec991a7828240cebbaa5e80577b31fb5a566cdbf51691558691d7138a6c55f"
       },
       {
         "name": "sheen-10-core-design-principles",
         "path": "instructions/sheen-10-core-design-principles.instructions.md",
         "band": "10",
         "layer": "core",
-        "description": "Always-on design values and craft principles for every sheen asset and review.",
-        "hash": "29111e902674e3fe49026bf8152870e06c1da8b7a8dafac8dc90a1256b007e84"
+        "description": "Path-scoped design values and craft principles for design assets, UI surfaces, and reviews.",
+        "hash": "90774a8d2a86cc6c698f60f8bcf3c2ecb691c202153cc3fc18bb1e3041d42765"
       },
       {
         "name": "sheen-20-tokens-naming",
         "path": "instructions/sheen-20-tokens-naming.instructions.md",
         "band": "20",
         "layer": "tokens",
-        "description": "Always-on naming and structure rules for DTCG design tokens in the sheen token system.",
-        "hash": "4e6e61f252d69cee4bd56ca45a55b687cf50261793af54d774741b0008e71613"
+        "description": "Path-scoped naming and structure rules for DTCG design tokens in the sheen token system.",
+        "hash": "1fc2b49527288b257f91cbbc767bc3e2c5826e40c43eddac057a42e8f50d68b5"
       },
       {
         "name": "sheen-30-components-states",
         "path": "instructions/sheen-30-components-states.instructions.md",
         "band": "30",
         "layer": "components",
-        "description": "Always-on rules for component anatomy, interaction states, ARIA mapping, and keyboard model.",
-        "hash": "3a64227e1e2fd12c43cbfab1c27054e9d4341cd36c38698dbd754310d91a07e2"
+        "description": "Path-scoped rules for component anatomy, interaction states, ARIA mapping, and keyboard models.",
+        "hash": "89c44467d4cb7165e8237ba3ad768b07f64fe3c5b32fe71065f0275337b7da1f"
       },
       {
         "name": "sheen-40-web-usability",
         "path": "instructions/sheen-40-web-usability.instructions.md",
         "band": "40",
         "layer": "web-usability",
-        "description": "Always-on web usability rules grounded in the NN/g ten heuristics and ISO 9241 dialogue principles.",
-        "hash": "e24927f34a799c61dd1757d6ef383e6f9212abecb3d4fae3ea02e8584dd1f13c"
+        "description": "Path-scoped web usability rules grounded in the NN/g heuristics and ISO 9241 dialogue principles.",
+        "hash": "38940b7b770ef7a12196f6445f89020576994168cb243ec28ecd375455ca7c8b"
       },
       {
         "name": "sheen-50-brand-voice",
         "path": "instructions/sheen-50-brand-voice.instructions.md",
         "band": "50",
         "layer": "brand",
-        "description": "Always-on brand identity constraints: voice, logo, color, typography, and imagery.",
-        "hash": "0c7717d0d9941484684e2b16e449a74e64f0cbb039daa140954b6d04432cc316"
+        "description": "Path-scoped brand identity constraints for voice, logo, color, typography, and imagery.",
+        "hash": "79db660fa1556bc8caae40a3696ecd89811d76682f4b814b8871093ad12f1cdf"
       },
       {
         "name": "sheen-60-ia-navigation",
         "path": "instructions/sheen-60-ia-navigation.instructions.md",
         "band": "60",
         "layer": "information-architecture",
-        "description": "Always-on information architecture and navigation pattern rules.",
-        "hash": "bb299cea616cc81ae4ba0f30d1078113e163e20d3ba4074e6106d3a84db293ca"
+        "description": "Path-scoped information architecture and navigation pattern rules for product surfaces.",
+        "hash": "865268ec185416df47cc0ceeb0f3189fb6d7573ceda1a923a6d36bcac5e4ad6c"
       },
       {
         "name": "sheen-70-taxonomy-ontology",
         "path": "instructions/sheen-70-taxonomy-ontology.instructions.md",
         "band": "70",
         "layer": "taxonomy-ontology",
-        "description": "Always-on controlled vocabulary, relationship, and taxonomy rules for design system assets.",
-        "hash": "8b657d1fcd46b40dbb126254e698bb274863885c8018a7cac36a657a7cebb912"
+        "description": "Path-scoped controlled vocabulary, relationship, and taxonomy rules for design-system assets.",
+        "hash": "581909cc0a98389936d55130be3b1a8eb2ad9c7dbfd8d3d36ad3ddeeb3ac3a94"
       },
       {
         "name": "sheen-80-content-multilingual",
         "path": "instructions/sheen-80-content-multilingual.instructions.md",
         "band": "80",
         "layer": "content",
-        "description": "Always-on microcopy, plain language, i18n/l10n, and content design rules.",
-        "hash": "ef8ef92429da9f088102b554c25960f2421f11f00423d017166f2b0e7f61dcc5"
+        "description": "Path-scoped microcopy, plain-language, i18n/l10n, and content-design rules.",
+        "hash": "f574a1e3c4020f4427ddab2ba101de23c274ce62081dd00d06c9d3afdee7cb86"
       },
       {
         "name": "sheen-90-standards-conformance",
         "path": "instructions/sheen-90-standards-conformance.instructions.md",
         "band": "90",
         "layer": "standards",
-        "description": "Always-on cross-cutting conformance gates: WCAG, WAI-ARIA, ISO 9241, DTCG, BCP 47, OWASP.",
-        "hash": "0221f77362919494a12319817e29c24f05335e6cf219cde7cda355acd8ca5697"
+        "description": "Path-scoped conformance gates for design and UI surfaces: WCAG, ARIA, ISO 9241, DTCG, BCP 47, and OWASP.",
+        "hash": "c84f86125ece9ab3401e7eba50c3813647f321030bd7b6e7eff5100cdc86f73d"
       }
     ],
     "themes": [

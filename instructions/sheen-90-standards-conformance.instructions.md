@@ -1,8 +1,8 @@
 ---
 name: sheen-90-standards-conformance
 compatibility: [github-copilot-cli]
-description: "Always-on cross-cutting conformance gates: WCAG, WAI-ARIA, ISO 9241, DTCG, BCP 47, OWASP."
-applyTo: "**/*"
+description: "Path-scoped conformance gates for design and UI surfaces: WCAG, ARIA, ISO 9241, DTCG, BCP 47, and OWASP."
+applyTo: "**/*.html,**/*.css,**/*.scss,**/*.sass,**/*.less,**/*.styl,**/*.jsx,**/*.tsx,**/*.vue,**/*.svelte,**/*.astro,**/*.md,**/*.mdx,**/*.svg,**/components/**,**/ui/**,**/frontend/**,**/client/**,**/web/**,**/design/**,**/docs/**,**/tokens/**,**/assets/**,**/public/**,**/locales/**,**/i18n/**"
 metadata:
   band: 90
   layer: standards
@@ -38,12 +38,14 @@ See `specs/08-standards-conformance.spec.md` for the full normative catalog.
 ## Hard gates vs. advisory checks
 
 **Hard gates (`checks.json` error -- blocks release):**
+
 - Color contrast below WCAG 2.2 AA thresholds (4.5:1 text, 3:1 non-text/focus)
 - DTCG token schema violations (missing `$type`/`$value`, unresolvable alias, cycles)
 - High-contrast theme missing a semantic token resolution
 - `sheen-metadata.json` drift from the installed asset set
 
 **Advisory checks (`checks.json` warn -- must be acknowledged, do not block):**
+
 - Component spec missing ARIA role or keyboard model
 - Error state spec without a "no-information-leak" note
 - Missing `$description` on any token

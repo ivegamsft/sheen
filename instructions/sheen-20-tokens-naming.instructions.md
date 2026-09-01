@@ -1,8 +1,8 @@
 ---
 name: sheen-20-tokens-naming
 compatibility: [github-copilot-cli]
-description: "Always-on naming and structure rules for DTCG design tokens in the sheen token system."
-applyTo: "tokens/**"
+description: "Path-scoped naming and structure rules for DTCG design tokens in the sheen token system."
+applyTo: "tokens/**,sheen/tokens/**,**/*.tokens.json"
 metadata:
   band: 20
   layer: tokens

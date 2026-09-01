@@ -1,8 +1,8 @@
 ---
 name: sheen-70-taxonomy-ontology
 compatibility: [github-copilot-cli]
-description: "Always-on controlled vocabulary, relationship, and taxonomy rules for design system assets."
-applyTo: "**/*"
+description: "Path-scoped controlled vocabulary, relationship, and taxonomy rules for design-system assets."
+applyTo: "**/*.md,**/*.mdx,**/.github/skills/**,**/.github/agents/**,**/.github/instructions/**,**/skills/**,**/agents/**,**/instructions/**,**/tokens/**,**/docs/**,**/.lexicon.md,**/sheen-metadata.json"
 metadata:
   band: 70
   layer: taxonomy-ontology

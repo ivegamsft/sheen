@@ -1,8 +1,8 @@
 ---
 name: sheen-30-components-states
 compatibility: [github-copilot-cli]
-description: "Always-on rules for component anatomy, interaction states, ARIA mapping, and keyboard model."
-applyTo: "**/*"
+description: "Path-scoped rules for component anatomy, interaction states, ARIA mapping, and keyboard models."
+applyTo: "**/*.html,**/*.css,**/*.scss,**/*.sass,**/*.less,**/*.styl,**/*.jsx,**/*.tsx,**/*.vue,**/*.svelte,**/*.astro,**/*.md,**/*.mdx,**/components/**,**/ui/**,**/frontend/**,**/client/**,**/web/**,**/design/**,**/docs/components/**,**/tokens/**"
 metadata:
   band: 30
   layer: components

@@ -5,7 +5,7 @@
 
 ## 1. File naming
 
-```
+```text
 instructions/sheen-<NN>-<layer>-<topic>.instructions.md
 ```
 
@@ -17,7 +17,7 @@ instructions/sheen-<NN>-<layer>-<topic>.instructions.md
 
 | Band | Layer | Purpose | Example topic |
 |---|---|---|---|
-| 10 | core | Always-on design principles & values | `design-principles`, `brand-voice` |
+| 10 | core | Surface-scoped design principles & values | `design-principles`, `accessibility` |
 | 20 | tokens | Token naming, tiers, theming rules | `tokens-naming` |
 | 30 | components | Component anatomy, states, variants | `components-states` |
 | 40 | web/usability | NN/g heuristics, responsive rules | `web-usability` |
@@ -36,30 +36,37 @@ may refine (never contradict) lower ones.
 ---
 name: sheen-<NN>-<layer>-<topic>
 compatibility: [github-copilot-cli]
-description: "Always-on guidance for <topic>."
-applyTo: "**/*"            # or a glob scope, e.g. "**/*.css", "**/*.tokens.json"
+description: "Path-scoped guidance for <topic>."
+applyTo: "**/*.css,**/*.tsx" # comma-separated GitHub Copilot glob patterns
 metadata:
   band: <NN>
   layer: <layer>
 ---
 ```
 
-- `applyTo` scopes the instruction. Broad principles use `**/*`; technical rules
-  scope to relevant file globs (CSS, token JSON, markup, locale files).
+- `applyTo` scopes every instruction to its actionable design/UI surface.
+- Universal `**` or `**/*` scopes are prohibited: sheen must add no instruction
+  context to backend, infrastructure, or data files that have no design surface.
+- Multiple patterns use GitHub Copilot's supported comma-separated syntax.
+  Brace expansion is not part of the contract.
+- Broad design principles cover frontend markup/styles/components, design docs,
+  assets, and tokens. More specialized layers narrow further to components,
+  navigation, catalog assets, or locale/content paths.
 
 ## 4. Precedence
 
 - Within a request, all matching instructions apply.
-- On conflict, **more specific scope wins** (narrow glob > `**/*`), then **higher
-  band wins** (80 > 10). Instructions SHOULD be written to avoid conflict.
+- On conflict, **more specific scope wins**, then **higher band wins** (80 > 10).
+  Instructions SHOULD be written to avoid conflict.
 - Instructions are guidance, not executable checks; hard enforcement lives in
   `checks.json` (spec 05).
 
 ## 5. Instruction vs. skill
 
-Use an **instruction** for always-on, ambient rules (naming, principles,
-constraints). Use a **skill** (spec 02) for an invokable, multi-step workflow.
-When unsure, prefer an instruction — it is cheaper and composes automatically.
+Use an **instruction** for automatically applied, path-scoped ambient rules
+(naming, principles, constraints). Use a **skill** (spec 02) for an invokable,
+multi-step workflow or a full audit. When unsure, prefer the narrowest
+instruction scope that covers the files where the guidance is actionable.
 
 ## 6. Core set (v1 target)
 

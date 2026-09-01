@@ -1,8 +1,8 @@
 ---
 name: sheen-60-ia-navigation
 compatibility: [github-copilot-cli]
-description: "Always-on information architecture and navigation pattern rules."
-applyTo: "**/*"
+description: "Path-scoped information architecture and navigation pattern rules for product surfaces."
+applyTo: "**/*.html,**/*.css,**/*.scss,**/*.less,**/*.jsx,**/*.tsx,**/*.vue,**/*.svelte,**/*.astro,**/*.md,**/*.mdx,**/components/**,**/ui/**,**/frontend/**,**/client/**,**/web/**,**/design/**,**/docs/**,**/navigation/**,**/nav/**,**/routes/**"
 metadata:
   band: 60
   layer: information-architecture

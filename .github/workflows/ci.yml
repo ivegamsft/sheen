@@ -116,6 +116,9 @@ jobs:
       - name: Lint - frontmatter contracts
         run: pwsh -NonInteractive -File scripts/lint-frontmatter.ps1
 
+      - name: Validate - instruction path scopes
+        run: pwsh -NonInteractive -File scripts/test-instruction-scopes.ps1
+
       - name: Validate - metadata drift
         run: pwsh -NonInteractive -File scripts/build-metadata.ps1 -Check
 

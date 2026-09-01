@@ -47,7 +47,7 @@ Use the search field in the top bar or pick one of these entry points:
 - `skills/` — invokable design workflows with routing evals
 - `agents/` — composed design-role orchestrators
 - `tokens/` — core, semantic, and themed DTCG token tiers
-- `instructions/` — always-on guidance layers
+- `instructions/` — path-scoped guidance layers for design/UI surfaces
 - `checks.json` — governance checks and validation expectations
 
 ## Persona shortcuts
