@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.11.0",
-  "releaseDate": "2026-08-31",
-  "notes": "v0.11.0: generated agents/skills/prompts system atlas, corrected treemap and Sankey rendering, and surface-scoped Copilot instructions that remove approximately 9.8k tokens from representative non-design edits."
+  "version": "0.11.1",
+  "releaseDate": "2026-09-01",
+  "notes": "v0.11.1: publishes the Wave 6 delivery learnings and guardrails for visual verification, instruction scope contracts, downstream path parity, release completeness, and PR wave labeling."
 }

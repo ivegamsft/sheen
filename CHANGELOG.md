@@ -7,6 +7,47 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.11.1] — 2026-09-01
+
+| Field | Value |
+|---|---|
+| Version | v0.11.1 |
+| Range | v0.11.0..v0.11.1 |
+| Wave | wave:6 |
+| Sprint | N/A |
+| Release date | 2026-09-01 |
+
+### Highlights
+
+- **Published Wave 6 learning log** — documented six evidence-backed delivery
+  lessons and six reusable guardrails covering focused chart verification,
+  renderer coverage gaps, instruction-scope contracts, downstream path parity,
+  complete release promotion, and PR wave-label timing (#160).
+
+### Breaking changes
+
+- None. This is a documentation-only patch release.
+
+### Fixes and improvements
+
+- Normalized the complete incident learning log so its headings, ordered lists,
+  and separators pass whole-file Markdown lint (#160).
+- Linked each Wave 6 learning to the system-atlas, instruction-scoping, and
+  v0.11.0 release evidence that produced it (#160).
+
+### Known issues
+
+- None known.
+
+### Upgrade notes
+
+- Update `.sheen.yml` to `ref: v0.11.1`, then run the normal sheen sync command.
+- No asset, token, instruction, or configuration migration is required.
+
+### Contributors
+
+- @ibuyspy and GitHub Copilot.
+
 ## [0.11.0] — 2026-08-31
 
 | Field | Value |
