@@ -8,7 +8,7 @@ short, evidence-based, and actionable.
 Wave 6 delivered the generated system atlas, two rounds of diagram-rendering
 corrections, path-scoped Copilot instructions, and the v0.11.0 source and
 production releases. Evidence: #150, #152, #154, #156, #158, and
-[v0.11.0](https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.11.0).
+[v0.11.0](https://github.com/ivegamsft/sheen/releases/tag/v0.11.0).
 
 ### Wave 6 learnings
 

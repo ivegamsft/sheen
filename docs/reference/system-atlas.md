@@ -10,7 +10,7 @@ description: Generated diagrams explaining how sheen's agents, skills, and inten
 > `skills/_catalog.md`, or the sheen router's Pillars & Agents table.
 
 This page renders sheen's own agent/skill/prompt structure through the
-[`documentation-diagram`](https://github.com/IBuySpy-Shared/basecoat-sheen/tree/main/skills/documentation-diagram) skill — every
+[`documentation-diagram`](https://github.com/ivegamsft/sheen/tree/main/skills/documentation-diagram) skill — every
 value below is parsed live from the source files that already define the
 system, not hand-authored sample data (issue #149).
 
@@ -290,7 +290,7 @@ and routed to exactly one agent. This Sankey traces that fan-out: one
 
 ## Related
 
-- [`documentation-diagram` skill](https://github.com/IBuySpy-Shared/basecoat-sheen/tree/main/skills/documentation-diagram) — the renderer used for every diagram on this page.
+- [`documentation-diagram` skill](https://github.com/ivegamsft/sheen/tree/main/skills/documentation-diagram) — the renderer used for every diagram on this page.
 - [Skills Catalog](skills-catalog.md) — full skill listing.
 - [Agent Roster](agent-roster.md) — agent reference.
 - [ADR-005](../decisions/adr-005-diagram-skin-bridge.md) — why diagram colour always comes from DTCG tokens, never a hand-picked hex.

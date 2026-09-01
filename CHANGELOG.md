@@ -377,7 +377,7 @@ sheen was **pull-only** (manual `sync.ps1`). This release closes that gap.
 ## [0.6.3] — 2026-08-18
 
 ### Fixed
-- Publish sanitization hotfix: scrubs plain internal owner tokens (`IBuySpy-Shared`)
+- Publish sanitization hotfix: scrubs plain internal owner tokens (`ivegamsft`)
   in addition to owner/repo paths, preventing leakage from release notes/changelog text.
 
 ## [0.6.2] — 2026-08-18
@@ -385,8 +385,8 @@ sheen was **pull-only** (manual `sync.ps1`). This release closes that gap.
 ### Fixed
 - Hardened public publish sanitization in `publish-to-production.yml`:
   - Strips `.github/skills/**` and `vendor/**` from the production payload.
-  - Expands internal-owner scrub + safety gate to block leaked `IBuySpy-Shared` and
-    `ibuyspy-shared.github.io` references outside `LICENSE`.
+  - Expands internal-owner scrub + safety gate to block leaked `ivegamsft` and
+    `ivegamsft.github.io` references outside `LICENSE`.
 - Prevents internal owner/repo details from leaking into the public mirror content.
 
 ## [0.6.1] — 2026-08-18
@@ -441,7 +441,7 @@ sheen was **pull-only** (manual `sync.ps1`). This release closes that gap.
     and `eval.yaml` (4 positive + 2 negative routing scenarios ≥ 7.0 threshold).
 - **Publishing flow** — `publish-to-production.yml` + `token-preflight.yml`:
   - Mirrors tagged releases to the public production repo (`ivegamsft/sheen`).
-  - Strips internal CI tooling; sanitizes `IBuySpy-Shared/basecoat-sheen` → `ivegamsft/sheen`.
+  - Strips internal CI tooling; sanitizes `ivegamsft/sheen` → `ivegamsft/sheen`.
   - `release.yml` updated to gate on `PRODUCTION_REPO_TOKEN` preflight before creating release.
 
 ### Changed
@@ -565,8 +565,8 @@ sheen was **pull-only** (manual `sync.ps1`). This release closes that gap.
 - The upstream `basecoat` framework remains vendored read-only under
   `vendor/basecoat/` and is not modified by sheen.
 
-[Unreleased]: https://github.com/IBuySpy-Shared/basecoat-sheen/compare/v0.4.0...HEAD
-[0.4.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.4.0
-[0.3.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.3.0
-[0.2.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.2.0
-[0.1.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.1.0
+[Unreleased]: https://github.com/ivegamsft/sheen/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/ivegamsft/sheen/releases/tag/v0.4.0
+[0.3.0]: https://github.com/ivegamsft/sheen/releases/tag/v0.3.0
+[0.2.0]: https://github.com/ivegamsft/sheen/releases/tag/v0.2.0
+[0.1.0]: https://github.com/ivegamsft/sheen/releases/tag/v0.1.0
