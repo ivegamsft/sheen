@@ -71,3 +71,4 @@ governance prose:
 ## Delegates / pairs with
 - design-update
 - design-system-audit
+- design-review

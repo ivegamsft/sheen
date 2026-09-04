@@ -210,7 +210,7 @@
         "pillar": "governance",
         "maturity": "stable",
         "description": "Use when running a craft and polish pass to assess consistency, refinement, and visual quality. USE FOR: craft checklist passes, polish quality assessments, consistency refinements. DO NOT USE FOR: formal usability audits, framework detection scans.",
-        "hash": "444f63333513d6634c5b0677630105a9c8399160ccc575dc928bd81b2843a4c5"
+        "hash": "7ba1c70eb35e270db60770f4456e46151f66bb6d79e39844eef0c5c197d1f065"
       },
       {
         "name": "create-design-skill",
@@ -300,7 +300,7 @@
         "pillar": "lifecycle",
         "maturity": "beta",
         "description": "Use when generating new design directions, concepts, or exploring problem spaces before committing to a single path. USE FOR: concept generation, divergent direction exploration, idea synthesis. DO NOT USE FOR: final decision arbitration, wcag audit reporting.",
-        "hash": "af3606cf2063fc805bcfbb7f60fd3550e4e7441f4408539259e7255a00c6da61"
+        "hash": "4de5d8ff0c5abf613545e6eddc0f413482ee2044fcb7bed021781abefb896668"
       },
       {
         "name": "design-handoff",
@@ -320,7 +320,7 @@
         "pillar": "governance",
         "maturity": "stable",
         "description": "Use when critiquing a design artifact against principles, craft standards, or system guidelines. USE FOR: artifact critique, principle-based review, craft issue identification. DO NOT USE FOR: multi-option debate facilitation, full repo audits.",
-        "hash": "15afd6fc55d41a91499b0b701db6ab44a4e9fdd1d0734e429a9e12d503b20b8a"
+        "hash": "7030e58ad6cf8f0a9d6d8f2c245ae2aa3e1bc62d962545a9c80b359b68ce8860"
       },
       {
         "name": "design-sprint",
@@ -510,7 +510,7 @@
         "pillar": "foundations",
         "maturity": "beta",
         "description": "Use when defining or validating motion tokens, elevation rules, and material/translucency guidance. USE FOR: duration and easing tokens, elevation level rules, material/translucency guidance. DO NOT USE FOR: full interaction state specs, usability heuristic reviews.",
-        "hash": "7b927b9eeb9b0cd0f6d4e8a8028b201577a630876f69912f1227f24777875136"
+        "hash": "93470720212f80e01b101cbab55dfd84981dafff8f184ed1c277ccc33061d916"
       },
       {
         "name": "multilingual",
@@ -680,7 +680,7 @@
         "pillar": "governance",
         "maturity": "beta",
         "description": "Use when setting up visual snapshot baselines, triaging visual diffs, or detecting design QA drift. USE FOR: snapshot baseline setup, visual diff triage, design QA drift detection. DO NOT USE FOR: functional test authoring, security threat modeling.",
-        "hash": "7f8a650416b823bfd3b04689c71be2c18f9c8d49f55ae2234e53ec46fe9cf8d3"
+        "hash": "55448e1974c703d373c3f563c04b1cfd19ac7abaec1f044c011994fc33b172fd"
       },
       {
         "name": "web-usability-review",

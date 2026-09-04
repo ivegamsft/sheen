@@ -14,6 +14,12 @@ scenarios:
   - id: "pos-direction-options"
     input: "Create concept sketches and rationale for possible onboarding flows so stakeholders can compare strategic directions."
     expect_activation: true
+  - id: "pos-subject-grounding"
+    input: "Ground the redesign of this veterinary scheduling app in its clinic-staff audience, primary booking job, and clinical operating context before sketching any new page concepts."
+    expect_activation: true
+  - id: "pos-anti-template-check"
+    input: "Compare our proposed onboarding concept against an unrelated fitness-app brief and revise any generic, interchangeable layout or copy choices it still shares."
+    expect_activation: true
   - id: "neg-final-arbitration"
     input: "Facilitate the final design debate and select the approved option with a decision log."
     expect_activation: false
@@ -22,4 +28,10 @@ scenarios:
     expect_activation: false
   - id: "neg-production-code"
     input: "Implement the selected flow in React and wire it to backend APIs."
+    expect_activation: false
+  - id: "neg-brand-only"
+    input: "Codify our existing logo usage rules, brand color palette, and voice guidelines without proposing any new page concepts or directions."
+    expect_activation: false
+  - id: "neg-layout-only"
+    input: "Adjust the grid columns, spacing tokens, and breakpoint rules on this already-approved page layout without changing its creative direction."
     expect_activation: false

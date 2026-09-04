@@ -14,6 +14,12 @@ scenarios:
   - id: "pos-craft-issue-id"
     input: "Identify craft quality and design governance issues in this Figma-ready artifact without opening a multi-option debate."
     expect_activation: true
+  - id: "pos-real-content-calibration"
+    input: "Review this claims-intake form using real customer-representative data shapes, marking any invented sample content, and exercise the empty, error, and loading states."
+    expect_activation: true
+  - id: "pos-visual-self-critique"
+    input: "Capture a rendered screenshot of the updated dashboard, critique its hierarchy, density, and overflow, then make one focused revision pass and record what changed."
+    expect_activation: true
   - id: "neg-debate-facilitation"
     input: "Compare three competing design directions and facilitate final arbitration with stakeholders."
     expect_activation: false
@@ -22,4 +28,10 @@ scenarios:
     expect_activation: false
   - id: "neg-implementation"
     input: "Build the approved component in TypeScript and add unit tests."
+    expect_activation: false
+  - id: "neg-aesthetic-direction-generation"
+    input: "Generate the AESTHETIC-DIRECTION.md creative-direction narrative from our design tokens without reviewing any specific artifact."
+    expect_activation: false
+  - id: "neg-snapshot-baseline-setup"
+    input: "Set up the initial Playwright snapshot baselines for our diagram renders before any design critique happens."
     expect_activation: false

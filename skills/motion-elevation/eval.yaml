@@ -11,9 +11,21 @@ scenarios:
   - id: "pos-3"
     input: "Compare approaches for material/translucency guidance and recommend one."
     expect_activation: true
+  - id: "pos-motion-inventory"
+    input: "Inventory every entrance animation, hover effect, and autoplay motion across our dashboard and flag which ones lack a stated attention or comprehension purpose."
+    expect_activation: true
+  - id: "pos-attention-budget-review"
+    input: "Review whether the repeated section-by-section reveal animations on this landing page are competing for attention instead of coordinating one memorable moment."
+    expect_activation: true
   - id: "neg-1"
     input: "This request is only about full interaction state specs."
     expect_activation: false
   - id: "neg-2"
     input: "Please focus exclusively on usability heuristic reviews."
+    expect_activation: false
+  - id: "neg-single-component-interaction-spec"
+    input: "Write the full keyboard, focus, and ARIA interaction state specification for this single dropdown component."
+    expect_activation: false
+  - id: "neg-heuristic-usability-review"
+    input: "Run a full Nielsen Norman usability heuristic review of navigation, error recovery, and help documentation for this product."
     expect_activation: false
