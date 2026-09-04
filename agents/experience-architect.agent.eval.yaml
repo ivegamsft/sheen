@@ -1,0 +1,34 @@
+name: "experience-architect-routing"
+description: "Routing and behavior evaluation for agent experience-architect."
+skill: "agents/experience-architect.agent.md"
+scenarios:
+  - id: "pos-full-audit"
+    input: "Have experience-architect audit our support portal end to end — IA, layouts, pages, navigation, and flows — with evidence and a prioritized remediation plan."
+    expect_activation: true
+  - id: "pos-generate-commerce-admin"
+    input: "Generate a complete experience blueprint for a new commerce administration console using the commerce and admin-settings archetypes, including brief, IA, layouts, pages, and flows."
+    expect_activation: true
+  - id: "pos-direction-resolution"
+    input: "We have two competing IA and layout directions for the onboarding flow — resolve them into one experience contract with a documented decision."
+    expect_activation: true
+  - id: "pos-cross-specialist-coordination"
+    input: "Coordinate brand, IA, wireframing, and accessibility specialists into one coherent product experience for the new patient dashboard."
+    expect_activation: true
+  - id: "pos-handoff-validation"
+    input: "Validate our experience blueprint's cross-references and archetype-required moments, then produce a source-linked handoff package for engineering."
+    expect_activation: true
+  - id: "neg-brand-only"
+    input: "Update our brand identity principles, logo usage rules, and imagery direction — no page or flow changes involved."
+    expect_activation: false
+  - id: "neg-ia-only"
+    input: "Reorganize the taxonomy and controlled vocabulary for our knowledge base search filters only."
+    expect_activation: false
+  - id: "neg-frontend-implementation"
+    input: "Write the React component code and API integration for the checkout page."
+    expect_activation: false
+  - id: "neg-component-catalog-only"
+    input: "Audit our app's logical component gallery for reuse-vs-duplicate drift and normalize aliases — no page, flow, or navigation scope."
+    expect_activation: false
+  - id: "neg-layout-catalog-only"
+    input: "Select or extend a logical page layout from our app layout gallery for one new settings screen — no broader experience audit needed."
+    expect_activation: false

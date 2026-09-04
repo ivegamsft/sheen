@@ -126,6 +126,67 @@ Add detailed brand, voice, and wireframe artifacts by reference when the project
 already has accepted sources. Do not copy those sources merely to fill every
 folder.
 
+## Orchestrator skill and agent
+
+The `experience-blueprint` skill is the single orchestrator entry point for
+both modes. It does not reimplement brand, IA, accessibility, component, or
+frontend expertise — it populates the experience index and delegates each
+domain artifact to the specialist skill that already owns it (see the
+skill's `Delegates / pairs with` list). The `experience-architect` agent
+composes this skill for full-experience requests and routes narrower
+requests to the neighboring agent whose mandate actually owns them:
+
+| Request shape | Routes to |
+|---|---|
+| Full experience audit or generation (pages, flows, navigation) | `experience-architect` |
+| Brand or voice only, no page/flow scope | `brand-steward` |
+| IA or taxonomy only, no page/flow scope | `information-architect` |
+| Single component, pattern, or interaction state | `ux-designer` / `component-spec` |
+| App-specific component gallery audit/selection | `app-component-catalog` (composed by `design-system-architect`) |
+| App-specific layout gallery audit/selection | `app-layout-catalog` (composed by `ux-designer`) |
+| Runtime UI implementation | `design-to-code` / `frontend-dev` |
+
+Starter reasoning templates for each mode live in
+`templates/experience-blueprint/`: `experience-index.md`, `archetypes.md`,
+`audit-workflow.md`, `generation-workflow.md`, and `handoff.md`. Layout and
+page-component selection during generation delegate to the app-specific
+`app-layout-catalog` and `app-component-catalog` galleries rather than
+inventing structure inline.
+
+## Contract checks
+
+`scripts/audit-experience-blueprint.ps1` implements the required checks from
+`specs/10-experience-blueprint.spec.md` §12: identifier uniqueness, every
+page's layout reference, every flow step's page/external-touchpoint
+reference, responsive breakpoint coverage, required page-state coverage,
+audit-finding evidence/artifact references, documentation provenance, and
+archetype-required-moment coverage. It also warns on orphan pages and flows
+missing a recovery/cancellation path.
+
+```console
+pwsh scripts/audit-experience-blueprint.ps1 -Path <your-blueprint>.json
+```
+
+The script's JSON input is **one illustrative example representation**, not
+a mandated schema — see `tests/fixtures/experience-blueprints/README.md`.
+Represent the same concepts and relationships in whatever format your
+project already uses, and adapt the checks accordingly.
+
+## End-to-end scenarios
+
+- **Audit scenario** — `tests/fixtures/experience-blueprints/valid-sample.json`
+  is a complete commerce-archetype audit: five pages covering every required
+  commerce moment (discovery, detail, cart, checkout, confirmation), a
+  purchase flow with recovery and cancellation paths, an evidence-backed
+  finding, and a source-linked summary. It passes the contract checks with
+  zero findings.
+- **Broken scenario** — `tests/fixtures/experience-blueprints/invalid-sample.json`
+  is the same shape with deliberate violations (a duplicated identifier, a
+  page pointing at a missing layout, a flow step pointing at a missing page,
+  a responsive page with no breakpoints, a missing required state, a finding
+  citing missing evidence, an unrepresented required moment, and an orphan
+  page) so downstream teams can see exactly what the checker catches.
+
 ## Review checklist
 
 - Every page has a purpose, route, layout, states, and transitions.

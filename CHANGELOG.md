@@ -9,6 +9,29 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ### Added
 
+- **Experience Blueprint orchestrator** — added the `experience-blueprint`
+  skill and `experience-architect` agent implementing
+  `specs/10-experience-blueprint.spec.md`: an implementation-neutral
+  audit/generate contract spanning brand, voice, IA, layouts, pages,
+  wireframes, navigation, and flows, with the eight composable archetypes as
+  reasoning templates, an evidence/confidence/0-4 maturity/findings audit
+  workflow, a brief-to-blueprint generation workflow with candidate-direction
+  resolution via `design-debate`, and a source-linked handoff package.
+  Delegates domain depth to existing specialist skills rather than
+  duplicating them (#165, #166, #167, #168).
+- **Experience Blueprint contract checks** —
+  `scripts/audit-experience-blueprint.ps1` validates identifier uniqueness,
+  page/layout and flow/page relationships, responsive and page-state
+  coverage, audit-finding evidence/artifact references, documentation
+  provenance, and archetype-required-moment coverage, with valid/invalid
+  fixtures and downstream guidance in `docs/guides/experience-blueprints.md`
+  (#169).
+- **`app-component-catalog` skill** — implements
+  `specs/11-app-component-catalog.spec.md`: audits an application's UI into a
+  normalized, evidence-linked logical component gallery, and generates
+  component selections (reuse/extend/create) with complete metadata,
+  variant-vs-drift classification, and alias normalization. Composed by
+  `design-system-architect`. Closes #164, #172, #173, #174, #175.
 - **`app-layout-catalog` skill** — implements
   `specs/12-app-layout-catalog.spec.md`: audits an application's pages into a
   normalized, evidence-linked catalog of logical layouts, and generates

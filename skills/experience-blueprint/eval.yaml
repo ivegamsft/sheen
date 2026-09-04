@@ -1,0 +1,37 @@
+name: "experience-blueprint-routing"
+description: "Routing evaluation — validates trigger activation for experience-blueprint."
+skill: "skills/experience-blueprint/SKILL.md"
+scenarios:
+  - id: "pos-audit-existing-app"
+    input: "Audit our existing customer portal's complete experience — pages, navigation, and flows — and give me evidence-backed findings with a prioritized remediation plan."
+    expect_activation: true
+  - id: "pos-generate-from-brief"
+    input: "Generate a new experience blueprint for a commerce admin tool from this product brief: audiences, jobs, constraints, and a dashboard-plus-admin-settings archetype composition."
+    expect_activation: true
+  - id: "pos-cross-artifact-coherence"
+    input: "Check that our IA, page inventory, layouts, and task flows for the onboarding journey stay coherent and every flow step resolves to a real page."
+    expect_activation: true
+  - id: "pos-archetype-composition"
+    input: "Compose the control-tower and dashboard archetypes for our ops console and produce the required moments, page inventory, and navigation model."
+    expect_activation: true
+  - id: "pos-experience-handoff"
+    input: "Produce a source-linked experience handoff package covering brand, voice, IA, layouts, pages, wireframes, and flows for engineering implementation."
+    expect_activation: true
+  - id: "neg-brand-only"
+    input: "Define our brand identity principles, approved color and imagery direction, and logo usage rules for the new microsite."
+    expect_activation: false
+  - id: "neg-ia-only"
+    input: "Build a sitemap and taxonomy for our documentation site without touching layouts, wireframes, or flows."
+    expect_activation: false
+  - id: "neg-component-only"
+    input: "Write the component spec for a single date-range picker: anatomy, states, and ARIA roles."
+    expect_activation: false
+  - id: "neg-frontend-implementation"
+    input: "Implement the checkout page in React with Tailwind classes and wire it to the payments API."
+    expect_activation: false
+  - id: "neg-component-catalog-only"
+    input: "Normalize aliases in our app's logical component gallery and classify a few variants as reuse versus drift — no page or flow scope."
+    expect_activation: false
+  - id: "neg-layout-catalog-only"
+    input: "Pick a reusable logical layout from our app layout gallery for one settings page, or extend an existing one — nothing else in the experience changes."
+    expect_activation: false

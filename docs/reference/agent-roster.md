@@ -10,5 +10,6 @@ Current target roster:
 - `information-architect`
 - `accessibility-auditor`
 - `design-reviewer`
+- `experience-architect`
 
 Each agent composes skills by mandate and includes a routing eval file.

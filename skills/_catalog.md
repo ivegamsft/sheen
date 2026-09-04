@@ -73,6 +73,7 @@ Complete catalog as of Phase 3 (SPEC s11).
 - skills/design-handoff/
 - skills/design-suggest/
 - skills/design-update/
+- skills/experience-blueprint/
 
 ## Governance / meta
 

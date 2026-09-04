@@ -262,6 +262,8 @@ $intents = @(
     [ordered]@{ intent = 'design-md-export';       keywords = @('design-md','design.md','export-tokens','stitch','ai-design-context'); skill = 'design-tokens'; agent = 'design-system-architect'; discriminator = 'token-spec' }
     [ordered]@{ intent = 'accessibility-conformance'; keywords = @('conformance','section-508','en-301-549');       skill = 'accessibility-audit'; agent = 'accessibility-auditor';     discriminator = 'audit-report' }
     [ordered]@{ intent = 'i18n-framework-mapping'; keywords = @('i18n-framework','rtl','bidi','language-support');  skill = 'i18n-framework-mapping'; agent = 'information-architect';  discriminator = 'content-spec' }
+    [ordered]@{ intent = 'experience-blueprint-audit'; keywords = @('experience-blueprint','ux-audit','end-to-end-experience'); skill = 'experience-blueprint'; agent = 'experience-architect'; discriminator = 'audit-report' }
+    [ordered]@{ intent = 'experience-blueprint-generate'; keywords = @('brief-to-blueprint','archetype-composition','experience-generate'); skill = 'experience-blueprint'; agent = 'experience-architect'; discriminator = 'concept-brief' }
     [ordered]@{ intent = 'app-layout-catalog';     keywords = @('layout-catalog','app-layout','page-layout','region-role'); skill = 'app-layout-catalog'; agent = 'ux-designer';        discriminator = 'wireframe' }
 )
 

@@ -154,7 +154,7 @@ The IA artifact MUST define:
 ### 6.5 Layouts
 
 Each layout specification MUST follow the App Layout Catalog contract in
-Spec 12 and define:
+Spec 12 (implemented as the `app-layout-catalog` skill) and define:
 
 - layout ID, purpose, and compatible archetypes;
 - named regions and reading order;
@@ -301,9 +301,9 @@ The orchestrator MUST delegate domain work:
 | Brand and visual identity | `brand-identity`, `design-tokens`, `theming` |
 | Voice and terminology | `brand-voice-tone`, `ux-writing`, `lexicon` |
 | IA and navigation | `information-architecture`, `navigation-design`, `taxonomy` |
-| Layout and page structure | `layout-grid-spacing`, `responsive-design`, `content-hierarchy` |
+| Layout and page structure | `layout-grid-spacing`, `responsive-design`, `content-hierarchy`, `app-layout-catalog` |
 | Wireframes and journeys | `wireframing`, `ux` templates, `user-research` |
-| Components and patterns | App Component Catalog (Spec 11), `component-spec`, `pattern-library`, `ui-states-interaction` |
+| Components and patterns | `app-component-catalog`, `component-spec`, `pattern-library`, `ui-states-interaction` |
 | Audit and quality | `design-audit`, `design-system-audit`, `web-usability-review` |
 | Accessibility and secure UX | `accessibility-audit`, `secure-ux` |
 | Direction selection | `design-exploration`, `design-debate` |

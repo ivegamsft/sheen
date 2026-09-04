@@ -244,6 +244,16 @@ intents:
     skill: "i18n-framework-mapping"
     agent: "information-architect"
     discriminator: "content-spec"
+  - intent: "experience-blueprint-audit"
+    keywords: ["experience-blueprint", "ux-audit", "end-to-end-experience"]
+    skill: "experience-blueprint"
+    agent: "experience-architect"
+    discriminator: "audit-report"
+  - intent: "experience-blueprint-generate"
+    keywords: ["brief-to-blueprint", "archetype-composition", "experience-generate"]
+    skill: "experience-blueprint"
+    agent: "experience-architect"
+    discriminator: "concept-brief"
   - intent: "app-layout-catalog"
     keywords: ["layout-catalog", "app-layout", "page-layout", "region-role"]
     skill: "app-layout-catalog"

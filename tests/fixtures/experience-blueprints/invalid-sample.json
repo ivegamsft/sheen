@@ -1,0 +1,118 @@
+{
+  "mode": "audit",
+  "archetypes": {
+    "primary": "commerce",
+    "supporting": []
+  },
+  "layouts": [
+    { "id": "layout-grid" },
+    { "id": "layout-detail" },
+    { "id": "page-cart" }
+  ],
+  "pages": [
+    {
+      "id": "page-discovery",
+      "layout": "layout-grid",
+      "responsive": true,
+      "breakpoints": ["mobile", "desktop"],
+      "isEntryPoint": true,
+      "states": {
+        "default": "product-grid-with-filters",
+        "loading": "skeleton-grid",
+        "empty": "no-results-with-clear-filters-cta",
+        "error": "retry-load-products",
+        "success": "not-applicable",
+        "permission": "not-applicable"
+      }
+    },
+    {
+      "id": "page-detail",
+      "layout": "layout-detail",
+      "responsive": true,
+      "states": {
+        "default": "product-detail",
+        "loading": "skeleton-detail",
+        "empty": "not-applicable",
+        "error": "product-not-found",
+        "success": "not-applicable",
+        "permission": "not-applicable"
+      }
+    },
+    {
+      "id": "page-cart",
+      "layout": "layout-missing",
+      "responsive": true,
+      "breakpoints": ["mobile", "desktop"],
+      "states": {
+        "default": "cart-with-items",
+        "loading": "cart-syncing",
+        "empty": "empty-cart-with-browse-cta",
+        "success": "not-applicable",
+        "permission": "not-applicable"
+      }
+    },
+    {
+      "id": "page-checkout",
+      "layout": "layout-missing",
+      "responsive": true,
+      "breakpoints": ["mobile", "desktop"],
+      "states": {
+        "default": "checkout-form",
+        "loading": "processing-payment",
+        "empty": "not-applicable",
+        "error": "payment-declined",
+        "success": "not-applicable",
+        "permission": "requires-authenticated-session"
+      }
+    },
+    {
+      "id": "page-wishlist",
+      "layout": "layout-grid",
+      "responsive": true,
+      "breakpoints": ["mobile", "desktop"],
+      "states": {
+        "default": "saved-items",
+        "loading": "skeleton-grid",
+        "empty": "no-saved-items",
+        "error": "retry-load-wishlist",
+        "success": "not-applicable",
+        "permission": "not-applicable"
+      }
+    }
+  ],
+  "flows": [
+    {
+      "id": "flow-purchase",
+      "steps": [
+        { "page": "page-discovery" },
+        { "page": "page-detail" },
+        { "page": "page-cart" },
+        { "page": "page-shipping" },
+        { "page": "page-checkout" }
+      ]
+    }
+  ],
+  "evidence": [
+    { "id": "ev-code-routes", "type": "code", "location": "src/routes/commerce/*.tsx", "capturedAt": "2026-08-15", "confidence": "high" }
+  ],
+  "findings": [
+    {
+      "id": "find-checkout-drop-off",
+      "severity": "major",
+      "evidenceIds": ["ev-missing"],
+      "artifactIds": ["page-unknown"],
+      "userImpact": "18% of sessions abandon at payment entry after a decline",
+      "recommendation": "Surface a specific decline reason and a retry path before returning to cart",
+      "owner": "checkout-team"
+    }
+  ],
+  "moments": {
+    "discovery": ["page-discovery"],
+    "detail": ["page-detail"],
+    "cart": ["page-cart"],
+    "checkout": ["page-checkout"]
+  },
+  "summary": {
+    "sources": []
+  }
+}

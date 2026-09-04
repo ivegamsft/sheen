@@ -29,6 +29,10 @@ Skills: `accessibility-audit`, `color-contrast-check`, `usability-mapping`
 **🗂️ Information Architecture** — `@information-architect`
 Skills: `information-architecture`, `taxonomy`, `ontology`, `content-hierarchy`, `multilingual`, `i18n-framework-mapping`
 
+**🧭 Experience** — `@experience-architect`
+Skills: `experience-blueprint` (delegates brand/voice/IA/layout/component/a11y
+depth to the owning pillar agents above)
+
 **✅ Governance** — `@design-reviewer`
 Skills: `design-review`, `design-debate`, `craft-quality`, `design-audit`, `design-system-audit`, `pattern-library`, `secure-ux`, `visual-regression`, `style-guide-authoring`
 

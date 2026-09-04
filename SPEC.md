@@ -279,7 +279,10 @@ a11y, usability), `design-bootstrap` (start a design system from scratch),
 `design-update` (evolve/modernize an existing system), `design-suggest` (propose
 targeted, prioritized improvements), `design-debate` (structured tradeoff debate
 between competing options), `design-exploration` (generate and shape new concepts),
-`design-handoff` (package tokens, component specs, and redlines for engineering)
+`design-handoff` (package tokens, component specs, and redlines for engineering),
+`experience-blueprint` (audit or generate a product's implementation-neutral,
+end-to-end brand/voice/IA/layout/page/wireframe/navigation/flow contract;
+delegates domain depth to the owning specialist skills — spec 10)
 
 **Governance / meta** — `style-guide-authoring`, `design-review`,
 `craft-quality`, `create-design-skill`, `user-research` (personas, interviews,
@@ -302,8 +305,9 @@ starter assets reduce repeated work.
 ## 9. Agents (target)
 
 `brand-steward`, `design-system-architect`, `ux-designer`,
-`information-architect`, `accessibility-auditor`, `design-reviewer`. Each composes
-the relevant skills + instructions and carries an eval file.
+`information-architect`, `accessibility-auditor`, `design-reviewer`,
+`experience-architect`. Each composes the relevant skills + instructions and
+carries an eval file.
 
 ---
 

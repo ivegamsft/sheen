@@ -4,12 +4,13 @@ Canonical source: `.github/skills/` (each subdirectory contains a `SKILL.md`)
 
 Current catalog summary:
 
-- 60 skills across foundations, brand, IA, components, usability, content,
+- 61 skills across foundations, brand, IA, components, usability, content,
   accessibility, security UX, mapping, lifecycle, governance, design-to-code,
   drift detection, versioning, performance, data visualisation and diagram
   rendering, AI governance, ethical design, mobile native, adoption
-  telemetry, design sprint facilitation, app-specific component cataloging,
-  and app-specific layout cataloging.
+  telemetry, design sprint facilitation, end-to-end experience
+  orchestration, app-specific component cataloging, and app-specific layout
+  cataloging.
 
 For authoritative behavior and boundaries, read each skill's `SKILL.md`.
 
@@ -17,6 +18,7 @@ For authoritative behavior and boundaries, read each skill's `SKILL.md`.
 
 | Skill | Issue | Priority | Description |
 |---|---|---|---|
+| `experience-blueprint` | #165–#169 | P1 | Implementation-neutral, end-to-end product experience audit/generation orchestrator (brand, voice, IA, layouts, pages, wireframes, navigation, flows) |
 | `app-component-catalog` | #164, #172-#175 | P2 | Audit and generate an app-specific catalog of logical UI components — roles, states, data, and composition, independent of framework/implementation |
 | `app-layout-catalog` | #170, #177-#180 | P2 | Audit and generate an app-specific catalog of neutral, logical page layouts — regions, navigation placement, and component-role constraints, independent of framework/grid/DOM |
 

@@ -9,11 +9,11 @@
     ]
   },
   "counts": {
-    "skills": 60,
-    "agents": 6,
+    "skills": 61,
+    "agents": 7,
     "instructions": 10,
     "prompts": 0,
-    "templates": 12,
+    "templates": 18,
     "tokens": {
       "core": 7,
       "semantic": 6,
@@ -53,6 +53,7 @@
       "design-update",
       "documentation-diagram",
       "ethical-design",
+      "experience-blueprint",
       "font-mapping",
       "i18n-framework-mapping",
       "iconography",
@@ -88,6 +89,7 @@
       "brand-steward",
       "design-reviewer",
       "design-system-architect",
+      "experience-architect",
       "information-architect",
       "ux-designer"
     ],
@@ -112,6 +114,12 @@
       "component-spec",
       "README",
       "design-review",
+      "README",
+      "archetypes",
+      "audit-workflow",
+      "experience-index",
+      "generation-workflow",
+      "handoff",
       "README",
       "sheen-sync",
       "README",
@@ -437,6 +445,16 @@
         "hash": "475c163b58f7415739f2a75bc185411b30fa96b9af59a091e5f62ef21f4695e1"
       },
       {
+        "name": "experience-blueprint",
+        "path": "skills/experience-blueprint/SKILL.md",
+        "folder": "skills/experience-blueprint",
+        "category": "lifecycle",
+        "pillar": "lifecycle",
+        "maturity": "draft",
+        "description": "Implementation-neutral orchestrator for a product's end-to-end UI/UX contract. USE FOR: audit an existing application's full experience and produce evidence-backed findings, generate a new experience from a product brief and archetype, coordinate brand/voice/IA/layout/page/flow specialists into one coherent contract, validate cross-artifact relationships and state coverage, produce a source-linked handoff for implementation. DO NOT USE FOR: brand-only identity work (brand-identity), IA-only sitemap/taxonomy work (information-architecture), single-component specification (component-spec), app-specific component or layout gallery maintenance alone (app-component-catalog, app-layout-catalog), writing runtime UI code (design-to-code, frontend-dev).",
+        "hash": "5616f84fe0e8f86cc7557c664f43f190d77337d8a464dd0b67bb77dc6d9f1674"
+      },
+      {
         "name": "font-mapping",
         "path": "skills/font-mapping/SKILL.md",
         "folder": "skills/font-mapping",
@@ -759,6 +777,14 @@
         "maturity": "draft",
         "description": "Token architecture, theming, and component-system coherence for design systems. USE FOR: design or audit semantic token layers, define theming strategies, review component-system coherence, create token migration guides, evaluate design-system adoption plans. DO NOT USE FOR: brand voice or campaign direction, navigation taxonomy, accessibility audits, backend implementation.",
         "hash": "51f8b70eda5b2633146f63ea2f5c0842db3a52d512d27428e4e36ebe3888bd9d"
+      },
+      {
+        "name": "experience-architect",
+        "path": "agents/experience-architect.agent.md",
+        "pillar": "lifecycle",
+        "maturity": "draft",
+        "description": "End-to-end product experience audit and generation across brand, voice, IA, layout, pages, wireframes, navigation, and flows. USE FOR: audit an existing application's full UI/UX experience and produce evidence-backed findings, generate a new experience from a product brief and archetype composition, resolve candidate IA/layout directions into one contract, coordinate brand/IA/usability/accessibility specialists into one traceable experience, validate cross-artifact relationships before implementation handoff. DO NOT USE FOR: brand-only identity or logo work, IA-only taxonomy/sitemap work with no page/flow scope, single-component specification, writing or deploying runtime frontend code.",
+        "hash": "774c9773689a80745dbeedc65bce35f1f86fffef7f33d1fd994e7a5c69442a64"
       },
       {
         "name": "information-architect",

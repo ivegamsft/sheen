@@ -48,6 +48,7 @@ Required sections:
 | `information-architect` | Structure, navigation, taxonomy, ontology | `information-architecture`, `navigation-design`, `taxonomy`, `ontology` |
 | `accessibility-auditor` | WCAG + NN/g heuristics conformance | `accessibility-audit`, `color-contrast-check`, `usability-mapping` |
 | `design-reviewer` | Craft-bar critique & tradeoff facilitation | `design-review`, `design-debate`, `craft-quality` |
+| `experience-architect` | End-to-end experience audit/generation orchestration | `experience-blueprint`, `design-debate`, `design-audit`, `wireframing` |
 
 ## 5. Eval
 

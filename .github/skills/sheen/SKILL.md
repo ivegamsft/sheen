@@ -17,7 +17,7 @@ allowed-tools: []
 # Sheen Router
 
 The front door to the Sheen design-system framework. Routes requests to the right agent across
-6 design pillars in two modes: **Discovery** (browse agents and skills) and **Delegation** (route directly).
+7 design pillars in two modes: **Discovery** (browse agents and skills) and **Delegation** (route directly).
 
 ## Quick Start
 
@@ -45,6 +45,7 @@ The front door to the Sheen design-system framework. Routes requests to the righ
 | 📐 Usability | wireframe, layout, navigation, responsive, journey | `@ux-designer` |
 | ♿ Accessibility | a11y, wcag, aria, contrast, focus, keyboard | `@accessibility-auditor` |
 | 🗂️ Information Architecture | ia, taxonomy, ontology, sitemap, navigation, content | `@information-architect` |
+| 🧭 Experience | experience-blueprint, ux-audit, brief-to-blueprint, archetype | `@experience-architect` |
 | ✅ Governance | review, critique, debate, craft, audit, tradeoff | `@design-reviewer` |
 
 ## Basecoat Integration

@@ -122,6 +122,16 @@ jobs:
       - name: Validate - metadata drift
         run: pwsh -NonInteractive -File scripts/build-metadata.ps1 -Check
 
+      - name: Validate - Experience Blueprint contract checks (#169)
+        run: |
+          pwsh -NonInteractive -File scripts/audit-experience-blueprint.ps1 -Path tests/fixtures/experience-blueprints/valid-sample.json
+          if pwsh -NonInteractive -File scripts/audit-experience-blueprint.ps1 -Path tests/fixtures/experience-blueprints/invalid-sample.json; then
+            echo "::error::audit-experience-blueprint.ps1 passed the intentionally-broken fixture — contract checks are not catching known violations"
+            exit 1
+          else
+            echo "invalid-sample.json correctly failed the Experience Blueprint contract checks."
+          fi
+
   eval-routing:
     runs-on: ubuntu-latest
     timeout-minutes: 10

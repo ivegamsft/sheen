@@ -374,6 +374,21 @@ the component spec (`component-spec`)
 · Workflow: collect tokens/specs → produce redlines/annotations → export handoff
 package. · Output: handoff package. · Pairs: `component-spec`, `design-tokens`.
 
+**`experience-blueprint`** *(lifecycle · draft)* — audit or generate a product's
+implementation-neutral, end-to-end experience contract.
+· Use for: full-experience audit with evidence and findings, brief-to-blueprint
+generation, cross-artifact relationship validation · Not for: brand-only identity
+work (`brand-identity`), IA-only sitemap work (`information-architecture`),
+single-component specs (`component-spec`), writing runtime UI code
+(`design-to-code`)
+· Workflow: select audit/generate mode → populate the experience index →
+delegate brand/voice/IA/layout/page/wireframe/flow depth to owning specialists →
+validate cross-references and archetype-required moments → produce a
+source-linked summary and handoff. · Output: experience index, evidence
+register + findings (audit) or brief + resolved direction + handoff
+(generate). · Pairs: `design-debate`, `design-audit`, `wireframing`,
+`information-architecture`, `brand-identity`; agent `experience-architect`.
+
 ---
 
 ## Governance / meta

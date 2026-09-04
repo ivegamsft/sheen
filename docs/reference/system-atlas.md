@@ -22,104 +22,118 @@ own frontmatter (`composes.skills`, full names and per-agent skill counts
 listed in the table beneath the chart — node labels are abbreviated to fit).
 
 <figure>
-<svg viewBox="0 0 920 340" width="920" height="340" role="img"
+<svg viewBox="0 0 1070 340" width="1070" height="340" role="img"
        aria-labelledby="diagram-title diagram-desc"
        xmlns="http://www.w3.org/2000/svg">
     <title id="diagram-title">Sheen router: pillars and agents</title>
     <desc id="diagram-desc">Org chart: Sheen router: pillars and agents</desc>
-    <rect x="0" y="0" width="920" height="340" fill="#ffffff" />
-<path class="connector" data-from="org-0" data-to="bus-org-0" d="M 460,60 L 460,85" fill="none" stroke="#57606a" stroke-width="1.5" />
-<path d="M 76.6666666666667,85 L 843.333333333333,85" fill="none" stroke="#57606a" stroke-width="1.5" />
-<path class="connector" data-from="bus-org-0" data-to="org-1" d="M 76.6666666666667,85 L 76.6666666666667,110" fill="none" stroke="#57606a" stroke-width="1.5" />
-<path class="connector" data-from="bus-org-0" data-to="org-3" d="M 230,85 L 230,110" fill="none" stroke="#57606a" stroke-width="1.5" />
-<path class="connector" data-from="bus-org-0" data-to="org-5" d="M 383.333333333333,85 L 383.333333333333,110" fill="none" stroke="#57606a" stroke-width="1.5" />
-<path class="connector" data-from="bus-org-0" data-to="org-7" d="M 536.666666666667,85 L 536.666666666667,110" fill="none" stroke="#57606a" stroke-width="1.5" />
-<path class="connector" data-from="bus-org-0" data-to="org-9" d="M 690,85 L 690,110" fill="none" stroke="#57606a" stroke-width="1.5" />
-<path class="connector" data-from="bus-org-0" data-to="org-11" d="M 843.333333333333,85 L 843.333333333333,110" fill="none" stroke="#57606a" stroke-width="1.5" />
-<path class="connector" data-from="org-1" data-to="org-2" d="M 76.6666666666667,150 L 76.6666666666667,200" fill="none" stroke="#57606a" stroke-width="1.5" />
-<path class="connector" data-from="org-3" data-to="org-4" d="M 230,150 L 230,200" fill="none" stroke="#57606a" stroke-width="1.5" />
-<path class="connector" data-from="org-5" data-to="org-6" d="M 383.333333333333,150 L 383.333333333333,200" fill="none" stroke="#57606a" stroke-width="1.5" />
-<path class="connector" data-from="org-7" data-to="org-8" d="M 536.666666666667,150 L 536.666666666667,200" fill="none" stroke="#57606a" stroke-width="1.5" />
-<path class="connector" data-from="org-9" data-to="org-10" d="M 690,150 L 690,200" fill="none" stroke="#57606a" stroke-width="1.5" />
-<path class="connector" data-from="org-11" data-to="org-12" d="M 843.333333333333,150 L 843.333333333333,200" fill="none" stroke="#57606a" stroke-width="1.5" />
-<rect x="395" y="20" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-0" rx="4" ry="4" />
-<g transform="translate(403,31) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+    <rect x="0" y="0" width="1070" height="340" fill="#ffffff" />
+<path class="connector" data-from="org-0" data-to="bus-org-0" d="M 535,60 L 535,85" fill="none" stroke="#57606a" stroke-width="1.5" />
+<path d="M 76.4285714285714,85 L 993.571428571429,85" fill="none" stroke="#57606a" stroke-width="1.5" />
+<path class="connector" data-from="bus-org-0" data-to="org-1" d="M 76.4285714285714,85 L 76.4285714285714,110" fill="none" stroke="#57606a" stroke-width="1.5" />
+<path class="connector" data-from="bus-org-0" data-to="org-3" d="M 229.285714285714,85 L 229.285714285714,110" fill="none" stroke="#57606a" stroke-width="1.5" />
+<path class="connector" data-from="bus-org-0" data-to="org-5" d="M 382.142857142857,85 L 382.142857142857,110" fill="none" stroke="#57606a" stroke-width="1.5" />
+<path class="connector" data-from="bus-org-0" data-to="org-7" d="M 535,85 L 535,110" fill="none" stroke="#57606a" stroke-width="1.5" />
+<path class="connector" data-from="bus-org-0" data-to="org-9" d="M 687.857142857143,85 L 687.857142857143,110" fill="none" stroke="#57606a" stroke-width="1.5" />
+<path class="connector" data-from="bus-org-0" data-to="org-11" d="M 840.714285714286,85 L 840.714285714286,110" fill="none" stroke="#57606a" stroke-width="1.5" />
+<path class="connector" data-from="bus-org-0" data-to="org-13" d="M 993.571428571429,85 L 993.571428571429,110" fill="none" stroke="#57606a" stroke-width="1.5" />
+<path class="connector" data-from="org-1" data-to="org-2" d="M 76.4285714285714,150 L 76.4285714285714,200" fill="none" stroke="#57606a" stroke-width="1.5" />
+<path class="connector" data-from="org-3" data-to="org-4" d="M 229.285714285714,150 L 229.285714285714,200" fill="none" stroke="#57606a" stroke-width="1.5" />
+<path class="connector" data-from="org-5" data-to="org-6" d="M 382.142857142857,150 L 382.142857142857,200" fill="none" stroke="#57606a" stroke-width="1.5" />
+<path class="connector" data-from="org-7" data-to="org-8" d="M 535,150 L 535,200" fill="none" stroke="#57606a" stroke-width="1.5" />
+<path class="connector" data-from="org-9" data-to="org-10" d="M 687.857142857143,150 L 687.857142857143,200" fill="none" stroke="#57606a" stroke-width="1.5" />
+<path class="connector" data-from="org-11" data-to="org-12" d="M 840.714285714286,150 L 840.714285714286,200" fill="none" stroke="#57606a" stroke-width="1.5" />
+<path class="connector" data-from="org-13" data-to="org-14" d="M 993.571428571429,150 L 993.571428571429,200" fill="none" stroke="#57606a" stroke-width="1.5" />
+<rect x="470" y="20" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-0" rx="4" ry="4" />
+<g transform="translate(478,31) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
   <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
   <path d="M16 3.13a4 4 0 0 1 0 7.75" />
   <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></g>
-<text  x="470" y="45" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">sheen router</text>
-<rect x="11.6666666666667" y="110" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-1" rx="4" ry="4" />
-<g transform="translate(19.6666666666667,121) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+<text  x="545" y="45" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">sheen router</text>
+<rect x="11.4285714285714" y="110" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-1" rx="4" ry="4" />
+<g transform="translate(19.4285714285714,121) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
   <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
   <path d="M16 3.13a4 4 0 0 1 0 7.75" />
   <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></g>
-<text  x="86.6666666666667" y="135" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">🎨 Tokens &amp; System</text>
-<rect x="11.6666666666667" y="200" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-2" rx="4" ry="4" />
-<g transform="translate(19.6666666666667,211) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+<text  x="86.4285714285714" y="135" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">🎨 Tokens &amp; System</text>
+<rect x="11.4285714285714" y="200" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-2" rx="4" ry="4" />
+<g transform="translate(19.4285714285714,211) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
   <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
   <path d="M16 3.13a4 4 0 0 1 0 7.75" />
   <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></g>
-<text  x="86.6666666666667" y="225" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">@design-system-architect</text>
-<rect x="165" y="110" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-3" rx="4" ry="4" />
-<g transform="translate(173,121) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+<text  x="86.4285714285714" y="225" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">@design-system-architect</text>
+<rect x="164.285714285714" y="110" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-3" rx="4" ry="4" />
+<g transform="translate(172.285714285714,121) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
   <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
   <path d="M16 3.13a4 4 0 0 1 0 7.75" />
   <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></g>
-<text  x="240" y="135" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">🖼️ Brand</text>
-<rect x="165" y="200" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-4" rx="4" ry="4" />
-<g transform="translate(173,211) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+<text  x="239.285714285714" y="135" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">🖼️ Brand</text>
+<rect x="164.285714285714" y="200" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-4" rx="4" ry="4" />
+<g transform="translate(172.285714285714,211) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
   <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
   <path d="M16 3.13a4 4 0 0 1 0 7.75" />
   <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></g>
-<text  x="240" y="225" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">@brand-steward</text>
-<rect x="318.333333333333" y="110" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-5" rx="4" ry="4" />
-<g transform="translate(326.333333333333,121) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+<text  x="239.285714285714" y="225" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">@brand-steward</text>
+<rect x="317.142857142857" y="110" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-5" rx="4" ry="4" />
+<g transform="translate(325.142857142857,121) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
   <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
   <path d="M16 3.13a4 4 0 0 1 0 7.75" />
   <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></g>
-<text  x="393.333333333333" y="135" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">📐 Usability</text>
-<rect x="318.333333333333" y="200" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-6" rx="4" ry="4" />
-<g transform="translate(326.333333333333,211) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+<text  x="392.142857142857" y="135" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">📐 Usability</text>
+<rect x="317.142857142857" y="200" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-6" rx="4" ry="4" />
+<g transform="translate(325.142857142857,211) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
   <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
   <path d="M16 3.13a4 4 0 0 1 0 7.75" />
   <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></g>
-<text  x="393.333333333333" y="225" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">@ux-designer</text>
-<rect x="471.666666666667" y="110" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-7" rx="4" ry="4" />
-<g transform="translate(479.666666666667,121) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+<text  x="392.142857142857" y="225" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">@ux-designer</text>
+<rect x="470" y="110" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-7" rx="4" ry="4" />
+<g transform="translate(478,121) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
   <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
   <path d="M16 3.13a4 4 0 0 1 0 7.75" />
   <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></g>
-<text  x="546.666666666667" y="135" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">♿ Accessibility</text>
-<rect x="471.666666666667" y="200" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-8" rx="4" ry="4" />
-<g transform="translate(479.666666666667,211) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+<text  x="545" y="135" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">♿ Accessibility</text>
+<rect x="470" y="200" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-8" rx="4" ry="4" />
+<g transform="translate(478,211) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
   <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
   <path d="M16 3.13a4 4 0 0 1 0 7.75" />
   <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></g>
-<text  x="546.666666666667" y="225" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">@accessibility-auditor</text>
-<rect x="625" y="110" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-9" rx="4" ry="4" />
-<g transform="translate(633,121) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+<text  x="545" y="225" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">@accessibility-auditor</text>
+<rect x="622.857142857143" y="110" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-9" rx="4" ry="4" />
+<g transform="translate(630.857142857143,121) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
   <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
   <path d="M16 3.13a4 4 0 0 1 0 7.75" />
   <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></g>
-<text  x="700" y="135" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">🗂️ Info Architecture</text>
-<rect x="625" y="200" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-10" rx="4" ry="4" />
-<g transform="translate(633,211) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+<text  x="697.857142857143" y="135" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">🗂️ Info Architecture</text>
+<rect x="622.857142857143" y="200" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-10" rx="4" ry="4" />
+<g transform="translate(630.857142857143,211) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
   <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
   <path d="M16 3.13a4 4 0 0 1 0 7.75" />
   <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></g>
-<text  x="700" y="225" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">@information-architect</text>
-<rect x="778.333333333333" y="110" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-11" rx="4" ry="4" />
-<g transform="translate(786.333333333333,121) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+<text  x="697.857142857143" y="225" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">@information-architect</text>
+<rect x="775.714285714286" y="110" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-11" rx="4" ry="4" />
+<g transform="translate(783.714285714286,121) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
   <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
   <path d="M16 3.13a4 4 0 0 1 0 7.75" />
   <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></g>
-<text  x="853.333333333333" y="135" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">✅ Governance</text>
-<rect x="778.333333333333" y="200" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-12" rx="4" ry="4" />
-<g transform="translate(786.333333333333,211) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+<text  x="850.714285714286" y="135" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">🧭 Experience</text>
+<rect x="775.714285714286" y="200" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-12" rx="4" ry="4" />
+<g transform="translate(783.714285714286,211) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
   <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
   <path d="M16 3.13a4 4 0 0 1 0 7.75" />
   <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></g>
-<text  x="853.333333333333" y="225" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">@design-reviewer</text>
+<text  x="850.714285714286" y="225" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">@experience-architect</text>
+<rect x="928.571428571429" y="110" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-13" rx="4" ry="4" />
+<g transform="translate(936.571428571429,121) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+  <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+  <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></g>
+<text  x="1003.57142857143" y="135" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">✅ Governance</text>
+<rect x="928.571428571429" y="200" width="130" height="40" fill="#f6f8fa" stroke="#57606a" stroke-width="1.5" id="org-14" rx="4" ry="4" />
+<g transform="translate(936.571428571429,211) scale(0.75)" style="color:#57606a"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+  <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+  <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></g>
+<text  x="1003.57142857143" y="225" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">@design-reviewer</text>
   </svg>
 <figcaption>Source: <code>.github/skills/sheen/SKILL.md</code> (Pillars &amp; Agents table) and each agent's <code>composes.skills</code> frontmatter (skill count per node).</figcaption>
 </figure>
@@ -131,11 +145,12 @@ listed in the table beneath the chart — node labels are abbreviated to fit).
 | 📐 Usability | @ux-designer | 5 |
 | ♿ Accessibility | @accessibility-auditor | 3 |
 | 🗂️ Information Architecture | @information-architect | 4 |
+| 🧭 Experience | @experience-architect | 4 |
 | ✅ Governance | @design-reviewer | 3 |
 
 ## Skill catalog composition
 
-60 skills are organised into 13 categories in
+61 skills are organised into 13 categories in
 `skills/_catalog.md`. This treemap shows the relative size of each
 category — useful for spotting where the catalog is dense (lifecycle /
 operations, governance / meta) versus a single-skill category (security &
@@ -145,72 +160,72 @@ privacy UX).
 <svg viewBox="0 0 640 400" width="640" height="400" role="img"
        aria-labelledby="diagram-title diagram-desc"
        xmlns="http://www.w3.org/2000/svg">
-    <title id="diagram-title">Sheen skill catalog by category (60 skills)</title>
-    <desc id="diagram-desc">Treemap: Sheen skill catalog by category (60 skills)</desc>
+    <title id="diagram-title">Sheen skill catalog by category (61 skills)</title>
+    <desc id="diagram-desc">Treemap: Sheen skill catalog by category (61 skills)</desc>
     <rect x="0" y="0" width="640" height="400" fill="#ffffff" />
-<rect x="0" y="0" width="96" height="400" fill="#0969da" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-0"><rect x="0" y="0" width="96" height="400" /></clipPath>
+<rect x="0" y="0" width="94" height="400" fill="#0969da" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-0"><rect x="0" y="0" width="94" height="400" /></clipPath>
 <g clip-path="url(#tm-clip-0)">
 <text  x="6" y="18" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Governance…</text>
 <text  x="6" y="34" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">9</text>
 </g>
-<rect x="96" y="0" width="544" height="47" fill="#bc4c00" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-1"><rect x="96" y="0" width="544" height="47" /></clipPath>
+<rect x="94" y="0" width="546" height="52" fill="#bc4c00" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-1"><rect x="94" y="0" width="546" height="52" /></clipPath>
 <g clip-path="url(#tm-clip-1)">
-<text  x="102" y="18" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Foundations</text>
-<text  x="102" y="34" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">7</text>
+<text  x="100" y="18" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Lifecycle / operations</text>
+<text  x="100" y="34" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">8</text>
 </g>
-<rect x="96" y="47" width="87" height="353" fill="#1a7f37" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-2"><rect x="96" y="47" width="87" height="353" /></clipPath>
+<rect x="94" y="52" width="87" height="348" fill="#1a7f37" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-2"><rect x="94" y="52" width="87" height="348" /></clipPath>
 <g clip-path="url(#tm-clip-2)">
-<text  x="102" y="65" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Lifecycle…</text>
-<text  x="102" y="81" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">7</text>
+<text  x="100" y="70" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Foundatio…</text>
+<text  x="100" y="86" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">7</text>
 </g>
-<rect x="183" y="47" width="457" height="41" fill="#6e40c9" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-3"><rect x="183" y="47" width="457" height="41" /></clipPath>
+<rect x="181" y="52" width="459" height="40" fill="#6e40c9" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-3"><rect x="181" y="52" width="459" height="40" /></clipPath>
 <g clip-path="url(#tm-clip-3)">
-<text  x="189" y="65" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Extended lifecycle &amp; platform-specific design</text>
+<text  x="187" y="70" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Extended lifecycle &amp; platform-specific design</text>
 </g>
-<rect x="183" y="88" width="91" height="312" fill="#cf222e" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-4"><rect x="183" y="88" width="91" height="312" /></clipPath>
+<rect x="181" y="92" width="92" height="308" fill="#cf222e" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-4"><rect x="181" y="92" width="92" height="308" /></clipPath>
 <g clip-path="url(#tm-clip-4)">
-<text  x="189" y="106" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Component…</text>
-<text  x="189" y="122" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">6</text>
+<text  x="187" y="110" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Components…</text>
+<text  x="187" y="126" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">6</text>
 </g>
-<rect x="274" y="88" width="366" height="26" fill="#0f7b6c" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-5"><rect x="274" y="88" width="366" height="26" /></clipPath>
+<rect x="273" y="92" width="367" height="25" fill="#0f7b6c" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-5"><rect x="273" y="92" width="367" height="25" /></clipPath>
 <g clip-path="url(#tm-clip-5)">
-<text  x="280" y="100" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="9" font-weight="bold" text-anchor="start">Information architecture 5</text>
+<text  x="279" y="104" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="9" font-weight="bold" text-anchor="start">Information architecture 5</text>
 </g>
-<rect x="274" y="114" width="77" height="286" fill="#b83280" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-6"><rect x="274" y="114" width="77" height="286" /></clipPath>
+<rect x="273" y="117" width="77" height="283" fill="#b83280" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-6"><rect x="273" y="117" width="77" height="283" /></clipPath>
 <g clip-path="url(#tm-clip-6)">
-<text  x="280" y="132" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Brand</text>
-<text  x="280" y="148" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">4</text>
+<text  x="279" y="135" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Brand</text>
+<text  x="279" y="151" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">4</text>
 </g>
-<rect x="351" y="114" width="289" height="19" fill="#8a6d3b" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-7"><rect x="351" y="114" width="289" height="19" /></clipPath>
-<rect x="351" y="133" width="105" height="267" fill="#0969da" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-8"><rect x="351" y="133" width="105" height="267" /></clipPath>
+<rect x="350" y="117" width="290" height="19" fill="#8a6d3b" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-7"><rect x="350" y="117" width="290" height="19" /></clipPath>
+<rect x="350" y="136" width="105" height="264" fill="#0969da" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-8"><rect x="350" y="136" width="105" height="264" /></clipPath>
 <g clip-path="url(#tm-clip-8)">
-<text  x="357" y="151" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Mapping / d…</text>
-<text  x="357" y="167" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">4</text>
+<text  x="356" y="154" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Mapping / d…</text>
+<text  x="356" y="170" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">4</text>
 </g>
-<rect x="456" y="133" width="184" height="9" fill="#bc4c00" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-9"><rect x="456" y="133" width="184" height="9" /></clipPath>
-<rect x="456" y="142" width="74" height="258" fill="#1a7f37" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-10"><rect x="456" y="142" width="74" height="258" /></clipPath>
+<rect x="455" y="136" width="185" height="9" fill="#bc4c00" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-9"><rect x="455" y="136" width="185" height="9" /></clipPath>
+<rect x="455" y="145" width="74" height="255" fill="#1a7f37" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-10"><rect x="455" y="145" width="74" height="255" /></clipPath>
 <g clip-path="url(#tm-clip-10)">
-<text  x="462" y="160" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Accessi…</text>
-<text  x="462" y="176" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">2</text>
+<text  x="461" y="163" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Accessi…</text>
+<text  x="461" y="179" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">2</text>
 </g>
-<rect x="530" y="142" width="110" height="9" fill="#6e40c9" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-11"><rect x="530" y="142" width="110" height="9" /></clipPath>
-<rect x="530" y="151" width="110" height="249" fill="#cf222e" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-12"><rect x="530" y="151" width="110" height="249" /></clipPath>
+<rect x="529" y="145" width="111" height="8" fill="#6e40c9" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-11"><rect x="529" y="145" width="111" height="8" /></clipPath>
+<rect x="529" y="153" width="111" height="247" fill="#cf222e" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-12"><rect x="529" y="153" width="111" height="247" /></clipPath>
 <g clip-path="url(#tm-clip-12)">
-<text  x="536" y="169" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Security &amp; p…</text>
-<text  x="536" y="185" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">1</text>
+<text  x="535" y="171" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Security &amp; p…</text>
+<text  x="535" y="187" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">1</text>
 </g>
   </svg>
 <figcaption>Source: <code>skills/_catalog.md</code>, cross-checked against <code>sheen-metadata.json</code>'s <code>counts.skills</code>.</figcaption>
@@ -219,8 +234,8 @@ privacy UX).
 | Category | Skills |
 |---|---|
 | Governance / meta | 9 |
+| Lifecycle / operations | 8 |
 | Foundations | 7 |
-| Lifecycle / operations | 7 |
 | Extended lifecycle & platform-specific design | 7 |
 | Components / UI | 6 |
 | Information architecture | 5 |
@@ -245,44 +260,50 @@ and routed to exactly one agent. This Sankey traces that fan-out: one
     <title id="diagram-title">Prompt routing: pillar keyword match -&gt; agent</title>
     <desc id="diagram-desc">Sankey diagram: Prompt routing: pillar keyword match -&gt; agent</desc>
     <rect x="0" y="0" width="700" height="420" fill="#ffffff" />
-<path d="M 58,215 C 119,215 119,62.5 180,62.5" fill="none" stroke="#0969da" stroke-width="4" stroke-opacity="0.55" />
-<path d="M 198,62.5 C 259,62.5 259,62.5 320,62.5" fill="none" stroke="#bc4c00" stroke-width="4" stroke-opacity="0.55" />
-<path d="M 58,215 C 119,215 119,123.5 180,123.5" fill="none" stroke="#1a7f37" stroke-width="4" stroke-opacity="0.55" />
-<path d="M 198,123.5 C 259,123.5 259,123.5 320,123.5" fill="none" stroke="#6e40c9" stroke-width="4" stroke-opacity="0.55" />
-<path d="M 58,215 C 119,215 119,184.5 180,184.5" fill="none" stroke="#cf222e" stroke-width="4" stroke-opacity="0.55" />
-<path d="M 198,184.5 C 259,184.5 259,184.5 320,184.5" fill="none" stroke="#0f7b6c" stroke-width="4" stroke-opacity="0.55" />
-<path d="M 58,215 C 119,215 119,245.5 180,245.5" fill="none" stroke="#b83280" stroke-width="4" stroke-opacity="0.55" />
-<path d="M 198,245.5 C 259,245.5 259,245.5 320,245.5" fill="none" stroke="#8a6d3b" stroke-width="4" stroke-opacity="0.55" />
-<path d="M 58,215 C 119,215 119,306.5 180,306.5" fill="none" stroke="#0969da" stroke-width="4" stroke-opacity="0.55" />
-<path d="M 198,306.5 C 259,306.5 259,306.5 320,306.5" fill="none" stroke="#bc4c00" stroke-width="4" stroke-opacity="0.55" />
-<path d="M 58,215 C 119,215 119,367.5 180,367.5" fill="none" stroke="#1a7f37" stroke-width="4" stroke-opacity="0.55" />
-<path d="M 198,367.5 C 259,367.5 259,367.5 320,367.5" fill="none" stroke="#6e40c9" stroke-width="4" stroke-opacity="0.55" />
+<path d="M 58,215 C 119,215 119,58 180,58" fill="none" stroke="#0969da" stroke-width="4" stroke-opacity="0.55" />
+<path d="M 198,58 C 259,58 259,58 320,58" fill="none" stroke="#bc4c00" stroke-width="4" stroke-opacity="0.55" />
+<path d="M 58,215 C 119,215 119,110 180,110" fill="none" stroke="#1a7f37" stroke-width="4" stroke-opacity="0.55" />
+<path d="M 198,110 C 259,110 259,110 320,110" fill="none" stroke="#6e40c9" stroke-width="4" stroke-opacity="0.55" />
+<path d="M 58,215 C 119,215 119,162 180,162" fill="none" stroke="#cf222e" stroke-width="4" stroke-opacity="0.55" />
+<path d="M 198,162 C 259,162 259,162 320,162" fill="none" stroke="#0f7b6c" stroke-width="4" stroke-opacity="0.55" />
+<path d="M 58,215 C 119,215 119,214 180,214" fill="none" stroke="#b83280" stroke-width="4" stroke-opacity="0.55" />
+<path d="M 198,214 C 259,214 259,214 320,214" fill="none" stroke="#8a6d3b" stroke-width="4" stroke-opacity="0.55" />
+<path d="M 58,215 C 119,215 119,266 180,266" fill="none" stroke="#0969da" stroke-width="4" stroke-opacity="0.55" />
+<path d="M 198,266 C 259,266 259,266 320,266" fill="none" stroke="#bc4c00" stroke-width="4" stroke-opacity="0.55" />
+<path d="M 58,215 C 119,215 119,318 180,318" fill="none" stroke="#1a7f37" stroke-width="4" stroke-opacity="0.55" />
+<path d="M 198,318 C 259,318 259,318 320,318" fill="none" stroke="#6e40c9" stroke-width="4" stroke-opacity="0.55" />
+<path d="M 58,215 C 119,215 119,370 180,370" fill="none" stroke="#cf222e" stroke-width="4" stroke-opacity="0.55" />
+<path d="M 198,370 C 259,370 259,370 320,370" fill="none" stroke="#0f7b6c" stroke-width="4" stroke-opacity="0.55" />
 <rect x="40" y="40" width="18" height="350" fill="#1f2328" />
 <text  x="34" y="219" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="end">Prompt</text>
-<rect x="180" y="40" width="18" height="45" fill="#1f2328" />
-<text  x="204" y="66.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">🎨 Tokens &amp; System</text>
-<rect x="320" y="40" width="18" height="45" fill="#1f2328" />
-<text  x="344" y="66.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@design-system-architect</text>
-<rect x="180" y="101" width="18" height="45" fill="#1f2328" />
-<text  x="204" y="127.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">🖼️ Brand</text>
-<rect x="320" y="101" width="18" height="45" fill="#1f2328" />
-<text  x="344" y="127.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@brand-steward</text>
-<rect x="180" y="162" width="18" height="45" fill="#1f2328" />
-<text  x="204" y="188.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">📐 Usability</text>
-<rect x="320" y="162" width="18" height="45" fill="#1f2328" />
-<text  x="344" y="188.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@ux-designer</text>
-<rect x="180" y="223" width="18" height="45" fill="#1f2328" />
-<text  x="204" y="249.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">♿ Accessibility</text>
-<rect x="320" y="223" width="18" height="45" fill="#1f2328" />
-<text  x="344" y="249.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@accessibility-auditor</text>
-<rect x="180" y="284" width="18" height="45" fill="#1f2328" />
-<text  x="204" y="310.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">🗂️ Info Architecture</text>
-<rect x="320" y="284" width="18" height="45" fill="#1f2328" />
-<text  x="344" y="310.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@information-architect</text>
-<rect x="180" y="345" width="18" height="45" fill="#1f2328" />
-<text  x="204" y="371.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">✅ Governance</text>
-<rect x="320" y="345" width="18" height="45" fill="#1f2328" />
-<text  x="344" y="371.5" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@design-reviewer</text>
+<rect x="180" y="40" width="18" height="36" fill="#1f2328" />
+<text  x="204" y="62" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">🎨 Tokens &amp; System</text>
+<rect x="320" y="40" width="18" height="36" fill="#1f2328" />
+<text  x="344" y="62" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@design-system-architect</text>
+<rect x="180" y="92" width="18" height="36" fill="#1f2328" />
+<text  x="204" y="114" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">🖼️ Brand</text>
+<rect x="320" y="92" width="18" height="36" fill="#1f2328" />
+<text  x="344" y="114" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@brand-steward</text>
+<rect x="180" y="144" width="18" height="36" fill="#1f2328" />
+<text  x="204" y="166" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">📐 Usability</text>
+<rect x="320" y="144" width="18" height="36" fill="#1f2328" />
+<text  x="344" y="166" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@ux-designer</text>
+<rect x="180" y="196" width="18" height="36" fill="#1f2328" />
+<text  x="204" y="218" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">♿ Accessibility</text>
+<rect x="320" y="196" width="18" height="36" fill="#1f2328" />
+<text  x="344" y="218" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@accessibility-auditor</text>
+<rect x="180" y="248" width="18" height="36" fill="#1f2328" />
+<text  x="204" y="270" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">🗂️ Info Architecture</text>
+<rect x="320" y="248" width="18" height="36" fill="#1f2328" />
+<text  x="344" y="270" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@information-architect</text>
+<rect x="180" y="300" width="18" height="36" fill="#1f2328" />
+<text  x="204" y="322" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">🧭 Experience</text>
+<rect x="320" y="300" width="18" height="36" fill="#1f2328" />
+<text  x="344" y="322" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@experience-architect</text>
+<rect x="180" y="352" width="18" height="36" fill="#1f2328" />
+<text  x="204" y="374" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">✅ Governance</text>
+<rect x="320" y="352" width="18" height="36" fill="#1f2328" />
+<text  x="344" y="374" fill="#1f2328" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">@design-reviewer</text>
   </svg>
 <figcaption>Source: <code>.github/skills/sheen/SKILL.md</code> Pillars &amp; Agents table.</figcaption>
 </figure>
