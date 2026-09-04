@@ -9,11 +9,11 @@
     ]
   },
   "counts": {
-    "skills": 58,
+    "skills": 59,
     "agents": 6,
     "instructions": 10,
     "prompts": 0,
-    "templates": 10,
+    "templates": 12,
     "tokens": {
       "core": 7,
       "semantic": 6,
@@ -24,6 +24,7 @@
     "skills": [
       "accessibility-audit",
       "ai-output-governance",
+      "app-component-catalog",
       "brand-identity",
       "brand-voice-tone",
       "color-contrast-check",
@@ -103,6 +104,8 @@
     ],
     "prompts": [],
     "templates": [
+      "component-entry",
+      "README",
       "brand-guidelines",
       "README",
       "component-spec",
@@ -141,6 +144,16 @@
         "maturity": "stable",
         "description": "Use when reviewing AI-generated UI copy, imagery, or components for bias, hallucination, brand safety, and accessibility compliance. USE FOR: audit AI-generated copy for harmful bias or hallucinated facts, review AI-generated images for brand compliance and representational fairness, flag AI-generated UI components that violate accessibility or token standards, enforce content moderation thresholds before AI output reaches users. DO NOT USE FOR: implementing AI model inference, training data curation, backend ML pipeline design.",
         "hash": "1f6de2c7051be96e820593c263b233bad48912acca688ea890bc1ded4b2e6095"
+      },
+      {
+        "name": "app-component-catalog",
+        "path": "skills/app-component-catalog/SKILL.md",
+        "folder": "skills/app-component-catalog",
+        "category": "design",
+        "pillar": "components",
+        "maturity": "draft",
+        "description": "Audit or generate one application's logical UI component catalog: neutral seed vocabulary, alias normalization, variant-versus-drift findings, and reuse/extend/create selection. USE FOR: app-specific component audits, alias and duplicate normalization, reuse-extend-create selection decisions, logical component metadata and gallery documentation. DO NOT USE FOR: authoring one component's full anatomy spec, multi-component pattern composition, page-layout region catalogs.",
+        "hash": "11cfa68d9a4f6c91fcceab3bd5c2c00fa0ac621aeff2d6fc6e34d7d799a906d6"
       },
       {
         "name": "brand-identity",
@@ -734,7 +747,7 @@
         "pillar": "foundations",
         "maturity": "draft",
         "description": "Token architecture, theming, and component-system coherence for design systems. USE FOR: design or audit semantic token layers, define theming strategies, review component-system coherence, create token migration guides, evaluate design-system adoption plans. DO NOT USE FOR: brand voice or campaign direction, navigation taxonomy, accessibility audits, backend implementation.",
-        "hash": "4a9997fa630a04a5d19d2003c7144dff3e8411703dde68912ae7bf65f532e80e"
+        "hash": "51f8b70eda5b2633146f63ea2f5c0842db3a52d512d27428e4e36ebe3888bd9d"
       },
       {
         "name": "information-architect",

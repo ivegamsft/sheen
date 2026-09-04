@@ -134,6 +134,7 @@ nav:
           - Components:
               - Overview: components/index.md
               - Component Spec Contract: components/component-spec.md
+              - App Component Catalog Template: components/app-component-catalog.md
               - States & Interaction: components/states-interaction.md
               - Pattern Library: components/pattern-library.md
               - Design Handoff: components/handoff.md

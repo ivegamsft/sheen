@@ -11,6 +11,7 @@ composes:
     - theming
     - component-spec
     - design-system-audit
+    - app-component-catalog
   instructions:
     - sheen-10-core-design-principles
     - sheen-20-tokens-naming

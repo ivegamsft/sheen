@@ -29,6 +29,7 @@ Complete catalog as of Phase 3 (SPEC s11).
 
 ## Components / UI
 
+- skills/app-component-catalog/
 - skills/component-spec/
 - skills/design-system-audit/
 - skills/pattern-library/

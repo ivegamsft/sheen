@@ -12,3 +12,4 @@ Primary skills:
 - `ui-states-interaction`
 - `pattern-library`
 - `design-handoff`
+- `app-component-catalog`

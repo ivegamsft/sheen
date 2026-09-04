@@ -179,6 +179,20 @@ whole-repo product audit (`design-audit`)
 · Workflow: inventory tokens/components → compare to contract → report gaps. ·
 Output: audit report. · Pairs: `design-audit`, `design-tokens`.
 
+**`app-component-catalog`** *(components · draft)* — audit or generate one
+application's logical UI component catalog (spec 11, ADR-011).
+· Use for: app-specific component audits, alias/duplicate normalization,
+reuse-extend-create selection, logical component metadata and gallery
+documentation · Not for: a single component's full anatomy spec
+(`component-spec`), multi-component pattern composition (`pattern-library`)
+· Workflow: inventory bindings/usage → group by purpose/alias evidence →
+classify variant vs. drift vs. distinct → select reuse/extend/create against
+placement and data constraints → complete metadata → add to app gallery. ·
+Output: evidence-linked catalog entries (audit) or a new/updated gallery entry
+with selection rationale (generate). · Pairs: `component-spec`,
+`pattern-library`, `design-system-audit`, `information-architecture`,
+`navigation-design`, `responsive-design`; agent `design-system-architect`.
+
 ---
 
 ## Web design & usability

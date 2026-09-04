@@ -1,0 +1,25 @@
+name: "app-component-catalog-routing"
+description: "Routing evaluation — validates trigger activation for app-component-catalog."
+skill: "skills/app-component-catalog/SKILL.md"
+scenarios:
+  - id: "pos-1"
+    input: "Audit our existing checkout screens for duplicate button and card components, normalize their aliases, and flag any implementation drift from the design system."
+    expect_activation: true
+  - id: "pos-2"
+    input: "We need to select or extend a logical component for a new dashboard sidebar region — compare candidates against placement and data constraints before creating anything new."
+    expect_activation: true
+  - id: "pos-3"
+    input: "Document a new logical component's identity, usage rules, composition, and responsive behavior, then add the entry to our app-specific component gallery."
+    expect_activation: true
+  - id: "pos-4"
+    input: "Review our onboarding flow for one-off components that should be reused instead of duplicated, and record the evidence-based catalog findings with recommended actions."
+    expect_activation: true
+  - id: "neg-1"
+    input: "Write the full anatomy, variant matrix, and keyboard interaction spec for a single existing button component."
+    expect_activation: false
+  - id: "neg-2"
+    input: "Document the multi-component composition and anti-patterns for our data-table pattern across the product."
+    expect_activation: false
+  - id: "neg-3"
+    input: "Set up CI pipeline caching and database connection pooling for the backend order service."
+    expect_activation: false

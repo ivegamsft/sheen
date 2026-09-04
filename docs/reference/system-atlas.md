@@ -126,7 +126,7 @@ listed in the table beneath the chart — node labels are abbreviated to fit).
 
 | Pillar | Agent | Composed skills |
 |---|---|---|
-| 🎨 Tokens & System | @design-system-architect | 4 |
+| 🎨 Tokens & System | @design-system-architect | 5 |
 | 🖼️ Brand | @brand-steward | 4 |
 | 📐 Usability | @ux-designer | 4 |
 | ♿ Accessibility | @accessibility-auditor | 3 |
@@ -135,7 +135,7 @@ listed in the table beneath the chart — node labels are abbreviated to fit).
 
 ## Skill catalog composition
 
-58 skills are organised into 13 categories in
+59 skills are organised into 13 categories in
 `skills/_catalog.md`. This treemap shows the relative size of each
 category — useful for spotting where the catalog is dense (lifecycle /
 operations, governance / meta) versus a single-skill category (security &
@@ -145,73 +145,73 @@ privacy UX).
 <svg viewBox="0 0 640 400" width="640" height="400" role="img"
        aria-labelledby="diagram-title diagram-desc"
        xmlns="http://www.w3.org/2000/svg">
-    <title id="diagram-title">Sheen skill catalog by category (58 skills)</title>
-    <desc id="diagram-desc">Treemap: Sheen skill catalog by category (58 skills)</desc>
+    <title id="diagram-title">Sheen skill catalog by category (59 skills)</title>
+    <desc id="diagram-desc">Treemap: Sheen skill catalog by category (59 skills)</desc>
     <rect x="0" y="0" width="640" height="400" fill="#ffffff" />
-<rect x="0" y="0" width="99" height="400" fill="#0969da" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-0"><rect x="0" y="0" width="99" height="400" /></clipPath>
+<rect x="0" y="0" width="98" height="400" fill="#0969da" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-0"><rect x="0" y="0" width="98" height="400" /></clipPath>
 <g clip-path="url(#tm-clip-0)">
-<text  x="6" y="18" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Governance …</text>
+<text  x="6" y="18" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Governance…</text>
 <text  x="6" y="34" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">9</text>
 </g>
-<rect x="99" y="0" width="541" height="48" fill="#bc4c00" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-1"><rect x="99" y="0" width="541" height="48" /></clipPath>
+<rect x="98" y="0" width="542" height="47" fill="#bc4c00" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-1"><rect x="98" y="0" width="542" height="47" /></clipPath>
 <g clip-path="url(#tm-clip-1)">
-<text  x="105" y="18" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Foundations</text>
-<text  x="105" y="34" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">7</text>
+<text  x="104" y="18" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Foundations</text>
+<text  x="104" y="34" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">7</text>
 </g>
-<rect x="99" y="48" width="90" height="352" fill="#1a7f37" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-2"><rect x="99" y="48" width="90" height="352" /></clipPath>
+<rect x="98" y="47" width="88" height="353" fill="#1a7f37" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-2"><rect x="98" y="47" width="88" height="353" /></clipPath>
 <g clip-path="url(#tm-clip-2)">
-<text  x="105" y="66" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Lifecycle…</text>
-<text  x="105" y="82" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">7</text>
+<text  x="104" y="65" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Lifecycle…</text>
+<text  x="104" y="81" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">7</text>
 </g>
-<rect x="189" y="48" width="451" height="42" fill="#6e40c9" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-3"><rect x="189" y="48" width="451" height="42" /></clipPath>
+<rect x="186" y="47" width="454" height="42" fill="#6e40c9" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-3"><rect x="186" y="47" width="454" height="42" /></clipPath>
 <g clip-path="url(#tm-clip-3)">
-<text  x="195" y="66" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Extended lifecycle &amp; platform-specific design</text>
-<text  x="195" y="82" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">7</text>
+<text  x="192" y="65" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Extended lifecycle &amp; platform-specific design</text>
+<text  x="192" y="81" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">7</text>
 </g>
-<rect x="189" y="90" width="81" height="310" fill="#cf222e" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-4"><rect x="189" y="90" width="81" height="310" /></clipPath>
+<rect x="186" y="89" width="78" height="311" fill="#cf222e" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-4"><rect x="186" y="89" width="78" height="311" /></clipPath>
 <g clip-path="url(#tm-clip-4)">
-<text  x="195" y="108" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Informat…</text>
-<text  x="195" y="124" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">5</text>
+<text  x="192" y="107" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Informat…</text>
+<text  x="192" y="123" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">5</text>
 </g>
-<rect x="270" y="90" width="370" height="21" fill="#0f7b6c" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-5"><rect x="270" y="90" width="370" height="21" /></clipPath>
+<rect x="264" y="89" width="376" height="26" fill="#0f7b6c" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-5"><rect x="264" y="89" width="376" height="26" /></clipPath>
 <g clip-path="url(#tm-clip-5)">
-<text  x="276" y="100" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="9" font-weight="bold" text-anchor="start">Brand 4</text>
+<text  x="270" y="101" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="9" font-weight="bold" text-anchor="start">Components / UI 5</text>
 </g>
-<rect x="270" y="111" width="78" height="289" fill="#b83280" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-6"><rect x="270" y="111" width="78" height="289" /></clipPath>
+<rect x="264" y="115" width="79" height="285" fill="#b83280" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-6"><rect x="264" y="115" width="79" height="285" /></clipPath>
 <g clip-path="url(#tm-clip-6)">
-<text  x="276" y="129" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Componen…</text>
-<text  x="276" y="145" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">4</text>
+<text  x="270" y="133" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Brand</text>
+<text  x="270" y="149" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">4</text>
 </g>
-<rect x="348" y="111" width="292" height="20" fill="#8a6d3b" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-7"><rect x="348" y="111" width="292" height="20" /></clipPath>
-<rect x="348" y="131" width="106" height="269" fill="#0969da" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-8"><rect x="348" y="131" width="106" height="269" /></clipPath>
+<rect x="343" y="115" width="297" height="19" fill="#8a6d3b" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-7"><rect x="343" y="115" width="297" height="19" /></clipPath>
+<rect x="343" y="134" width="108" height="266" fill="#0969da" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-8"><rect x="343" y="134" width="108" height="266" /></clipPath>
 <g clip-path="url(#tm-clip-8)">
-<text  x="354" y="149" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Mapping / di…</text>
-<text  x="354" y="165" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">4</text>
+<text  x="349" y="152" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Mapping / di…</text>
+<text  x="349" y="168" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">4</text>
 </g>
-<rect x="454" y="131" width="186" height="9" fill="#bc4c00" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-9"><rect x="454" y="131" width="186" height="9" /></clipPath>
-<rect x="454" y="140" width="74" height="260" fill="#1a7f37" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-10"><rect x="454" y="140" width="74" height="260" /></clipPath>
+<rect x="451" y="134" width="189" height="9" fill="#bc4c00" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-9"><rect x="451" y="134" width="189" height="9" /></clipPath>
+<rect x="451" y="143" width="76" height="257" fill="#1a7f37" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-10"><rect x="451" y="143" width="76" height="257" /></clipPath>
 <g clip-path="url(#tm-clip-10)">
-<text  x="460" y="158" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Accessi…</text>
-<text  x="460" y="174" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">2</text>
+<text  x="457" y="161" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Accessi…</text>
+<text  x="457" y="177" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">2</text>
 </g>
-<rect x="528" y="140" width="112" height="9" fill="#6e40c9" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-11"><rect x="528" y="140" width="112" height="9" /></clipPath>
-<rect x="528" y="149" width="112" height="251" fill="#cf222e" stroke="#ffffff" stroke-width="2" />
-<clipPath id="tm-clip-12"><rect x="528" y="149" width="112" height="251" /></clipPath>
+<rect x="527" y="143" width="113" height="9" fill="#6e40c9" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-11"><rect x="527" y="143" width="113" height="9" /></clipPath>
+<rect x="527" y="152" width="113" height="248" fill="#cf222e" stroke="#ffffff" stroke-width="2" />
+<clipPath id="tm-clip-12"><rect x="527" y="152" width="113" height="248" /></clipPath>
 <g clip-path="url(#tm-clip-12)">
-<text  x="534" y="167" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Security &amp; p…</text>
-<text  x="534" y="183" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">1</text>
+<text  x="533" y="170" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start">Security &amp; pr…</text>
+<text  x="533" y="186" fill="#ffffff" font-family="'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="start">1</text>
 </g>
   </svg>
 <figcaption>Source: <code>skills/_catalog.md</code>, cross-checked against <code>sheen-metadata.json</code>'s <code>counts.skills</code>.</figcaption>
@@ -224,8 +224,8 @@ privacy UX).
 | Lifecycle / operations | 7 |
 | Extended lifecycle & platform-specific design | 7 |
 | Information architecture | 5 |
+| Components / UI | 5 |
 | Brand | 4 |
-| Components / UI | 4 |
 | Web design & usability | 4 |
 | Mapping / discovery | 4 |
 | Content & localization | 2 |

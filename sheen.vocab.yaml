@@ -194,6 +194,11 @@ intents:
     skill: "design-system-audit"
     agent: "design-reviewer"
     discriminator: "audit-report"
+  - intent: "app-component-catalog"
+    keywords: ["component-catalog", "component-gallery", "logical-component", "reuse-extend-create"]
+    skill: "app-component-catalog"
+    agent: "design-system-architect"
+    discriminator: "component-spec"
   - intent: "component-spec"
     keywords: ["component-spec", "component-anatomy", "spec"]
     skill: "component-spec"

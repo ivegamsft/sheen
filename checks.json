@@ -79,7 +79,7 @@
       },
       {
         "id": "aria-keyboard-present",
-        "applies_to": ["templates/component-spec/**", "skills/**/templates/**"],
+        "applies_to": ["templates/component-spec/**", "templates/app-component-catalog/**", "skills/**/templates/**"],
         "description": "A component-spec / ui-states artifact missing an ARIA role/keyboard section (spec 08 s2.2)."
       },
       {
