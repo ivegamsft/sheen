@@ -90,6 +90,7 @@ nav:
       - Adopting Tokens: guides/adopting-tokens.md
       - Experience Blueprints: guides/experience-blueprints.md
       - App Component Catalogs: guides/app-component-catalogs.md
+      - App Layout Catalogs: guides/app-layout-catalogs.md
       - Upgrading sheen: guides/upgrading-sheen.md
       - Authoring a Skill: guides/authoring-a-skill.md
   - Prompt Guide:
@@ -165,6 +166,7 @@ nav:
       - "ADR-009: Surface-Scoped Instructions": decisions/adr-009-surface-scoped-instructions.md
       - "ADR-010: Experience Blueprint": decisions/adr-010-experience-blueprint-agent-contract.md
       - "ADR-011: App Component Catalog": decisions/adr-011-app-component-catalog.md
+      - "ADR-012: App Layout Catalog": decisions/adr-012-app-layout-catalog.md
       - "AUDIT-001: Spec Gap Audit": decisions/spec-gap-audit-2026-08-16.md
   - Support:
       - FAQ: support/faq.md

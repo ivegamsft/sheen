@@ -17,6 +17,7 @@ the contract implementers must satisfy. No assets are implemented yet.
 | 09 | [Router contract](09-router-contract.spec.md) | Router skill shape, `sheen.vocab.yaml` schema, five-step disambiguation chain |
 | 10 | [Experience Blueprint](10-experience-blueprint.spec.md) | Audit/generate modes, artifact model, archetypes, orchestration, validation |
 | 11 | [App Component Catalog](11-app-component-catalog.spec.md) | Logical component selection, placement, composition, gallery, audit/generate behavior |
+| 12 | [App Layout Catalog](12-app-layout-catalog.spec.md) | Logical layout selection, regions, navigation/IA placement, component constraints, gallery |
 
 ## Conventions used in these specs
 

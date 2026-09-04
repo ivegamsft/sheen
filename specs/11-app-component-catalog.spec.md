@@ -291,7 +291,7 @@ When determining proper usage and placement, the agent MUST:
 
 - **Experience Blueprint (Spec 10):** supplies audiences, tasks, archetypes,
   IA, pages, layouts, wireframes, navigation, and flows.
-- **App Layout Catalog (issue #170):** defines logical regions and the
+- **App Layout Catalog (Spec 12):** defines logical regions and the
   component roles those regions accept.
 - **Shared component inventory:** identifies reusable upstream component
   concepts and maturity.

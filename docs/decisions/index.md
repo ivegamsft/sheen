@@ -19,6 +19,7 @@ chosen direction — so future contributors understand *why* the system is shape
 | [ADR-009](adr-009-surface-scoped-instructions.md) | Copilot instructions are scoped to design and UI surfaces | 2026-08-31 | Accepted |
 | [ADR-010](adr-010-experience-blueprint-agent-contract.md) | Experience Blueprint as agent contract and orchestrator | 2026-09-04 | Accepted |
 | [ADR-011](adr-011-app-component-catalog.md) | Neutral seed plus app-specific logical component gallery | 2026-09-04 | Accepted |
+| [ADR-012](adr-012-app-layout-catalog.md) | Neutral layout seeds plus app-specific logical gallery | 2026-09-04 | Accepted |
 | [AUDIT-001](spec-gap-audit-2026-08-16.md) | Spec gap audit — all specs vs implementation | 2026-08-16 | Published |
 
 ## Conventions

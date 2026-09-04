@@ -153,7 +153,8 @@ The IA artifact MUST define:
 
 ### 6.5 Layouts
 
-Each layout specification MUST define:
+Each layout specification MUST follow the App Layout Catalog contract in
+Spec 12 and define:
 
 - layout ID, purpose, and compatible archetypes;
 - named regions and reading order;
