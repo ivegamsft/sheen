@@ -302,7 +302,7 @@ The orchestrator MUST delegate domain work:
 | IA and navigation | `information-architecture`, `navigation-design`, `taxonomy` |
 | Layout and page structure | `layout-grid-spacing`, `responsive-design`, `content-hierarchy` |
 | Wireframes and journeys | `wireframing`, `ux` templates, `user-research` |
-| Components and patterns | `component-spec`, `pattern-library`, `ui-states-interaction` |
+| Components and patterns | App Component Catalog (Spec 11), `component-spec`, `pattern-library`, `ui-states-interaction` |
 | Audit and quality | `design-audit`, `design-system-audit`, `web-usability-review` |
 | Accessibility and secure UX | `accessibility-audit`, `secure-ux` |
 | Direction selection | `design-exploration`, `design-debate` |

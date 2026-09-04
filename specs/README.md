@@ -16,6 +16,7 @@ the contract implementers must satisfy. No assets are implemented yet.
 | 08 | [Standards & conformance](08-standards-conformance.spec.md) | WCAG/W3C, ISO, OWASP + i18n/privacy mapped to enforcing assets |
 | 09 | [Router contract](09-router-contract.spec.md) | Router skill shape, `sheen.vocab.yaml` schema, five-step disambiguation chain |
 | 10 | [Experience Blueprint](10-experience-blueprint.spec.md) | Audit/generate modes, artifact model, archetypes, orchestration, validation |
+| 11 | [App Component Catalog](11-app-component-catalog.spec.md) | Logical component selection, placement, composition, gallery, audit/generate behavior |
 
 ## Conventions used in these specs
 

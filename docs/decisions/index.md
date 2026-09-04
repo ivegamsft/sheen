@@ -18,6 +18,7 @@ chosen direction — so future contributors understand *why* the system is shape
 | [ADR-008](adr-008-aesthetic-direction-generated-artifact.md) | AESTHETIC-DIRECTION.md as a second generated consumer artifact | 2026-08-30 | Accepted |
 | [ADR-009](adr-009-surface-scoped-instructions.md) | Copilot instructions are scoped to design and UI surfaces | 2026-08-31 | Accepted |
 | [ADR-010](adr-010-experience-blueprint-agent-contract.md) | Experience Blueprint as agent contract and orchestrator | 2026-09-04 | Accepted |
+| [ADR-011](adr-011-app-component-catalog.md) | Neutral seed plus app-specific logical component gallery | 2026-09-04 | Accepted |
 | [AUDIT-001](spec-gap-audit-2026-08-16.md) | Spec gap audit — all specs vs implementation | 2026-08-16 | Published |
 
 ## Conventions
