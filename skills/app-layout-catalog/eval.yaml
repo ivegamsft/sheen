@@ -1,0 +1,25 @@
+name: "app-layout-catalog-routing"
+description: "Routing evaluation — validates trigger activation for app-layout-catalog."
+skill: "skills/app-layout-catalog/SKILL.md"
+scenarios:
+  - id: "pos-audit-page-templates"
+    input: "Audit our checkout, account, and reports pages to find which ones share a real logical layout, which are structural drift, and document a normalized app layout catalog with evidence."
+    expect_activation: true
+  - id: "pos-select-layout-for-new-page"
+    input: "We're adding a new inventory review page — search the app layout catalog for a master-detail or dashboard layout that fits before we invent a new page structure."
+    expect_activation: true
+  - id: "pos-extend-vs-new-layout"
+    input: "Decide whether the new bulk-approval screen can extend our existing operational workbench layout or whether it needs a new logical layout, and document region and navigation placement either way."
+    expect_activation: true
+  - id: "pos-gallery-documentation"
+    input: "Document the region map, IA level, component-role constraints, and responsive behavior for our detail-layout entry and add it to the app-specific layout gallery."
+    expect_activation: true
+  - id: "neg-single-component-spec"
+    input: "Write a complete component spec for a segmented control including anatomy, states, and keyboard behavior."
+    expect_activation: false
+  - id: "neg-token-theming"
+    input: "Define the semantic color tokens and dark-theme mapping for our design system."
+    expect_activation: false
+  - id: "neg-framework-implementation"
+    input: "Implement the checkout page using CSS Grid in our React app and wire up the routing."
+    expect_activation: false

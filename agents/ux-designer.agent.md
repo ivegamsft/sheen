@@ -11,6 +11,7 @@ composes:
     - ui-states-interaction
     - web-usability-review
     - responsive-design
+    - app-layout-catalog
   instructions:
     - sheen-10-core-design-principles
     - sheen-30-components-states

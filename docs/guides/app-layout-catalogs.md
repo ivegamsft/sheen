@@ -116,4 +116,7 @@ navigation, responsive, and accessibility guidance remains required.
 - An **implementation binding** realizes the layout in downstream technology.
 
 The normative behavior, metadata, workflows, and acceptance criteria are in
-`specs/12-app-layout-catalog.spec.md`.
+`specs/12-app-layout-catalog.spec.md`. The `app-layout-catalog` skill
+(composed by the `ux-designer` agent) implements this workflow; starter
+templates for a logical layout entry, an audit finding, and worked
+reuse/extend/create scenarios are in `skills/app-layout-catalog/templates/`.

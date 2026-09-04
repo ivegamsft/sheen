@@ -7,6 +7,15 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+### Added
+
+- **`app-layout-catalog` skill** — implements
+  `specs/12-app-layout-catalog.spec.md`: audits an application's pages into a
+  normalized, evidence-linked catalog of logical layouts, and generates
+  layout selections (reuse/extend/create) with complete region, navigation,
+  component-role, styling, data, responsive, and accessibility metadata.
+  Composed by `ux-designer`. Closes #170, #177, #178, #179, #180.
+
 ## [0.11.1] — 2026-09-01
 
 | Field | Value |

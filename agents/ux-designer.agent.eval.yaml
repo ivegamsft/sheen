@@ -14,6 +14,9 @@ scenarios:
   - id: "pos-coordinate-ux-skills"
     input: "Coordinate wireframing, UI states, web usability review, and responsive design into one execution plan."
     expect_activation: true
+  - id: "pos-app-layout-catalog"
+    input: "Audit our page templates into a normalized app layout catalog, then select the right layout with correct region and navigation placement for a new inventory page."
+    expect_activation: true
   - id: "neg-brand-standards"
     input: "Codify brand identity principles, logo placement, and imagery style for a launch microsite."
     expect_activation: false

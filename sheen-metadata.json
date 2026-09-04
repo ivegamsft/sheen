@@ -9,7 +9,7 @@
     ]
   },
   "counts": {
-    "skills": 59,
+    "skills": 60,
     "agents": 6,
     "instructions": 10,
     "prompts": 0,
@@ -25,6 +25,7 @@
       "accessibility-audit",
       "ai-output-governance",
       "app-component-catalog",
+      "app-layout-catalog",
       "brand-identity",
       "brand-voice-tone",
       "color-contrast-check",
@@ -154,6 +155,16 @@
         "maturity": "draft",
         "description": "Audit or generate one application's logical UI component catalog: neutral seed vocabulary, alias normalization, variant-versus-drift findings, and reuse/extend/create selection. USE FOR: app-specific component audits, alias and duplicate normalization, reuse-extend-create selection decisions, logical component metadata and gallery documentation. DO NOT USE FOR: authoring one component's full anatomy spec, multi-component pattern composition, page-layout region catalogs.",
         "hash": "11cfa68d9a4f6c91fcceab3bd5c2c00fa0ac621aeff2d6fc6e34d7d799a906d6"
+      },
+      {
+        "name": "app-layout-catalog",
+        "path": "skills/app-layout-catalog/SKILL.md",
+        "folder": "skills/app-layout-catalog",
+        "category": "design",
+        "pillar": "components",
+        "maturity": "draft",
+        "description": "Use when auditing or generating an application-specific catalog of logical page layouts, mapping pages to layouts, or selecting a layout's regions, navigation placement, and component-role constraints. USE FOR: app layout catalog audits, page-to-layout mapping and variant-vs-drift normalization, layout reuse/extend/create selection, app layout gallery documentation. DO NOT USE FOR: single component anatomy specs, visual theme/token styling, framework/grid/DOM implementation choices.",
+        "hash": "88b6a2b6459e1939f23fdfa6776d103ec92be527bca9638b34831762f1424f7d"
       },
       {
         "name": "brand-identity",
@@ -763,7 +774,7 @@
         "pillar": "usability",
         "maturity": "draft",
         "description": "User journeys, interaction states, and usability optimization for web and app surfaces. USE FOR: design or critique user flows and wireframes, define interaction and component states, run usability reviews against heuristics, evaluate responsive layout strategies, coordinate usability research findings into design decisions. DO NOT USE FOR: brand identity campaigns, token naming, accessibility WCAG audits, backend implementation.",
-        "hash": "cedbc9144228fbc1e8c9c0a97178e6aa5b4d937c70fb3a586212562e4ef7cff6"
+        "hash": "96ea7db6948055c47370e4e78a8e12738df2c4cf17e7bacfb5ad15c83bfb2b72"
       }
     ],
     "instructions": [

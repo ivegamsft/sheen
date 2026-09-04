@@ -244,3 +244,8 @@ intents:
     skill: "i18n-framework-mapping"
     agent: "information-architect"
     discriminator: "content-spec"
+  - intent: "app-layout-catalog"
+    keywords: ["layout-catalog", "app-layout", "page-layout", "region-role"]
+    skill: "app-layout-catalog"
+    agent: "ux-designer"
+    discriminator: "wireframe"
