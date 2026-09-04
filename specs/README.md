@@ -15,6 +15,7 @@ the contract implementers must satisfy. No assets are implemented yet.
 | 07 | [Skill catalog](07-skill-catalog.spec.md) | Per-skill spec for every skill in the catalog |
 | 08 | [Standards & conformance](08-standards-conformance.spec.md) | WCAG/W3C, ISO, OWASP + i18n/privacy mapped to enforcing assets |
 | 09 | [Router contract](09-router-contract.spec.md) | Router skill shape, `sheen.vocab.yaml` schema, five-step disambiguation chain |
+| 10 | [Experience Blueprint](10-experience-blueprint.spec.md) | Audit/generate modes, artifact model, archetypes, orchestration, validation |
 
 ## Conventions used in these specs
 

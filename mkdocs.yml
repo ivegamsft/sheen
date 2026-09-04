@@ -88,6 +88,7 @@ nav:
       - Skill / Agent / Instruction Usage: guides/asset-usage.md
       - .sheen.yml Guide: guides/sheen-yml.md
       - Adopting Tokens: guides/adopting-tokens.md
+      - Experience Blueprints: guides/experience-blueprints.md
       - Upgrading sheen: guides/upgrading-sheen.md
       - Authoring a Skill: guides/authoring-a-skill.md
   - Prompt Guide:
@@ -161,6 +162,7 @@ nav:
       - "ADR-007: Populated Catalog Drift Prevention": decisions/adr-007-populated-catalog-drift-prevention.md
       - "ADR-008: Aesthetic Direction Generated Artifact": decisions/adr-008-aesthetic-direction-generated-artifact.md
       - "ADR-009: Surface-Scoped Instructions": decisions/adr-009-surface-scoped-instructions.md
+      - "ADR-010: Experience Blueprint": decisions/adr-010-experience-blueprint-agent-contract.md
       - "AUDIT-001: Spec Gap Audit": decisions/spec-gap-audit-2026-08-16.md
   - Support:
       - FAQ: support/faq.md

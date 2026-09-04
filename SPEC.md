@@ -9,7 +9,8 @@
 >
 > **Detailed specs:** see [`specs/`](specs/README.md) — token system (01), skill
 > contract (02), agent contract (03), instruction layers (04), validation (05),
-> consumption/sync (06), and the per-skill catalog (07).
+> consumption/sync (06), per-skill catalog (07), standards (08), router (09),
+> and Experience Blueprint (10).
 
 ---
 
