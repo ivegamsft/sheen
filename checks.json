@@ -19,6 +19,12 @@
   "rules": {
     "error": [
       {
+        "id": "theme-lifecycle-scenarios",
+        "applies_to": ["skills/theming/**", "tests/fixtures/theme-lifecycle/**", "scripts/test-theme-lifecycle.ps1"],
+        "description": "Illustrative T01-T14 evidence-to-decision assertions and incorrect-output rejection; not rendered quality or downstream schema validation.",
+        "script": "scripts/test-theme-lifecycle"
+      },
+      {
         "id": "frontmatter-complete",
         "applies_to": ["skills/**/SKILL.md", "agents/*.agent.md", "instructions/*.instructions.md"],
         "description": "Every asset has all required frontmatter fields per specs 02-04.",

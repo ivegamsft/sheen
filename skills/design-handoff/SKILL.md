@@ -21,6 +21,9 @@ Package design artifacts for engineering execution.
 3. Produce decision-ready artifacts using this lifecycle method.
 4. Validate compatibility with design system, accessibility, and governance.
 5. Sequence next actions with owners, dependencies, and risk notes.
+6. For theme changes, carry `theming`'s exact revision, scoped decision,
+   readiness evidence, separate change authorization, affected catalog entries,
+   and recovery intent. Missing rights produce a bounded handoff, not application.
 
 ## Guardrails
 - Do not make directional claims without evidence collection.
@@ -35,3 +38,4 @@ Package design artifacts for engineering execution.
 ## Delegates / pairs with
 - component-spec
 - design-tokens
+- theming

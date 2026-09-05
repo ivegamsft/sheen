@@ -58,13 +58,20 @@ Not for: component-level state transitions (`ui-states-interaction`)
 · Output: `tokens/core/motion|elevation|materials`. · Pairs: `theming`,
 `component-spec`.
 
-**`theming`** *(foundations · stable)* — build and validate light/dark/
-high-contrast/brand themes.
-· Use for: add a theme, override semantic tokens, ensure theme completeness · Not
-for: creating new semantic keys (`design-tokens`)
-· Workflow: clone semantic base → override values → run completeness + contrast
-gates. · Output: `tokens/themes/**`. · Pairs: `color-system`,
-`color-contrast-check`; agent `design-system-architect`.
+**`theming`** *(foundations · stable)* — coordinate app-specific theme lifecycle
+audit and generation (Spec 13).
+· Use for: discover/compare candidates, reuse scoped approved selections,
+semantic overrides/completeness, readiness, custom revision and drift audit.
+· Not for: new semantic keys (`design-tokens`), brand-only identity, reporting.
+· Workflow: inventory authority → comparable previews → scoped selection and
+applicability → readiness/impact/recovery → separately authorized application
+and review; preserve predecessor history.
+· Output: downstream-owned candidate, decision, evidence, application and audit
+records; no prescribed downstream format. · Pairs: `brand-identity`,
+`design-exploration`, `design-debate`, `typography`, `font-mapping`,
+`design-tokens`, `color-system`, `color-contrast-check`, `accessibility-audit`,
+`design-review`, `visual-regression`, `design-handoff`, `design-to-code`,
+`experience-blueprint`; agent `design-system-architect`.
 
 ---
 

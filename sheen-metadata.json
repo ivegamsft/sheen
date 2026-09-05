@@ -202,7 +202,7 @@
         "pillar": "a11y",
         "maturity": "stable",
         "description": "Use when validating color pair contrast ratios for accessibility compliance or theme readiness. USE FOR: contrast ratio checks, theme pair validation, wcag contrast triage. DO NOT USE FOR: full accessibility audits, navigation IA design.",
-        "hash": "770959a643d2d47911126aea76117906667215600107c905e1af29d47b4bd7e7"
+        "hash": "a47251bbc559b8fa5349219c96b32eec37fadec96b5dccc395c61eecf0fb14ff"
       },
       {
         "name": "color-system",
@@ -342,7 +342,7 @@
         "pillar": "lifecycle",
         "maturity": "stable",
         "description": "Use when packaging and preparing design artifacts for engineering handoff, including redlines, annotations, and token exports. USE FOR: engineering handoff packaging, redline and annotation bundling, token/spec export preparation. DO NOT USE FOR: authoring core component specs, backend implementation.",
-        "hash": "3d2bd3dc66bed70fa133405586e39c686c2660b304bebeb123ff95a01e67053a"
+        "hash": "596ebdc61d97a130cb919298b348ecc2adeade87b787eb344b0c9fef8b2bd962"
       },
       {
         "name": "design-review",
@@ -352,7 +352,7 @@
         "pillar": "governance",
         "maturity": "stable",
         "description": "Use when critiquing a design artifact against principles, craft standards, or system guidelines. USE FOR: artifact critique, principle-based review, craft issue identification. DO NOT USE FOR: multi-option debate facilitation, full repo audits.",
-        "hash": "7030e58ad6cf8f0a9d6d8f2c245ae2aa3e1bc62d962545a9c80b359b68ce8860"
+        "hash": "bce20b200041699abb29fab733ca07db6e1db3a22c97e5336d39491bf3731f8d"
       },
       {
         "name": "design-sprint",
@@ -452,7 +452,7 @@
         "pillar": "lifecycle",
         "maturity": "draft",
         "description": "Implementation-neutral orchestrator for a product's end-to-end UI/UX contract. USE FOR: audit an existing application's full experience and produce evidence-backed findings, generate a new experience from a product brief and archetype, coordinate brand/voice/IA/layout/page/flow specialists into one coherent contract, validate cross-artifact relationships and state coverage, produce a source-linked handoff for implementation. DO NOT USE FOR: brand-only identity work (brand-identity), IA-only sitemap/taxonomy work (information-architecture), single-component specification (component-spec), app-specific component or layout gallery maintenance alone (app-component-catalog, app-layout-catalog), writing runtime UI code (design-to-code, frontend-dev).",
-        "hash": "5616f84fe0e8f86cc7557c664f43f190d77337d8a464dd0b67bb77dc6d9f1674"
+        "hash": "ef58f7d5a79430aca2dac5a18c2a956fd8dafad22a6178e5dd061dd2f621fc77"
       },
       {
         "name": "font-mapping",
@@ -462,7 +462,7 @@
         "pillar": "mapping",
         "maturity": "beta",
         "description": "Use when inventorying font usage in a codebase to map weights, styles, and sizes to type token candidates. USE FOR: font usage inventory, weight/style mapping, type token candidate mapping. DO NOT USE FOR: new typography scale creation, a11y conformance statements.",
-        "hash": "834f71174b0f8602f29f4f60c39092e8835374533672235320b6b99fbd03b757"
+        "hash": "aa70943736aa8a9df532650a349f766758ee0de35f5dbf956dc88bd1206d5e0e"
       },
       {
         "name": "i18n-framework-mapping",
@@ -661,8 +661,8 @@
         "category": "foundation",
         "pillar": "foundations",
         "maturity": "stable",
-        "description": "Use when creating new themes, applying semantic token overrides, or validating theme completeness. USE FOR: new theme creation, semantic overrides, theme completeness validation. DO NOT USE FOR: new semantic key creation, brand voice guidance.",
-        "hash": "3440e9cd2b7ce0ff312405518cddee6f1ba1e96724c4237c0c0f00f679ce705b"
+        "description": "Use when auditing or generating app-specific themes through comparable previews, scoped selection, and application readiness. USE FOR: theme candidate discovery and comparison, approved theme selection reuse, semantic overrides and theme completeness, custom theme creation and revision, theme application readiness and drift audit. DO NOT USE FOR: new semantic key creation, brand-only identity or voice guidance, reporting or chart generation, full accessibility audits.",
+        "hash": "dbb12f0ca06b1c7dbbcb4f9a11f3c5d5ef87b52276e947e04f5be08db3311d90"
       },
       {
         "name": "typography",
@@ -672,7 +672,7 @@
         "pillar": "foundations",
         "maturity": "stable",
         "description": "Use when defining a type ramp, font pairing rules, or mapping text roles to type tokens. USE FOR: type ramp definition, font pairing, text role mapping. DO NOT USE FOR: font inventory mapping, full usability audits.",
-        "hash": "1b73b1ecc84aa6228866e89dd0f837ebe73f8a548d769d6b961a70fb5ede3aef"
+        "hash": "5b875f339b57df810b8c4c3c87ab6f639bdc0f61a10d4e3487b6cd8298f20231"
       },
       {
         "name": "ui-states-interaction",
@@ -776,7 +776,7 @@
         "pillar": "foundations",
         "maturity": "draft",
         "description": "Token architecture, theming, and component-system coherence for design systems. USE FOR: design or audit semantic token layers, define theming strategies, review component-system coherence, create token migration guides, evaluate design-system adoption plans. DO NOT USE FOR: brand voice or campaign direction, navigation taxonomy, accessibility audits, backend implementation.",
-        "hash": "51f8b70eda5b2633146f63ea2f5c0842db3a52d512d27428e4e36ebe3888bd9d"
+        "hash": "add3d1c65ccacfaf0f5a15fb1b666e9e52025fee374dfac3f57c509f9817bb69"
       },
       {
         "name": "experience-architect",

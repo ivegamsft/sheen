@@ -3,8 +3,9 @@
 > Normative target behavior for comparable theme previews, scoped selection,
 > application readiness, and custom-theme generation and revision.
 >
-> Status: **Draft v0.1 - proposed; implementation tracked by #190 and #191-#195.**
-> This document does not claim that the lifecycle enhancements are implemented.
+> Status: **Implemented agent contracts and illustrative scenario checks.**
+> Tracked by #190 and #191-#195. Downstream rendering, dogfood validation, and
+> authorized application remain environment-specific, not claimed by these checks.
 
 ## 1. Purpose and decision
 
@@ -313,5 +314,11 @@ behavior from implemented capability. Updated implementation assets MUST use
 existing repository checks and regenerate related metadata/catalog/atlas
 artifacts when those assets change.
 
-This specification PR creates the contract and backlog only. It MUST NOT
-close the epic or implementation issues merely because the spec is published.
+The existing [theming skill](../skills/theming/SKILL.md) implements this contract
+with a shared [lifecycle reference](../skills/theming/references/lifecycle-contract.md)
+and [record worksheet](../skills/theming/templates/lifecycle-record.md).
+[T01-T14 evidence](../tests/fixtures/theme-lifecycle/README.md) and
+[downstream guidance](../docs/guides/theme-lifecycle.md) distinguish executable
+illustrative decisions from routing scores, real visual evidence, and product
+deployment. Epic #190 tracks review/closeout; publishing this spec or passing
+synthetic checks alone does not establish downstream visual readiness.

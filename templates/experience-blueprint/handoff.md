@@ -23,6 +23,7 @@ incomplete.
 | Section | Source (artifact/evidence/decision ID) |
 |---|---|
 | Brand and voice | |
+| Selected theme identity/revision, scoped decision and readiness evidence | |
 | IA and navigation | |
 | Layouts | |
 | Pages and states | |
@@ -38,6 +39,10 @@ build it:
 - Outstanding design decisions or unresolved questions.
 - Specialist artifacts not yet produced (e.g., component specs, tokens).
 - Data, content, or integration dependencies referenced by pages/flows.
+- Theme application authorization boundary, affected component/layout catalog
+  references, unresolved readiness evidence, and migration/recovery owner.
+  Reference `theming` records; do not duplicate a theme catalog or treat selection
+  as permission to change or deploy the target.
 - Recommended next skill/agent (e.g., `design-handoff`, `design-to-code`,
   `frontend-dev`) — the downstream chooses the actual implementation path.
 

@@ -122,6 +122,16 @@ jobs:
       - name: Validate - metadata drift
         run: pwsh -NonInteractive -File scripts/build-metadata.ps1 -Check
 
+      - name: Validate - theme lifecycle worked contracts (T01-T14)
+        run: pwsh -NonInteractive -File scripts/test-theme-lifecycle.ps1 -OutFile dist/theme-lifecycle-evidence.json
+
+      - name: Upload - illustrative theme lifecycle evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: theme-lifecycle-evidence
+          path: dist/theme-lifecycle-evidence.json
+          retention-days: 7
+
       - name: Validate - Experience Blueprint contract checks (#169)
         run: |
           pwsh -NonInteractive -File scripts/audit-experience-blueprint.ps1 -Path tests/fixtures/experience-blueprints/valid-sample.json

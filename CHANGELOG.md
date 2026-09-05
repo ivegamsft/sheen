@@ -9,6 +9,15 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ### Added
 
+- **App-specific theme lifecycle** — extended existing `theming` with comparable
+  candidate previews, exact-revision scoped selection and approval reuse,
+  semantic/font/accessibility/capability readiness, authorized application and
+  recovery, custom reuse/extend/create history, and evidence-backed variant/drift
+  audit. Added shared records, architect/Blueprint handoff integration, downstream
+  guidance, and executable illustrative T01-T14 decisions in CI (#191–#195).
+  Synthetic fixtures and routing checks do not claim downstream rendered
+  quality, dogfood validation, or deployment. No new skill, preset collection,
+  runtime adapter, or downstream schema requirement.
 - **Experience Blueprint orchestrator** — added the `experience-blueprint`
   skill and `experience-architect` agent implementing
   `specs/10-experience-blueprint.spec.md`: an implementation-neutral

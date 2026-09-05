@@ -21,6 +21,9 @@ Inventory and map fonts to typography tokens.
 3. Flag collisions and ambiguities requiring adjudication.
 4. Quantify coverage and prioritize unresolved gaps.
 5. Deliver a migration-ready mapping table with next actions.
+6. For theme readiness, inventory target availability, permitted use, required
+   scripts/weights/styles, and authorized fallback evidence by revision/scope.
+   Keep unknown permission/coverage blocking; never install tools or fonts silently.
 
 ## Guardrails
 - Do not infer mappings without traceable source evidence.
@@ -35,3 +38,4 @@ Inventory and map fonts to typography tokens.
 ## Delegates / pairs with
 - typography
 - design-audit
+- theming

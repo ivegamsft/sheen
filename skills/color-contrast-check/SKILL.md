@@ -21,6 +21,11 @@ Check semantic/theme color contrast against WCAG thresholds.
 3. Define remediations with implementation intent and user impact.
 4. Verify keyboard/screen-reader and contrast behavior expectations.
 5. Produce conformance-oriented issues with severity and ownership.
+6. For theme readiness, return revision/scope-specific measurements for actual
+   required pairs/modes/states: normal text AA 4.5:1, large text and applicable
+   non-text information 3:1. Record stricter criteria, exemptions, and non-color
+   cues; failed or unknown mandatory checks block readiness. Palette pairs alone
+   are not whole-artifact WCAG conformance.
 
 ## Guardrails
 - Do not claim compliance without criterion-level evidence.

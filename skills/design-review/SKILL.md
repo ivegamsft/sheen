@@ -29,6 +29,9 @@ Run craft-bar reviews for a single artifact or flow.
 - Do not conflate style preference with contractual requirement.
 - Do not review generic placeholder content alone when representative
   content is available.
+- Theme reviews return exact-revision/scope evidence to `theming`; a structural
+  fallback review does not clear required visual-evidence gates. Record actual
+  changed targets on failure, and never treat a selected theme as write authority.
 - Do not perform more than one revision pass inside this workflow; escalate
   further concerns instead of looping indefinitely.
 

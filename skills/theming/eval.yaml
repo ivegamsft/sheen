@@ -14,6 +14,18 @@ scenarios:
   - id: "pos-cross-theme-mapping"
     input: "Produce cross-theme mappings and exception notes for high-contrast and dark mode adoption."
     expect_activation: true
+  - id: "pos-comparable-previews"
+    input: "Compare two theme candidates on the same queue content, long action labels, focus states, and required dark mode; show revision and preview limitations."
+    expect_activation: true
+  - id: "pos-approved-theme-reuse"
+    input: "Reuse our approved theme selection for the same application scope after checking its exact revision, brand constraints, and evidence are still applicable."
+    expect_activation: true
+  - id: "pos-readiness-blocked"
+    input: "Assess theme application readiness: the heading font is unavailable and one required error state fails contrast; prepare a bounded handoff without changing files."
+    expect_activation: true
+  - id: "pos-custom-revision-audit"
+    input: "Audit custom theme drift against accepted variants, then propose a justified revision with affected consumers, predecessor history, and recovery guidance."
+    expect_activation: true
   - id: "neg-new-semantic-key"
     input: "Invent a new semantic token key and update the primitive token schema."
     expect_activation: false
@@ -22,4 +34,13 @@ scenarios:
     expect_activation: false
   - id: "neg-accessibility-audit"
     input: "Run a full WCAG audit of keyboard navigation, ARIA labels, and screen reader announcements."
+    expect_activation: false
+  - id: "neg-brand-only"
+    input: "Define our product brand personality and imagery principles without selecting or applying an application theme."
+    expect_activation: false
+  - id: "neg-reporting-only"
+    input: "Render a revenue trend line chart for a documentation report with the existing diagram renderer; do not change application styling."
+    expect_activation: false
+  - id: "neg-backend-query"
+    input: "Optimize the database query for the task queue API and add an index to reduce request latency."
     expect_activation: false

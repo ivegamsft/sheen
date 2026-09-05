@@ -35,6 +35,8 @@ as one traceable model. Implements `specs/10-experience-blueprint.spec.md`.
 7. Produce a source-linked summary and handoff
    (`templates/experience-blueprint/handoff.md`) in the downstream's chosen
    representation.
+   Reference the selected theme revision, decision/readiness evidence and affected
+   catalog entries from `theming`; do not reproduce its catalog or infer write rights.
 
 ## Guardrails
 - Do not reimplement brand, IA, accessibility, component, or frontend

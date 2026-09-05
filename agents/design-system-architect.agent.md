@@ -33,6 +33,11 @@ Owns decisions in the foundations mandate and coordinates composed skills to del
 2. Select the minimum composed skills needed for the request.
 3. Sequence skills to produce evidence first, recommendations second.
 4. Synthesize findings into a decision package with risks and next actions.
+5. Own theme lifecycle composition through `theming`: exact-revision selection,
+   applicable approval reuse, mandatory readiness evidence, and separately
+   authorized application/review. Keep brand and semantic owners authoritative;
+   reference affected component/layout entries and Blueprint decisions instead
+   of duplicating catalogs. Missing required visual evidence blocks readiness.
 
 ## Handoffs
 - Route cross-domain implementation requests to the relevant sheen lifecycle skills.

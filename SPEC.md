@@ -11,7 +11,7 @@
 > contract (02), agent contract (03), instruction layers (04), validation (05),
 > consumption/sync (06), per-skill catalog (07), standards (08), router (09),
 > Experience Blueprint (10), App Component Catalog (11), App Layout
-> Catalog (12), and proposed App-Specific Theme Lifecycle (13).
+> Catalog (12), and implemented App-Specific Theme Lifecycle agent contracts (13).
 
 ---
 

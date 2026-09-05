@@ -140,7 +140,7 @@ Map to semantic token names and include line-height and letter-spacing values.
 
 ---
 
-### `theming` — Theme generation and override design
+### `theming` — App-specific theme lifecycle
 
 **Intent:** `theming`  
 **Keywords:** theme, theming, dark-mode, light-mode, high-contrast
@@ -149,20 +149,23 @@ Map to semantic token names and include line-height and letter-spacing values.
 
 ```
 /sheen theme
-Add a dark-mode theme to our existing light token set.
-We use CSS custom properties. For each semantic surface, text, border, and
-interactive token: provide the dark-mode value, flag any pairs that fail
-WCAG AA contrast in dark mode, and suggest corrections.
+Compare a dark-mode extension with our existing approved theme on the same
+queue/detail content and required states. Preserve accepted brand and semantic
+roles. Check exact-revision approval applicability, fonts, target capability,
+contrast, and recovery. Produce a bounded handoff; do not change files.
 ```
 
 **Flow:**
-1. Ingest light-mode token set.
-2. Map semantic roles to dark-mode values (invert lightness, preserve hue).
-3. Run contrast check across all text/surface pairings in dark mode.
-4. Flag failures → suggest corrected values.
-5. Emit dark.tokens.json and a CSS override block.
+1. Inventory accepted decisions, candidates, target modes/states and safe content.
+2. Compare exact revisions under shared conditions; expose unsupported previews.
+3. Reuse approved selection only after applicability review; resolve uncertainty.
+4. Gate readiness on semantic, font, accessibility, capability, impact/recovery evidence.
+5. Hand off or apply only separately authorized scope; review and preserve history.
 
-**Output:** Dark token JSON · Contrast failure table · CSS `@media (prefers-color-scheme: dark)` block
+**Output:** Candidate comparison · Scoped selection · Readiness/impact/recovery
+records · Bounded application or handoff · Audit/revision history.
+Use the downstream's representation. See [Theme Lifecycle](../theme-lifecycle.md);
+routing scores and simulated previews do not establish visual readiness.
 
 ---
 

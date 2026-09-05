@@ -19,12 +19,15 @@ exact rules.
 
 If a docs page conflicts with the spec, the spec wins.
 
-## Proposed theme lifecycle
+## Implemented theme lifecycle contracts
 
 [Spec 13: App-Specific Theme Lifecycle](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/specs/13-theme-lifecycle.spec.md)
 defines comparable previews, scoped selection records, readiness/impact
 review, and custom-theme reuse and revision. It extends existing skills
 without prescribing downstream tooling or shipping a preset collection.
-Implementation is tracked by
-[epic #190](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/190);
-the specification is not a claim that these enhancements have shipped.
+The existing theming skill implements the shared records and decision rules;
+[downstream guidance](../guides/theme-lifecycle.md) explains supported and blocked
+paths and the illustrative T01-T14 checks. Review/closeout is tracked by
+[epic #190](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/190).
+This is agent-contract capability, not a product deployment or proof of
+downstream rendered visual quality.

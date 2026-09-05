@@ -91,6 +91,7 @@ nav:
       - Experience Blueprints: guides/experience-blueprints.md
       - App Component Catalogs: guides/app-component-catalogs.md
       - App Layout Catalogs: guides/app-layout-catalogs.md
+      - Theme Lifecycle: guides/theme-lifecycle.md
       - Upgrading sheen: guides/upgrading-sheen.md
       - Authoring a Skill: guides/authoring-a-skill.md
   - Prompt Guide:

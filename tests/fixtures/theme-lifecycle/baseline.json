@@ -1,0 +1,128 @@
+{
+  "representation": "Illustrative reasoning fixture only; synthetic evidence is not a rendered app or downstream schema.",
+  "task": "compare",
+  "intent": "theme",
+  "target": {
+    "surfaces": ["queue", "detail"],
+    "context": "staff triage",
+    "interactive": true,
+    "modes": ["light"],
+    "states": ["default", "focus", "error", "disabled"],
+    "staticReason": "",
+    "content": "sample-1",
+    "conditions": "desktop-compact",
+    "brand": "accepted-brand-3",
+    "capability": "target-renderer-2",
+    "evidenceVersion": "evidence-7",
+    "semanticKeys": ["surface", "text", "action", "feedback", "type.body", "type.heading"],
+    "visualRequired": true
+  },
+  "samples": {
+    "sample-1": {
+      "heading": "Review pending requests",
+      "denseText": "A request needs review before the end of the current work period. Read the context, check the supporting details, then choose an action.",
+      "action": "Request additional supporting information",
+      "feedback": "Could not save. Your input remains available; try again.",
+      "constraint": "Long action label in the narrow detail pane; no content or structure changes",
+      "localization": "Expanded translated action label, Latin and Arabic shaping samples",
+      "numericCode": "Request 001234 / RQ-19",
+      "fallback": "Same body and heading samples with the accepted fallback"
+    }
+  },
+  "candidates": [
+    {
+      "id": "triage", "revision": "1", "name": "Staff triage",
+      "purpose": "Readable dense review", "audience": "staff",
+      "use": "daily queue and detail", "doNotUse": "public campaigns",
+      "source": "accepted-brand-3", "base": "accepted-core-1",
+      "rationale": "Preserve existing hierarchy in compact surfaces",
+      "maturity": "accepted", "limitations": ["high contrast not yet evaluated"],
+      "content": "sample-1", "conditions": "desktop-compact",
+      "preview": "rendered", "evidence": "synthetic-preview-A",
+      "surfaces": ["queue", "detail"], "modes": ["light"],
+      "states": ["default", "focus", "error", "disabled"],
+      "mapping": ["surface", "text", "action", "feedback", "type.body", "type.heading"]
+    },
+    {
+      "id": "triage-alternate", "revision": "1", "name": "Staff triage alternative",
+      "purpose": "Test emphasis in dense review", "audience": "staff",
+      "use": "review comparison", "doNotUse": "application without selection",
+      "source": "accepted-brand-3", "base": "accepted-core-1",
+      "rationale": "Alternative permitted emphasis, unchanged semantics and content",
+      "maturity": "proposed", "limitations": ["not selected", "high contrast not yet evaluated"],
+      "content": "sample-1", "conditions": "desktop-compact",
+      "preview": "rendered", "evidence": "synthetic-preview-B",
+      "surfaces": ["queue", "detail"], "modes": ["light"],
+      "states": ["default", "focus", "error", "disabled"],
+      "mapping": ["surface", "text", "action", "feedback", "type.body", "type.heading"]
+    }
+  ],
+  "selection": {
+    "id": "decision-7", "candidate": "triage", "revision": "1",
+    "status": "approved", "authority": "delegated-agent",
+    "policy": "downstream-policy-4 delegates scoped theme choice to the design agent",
+    "surfaces": ["queue", "detail"], "modes": ["light"],
+    "states": ["default", "focus", "error", "disabled"], "context": "staff triage",
+    "brand": "accepted-brand-3", "capability": "target-renderer-2",
+    "evidenceVersion": "evidence-7",
+    "rationale": "Existing accepted choice meets the brief",
+    "alternatives": ["triage-alternate@1 has no demonstrated benefit for this brief"],
+    "exceptions": [], "questions": [], "previous": "decision-6",
+    "triggers": ["revision", "scope", "brand", "capability", "evidence"]
+  },
+  "brandConflict": false,
+  "mappingCollisions": [],
+  "readinessBinding": {
+    "selection": "decision-7", "candidate": "triage", "revision": "1",
+    "evidenceVersion": "evidence-7"
+  },
+  "requirements": {
+    "semantics": {"mandatory": true, "status": "pass", "evidence": "mapping-1", "observation": "Every existing role maps once; keys retained"},
+    "capability": {"mandatory": true, "status": "pass", "evidence": "capability-2", "observation": "Target supports all mapped expressions without new mechanisms"},
+    "fontAvailability": {"mandatory": true, "status": "pass", "evidence": "font-inventory-2", "observation": "Accepted app fonts available in target environment"},
+    "fontPermission": {"mandatory": true, "status": "pass", "evidence": "font-permission-2", "observation": "Downstream permitted-use record covers this target"},
+    "fontCoverage": {"mandatory": true, "status": "pass", "evidence": "font-coverage-2", "observation": "Body/heading weights and styles; Latin/Arabic shaping verified in sample"},
+    "fontFit": {"mandatory": true, "status": "pass", "evidence": "font-fit-2", "observation": "Authorized fallback preserves hierarchy and fits expanded label"},
+    "accessibility": {"mandatory": true, "status": "pass", "evidence": "a11y-7", "observation": "Required pairs/states, focus, and non-color cues evaluated; not whole-artifact conformance"},
+    "impact": {"mandatory": true, "status": "pass", "evidence": "impact-7", "observation": "Queue/detail; component action and layout split references; unrelated behavior/content retained"},
+    "recovery": {"mandatory": true, "status": "pass", "evidence": "recovery-7", "observation": "Restore accepted revision 0 on changed targets only through downstream change mechanism with authorization"}
+  },
+  "accessibility": {
+    "pairs": [
+      {"id": "body", "kind": "normal", "mode": "light", "state": "default", "ratio": 5.2, "required": 4.5, "evidence": "pair-body"},
+      {"id": "heading", "kind": "large", "mode": "light", "state": "default", "ratio": 3.8, "required": 3.0, "evidence": "pair-heading"},
+      {"id": "focus", "kind": "non-text", "mode": "light", "state": "focus", "ratio": 3.3, "required": 3.0, "evidence": "pair-focus"},
+      {"id": "error", "kind": "normal", "mode": "light", "state": "error", "ratio": 4.8, "required": 4.5, "evidence": "pair-error"},
+      {"id": "disabled", "kind": "normal", "mode": "light", "state": "disabled", "ratio": 2.0, "required": 4.5, "evidence": "pair-disabled", "exemption": "Inactive control exemption recorded under applicable downstream criteria"}
+    ],
+    "nonColorCues": "pass",
+    "cuesEvidence": "error text plus icon; focus outline; no status conveyed by color alone"
+  },
+  "application": {
+    "requested": false,
+    "authorization": {"granted": false, "reference": "", "candidate": "triage", "selection": "decision-7", "revision": "1", "surfaces": ["queue", "detail"], "modes": ["light"], "states": ["default", "focus", "error", "disabled"], "context": "staff triage", "mechanism": "downstream-change-process"},
+    "changedTargets": [], "failedTargets": [], "review": "unknown",
+    "reviewEvidence": "", "unchangedReviewed": false,
+    "preservation": {
+      "before": {
+        "semanticKeys": ["surface", "text", "action", "feedback", "type.body", "type.heading"],
+        "content": "sample-1",
+        "structure": ["queue-list", "detail-pane"],
+        "behavior": ["open-detail", "request-information", "save", "retry-with-retained-input"],
+        "theme": "triage@0"
+      },
+      "after": {
+        "semanticKeys": ["surface", "text", "action", "feedback", "type.body", "type.heading"],
+        "content": "sample-1",
+        "structure": ["queue-list", "detail-pane"],
+        "behavior": ["open-detail", "request-information", "save", "retry-with-retained-input"],
+        "theme": "triage@1"
+      }
+    },
+    "recovery": "Restore prior accepted values only on actual changed targets; obtain downstream authorization and preserve unrelated edits"
+  },
+  "custom": {"existingSuitable": true, "basePurposeValid": true, "need": "", "grounding": "accepted-brand-3 / app-brief-2"},
+  "history": ["triage@0:decision-6:accepted", "triage@1:decision-7:selected"],
+  "revision": {"changed": false, "predecessor": "triage@1", "affectedConsumers": [], "staleEvidence": []},
+  "observations": []
+}

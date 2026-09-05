@@ -1,0 +1,320 @@
+{
+  "description": "Each input deep-merges baseline.json; arrays replace, not append. Expected outputs are independently authored contract decisions. Evidence is synthetic, not dogfood/render proof.",
+  "scenarios": [
+    {
+      "id": "T01-comparable",
+      "input": {},
+      "expected": {
+        "comparison": "comparable", "selection": "reuse", "readiness": "ready",
+        "application": "handoff", "changedTargets": [], "promptRequired": false,
+        "candidateSummaries": [
+          {"identity": "triage@1", "purpose": "Readable dense review", "maturity": "accepted", "limitations": ["high contrast not yet evaluated"], "preview": "rendered"},
+          {"identity": "triage-alternate@1", "purpose": "Test emphasis in dense review", "maturity": "proposed", "limitations": ["not selected", "high contrast not yet evaluated"], "preview": "rendered"}
+        ]
+      }
+    },
+    {
+      "id": "T01-mismatched-content",
+      "input": {"target": {"content": "sample-2"}},
+      "expected": {"comparison": "provisional", "readiness": "blocked", "blockers": ["comparison"], "application": "handoff"}
+    },
+    {
+      "id": "T02-interactive",
+      "input": {},
+      "expected": {"stateCoverage": "covered", "comparison": "comparable"}
+    },
+    {
+      "id": "T02-static",
+      "input": {"target": {"interactive": false, "states": [], "staticReason": "Read-only static document; no interactive controls"}, "selection": {"states": []}},
+      "expected": {"stateCoverage": "not-applicable", "readiness": "ready", "promptRequired": false}
+    },
+    {
+      "id": "T02-unsupported-mode",
+      "input": {"target": {"modes": ["light", "dark"]}},
+      "expected": {"comparison": "provisional", "selection": "reassess", "readiness": "blocked", "blockers": ["comparison", "selection"]}
+    },
+    {
+      "id": "T03-unavailable-preview",
+      "input": {"previewOverride": "unrendered"},
+      "expected": {"comparison": "logical-only", "readiness": "blocked", "blockers": ["visual-evidence"], "application": "handoff"}
+    },
+    {
+      "id": "T03-simulated-preview",
+      "input": {"previewOverride": "simulated"},
+      "expected": {"comparison": "logical-only", "readiness": "blocked", "blockers": ["visual-evidence"]}
+    },
+    {
+      "id": "T04-approved-delegated-reuse",
+      "input": {},
+      "expected": {"selection": "reuse", "applicability": "revision/scope/brand/capability/evidence unchanged", "promptRequired": false, "application": "handoff"}
+    },
+    {
+      "id": "T04-selection-is-not-write-authority",
+      "input": {"application": {"requested": true}},
+      "expected": {"selection": "reuse", "readiness": "ready", "application": "handoff", "changedTargets": []}
+    },
+    {
+      "id": "T04-authorized-application",
+      "input": {"task": "apply", "application": {"requested": true, "authorization": {"granted": true, "reference": "change-8"}, "changedTargets": ["queue", "detail"], "review": "pass", "reviewEvidence": "synthetic-review-8"}},
+      "expected": {"application": "reviewed", "conditions": ["selected", "ready", "applied", "reviewed"], "changedTargets": ["queue", "detail"], "unchangedTargets": [], "complete": true, "unrelatedPreserved": true}
+    },
+    {
+      "id": "T04-reviewed-repeat-no-op",
+      "input": {"task": "apply", "application": {"requested": true, "unchangedReviewed": true, "review": "pass", "reviewEvidence": "synthetic-review-8"}},
+      "expected": {"application": "no-op", "changedTargets": [], "complete": true, "promptRequired": false}
+    },
+    {
+      "id": "T04-exact-revision-with-retained-predecessor",
+      "input": {"candidates": [
+        {
+          "id": "triage", "revision": "1", "name": "Staff triage",
+          "purpose": "Readable dense review", "audience": "staff",
+          "use": "daily queue and detail", "doNotUse": "public campaigns",
+          "source": "accepted-brand-3", "base": "accepted-core-1",
+          "rationale": "Current accepted expression", "maturity": "accepted",
+          "limitations": ["high contrast not yet evaluated"],
+          "content": "sample-1", "conditions": "desktop-compact",
+          "preview": "rendered", "evidence": "synthetic-preview-current",
+          "surfaces": ["queue", "detail"], "modes": ["light"],
+          "states": ["default", "focus", "error", "disabled"],
+          "mapping": ["surface", "text", "action", "feedback", "type.body", "type.heading"]
+        },
+        {
+          "id": "triage", "revision": "0", "name": "Staff triage predecessor",
+          "purpose": "Readable dense review", "audience": "staff",
+          "use": "historical comparison", "doNotUse": "new application",
+          "source": "accepted-brand-3", "base": "accepted-core-1",
+          "rationale": "Preserve predecessor for comparison", "maturity": "superseded",
+          "limitations": ["superseded for new use"],
+          "content": "sample-1", "conditions": "desktop-compact",
+          "preview": "rendered", "evidence": "synthetic-preview-predecessor",
+          "surfaces": ["queue", "detail"], "modes": ["light"],
+          "states": ["default", "focus", "error", "disabled"],
+          "mapping": ["surface", "text", "action", "feedback", "type.body", "type.heading"]
+        }
+      ]},
+      "expected": {"selection": "reuse", "readiness": "ready", "blockers": [], "promptRequired": false}
+    },
+    {
+      "id": "T04-duplicate-exact-revision",
+      "input": {"candidates": [
+        {
+          "id": "triage", "revision": "1", "purpose": "Readable dense review",
+          "maturity": "accepted", "limitations": [],
+          "content": "sample-1", "conditions": "desktop-compact",
+          "preview": "rendered", "evidence": "synthetic-preview-A",
+          "surfaces": ["queue", "detail"], "modes": ["light"],
+          "states": ["default", "focus", "error", "disabled"],
+          "mapping": ["surface", "text", "action", "feedback", "type.body", "type.heading"]
+        },
+        {
+          "id": "triage", "revision": "1", "purpose": "Conflicting duplicate",
+          "maturity": "proposed", "limitations": ["identity collision"],
+          "content": "sample-1", "conditions": "desktop-compact",
+          "preview": "rendered", "evidence": "synthetic-preview-duplicate",
+          "surfaces": ["queue", "detail"], "modes": ["light"],
+          "states": ["default", "focus", "error", "disabled"],
+          "mapping": ["surface", "text", "action", "feedback", "type.body", "type.heading"]
+        }
+      ]},
+      "expected": {"selection": "reassess", "readiness": "blocked", "blockers": ["selection", "semantic-mapping"], "complete": false}
+    },
+    {
+      "id": "T05-revision-stale",
+      "input": {"selection": {"revision": "0"}},
+      "expected": {"selection": "reassess", "readiness": "blocked", "application": "handoff", "blockers": ["readiness-evidence-stale", "selection", "semantic-mapping"]}
+    },
+    {
+      "id": "T05-evidence-stale",
+      "input": {"target": {"evidenceVersion": "evidence-8"}},
+      "expected": {"selection": "reassess", "readiness": "blocked", "blockers": ["readiness-evidence-stale", "selection"]}
+    },
+    {
+      "id": "T05-wrong-readiness-reference",
+      "input": {"readinessBinding": {"candidate": "triage-alternate"}},
+      "expected": {"selection": "reuse", "readiness": "blocked", "blockers": ["readiness-evidence-stale"], "application": "handoff"}
+    },
+    {
+      "id": "T06-brand-conflict",
+      "input": {"brandConflict": true},
+      "expected": {"selection": "pending", "readiness": "blocked", "blockers": ["brand-conflict", "selection"], "changedTargets": []}
+    },
+    {
+      "id": "T06-missing-authority",
+      "input": {"selection": {"policy": ""}},
+      "expected": {"selection": "pending", "readiness": "blocked", "promptRequired": false, "blockers": ["selection"]}
+    },
+    {
+      "id": "T07-font-unavailable",
+      "input": {"requirements": {"fontAvailability": {"status": "fail", "observation": "Requested face missing; no tools or fonts installed"}, "fontPermission": {"status": "unknown", "evidence": "", "observation": "Permitted-use record unavailable"}, "fontCoverage": {"status": "fail", "observation": "Required Arabic shaping and heading weight absent"}}},
+      "expected": {"readiness": "blocked", "blockers": ["fontAvailability:fail", "fontCoverage:fail", "fontPermission:unknown"], "application": "handoff"}
+    },
+    {
+      "id": "T07-authorized-fallback",
+      "input": {"requirements": {"fontAvailability": {"evidence": "fallback-inventory", "observation": "Already available approved fallback"}, "fontPermission": {"evidence": "fallback-permission", "observation": "Policy permits fallback for this target"}, "fontCoverage": {"evidence": "fallback-coverage", "observation": "Required scripts, weights and styles supplied"}, "fontFit": {"evidence": "fallback-render", "observation": "Same samples retain role hierarchy and fit"}}},
+      "expected": {"readiness": "ready", "blockers": []}
+    },
+    {
+      "id": "T08-required-state-contrast-failure",
+      "input": {"accessibility": {"pairs": [{"id": "error", "kind": "normal", "mode": "light", "state": "error", "ratio": 3.2, "required": 4.5, "evidence": "synthetic-error-measurement"}]}},
+      "expected": {"selection": "reuse", "readiness": "blocked", "blockers": ["contrast:error:3.2<4.5"], "application": "handoff"}
+    },
+    {
+      "id": "T08-missing-mandatory-check",
+      "input": {"requirements": {"fontPermission": null}},
+      "expected": {"readiness": "blocked", "blockers": ["fontPermission:unknown"]}
+    },
+    {
+      "id": "T08-unjustified-na",
+      "input": {"requirements": {"fontFit": {"status": "not-applicable", "observation": ""}}},
+      "expected": {"readiness": "blocked", "blockers": ["fontFit:unknown"]}
+    },
+    {
+      "id": "T09-unsupported-expression",
+      "input": {"requirements": {"capability": {"status": "fail", "evidence": "target-probe", "observation": "Renderer cannot express mapped focus treatment; hand off for supported resolution"}}},
+      "expected": {"readiness": "blocked", "blockers": ["capability:fail"], "application": "handoff"}
+    },
+    {
+      "id": "T09-semantic-key-missing",
+      "input": {"target": {"semanticKeys": ["surface", "text", "action", "feedback", "type.body"]}},
+      "expected": {"readiness": "blocked", "blockers": ["semantic-mapping"], "semanticOwner": "design-tokens", "application": "handoff"}
+    },
+    {
+      "id": "T10-partial-failure",
+      "input": {"task": "apply", "application": {"requested": true, "authorization": {"granted": true, "reference": "change-8"}, "changedTargets": ["queue"], "failedTargets": ["detail"], "review": "fail", "reviewEvidence": "queue review finds localized label clipped"}},
+      "expected": {"application": "partial-failure", "changedTargets": ["queue"], "unchangedTargets": ["detail"], "complete": false, "conditions": ["selected", "ready", "applied", "blocked"], "recovery": "Restore prior accepted values only on actual changed targets; obtain downstream authorization and preserve unrelated edits"}
+    },
+    {
+      "id": "T10-unauthorized-change-observed",
+      "input": {"task": "apply", "application": {"requested": true, "changedTargets": ["queue"]}},
+      "expected": {"application": "authorization-violation", "changedTargets": ["queue"], "complete": false, "conditions": ["selected", "ready", "applied", "blocked"]}
+    },
+    {
+      "id": "T10-wrong-candidate-authorization",
+      "input": {"task": "apply", "application": {"requested": true, "authorization": {"granted": true, "reference": "change-for-other-candidate", "candidate": "triage-alternate"}}},
+      "expected": {"application": "handoff", "changedTargets": [], "complete": false}
+    },
+    {
+      "id": "T10-out-of-scope-change-observed",
+      "input": {"task": "apply", "application": {"requested": true, "authorization": {"granted": true, "reference": "change-8"}, "changedTargets": ["archive"]}},
+      "expected": {"application": "authorization-violation", "changedTargets": ["archive"], "unchangedTargets": ["queue", "detail"], "complete": false}
+    },
+    {
+      "id": "T10-missing-post-review",
+      "input": {"task": "apply", "application": {"requested": true, "authorization": {"granted": true, "reference": "change-8"}, "changedTargets": ["queue", "detail"]}},
+      "expected": {"application": "partial-failure", "changedTargets": ["queue", "detail"], "complete": false, "conditions": ["selected", "ready", "applied", "blocked"]}
+    },
+    {
+      "id": "T10-semantic-key-change",
+      "input": {"task": "apply", "application": {"requested": true, "authorization": {"granted": true, "reference": "change-8"}, "changedTargets": ["queue"], "preservation": {"after": {"semanticKeys": ["new-theme-only-key"]}}}},
+      "expected": {"application": "preservation-violation", "changedTargets": ["queue"], "unrelatedPreserved": false, "complete": false}
+    },
+    {
+      "id": "T10-unrelated-behavior-change",
+      "input": {"task": "apply", "application": {"requested": true, "authorization": {"granted": true, "reference": "change-8"}, "changedTargets": ["queue"], "preservation": {"after": {"behavior": ["save-without-review"]}}}},
+      "expected": {"application": "preservation-violation", "changedTargets": ["queue"], "unrelatedPreserved": false, "complete": false}
+    },
+    {
+      "id": "T11-reuse",
+      "input": {"task": "custom"},
+      "expected": {"customAction": "reuse", "selection": "reuse", "readiness": "ready", "application": "handoff"}
+    },
+    {
+      "id": "T11-extend",
+      "input": {"task": "custom", "custom": {"existingSuitable": false, "need": "Need compact document expression while retaining staff-review purpose"}, "selection": {"status": "proposed"}},
+      "expected": {"customAction": "extend", "selection": "pending", "readiness": "blocked", "application": "handoff"}
+    },
+    {
+      "id": "T11-create",
+      "input": {"task": "custom", "custom": {"existingSuitable": false, "basePurposeValid": false, "need": "New app audience not served by accepted staff-only themes"}, "selection": {"status": "proposed"}},
+      "expected": {"customAction": "create", "selection": "pending", "readiness": "blocked", "application": "handoff"}
+    },
+    {
+      "id": "T11-created-candidate-ordinary-gates",
+      "input": {
+        "task": "custom",
+        "custom": {"existingSuitable": false, "basePurposeValid": false, "need": "Unmet external reviewer context; internal staff-only theme unsuitable"},
+        "target": {"context": "external reviewer"},
+        "candidates": [{
+          "id": "external-review", "revision": "1", "name": "External review",
+          "purpose": "Review shared requests without staff-only expression", "audience": "external reviewer",
+          "use": "shared queue and detail", "doNotUse": "staff-only work without reassessment",
+          "source": "accepted-brand-3 / app-brief-2", "base": "",
+          "rationale": "Existing staff-only direction does not serve the brief; preserve accepted semantic purpose of each role",
+          "maturity": "proposed", "limitations": ["logical preview only; required rendered evidence unavailable"],
+          "content": "sample-1", "conditions": "desktop-compact", "preview": "unrendered", "evidence": "",
+          "surfaces": ["queue", "detail"], "modes": ["light"], "states": ["default", "focus", "error", "disabled"],
+          "mapping": ["surface", "text", "action", "feedback", "type.body", "type.heading"]
+        }],
+        "selection": {"candidate": "external-review", "status": "proposed", "context": "external reviewer"},
+        "readinessBinding": {"candidate": "external-review"}
+      },
+      "expected": {"customAction": "create", "comparison": "logical-only", "selection": "pending", "readiness": "blocked", "blockers": ["selection", "visual-evidence"], "application": "handoff"}
+    },
+    {
+      "id": "T11-ungrounded-creation",
+      "input": {"task": "custom", "custom": {"existingSuitable": false, "basePurposeValid": false, "grounding": ""}, "selection": {"status": "proposed"}},
+      "expected": {"customAction": "blocked", "readiness": "blocked", "application": "handoff"}
+    },
+    {
+      "id": "T11-ungrounded-with-approved-application",
+      "input": {
+        "task": "custom",
+        "custom": {"existingSuitable": false, "basePurposeValid": false, "need": "New audience", "grounding": ""},
+        "application": {"requested": true, "authorization": {"granted": true, "reference": "change-8"}, "changedTargets": ["queue", "detail"], "review": "pass", "reviewEvidence": "synthetic-review-8"}
+      },
+      "expected": {
+        "customAction": "blocked", "selection": "reuse", "readiness": "blocked",
+        "blockers": ["custom-prerequisites"], "application": "readiness-violation",
+        "conditions": ["selected", "blocked", "applied"], "changedTargets": ["queue", "detail"],
+        "complete": false
+      }
+    },
+    {
+      "id": "T11-unjustified-with-approved-no-op",
+      "input": {
+        "task": "custom",
+        "custom": {"existingSuitable": false, "basePurposeValid": false, "need": ""},
+        "application": {"requested": true, "unchangedReviewed": true, "review": "pass", "reviewEvidence": "synthetic-review-8"}
+      },
+      "expected": {
+        "customAction": "blocked", "selection": "reuse", "readiness": "blocked",
+        "blockers": ["custom-prerequisites"], "application": "handoff", "complete": false
+      }
+    },
+    {
+      "id": "T12-revision-history",
+      "input": {"task": "revise", "revision": {"changed": true, "affectedConsumers": ["queue"], "staleEvidence": ["synthetic-preview-A", "font-fit-2"]}},
+      "expected": {"selection": "reassess", "readiness": "blocked", "history": ["triage@0:decision-6:accepted", "triage@1:decision-7:selected"], "affectedConsumers": ["queue"], "invalidatedEvidence": ["synthetic-preview-A", "font-fit-2"], "predecessor": "triage@1", "application": "handoff"}
+    },
+    {
+      "id": "T13-audit-variant-drift-unknown",
+      "input": {"task": "audit", "observations": [
+        {"target": "queue", "deviation": true, "decision": "exception-2 permits compact queue", "applicable": true, "evidence": "observed-queue", "confidence": "high", "impact": "local spacing expression only", "action": "retain scoped variant"},
+        {"target": "detail", "deviation": true, "decision": "", "applicable": false, "evidence": "observed-detail", "confidence": "high", "impact": "unapproved feedback expression", "action": "propose scoped repair"},
+        {"target": "archive", "deviation": false, "decision": "", "applicable": false, "evidence": "", "confidence": "low", "impact": "coverage unknown", "action": "collect observation, do not infer absence"}
+      ]},
+      "expected": {"application": "audit-only", "audit": ["queue:variant", "detail:drift", "archive:unresolved"], "changedTargets": []}
+    },
+    {
+      "id": "T14-brand-only",
+      "input": {"intent": "brand"},
+      "expected": {"route": "brand-identity", "application": "not-in-scope", "readiness": "not-assessed", "changedTargets": []}
+    },
+    {
+      "id": "T13-audit-change-record-preserved",
+      "input": {"task": "audit", "application": {"changedTargets": ["detail"]}},
+      "expected": {"application": "authorization-violation", "changedTargets": ["detail"], "complete": false, "conditions": ["selected", "ready", "applied", "blocked"]}
+    },
+    {
+      "id": "T14-reporting-only",
+      "input": {"intent": "reporting"},
+      "expected": {"route": "data-visualisation", "application": "not-in-scope", "readiness": "not-assessed", "changedTargets": []}
+    },
+    {
+      "id": "T14-documentation-only",
+      "input": {"intent": "documentation"},
+      "expected": {"route": "documentation-diagram", "application": "not-in-scope", "readiness": "not-assessed", "changedTargets": []}
+    }
+  ]
+}

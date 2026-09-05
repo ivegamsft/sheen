@@ -21,6 +21,9 @@ Define typography scales, roles, and legibility constraints.
 3. Produce cross-theme mappings and list deliberate exceptions with rationale.
 4. Validate compatibility with related foundations and downstream components.
 5. Publish migration notes for safe adoption and backwards compatibility.
+6. For theme readiness, review required scripts/weights/styles and fallback
+   role preservation and fit on the shared representative content; return evidence
+   tied to candidate revision/scope. Substituted fonts are not automatically equivalent.
 
 ## Guardrails
 - Do not introduce breaking foundation changes without migration guidance.
@@ -35,3 +38,4 @@ Define typography scales, roles, and legibility constraints.
 ## Delegates / pairs with
 - font-mapping
 - content-hierarchy
+- theming
