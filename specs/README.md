@@ -2,7 +2,8 @@
 
 Detailed specifications for the assets and subsystems defined in the root
 [`SPEC.md`](../SPEC.md). Each document below is normative for its area: it defines
-the contract implementers must satisfy. No assets are implemented yet.
+the contract implementers must satisfy. Individual specs identify proposed
+extensions; a specification does not itself establish implementation status.
 
 | # | Spec | Scope |
 |---|---|---|
@@ -18,6 +19,7 @@ the contract implementers must satisfy. No assets are implemented yet.
 | 10 | [Experience Blueprint](10-experience-blueprint.spec.md) | Audit/generate modes, artifact model, archetypes, orchestration, validation |
 | 11 | [App Component Catalog](11-app-component-catalog.spec.md) | Logical component selection, placement, composition, gallery, audit/generate behavior |
 | 12 | [App Layout Catalog](12-app-layout-catalog.spec.md) | Logical layout selection, regions, navigation/IA placement, component constraints, gallery |
+| 13 | [App-Specific Theme Lifecycle](13-theme-lifecycle.spec.md) | Comparable previews, scoped selection, readiness/impact review, custom-theme reuse and revision (proposed) |
 
 ## Conventions used in these specs
 

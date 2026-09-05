@@ -10,8 +10,8 @@
 > **Detailed specs:** see [`specs/`](specs/README.md) — token system (01), skill
 > contract (02), agent contract (03), instruction layers (04), validation (05),
 > consumption/sync (06), per-skill catalog (07), standards (08), router (09),
-> Experience Blueprint (10), App Component Catalog (11), and App Layout
-> Catalog (12).
+> Experience Blueprint (10), App Component Catalog (11), App Layout
+> Catalog (12), and proposed App-Specific Theme Lifecycle (13).
 
 ---
 
