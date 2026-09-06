@@ -19,10 +19,10 @@ These work within the synced skill folder without requiring this repository's
 specs or test scripts. The worksheet is optional: preserve its concepts in your
 existing documents/records. Source versions:
 
-- [Theming skill](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/skills/theming/SKILL.md)
-- [Shared contract](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/skills/theming/references/lifecycle-contract.md)
-- [Record worksheet](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/skills/theming/templates/lifecycle-record.md)
-- [Spec 13](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/specs/13-theme-lifecycle.spec.md)
+- [Theming skill](https://github.com/ivegamsft/sheen/blob/main/skills/theming/SKILL.md)
+- [Shared contract](https://github.com/ivegamsft/sheen/blob/main/skills/theming/references/lifecycle-contract.md)
+- [Record worksheet](https://github.com/ivegamsft/sheen/blob/main/skills/theming/templates/lifecycle-record.md)
+- [Spec 13](https://github.com/ivegamsft/sheen/blob/main/specs/13-theme-lifecycle.spec.md)
 
 ## Supported paths
 
@@ -86,7 +86,7 @@ authorize changing chart/data semantics or broad application theming.
 
 ## Verification and evidence limits
 
-[Coverage and worked inputs/outputs](https://github.com/IBuySpy-Shared/basecoat-sheen/tree/main/tests/fixtures/theme-lifecycle)
+[Coverage and worked inputs/outputs](https://github.com/ivegamsft/sheen/tree/main/tests/fixtures/theme-lifecycle)
 cover T01–T14, including supported and blocked branches. Run from the Sheen repo:
 
 ```powershell

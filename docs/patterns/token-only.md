@@ -30,7 +30,7 @@ Place this at your design system repo root.
 
 ```yaml
 # Token-Only Mode — pure design system governance, no AI agents
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: v0.5.0
 
 # Exclude all skills/agents (tokens only)
@@ -97,7 +97,7 @@ themes: [light, dark, high-contrast]
 
 ```bash
 # Configure Figma Tokens plugin to sync from git
-# Source: https://github.com/IBuySpy-Shared/basecoat-sheen (or internal mirror)
+# Source: https://github.com/ivegamsft/sheen (or internal mirror)
 # File: tokens/semantic/figma.json
 # Sync: Manual pull or GitHub Action webhook
 ```

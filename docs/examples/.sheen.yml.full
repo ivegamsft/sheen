@@ -1,5 +1,5 @@
 # Full mode: complete basecoat-sheen catalog for cross-functional teams.
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: main
 # Omit allow-lists (skills, agents, instructions, themes) to sync everything.
 
