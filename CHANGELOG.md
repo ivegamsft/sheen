@@ -7,7 +7,17 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
-### Added
+## [0.12.0] — 2026-09-06
+
+| Field | Value |
+|---|---|
+| Version | v0.12.0 |
+| Range | v0.11.1..v0.12.0 |
+| Wave | wave:6, wave:7, wave:8 |
+| Sprint | N/A |
+| Release date | 2026-09-06 |
+
+### Highlights
 
 - **App-specific theme lifecycle** — extended existing `theming` with comparable
   candidate previews, exact-revision scoped selection and approval reuse,
@@ -47,6 +57,58 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
   layout selections (reuse/extend/create) with complete region, navigation,
   component-role, styling, data, responsive, and accessibility metadata.
   Composed by `ux-designer`. Closes #170, #177, #178, #179, #180.
+
+### Breaking changes
+
+- None. Existing asset names and semantic token keys are preserved. New
+  capabilities extend the existing downstream-owned design system (#187-#189,
+  #197).
+
+### Fixes and improvements
+
+- **Craft calibration** — added subject/audience/job grounding, anti-template
+  comparison, typography and structural-semantic review, motion attention
+  budgets, representative-content calibration, and bounded self-critique
+  to existing skills (#186).
+- **Theme decision correctness** — require grounded custom creation before
+  readiness, preserve exact-revision reuse alongside predecessor revisions,
+  and distinguish reporting from documentation-diagram routing. Included
+  45 illustrative scenarios covering the T01-T14 contract (#197).
+- **Dependency maintenance** — updated the source repository's installed
+  operation-context-resolver toolchain to browserslist 4.28.8, resolving
+  GHSA-c83g-rgw3-j3cx and GHSA-73wf-gq98-2v4g. This internal tooling is not
+  included in the public mirror (#199).
+- **Design contracts and discoverability** — documented implementation-neutral
+  Experience Blueprint, App Component Catalog, App Layout Catalog, and Theme
+  Lifecycle contracts, with routing, templates, and downstream guidance
+  (#171, #176, #181, #196).
+
+### Known issues
+
+- Theme lifecycle fixtures are synthetic contract-decision evidence, not proof
+  of rendered theme quality, autonomous agent compliance, or downstream
+  readiness. Real application work still requires local brand/font/accessibility
+  evidence, scoped change authority, and post-application review (#197).
+- The new experience and app catalog assets remain draft pending downstream
+  feedback; their logical contracts do not mandate a rendering or storage
+  technology (#187-#189).
+
+### Upgrade notes
+
+- Pin `.sheen.yml` to `ref: v0.12.0`, then run the normal sync command. Retain
+  downstream brand, tokens, components, layouts, and accepted decisions.
+- If using explicit asset allow-lists, opt in to `experience-blueprint`,
+  `app-component-catalog`, `app-layout-catalog`, and `experience-architect`
+  as needed. Existing `theming` consumers receive its supporting lifecycle
+  references and worksheet through normal skill synchronization (#187-#189,
+  #197).
+- No token-key or asset-name migration is required. To revert adoption,
+  pin the prior `v0.11.1` and follow the existing rollback/sync guidance,
+  preserving downstream-owned changes.
+
+### Contributors
+
+- @ibuyspy and GitHub Copilot.
 
 ## [0.11.1] — 2026-09-01
 
