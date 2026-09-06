@@ -17,7 +17,7 @@ Run a full-repo design governance audit and produce a prioritized backlog.
 ## Workflow
 1. Inventory scope: surfaces, platforms, and user-critical journeys.
 2. Run mapping passes (styles, typography, i18n, usability coverage) and collect gaps.
-3. Evaluate against sheen standards: tokens, accessibility, usability, component coherence.
+3. Evaluate tokens, accessibility, usability, and component coherence. For diagrams, read and apply the [anti-slop contract](references/diagram-audit.md), including all rule IDs and thresholds.
 4. Severity-rank findings by user impact, risk, and implementation effort.
 5. Convert findings into an actionable, ordered remediation backlog.
 
@@ -25,6 +25,8 @@ Run a full-repo design governance audit and produce a prioritized backlog.
 - Do not rewrite product code as part of the audit pass.
 - Do not claim compliance without concrete evidence per finding.
 - Do not collapse separate issues into vague "polish" recommendations.
+- Diagram auto-fails remain rule-ID findings; do not waive geometry, skin,
+  density, or accessibility checks as subjective polish.
 
 ## Output
 - Consolidated audit report with severity, rationale, and affected surfaces.
@@ -33,26 +35,3 @@ Run a full-repo design governance audit and produce a prioritized backlog.
 ## Delegates / pairs with
 - `css-mapping`, `font-mapping`, `i18n-framework-mapping`, `usability-mapping`
 - `design-system-audit`, `accessibility-audit`, `web-usability-review`
-
-## Diagram Anti-Slop Rules (#115)
-
-Enforceable, rule-ID'd checks for code/documentation diagrams (ported from
-cathrynlavery/diagram-design's editorial anti-slop guidance), run via
-`scripts/audit-diagram-slop.ps1 -SvgPath <file> -Theme <light|dark|high-contrast>`.
-Every violation is reported with its rule ID so it drops directly into the
-audit backlog as a single, unambiguous finding — never a vague "polish" note.
-
-| Rule ID | Checks | Auto-fail threshold |
-|---|---|---|
-| `DENSITY` | Node count | Target ~4/10; **>9 nodes** auto-fails — split into smaller diagrams or a drill-down hierarchy |
-| `SHADOW` | Drop-shadow/blur filters | Any use — sheen diagrams are flat, borders only |
-| `RADIUS` | `<rect>` corner radius | **>10px** (default max; 6-10px or none is the target) |
-| `ACCENT-BUDGET` | Elements using `accent`/`accent-tint` | **>2** elements — accent is for 1-2 focal points, not decoration |
-| `STRAY-HEX` | Fill/stroke colours vs. the resolved theme skin | Any hex not present in `dist/diagram-skins/<theme>.json` — catches neon and one-off hand-picked colours alike |
-| `MONO-FONT` | Font-family across all text | All-monospace with no hierarchy (unless the diagram is intentionally all-code) |
-| `SLANT`, `SHARED-ATTACH`, `OVERLAP-PATH`, `LABEL-UNMASKED`, `CLIPPED-LABEL`, `TRANSIT-BEHIND` | The six connector rules | Auto-fail — delegated to `scripts/lint-diagram-geometry.ps1` (#118) |
-
-`tests/fixtures/diagrams/clean-sample.svg` and `broken-sample.svg` are
-asserted in CI to pass and fail (respectively) so the audit's own
-effectiveness stays verified alongside its presence.
-

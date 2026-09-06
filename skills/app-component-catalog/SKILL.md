@@ -12,64 +12,27 @@ allowed-tools: []
 ---
 # app-component-catalog
 
-Audit an application's existing UI into an evidence-linked logical component
-catalog, or select, extend, or specify a component for a page/layout need.
-Implements `specs/11-app-component-catalog.spec.md` (ADR-011). The downstream
-design system is authoritative; the neutral seed vocabulary only detects
-gaps — rename, merge, or drop families to fit the app. Never copy another
-library's components, code, or visuals.
+Audit or select application-specific logical components with evidence, alias normalization, and reuse/extend/create rationale.
 
-## Neutral seed families
-
-Actions, input/selection, navigation, feedback/status, disclosure/overlays,
-content/media, data display, structure, task composition. See
-`docs/components/app-component-catalog.md` for the full role table and
-`templates/app-component-catalog/component-entry.md` for the logical
-component metadata template.
-
-## Audit workflow
-
-1. Load the app's design system, Experience Blueprint, layout catalog, and
-   shared/pattern inventories.
-2. Inventory implementation bindings, design assets, and observed page usage
-   in the stated scope.
-3. Group candidates by purpose, semantics, and alias evidence — not
-   appearance or name alone — to normalize duplicate labels.
-4. Classify each group as one component with legitimate variants,
-   implementation drift, or genuinely distinct components; distinguish a
-   component from a pattern, a layout region, and a page.
-5. Record findings with evidence, confidence, impact, affected pages, and a
-   recommended catalog action.
-
-## Generate workflow
-
-1. Read the audience, task, page/layout region, data, state, and
-   accessibility context.
-2. Search the catalog by name, alias, role, and constraint; eliminate
-   candidates whose do-not-use, placement, data, or responsive rules
-   conflict.
-3. Reuse a fitting component; extend only if its core purpose survives;
-   specify a new one only for a distinct unmet need — never for a visual
-   difference alone.
-4. Complete identity, usage, placement, composition, styling abstractions,
-   data/content, behavior/states, and responsive metadata.
-5. Add the accepted entry to the app gallery with provenance and document
-   why it was reused, extended, or created, plus rejected alternatives.
+## Workflow
+1. Read and apply the [catalog contract](references/catalog-contract.md), including both mode checklists, neutral seeds, full metadata, and shared source resources.
+2. Load the app's authoritative design system, Experience Blueprint, layouts, and shared/pattern inventories.
+3. Audit: inventory bindings/assets/page usage; group by purpose, semantics, and alias evidence; classify variants, drift, or distinct components, with confidence and impact.
+4. Generate: capture task/audience/region/data/state/accessibility; search by name/alias/role/constraints and reject conflicting candidates.
+5. Reuse when fitting; extend only if core purpose survives; create only for a distinct unmet need. Complete all metadata and gallery provenance, including rejected alternatives.
 
 ## Guardrails
-
-- Do not let an implementation binding stand in for the logical contract.
-- Do not treat the seed vocabulary as a required inventory.
-- Flag ambiguous aliases, undocumented dependencies, one-off components, and
-  mobile behavior that drops the primary task.
+- Downstream design decisions are authoritative; neutral seeds expose gaps, never require inventory. Rename, merge, or drop families to fit.
+- Never copy another library's components, code, or visuals, or create for visual differences alone.
+- A binding cannot replace a logical contract; distinguish components, patterns, regions, and pages.
+- Flag ambiguous aliases, undocumented dependencies, one-offs, and mobile behavior dropping the primary task.
 
 ## Output
-
-- Logical component catalog entries (audit) or a new/updated entry with
-  selection rationale and gallery placement (generate).
+- Downstream logical catalog entries with complete metadata and gallery placement.
+- Audit: evidence/confidence/impact/affected-page findings and recommended actions.
+- Generate: accepted entry, selection rationale, provenance, rejected alternatives.
 
 ## Delegates / pairs with
-
 - `component-spec`, `pattern-library`, `design-system-audit`
 - `information-architecture`, `navigation-design`, `responsive-design`
 - agent: `design-system-architect`

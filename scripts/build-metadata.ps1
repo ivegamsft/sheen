@@ -47,10 +47,14 @@ function Get-Rel([string]$path) {
     return [System.IO.Path]::GetRelativePath($repoRoot, $path).Replace('\','/')
 }
 
-function Get-Hash([string]$path) {
-    $text = Get-Content -LiteralPath $path -Raw
-    $normalized = (($text -replace "^\uFEFF", '') -replace "`r`n", "`n")
-    $bytes = [System.Text.Encoding]::UTF8.GetBytes($normalized)
+function Get-Hash([string]$path, [switch]$Binary) {
+    $bytes = if ($Binary) {
+        ,([System.IO.File]::ReadAllBytes($path))
+    } else {
+        $text = [string](Get-Content -LiteralPath $path -Raw)
+        $normalized = (($text -replace "^\uFEFF", '') -replace "`r`n", "`n")
+        ,([System.Text.Encoding]::UTF8.GetBytes($normalized))
+    }
     $sha = [System.Security.Cryptography.SHA256]::Create()
     try {
         return ([System.BitConverter]::ToString($sha.ComputeHash($bytes)) -replace '-', '').ToLowerInvariant()
@@ -60,8 +64,58 @@ function Get-Hash([string]$path) {
     }
 }
 
+function Get-SkillFiles([string]$folder) {
+    if ((Get-Item -LiteralPath $folder -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+        throw "Skill payload must not contain symbolic links or reparse points: $folder"
+    }
+    $textExtensions = @(
+        '.md', '.markdown', '.txt', '.json', '.jsonc', '.yaml', '.yml', '.toml',
+        '.xml', '.svg', '.html', '.htm', '.css', '.scss', '.sass', '.less',
+        '.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs', '.ps1', '.psm1', '.psd1',
+        '.sh', '.bash', '.py', '.rb', '.go', '.rs', '.cs', '.sql', '.csv'
+    )
+    $excludedDirectories = @(
+        '.git', 'node_modules', 'dist', 'build', '.venv', 'venv', '__pycache__',
+        '.cache', '.pytest_cache', '.mypy_cache', '.ruff_cache', 'coverage',
+        'site', 'test-results', 'playwright-report'
+    )
+    $pending = [System.Collections.Generic.Stack[string]]::new()
+    $paths = [System.Collections.Generic.Dictionary[string,string]]::new([StringComparer]::Ordinal)
+    $pending.Push($folder)
+    while ($pending.Count -gt 0) {
+        foreach ($item in Get-ChildItem -LiteralPath $pending.Pop() -Force) {
+            if ($item.PSIsContainer -and $item.Name -in $excludedDirectories) { continue }
+            if (-not $item.PSIsContainer -and (
+                $item.Name -in @('.git', '.gitkeep', '.DS_Store', 'Thumbs.db') -or
+                $item.Name -like '.env*' -or $item.Name -like '*.local' -or
+                $item.Name -like '*.local.*' -or $item.Extension -in @('.log', '.tmp', '.bak', '.pyc')
+            )) { continue }
+            # Linked payloads cannot establish portable, skill-local content evidence.
+            if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) {
+                throw "Skill payload must not contain symbolic links or reparse points: $($item.FullName)"
+            }
+            if ($item.PSIsContainer) {
+                $pending.Push($item.FullName)
+            } else {
+                $relative = [IO.Path]::GetRelativePath($folder, $item.FullName).Replace('\', '/')
+                $paths.Add($relative, $item.FullName)
+            }
+        }
+    }
+    $orderedPaths = [string[]]@($paths.Keys)
+    [Array]::Sort($orderedPaths, [StringComparer]::Ordinal)
+    foreach ($relative in $orderedPaths) {
+        $binary = [IO.Path]::GetExtension($relative) -notin $textExtensions
+        [ordered]@{
+            path = $relative
+            hash = Get-Hash $paths[$relative] -Binary:$binary
+            hash_mode = if ($binary) { 'bytes' } else { 'text-lf' }
+        }
+    }
+}
+
 $skillItems = @()
-Get-ChildItem $SkillsDir -Directory -ErrorAction SilentlyContinue | Sort-Object Name | ForEach-Object {
+Get-ChildItem $SkillsDir -Directory -Force -ErrorAction SilentlyContinue | Sort-Object Name | ForEach-Object {
     $skillFile = Join-Path $_.FullName 'SKILL.md'
     if (-not (Test-Path $skillFile)) { return }
     $fm = Get-FrontmatterLines $skillFile
@@ -74,6 +128,7 @@ Get-ChildItem $SkillsDir -Directory -ErrorAction SilentlyContinue | Sort-Object 
         maturity    = Get-FMValue $fm 'maturity'
         description = Get-FMValue $fm 'description'
         hash        = Get-Hash $skillFile
+        files       = @(Get-SkillFiles $_.FullName)
     }
 }
 
@@ -177,7 +232,7 @@ if ($Check) {
     $oldJson = Get-Content $outPath -Raw
     $oldNorm = Normalize-JsonText $oldJson
     $newNorm = Normalize-JsonText $newJson
-    if ($oldNorm -ne $newNorm) {
+    if ($oldNorm -cne $newNorm) {
         Write-Host "::error::sheen-metadata.json is out of date. Run scripts/build-metadata.ps1"
         $oldLines = $oldNorm -split "`n"
         $newLines = $newNorm -split "`n"
@@ -185,7 +240,7 @@ if ($Check) {
         for ($i = 0; $i -lt $max; $i++) {
             $oldLine = if ($i -lt $oldLines.Count) { $oldLines[$i] } else { '<missing>' }
             $newLine = if ($i -lt $newLines.Count) { $newLines[$i] } else { '<missing>' }
-            if ($oldLine -ne $newLine) {
+            if ($oldLine -cne $newLine) {
                 Write-Host ("::error::first diff at line {0}" -f ($i + 1))
                 Write-Host ("::error::expected: {0}" -f $oldLine)
                 Write-Host ("::error::actual:   {0}" -f $newLine)

@@ -12,6 +12,53 @@
 - **Scope:** scans repo-root assets only. `vendor/` (vendored basecoat) is
   excluded — it carries its own `basecoat-metadata.json` and is validated upstream.
 
+### 1.1 Complete skill payload evidence
+
+The additive `sheen-metadata/v1` skill inventory preserves `hash` as the
+normalized **SKILL.md-only** SHA-256 for compatibility. It does **not** establish
+that a whole skill is unchanged. Consumers comparing complete skills MUST compare
+the entire `files` array (paths, hashes, and hash modes), not only `hash`.
+The existing sync manifest separately records managed file paths and the source
+commit; it does not consume these hashes or prove content currency.
+
+Every skill entry includes `files: [{path, hash, hash_mode}]`: all regular bundled
+files in that skill folder, including `SKILL.md`, `eval.yaml`, root-level assets,
+`references/`, `templates/`, `samples/`, and executable supporting scripts.
+Paths are skill-folder-relative with `/` separators, sorted case-sensitively
+using ordinal comparison; additions, deletions, renames (including case changes),
+and content edits all invalidate `build-metadata -Check`. Discovery includes
+hidden payload files and the consumer `.github/skills` root when
+`.sheen/manifest.json` exists, using the builder's existing source/consumer mode.
+This does not change the manifest-owned scope of the separate W04 diagnostic.
+
+`Get-Hash` applies the existing decoded-text, leading-BOM removal and CRLF→LF,
+UTF-8 SHA-256 normalization (`hash_mode: text-lf`) to these text extensions:
+`.md`, `.markdown`, `.txt`, `.json`, `.jsonc`, `.yaml`, `.yml`, `.toml`, `.xml`,
+`.svg`, `.html`, `.htm`, `.css`, `.scss`, `.sass`, `.less`, `.js`, `.jsx`, `.ts`,
+`.tsx`, `.mjs`, `.cjs`, `.ps1`, `.psm1`, `.psd1`, `.sh`, `.bash`, `.py`, `.rb`,
+`.go`, `.rs`, `.cs`, `.sql`, `.csv`. Other extensions (including extensionless
+assets) use exact byte SHA-256 (`hash_mode: bytes`), never lossy text decoding.
+Empty files are valid payloads. No culture-dependent ordering or timestamps
+participate in the evidence.
+
+At every depth, exclude dependency/build/local directories `.git`, `node_modules`,
+`dist`, `build`, `.venv`, `venv`, `__pycache__`, `.cache`, `.pytest_cache`,
+`.mypy_cache`, `.ruff_cache`, `coverage`, `site`, `test-results`,
+`playwright-report`; exclude files `.git`, `.gitkeep`, `.DS_Store`, `Thumbs.db`,
+`.env*`, `*.local`, `*.local.*`, `*.log`, `*.tmp`, `*.bak`, `*.pyc`.
+These reserved noise locations MUST NOT hold operative skill contracts.
+Other hidden files remain included. Symlinks/reparse points in the payload fail
+generation rather than following external content or silently asserting currency.
+Assets outside the skill folder do not contribute to its file inventory.
+
+`scripts/test-build-metadata.ps1` runs the actual builder and `-Check` in isolated
+source/consumer git fixtures under ignored `dist/`, verifies reference-only
+edit/add/delete/rename drift and regeneration, text/BOM normalization, binary
+bytes, stable ordering and noise exclusions, then removes its fixtures.
+CI and `checks.json` gate this regression suite. The builder and test are internal
+source tooling stripped from the public mirror; source script execution with
+the fixture/consumer repository as cwd does not require copying the builder.
+
 ## 2. `checks.json` (validation manifest)
 
 Declares the rule set the validators run. Rules are grouped by severity:

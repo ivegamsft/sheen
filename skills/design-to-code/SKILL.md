@@ -13,84 +13,24 @@ allowed-tools: []
 ---
 # Design-to-Code Skill
 
-Bridge the gap between design specs and implementation by generating component scaffolds, token bindings, and typed interfaces from `ux` skill outputs.
-
-## Closes
-
-GitHub issue #59 — `feat(skill): design-to-code — component code generation from spec (React/Vue/Web Components)`
+Generate component scaffolds, token bindings, and typed interfaces from `ux` design outputs.
 
 ## Workflow
+1. Load component/wireframe specs, token definitions or Figma exports, and the requested target/output path.
+2. Read and apply the [scaffold contract](references/scaffold-contract.md): generation flow, artifact roles, scenarios, file/token schema, and gate.
+3. Scaffold React/CSS Modules, Vue 3 SFC, or vanilla Custom Elements as requested; derive TypeScript props from anatomy and Storybook CSF3 shells for all variants.
+4. Bind styles to semantic tokens, verify rendering and built token references, and hand off business logic and visual QA.
 
-```
-component-spec (ux skill) → design-to-code → scaffold output
-                          ↘ token bindings (build-tokens.ps1)
-                          ↘ Storybook story shell
-                          ↘ TypeScript interface
-```
+## Guardrails
+- Gate: the component renders without errors and token references resolve in `dist/tokens/` from the applicable build.
+- Do not replace semantic bindings with hardcoded values or silently omit specified variants.
+- Generate scaffolds, not business logic, backend APIs, or infrastructure.
 
-## Templates in This Skill
+## Output
+- Downstream component, styles, story, and barrel files under `src/components/{Name}/` (or the requested path), plus a typed interface.
+- Reference `component-spec` schema: paths/types and semantic-token/CSS-var/build-value bindings.
 
-| Template | Purpose |
-|---|---|
-| `react-component-template.md` | React functional component + CSS Modules scaffold |
-| `vue-component-template.md` | Vue 3 SFC scaffold with token bindings |
-| `web-component-template.md` | Vanilla Custom Element scaffold |
-| `storybook-story-template.md` | Storybook CSF3 story shell with all variants |
-| `component-interface-template.md` | TypeScript props interface derived from component spec |
-
-## Sample Prompts
-
-### Generate a React component from spec
-
-```
-@design-to-code scaffold a React component for the spec in docs/components/card.spec.md
-using tokens from tokens/semantic/. Output to src/components/Card/.
-```
-
-**Agent flow:** `design-system-architect` → `design-to-code` → `frontend-dev`
-
-**Output shape:**
-- `src/components/Card/Card.tsx` — typed functional component
-- `src/components/Card/Card.module.css` — token-bound CSS Module
-- `src/components/Card/Card.stories.tsx` — Storybook CSF3 story
-- `src/components/Card/index.ts` — barrel export
-
-**Gate condition:** component renders without errors; token references resolve in `dist/tokens/`
-
-### Generate a Vue SFC from wireframe
-
-```
-@design-to-code scaffold a Vue 3 SFC for the wireframe spec in docs/wireframes/modal.spec.md
-```
-
-### Generate TypeScript interface from component anatomy
-
-```
-@design-to-code generate a TypeScript props interface from the anatomy table
-in docs/components/button.spec.md
-```
-
-## Output Schema
-
-```yaml
-discriminator: component-spec
-files:
-  - path: src/components/{Name}/{Name}.{ext}
-    type: component
-  - path: src/components/{Name}/{Name}.module.css
-    type: styles
-  - path: src/components/{Name}/{Name}.stories.{ext}
-    type: storybook
-  - path: src/components/{Name}/index.ts
-    type: barrel
-token_bindings:
-  - semantic_token: string
-    css_var: string
-    value_at_build: string
-```
-
-## Agent Pairing
-
-- Input from: `ux-designer` (component-spec), `design-system-architect` (token-spec)
-- Output to: `frontend-dev` (implement logic), `design-reviewer` (visual QA)
-- Close loop: `design-drift-detection` verifies generated code matches spec
+## Delegates / pairs with
+- Input: `ux-designer` (component-spec), `design-system-architect` (token-spec).
+- Output: `frontend-dev` (logic), `design-reviewer` (visual QA).
+- Close loop: `design-drift-detection` verifies generated code against spec.

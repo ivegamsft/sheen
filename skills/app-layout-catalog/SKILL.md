@@ -12,51 +12,24 @@ allowed-tools: []
 ---
 # app-layout-catalog
 
-Audit or generate an application-specific catalog of logical page layouts —
-regions, navigation placement, and component-role constraints — independent
-of framework, grid technology, or DOM structure.
+Audit or generate logical page layouts, regions, navigation placement, and component-role constraints.
 
 ## Workflow
-1. Load the app's design system, IA/navigation decisions, Experience
-   Blueprint, App Component Catalog, and pattern library as authoritative.
-   Use neutral layout-role seeds (narrative landing, focused splash,
-   collection/discovery, detail, dashboard, workbench, master-detail, guided
-   workflow, form/settings, article, search/results, auth/gateway) only to
-   expose structural gaps, never as fixed templates.
-2. Audit mode: inventory pages, shells, templates, and responsive states;
-   group by structural purpose, region relationships, and navigation (not
-   appearance); separate variants from drift, misuse, and duplicate
-   layouts; map pages/components to regions with evidence.
-3. Generate mode: read the page's purpose, archetype, IA level, navigation,
-   data shape, and component needs; search the catalog by purpose, alias,
-   and region/navigation constraints; eliminate conflicting candidates.
-4. Reuse an existing layout when it fits; extend only when structural
-   purpose and region semantics hold; specify a new layout only for a
-   distinct, unmet need — never for different content, colors, or
-   component instances alone.
-5. Complete every metadata area: identity/provenance, usage rules, IA/nav
-   applicability, region model, component-role constraints, styling
-   abstractions, data needs, responsive behavior, accessibility structure,
-   and selection rationale (see `specs/12-app-layout-catalog.spec.md`).
-6. Add the accepted layout to the app-specific gallery with its reuse/
-   extend/create rationale, rejected alternatives, and evidence.
+1. Read and apply the [layout contract](references/layout-contract.md): neutral seeds, mode checklists, full metadata, and source spec.
+2. Load authoritative app design system, IA/navigation, Experience Blueprint, App Component Catalog, and patterns.
+3. Audit pages/shells/templates/responsive states by structural purpose, region relationships, and navigation; separate variants, drift, misuse, duplicates; map pages/components to regions with evidence.
+4. Generate: capture purpose/archetype/IA/nav/data/component needs; search by purpose/alias/region/nav constraints, eliminating conflicts.
+5. Reuse if fitting; extend only with preserved structural purpose/region semantics; create only for distinct unmet need. Complete every metadata area and gallery rationale, rejected alternatives, and provenance.
 
 ## Guardrails
-- Do not copy another product's layout, navigation, IA, or visual style;
-  neutral seeds are gap-detection prompts, not fixed templates.
-- Do not prescribe framework, CSS grid/flexbox, breakpoints, DOM structure,
-  or gallery/design-tool implementation.
-- Do not create a new layout for different content, colors, or component
-  instances alone, or let implementation bindings replace the logical spec.
-- Do not invent backend fields, APIs, or component behavior owned by the
-  App Component Catalog.
+- Neutral seeds expose gaps, not fixed templates; never copy another product's layout, navigation, IA, or style.
+- Do not prescribe framework, grid/flexbox, breakpoints, DOM, gallery, or design-tool implementation.
+- Do not create layouts for content, colours, or component instances alone, or replace logical specs with bindings.
+- Do not invent backend fields, APIs, or component behavior owned by App Component Catalog.
 
 ## Output
-- Logical layout catalog entries with complete identity, usage, IA/
-  navigation, region, component-role, styling, data, responsive,
-  accessibility, selection, and provenance metadata.
-- Audit findings: page-to-layout map, variant-vs-drift classification, and
-  evidence-ranked remediation priorities.
+- Downstream logical layout entries: identity/provenance, usage, IA/nav, regions, component roles, styling abstractions, data, responsive/accessibility structure, selection.
+- Audit page-to-layout map, variant/drift classification, evidence-ranked remediation.
 - Gallery documentation in the downstream's chosen representation.
 
 ## Delegates / pairs with

@@ -13,91 +13,24 @@ allowed-tools: []
 ---
 # Mobile Native Design Skill
 
-Design for iOS and Android with platform-native conventions — mapping design system tokens and components to HIG, Material You, and cross-platform parity expectations.
+Map tokens/components to iOS HIG, Android Material You, native gestures, and cross-platform parity.
 
-## Closes
+## Workflow
+1. Load web wireframes/component specs, token definitions, and target platform.
+2. Read and apply the [native contract](references/native-contract.md): platform mapping, adaptation/parity/gesture/accessibility scenarios, artifact roles, and schema.
+3. Map colour, typography, radius, spacing, elevation, and back gestures; document web-to-native deltas and dynamic theming needs.
+4. Specify gesture actions and tap targets; audit VoiceOver/TalkBack accessibility and compare iOS/Android parity.
 
-GitHub issue #67 — `feat(skill): mobile-native-design — iOS HIG, Android Material You, cross-platform parity`
+## Guardrails
+- Preserve platform-native conventions rather than blindly copying web values; record deviations, including undersized iOS targets against the 44×44pt minimum.
+- Do not claim accessibility or parity without the corresponding audit evidence.
+- Not web-only responsive design, backend mobile APIs, or mobile CI/CD.
 
-## Platform Mapping
+## Output
+- Downstream iOS/Android component specs with SwiftUI/Compose hints, cross-platform delta report, and mobile accessibility checklist.
+- Reference `component-spec` schema: platform, HIG deviations, tap-target issues, gesture/action/platform specs, parity delta, accessibility pass.
 
-| Design Dimension | iOS HIG | Android Material You | Sheen Token |
-|---|---|---|---|
-| Primary action colour | Tint (system blue by default) | Primary container | `color.action.primary` |
-| Background | System grouped background | Surface | `color.surface.default` |
-| Typography — body | SF Pro Text 17pt | Roboto Body Large 16sp | `typography.body.default` |
-| Typography — headline | SF Pro Display 28pt | Roboto Headline Small 24sp | `typography.heading.md` |
-| Corner radius — card | 10pt (RoundedRectangle) | 12dp (Medium) | `radius.card` |
-| Spacing unit | 8pt grid | 4dp grid | `space.base` (8px) |
-| Elevation — card | Shadow 3 | Elevation level 2 | `elevation.card` |
-| Gesture — back | Swipe right (edge) | Back gesture / predictive | n/a (platform-native) |
-
-## Sample Prompts
-
-### Map web spec to iOS
-
-```
-@mobile-native-design map the card component spec at docs/components/card.spec.md
-to iOS HIG conventions. What changes are needed?
-```
-
-**Output:**
-```
-## iOS HIG Mapping: Card Component
-
-Corner radius: 10pt (spec: radius.card = 8px → increase to 10pt for iOS)
-Shadow: HIG Shadow 3 (spec: elevation.card — matches)
-Typography: SF Pro Text 15pt for body (spec: 14px → 15pt iOS equivalent)
-Tap target: min 44×44pt (spec: 40px → flag for mobile adaptation)
-Gesture: long-press for context menu (not in web spec — add to iOS spec)
-
-Delta: 3 platform adaptations required
-```
-
-### Generate cross-platform parity report
-
-```
-@mobile-native-design generate an iOS vs Android parity report
-for the components in docs/components/
-```
-
-### Audit for mobile accessibility
-
-```
-@mobile-native-design audit the checkout flow in docs/wireframes/checkout.spec.md
-for iOS VoiceOver and Android TalkBack accessibility
-```
-
-### Spec gesture interactions
-
-```
-@mobile-native-design spec the gesture interactions for the swipe-to-dismiss
-pattern in the notification component
-```
-
-## Templates in This Skill
-
-| Template | Purpose |
-|---|---|
-| `ios-component-spec-template.md` | iOS HIG-adapted component spec with SwiftUI hints |
-| `android-component-spec-template.md` | Material You-adapted component spec with Compose hints |
-| `cross-platform-parity-template.md` | iOS vs Android parity report with delta table |
-| `mobile-accessibility-checklist.md` | VoiceOver + TalkBack accessibility checklist |
-
-## Output Schema
-
-```yaml
-discriminator: component-spec
-platform: ios | android | cross-platform
-hig_deviations: [{dimension: string, web_value: string, native_value: string}]
-tap_target_issues: [string]
-gesture_specs: [{gesture: string, action: string, platform: string}]
-parity_delta: number
-accessibility_pass: boolean
-```
-
-## Agent Pairing
-
-- Input from: `ux-designer` (web wireframe), `design-system-architect` (token definitions)
-- Output to: `frontend-dev` (SwiftUI / Jetpack Compose implementation hints)
-- Pairs with: `accessibility-auditor` (VoiceOver/TalkBack audit), `design-drift-detection` (native vs spec parity)
+## Delegates / pairs with
+- Input: `ux-designer` (web wireframe), `design-system-architect` (tokens).
+- Output: `frontend-dev` (SwiftUI / Jetpack Compose hints).
+- Pairs: `accessibility-auditor` (VoiceOver/TalkBack), `design-drift-detection` (native/spec parity).

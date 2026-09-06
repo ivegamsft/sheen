@@ -14,97 +14,25 @@ allowed-tools: []
 ---
 # Design Drift Detection Skill
 
-Audit whether live implementation matches design intent — catching token drift, missing states, structural divergence, and ARIA gaps before they reach production.
-
-## Closes
-
-GitHub issue #60 — `feat(skill): design-drift-detection — spec-vs-implementation parity audit`
+Compare live DOM/CSS with design intent for token, state, structure, and ARIA parity.
 
 ## Workflow
+1. Load component specs, token definitions, and live implementation evidence.
+2. Read and apply the [parity contract](references/parity-contract.md): evidence flow, scenarios, severity/actions, artifact roles, and schema.
+3. Compare spec values with computed CSS, required ARIA, and variants/states; locate each mismatch by file and line.
+4. Produce parity/token-drift/variant-coverage reports, apply the gate, and route fixes or spec clarification.
 
-```
-component-spec + live DOM/CSS → design-drift-detection → parity report
-                              ↘ token drift table
-                              ↘ ARIA gap list
-                              ↘ missing variant matrix
-```
+## Guardrails
+- Gate requires zero CRITICAL token or ARIA drifts; block the PR for CRITICAL token references outside the system.
+- Required focus/error/loading states missing: MAJOR, log issue. Within-range visual deviation: MINOR, log warning and track as issues. Undocumented variants: INFO, document.
+- Audit only: do not write new component code, create design specs, or perform infrastructure monitoring.
 
-## Templates in This Skill
+## Output
+- Downstream parity report, token diff table, and missing-variant matrix.
+- Reference `audit-report` schema: component/spec, dimension/severity/spec/implementation/file/line findings, severity counts, `gate_passed`.
 
-| Template | Purpose |
-|---|---|
-| `drift-report-template.md` | Spec-vs-implementation parity report with severity ratings |
-| `token-drift-table.md` | Token value diff: spec value vs. computed CSS value |
-| `variant-coverage-matrix.md` | Component variant/state coverage matrix |
-
-## Sample Prompts
-
-### Full parity audit
-
-```
-@design-drift-detection audit src/components/Button/ against docs/components/button.spec.md
-```
-
-**Agent flow:** `design-reviewer` → `design-drift-detection` → `frontend-dev` (fixes)
-
-**Output shape:**
-```
-## Drift Report: Button
-| Dimension        | Spec                    | Implementation        | Status  |
-|------------------|-------------------------|-----------------------|---------|
-| Background token | --color-action-primary  | --color-brand-blue    | ❌ DRIFT |
-| Focus ring       | 2px solid --focus-ring  | missing               | ❌ MISSING |
-| Hover state      | defined                 | defined               | ✅ MATCH |
-```
-
-**Gate condition:** zero CRITICAL drifts (token or ARIA); MINOR drifts logged as issues
-
-### Token drift only
-
-```
-@design-drift-detection check token bindings in src/components/ against tokens/semantic/
-```
-
-### Missing variant audit
-
-```
-@design-drift-detection generate a variant coverage matrix for src/components/Card/
-against docs/components/card.spec.md
-```
-
-## Drift Severity Levels
-
-| Level | Trigger | Action |
-|---|---|---|
-| CRITICAL | Token value does not reference design system | Block PR |
-| MAJOR | Required component state missing (focus, error, loading) | Log issue |
-| MINOR | Visual deviation within token-defined range | Log warning |
-| INFO | Implementation adds undocumented variant | Document |
-
-## Output Schema
-
-```yaml
-discriminator: audit-report
-component: string
-spec_ref: string
-drifts:
-  - dimension: string
-    severity: CRITICAL | MAJOR | MINOR | INFO
-    spec_value: string
-    impl_value: string
-    file: string
-    line: number
-summary:
-  critical: number
-  major: number
-  minor: number
-  info: number
-gate_passed: boolean
-```
-
-## Agent Pairing
-
-- Triggered by: `design-reviewer` (visual QA), `ci` (pre-merge gate)
-- Input from: `design-to-code` (generated components), `frontend-dev` (hand-coded)
-- Escalates to: `ux-designer` (spec clarification), `frontend-dev` (fix)
-- Closes loop: `design-to-code` → `design-drift-detection` → confirm parity
+## Delegates / pairs with
+- Triggered by: `design-reviewer` (visual QA), `ci` (pre-merge).
+- Input: `design-to-code` (generated), `frontend-dev` (hand-coded).
+- Escalates: `ux-designer` (spec clarification), `frontend-dev` (fix).
+- Close loop: `design-to-code` → `design-drift-detection` → confirm parity.

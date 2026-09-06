@@ -7,7 +7,27 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+### Changed
+
+- Reduced all 20 oversized source-owned skill bodies below the existing W03
+  2500-character heuristic, retaining critical guards and handoffs in concise
+  workflows and moving detailed contracts/checklists/examples into linked,
+  independently syncable skill-local references. Preserved discovery metadata,
+  routing, and accessibility pairings; clarified shared-source and downstream
+  artifact paths and documented the reference-folder contract in spec 02 (#203).
+
 ### Fixed
+
+- Corrected the extracted AI review example to classify representational
+  unfairness as CRITICAL and report FAIL (1 critical, 1 major), consistent with
+  its existing mandatory severity table and guardrail (#208).
+
+- Restored explicit contracts-and-standards evaluation alongside design-review's
+  mandatory real-content loop (#203). Added deterministic per-file skill payload
+  hash evidence, retaining the legacy SKILL-only hash while detecting reference,
+  template, sample, and supporting-script drift. Added source/consumer builder
+  regressions for normalization, binary content, ordering, and noise exclusions;
+  wired the tests into CI/checks and the internal publisher strip list (#207).
 
 - Accessibility routing diagnostics now distinguish positive scenarios from
   negative anti-triggers and resolve real agent composition/direct specialist

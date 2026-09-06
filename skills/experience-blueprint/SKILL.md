@@ -12,54 +12,34 @@ allowed-tools: []
 ---
 # Experience Blueprint
 
-Audit or generate a product's complete, implementation-neutral experience
-contract: brand, voice, IA, layouts, pages, wireframes, navigation, and flows
-as one traceable model. Implements `specs/10-experience-blueprint.spec.md`.
+Audit or generate one traceable, implementation-neutral brand/voice/IA/layout/page/wireframe/navigation/flow contract.
 
 ## Workflow
-1. Select mode. **Audit:** inventory routes, screens, navigation, content,
-   styles, copy, analytics, and existing docs; record each source in an
-   evidence register (`templates/experience-blueprint/audit-workflow.md`).
-   **Generate:** capture the brief, audiences, constraints, and select a
-   primary + supporting archetype (`templates/experience-blueprint/archetypes.md`).
-2. Populate the experience index (`templates/experience-blueprint/experience-index.md`):
-   stable IDs, relationships, sources, decisions, and open questions.
-3. Delegate each domain artifact to its owning specialist skill (see
-   Delegates below) instead of authoring it inline.
-4. For generation, produce at least two candidate IA/layout directions when
-   material uncertainty exists and resolve them with `design-debate`.
-5. Validate cross-references, required states, responsive coverage, and
-   archetype-required moments (`scripts/audit-experience-blueprint.ps1`).
-6. For audits, score each dimension 0-4 with evidence and confidence, and log
-   findings with severity, affected artifact IDs, and a recommendation.
-7. Produce a source-linked summary and handoff
-   (`templates/experience-blueprint/handoff.md`) in the downstream's chosen
-   representation.
-   Reference the selected theme revision, decision/readiness evidence and affected
-   catalog entries from `theming`; do not reproduce its catalog or infer write rights.
+1. Read and apply the [orchestration contract](references/orchestration-contract.md), mode checklists, shared templates, and validation/handoff requirements.
+2. Audit: inventory sources/evidence. Generate: capture brief/audiences/constraints and primary/supporting archetypes.
+3. Index stable IDs, relationships, sources, decisions, questions; delegate domain artifacts to their owners.
+4. For material generation uncertainty, create ≥2 IA/layout candidates and resolve via `design-debate`.
+5. Validate references, states, responsive coverage, and archetype moments. Audit dimensions 0–4 with evidence/confidence and severity-ranked findings.
+6. Hand off source-linked output; reference `theming`'s selected revision, decision/readiness evidence, and affected catalog entries.
 
 ## Guardrails
-- Do not reimplement brand, IA, accessibility, component, or frontend
-  expertise already owned by another skill; index and relate their output.
-- Do not claim a page, flow, or state is absent without supporting evidence.
-- Do not silently replace an accepted brand, token, IA, or component decision.
-- Do not prescribe language, framework, file format, or rendering technology.
+- Index specialist outputs; never duplicate their expertise or the theme catalog.
+- No unsupported absence claims or silent replacement of accepted brand/token/IA/component decisions.
+- No inferred write rights; no prescribed language, framework, format, or renderer.
 
 ## Output
-- Experience index with stable, unique artifact IDs and relationships.
-- Brand, voice, IA, layout, page, wireframe, navigation, and flow references
-  (audit: observed; generate: proposed) produced by the owning specialists.
-- Audit only: evidence register, 0-4 maturity scores, prioritized findings.
-- Generate only: brief, candidate directions, resolved direction, handoff.
+- Downstream experience index with unique IDs/relationships and specialist artifact references (observed/proposed).
+- Audit: evidence register, 0–4 scores, prioritized findings.
+- Generate: brief, candidates, resolved direction, source-linked handoff.
 
 ## Delegates / pairs with
 - `brand-identity`, `brand-voice-tone`, `design-tokens`, `theming`
 - `information-architecture`, `navigation-design`, `taxonomy`
 - `layout-grid-spacing`, `responsive-design`, `content-hierarchy`
-- `app-layout-catalog` (app-specific logical layout gallery, spec 12)
+- `app-layout-catalog` (logical layout gallery, spec 12)
 - `wireframing`, `user-research`, `ux-writing`
 - `component-spec`, `pattern-library`, `ui-states-interaction`
-- `app-component-catalog` (app-specific logical component gallery, spec 11)
+- `app-component-catalog` (logical component gallery, spec 11)
 - `design-audit`, `design-system-audit`, `web-usability-review`
 - `accessibility-audit`, `secure-ux`
 - `design-exploration`, `design-debate`

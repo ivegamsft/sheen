@@ -9,6 +9,7 @@
 skills/<skill-name>/
 ├── SKILL.md          # required
 ├── eval.yaml         # required — routing test
+├── references/       # optional — detailed contracts, checks, and examples
 └── templates/        # optional — starter assets
 ```
 
@@ -50,8 +51,29 @@ Target **≤ ~500 tokens**. Required sections, in order:
 4. **Output** — the concrete artifact(s) produced (and where they land).
 5. **Delegates / pairs with** — skills and agents this one hands off to.
 
-Move long examples, checklists, and starter files into `templates/` or `docs/`,
-not the skill body.
+The existing W03 heuristic measures the body (frontmatter excluded, lines
+joined with LF) and warns above **2500 characters**. Keep below that ceiling
+with margin (roughly 2200 characters); the token target remains advisory.
+
+Move detailed contracts, long examples, and checklists out of the body into
+skill-local `references/` (preferred for reading material) or `templates/`;
+use `templates/` for starter files. Both locations are supported: the existing
+W03 message's "Move examples to templates/" remains valid guidance, while
+`references/` lets authors distinguish detailed reading from starter assets.
+Keep scope, critical guardrails, output, and delegation summaries in `SKILL.md`.
+Workflow steps MUST explicitly require reading/applying the relevant supporting
+contract before acting; extraction must not make safety or output rules optional.
+
+Link supporting files relative to the Markdown file that contains the link.
+Each complete skill folder MUST remain independently syncable: local targets
+must exist inside that folder, including links from nested references back to
+`SKILL.md`, samples, or templates. Shared repository docs/specs/templates/tools
+may use repository-qualified URLs; identify downstream inputs and source-checkout
+commands explicitly rather than implying those files ship inside the skill.
+Do not advertise unbundled template filenames as locally available assets.
+Bundled supporting files are part of the skill's operative contract and the
+complete metadata `files` inventory; the legacy `hash` covers only `SKILL.md`.
+See [spec 05 §1.1](05-validation-checks.spec.md#11-complete-skill-payload-evidence).
 
 ## 4. `eval.yaml` (routing test)
 

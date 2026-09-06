@@ -142,7 +142,19 @@
         "pillar": "a11y",
         "maturity": "stable",
         "description": "WCAG 2.2 AA accessibility conformance audit for UI surfaces. USE FOR: a11y issue discovery and triage, remediation planning, conformance statement drafting. DO NOT USE FOR: only checking color-pair contrast, non-accessibility style preference reviews.",
-        "hash": "c9b1c0a91f50d499bd20ca930fb53019a8bad0f36cc59f0bec0f63850309e0df"
+        "hash": "c9b1c0a91f50d499bd20ca930fb53019a8bad0f36cc59f0bec0f63850309e0df",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "c9b1c0a91f50d499bd20ca930fb53019a8bad0f36cc59f0bec0f63850309e0df",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "90b6a9a5b4a04d4482a8e9cbd57e843246417c6faf08a7823b918a1ccfe17df5",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "ai-output-governance",
@@ -152,7 +164,24 @@
         "pillar": null,
         "maturity": "stable",
         "description": "Use when reviewing AI-generated UI copy, imagery, or components for bias, hallucination, brand safety, and accessibility compliance. USE FOR: audit AI-generated copy for harmful bias or hallucinated facts, review AI-generated images for brand compliance and representational fairness, flag AI-generated UI components that violate accessibility or token standards, enforce content moderation thresholds before AI output reaches users. DO NOT USE FOR: implementing AI model inference, training data curation, backend ML pipeline design.",
-        "hash": "1f6de2c7051be96e820593c263b233bad48912acca688ea890bc1ded4b2e6095"
+        "hash": "acdf6780435cfd15025088c3663481c28db8dff746c30f01b8f64e35ac517eee",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "acdf6780435cfd15025088c3663481c28db8dff746c30f01b8f64e35ac517eee",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "06f7b0d0513c5433c6cdd3979d57a038e12396fe8300cd64b8638d60532b3655",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/review-contract.md",
+            "hash": "c4cd46043f9aee130baeda0a4bdc2025ede5e226f60fe26e819f01a05ef4c669",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "app-component-catalog",
@@ -162,7 +191,24 @@
         "pillar": "components",
         "maturity": "draft",
         "description": "Audit or generate one application's logical UI component catalog: neutral seed vocabulary, alias normalization, variant-versus-drift findings, and reuse/extend/create selection. USE FOR: app-specific component audits, alias and duplicate normalization, reuse-extend-create selection decisions, logical component metadata and gallery documentation. DO NOT USE FOR: authoring one component's full anatomy spec, multi-component pattern composition, page-layout region catalogs.",
-        "hash": "11cfa68d9a4f6c91fcceab3bd5c2c00fa0ac621aeff2d6fc6e34d7d799a906d6"
+        "hash": "ef70fe5bfeb7db1c3abf99a2b1960ed697c8e665b7217057f92ddb8d5c719066",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "ef70fe5bfeb7db1c3abf99a2b1960ed697c8e665b7217057f92ddb8d5c719066",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "ab332f1b9ea34d66908c05164e098824c6f4e776551d5675132ec7be4fc75831",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/catalog-contract.md",
+            "hash": "5b9b845820d0795f9d4b78b309c5e7f7594a82098fde9a63bd816e094e38e20c",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "app-layout-catalog",
@@ -172,7 +218,44 @@
         "pillar": "components",
         "maturity": "draft",
         "description": "Use when auditing or generating an application-specific catalog of logical page layouts, mapping pages to layouts, or selecting a layout's regions, navigation placement, and component-role constraints. USE FOR: app layout catalog audits, page-to-layout mapping and variant-vs-drift normalization, layout reuse/extend/create selection, app layout gallery documentation. DO NOT USE FOR: single component anatomy specs, visual theme/token styling, framework/grid/DOM implementation choices.",
-        "hash": "88b6a2b6459e1939f23fdfa6776d103ec92be527bca9638b34831762f1424f7d"
+        "hash": "339abc283052ebb28865f5774ca8764031b2e2cc619b24b9ff142a1c0b214866",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "339abc283052ebb28865f5774ca8764031b2e2cc619b24b9ff142a1c0b214866",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "8681b2f6f6c4bf59e46ec1d406e69c82dcbfef9fbed3ff5385c6e5a8fb62e74d",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/layout-contract.md",
+            "hash": "9092845aae14c868b644c0583d7af8ac2aa3b3ce6692c7403a5eac6388f4a2f4",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "templates/README.md",
+            "hash": "b4ccf8423749876e77eb7722e503433f8aa6a19d9883c6640e3a9fd6fb1c4cc4",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "templates/audit-finding.md",
+            "hash": "e2f3b5e9c0650b05db5cab25faae3c97b68e7e6c6988c375838be4f4567a325a",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "templates/layout-catalog-entry.md",
+            "hash": "1341fa46ecc97b8ed5bffedce6330205f38e4eb78f935d6d1d75fa5cf910be83",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "templates/selection-scenarios.md",
+            "hash": "8864b527af43882bc901db8abce2ae3c01d6c3d86c96c2aa0a402d4fb239c227",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "brand-identity",
@@ -182,7 +265,19 @@
         "pillar": "brand",
         "maturity": "stable",
         "description": "Use when defining, documenting, or evaluating visual brand principles, identity systems, and brand consistency rules. USE FOR: brand principles definition, visual identity codification, brand consistency guidance. DO NOT USE FOR: microcopy editing, component redline specs.",
-        "hash": "acd7e444cee60c23ff100844a64e19df82f307d4dfd4d5a5262ab93defbda3c9"
+        "hash": "acd7e444cee60c23ff100844a64e19df82f307d4dfd4d5a5262ab93defbda3c9",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "acd7e444cee60c23ff100844a64e19df82f307d4dfd4d5a5262ab93defbda3c9",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "6563ee650205761568b3082807e33581f3e5edd15c31e635c818010b2217b22c",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "brand-voice-tone",
@@ -192,7 +287,19 @@
         "pillar": "brand",
         "maturity": "stable",
         "description": "Use when authoring or reviewing voice, tone, and messaging style guidance across product surfaces. USE FOR: voice and tone rules, messaging style guidance, tone-by-context matrix. DO NOT USE FOR: UI state behavior, token schema changes.",
-        "hash": "df38922ab16d4dc69e8f26dab9c299487ef3fe44533f10dfe0e64f15212d5916"
+        "hash": "df38922ab16d4dc69e8f26dab9c299487ef3fe44533f10dfe0e64f15212d5916",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "df38922ab16d4dc69e8f26dab9c299487ef3fe44533f10dfe0e64f15212d5916",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "5945b40754165d95af5f8fab60d62379297af8c6c253f1bd63712fe9dcc26147",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "color-contrast-check",
@@ -202,7 +309,19 @@
         "pillar": "a11y",
         "maturity": "stable",
         "description": "Use when validating color pair contrast ratios for accessibility compliance or theme readiness. USE FOR: contrast ratio checks, theme pair validation, wcag contrast triage. DO NOT USE FOR: full accessibility audits, navigation IA design.",
-        "hash": "a47251bbc559b8fa5349219c96b32eec37fadec96b5dccc395c61eecf0fb14ff"
+        "hash": "a47251bbc559b8fa5349219c96b32eec37fadec96b5dccc395c61eecf0fb14ff",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "a47251bbc559b8fa5349219c96b32eec37fadec96b5dccc395c61eecf0fb14ff",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "720f10a463059aea3af436d7d192537266edc5544e0c5d999b0c025a85a840cd",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "color-system",
@@ -212,7 +331,19 @@
         "pillar": "foundations",
         "maturity": "stable",
         "description": "Build accessible palette ramps and semantic color roles. USE FOR: generating color ramps, mapping brand hues to semantic roles, validating cross-theme contrast readiness. DO NOT USE FOR: isolated per-pair contrast reporting only, non-color token authoring.",
-        "hash": "b65a1aa975fe83106cf419276e743bc32ed33210723da53412956f800b89d5b1"
+        "hash": "b65a1aa975fe83106cf419276e743bc32ed33210723da53412956f800b89d5b1",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "b65a1aa975fe83106cf419276e743bc32ed33210723da53412956f800b89d5b1",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "c9f6df2b66f7d5a3cb03ba874d93a2db1d9017e0c97876a32ae8b9fa9a511e7b",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "component-spec",
@@ -222,7 +353,19 @@
         "pillar": "components",
         "maturity": "stable",
         "description": "Author complete component specifications with anatomy, variants, states, and accessibility behavior, checking the component inventory first to avoid duplicate specs. USE FOR: defining component contracts, documenting ARIA/keyboard behavior, producing implementation-ready redlines. DO NOT USE FOR: whole-system design audits, broad UX strategy documents.",
-        "hash": "e16ca87a17129a57b567833608699b8b9bcf4923c0da1ff94aa4a2d1cf8d6eef"
+        "hash": "e16ca87a17129a57b567833608699b8b9bcf4923c0da1ff94aa4a2d1cf8d6eef",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "e16ca87a17129a57b567833608699b8b9bcf4923c0da1ff94aa4a2d1cf8d6eef",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "4ece998ed8134b2773fb88d2cc588bd0f578753ef49240a0d10c40d877b47118",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "content-hierarchy",
@@ -232,7 +375,19 @@
         "pillar": "usability",
         "maturity": "beta",
         "description": "Use when analyzing or improving the prioritization and visual scan-path of content on a surface. USE FOR: content prioritization, scan-path improvement, hierarchy critique. DO NOT USE FOR: voice/tone strategy, token primitive edits.",
-        "hash": "33ffa62ef3176ae978ea43ef09be327b7500effee4c3b60f5a6bb13ee35d812f"
+        "hash": "33ffa62ef3176ae978ea43ef09be327b7500effee4c3b60f5a6bb13ee35d812f",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "33ffa62ef3176ae978ea43ef09be327b7500effee4c3b60f5a6bb13ee35d812f",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "74b3203bf6bef2c2db38010765230cedfbb9a7a8b529bca298250e3edebd8fe9",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "craft-quality",
@@ -242,7 +397,24 @@
         "pillar": "governance",
         "maturity": "stable",
         "description": "Use when running a craft and polish pass to assess consistency, refinement, and visual quality. USE FOR: craft checklist passes, polish quality assessments, consistency refinements. DO NOT USE FOR: formal usability audits, framework detection scans.",
-        "hash": "7ba1c70eb35e270db60770f4456e46151f66bb6d79e39844eef0c5c197d1f065"
+        "hash": "9e67ff057b9b794c2db098a5f568399c3fe6cfe23b27b0e49c0594ef3d32f0be",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "9e67ff057b9b794c2db098a5f568399c3fe6cfe23b27b0e49c0594ef3d32f0be",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "89c253d0b33422456d804167a063945926f8cbf1a19214f0142723233155afc2",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/typography-structure.md",
+            "hash": "2f0eac51b585d7867bd27d2b19bd2e37cc94b7da45abdd3ddce339ff0bce67e2",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "create-design-skill",
@@ -252,7 +424,19 @@
         "pillar": "governance",
         "maturity": "stable",
         "description": "Scaffold a new sheen skill that conforms to the skill contract. USE FOR: creating new skill folders and frontmatter, authoring routing eval scenarios, updating catalog entries safely. DO NOT USE FOR: writing instruction-layer files, implementing product feature code.",
-        "hash": "7efd46fb03ebbf7dd94647497624ecba7519d4d1be5797bd52d142620ffb63e3"
+        "hash": "7efd46fb03ebbf7dd94647497624ecba7519d4d1be5797bd52d142620ffb63e3",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "7efd46fb03ebbf7dd94647497624ecba7519d4d1be5797bd52d142620ffb63e3",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "8c488e52390a21e399df810e3e8ef003e946652d6790aee20c07ff40bc48640d",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "css-mapping",
@@ -262,7 +446,19 @@
         "pillar": "mapping",
         "maturity": "beta",
         "description": "Use when inventorying existing CSS to identify token candidates, detect framework usage, or map raw values to design tokens. USE FOR: css inventory mapping, framework detection, token candidate extraction. DO NOT USE FOR: creating new semantic token models, design review facilitation.",
-        "hash": "33c19440324871f5a147aeca5fdcb6da63319ed162e0bcf9b0d147531f7de4e5"
+        "hash": "33c19440324871f5a147aeca5fdcb6da63319ed162e0bcf9b0d147531f7de4e5",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "33c19440324871f5a147aeca5fdcb6da63319ed162e0bcf9b0d147531f7de4e5",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "0302b13aabfc12711b1f3434e0b4dc383fde7509a5ac5be2f23d22b9ac1217c4",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "data-visualisation",
@@ -272,7 +468,39 @@
         "pillar": null,
         "maturity": "stable",
         "description": "Use when designing charts, graphs, dashboards, or any data-dense UI. USE FOR: choose the right chart type for a data relationship, design a colour encoding scheme for a multi-series chart, specify data density rules for a dashboard layout, audit a chart design for accessibility (colour-blind safe, axis labels, ARIA), generate a data visualisation component spec. DO NOT USE FOR: implementing chart rendering code, data pipeline design, backend analytics query optimisation.",
-        "hash": "bddc36df47caa0ebc744c69f4bbe3517cc43ccfc57a1dd495e89dc8ce48aee21"
+        "hash": "36c1594f5f22380035a0062c4c0da0519dab4b791bf774009d049c93636dadb4",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "36c1594f5f22380035a0062c4c0da0519dab4b791bf774009d049c93636dadb4",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "chart-spec-template.md",
+            "hash": "290db0c2cad4cebf268cea1db1dd00fda00d60999e05eec7deed052422775776",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "dashboard-layout-template.md",
+            "hash": "48d6914cd14b0ba20f5f82872737608d4cd06c9a6d9d6f98c70709d6016e66bb",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "data-colour-palette-template.md",
+            "hash": "eb751ed55a4a84312bf4836f4fc8d02e23d13a21dba7a800d24cba0685c6a70a",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "4807cd0f135cdaab4956716d8227d5398697801ea0d4eed414d35649f6cb779f",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/chart-contract.md",
+            "hash": "c4aab352d60c94062096fd20c782d9a60db8a8454a6dd7c6bf61c89c4d50489a",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "design-adoption-telemetry",
@@ -282,7 +510,24 @@
         "pillar": null,
         "maturity": "stable",
         "description": "Use when measuring design system adoption in production — tracking token usage, component usage, and drift from the design system in live codebases. USE FOR: generate a design token usage report from a codebase, identify components using hardcoded values instead of tokens, measure design system adoption percentage across a product, track which teams are using vs. drifting from the design system, produce a design adoption scorecard. DO NOT USE FOR: application performance monitoring, error tracking, user analytics unrelated to design system usage.",
-        "hash": "6427e66a831458a4d4ba687d4dedb36b068cdf57cec105fcd467cfe0579059e1"
+        "hash": "27ca5748b9581940eb90ced1fc667f33aa76fa3385ffc23823e84098725c7966",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "27ca5748b9581940eb90ced1fc667f33aa76fa3385ffc23823e84098725c7966",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "725906184875180aa83275a9739aea0b9fba3c9553005133d1647dd17ff3d7a0",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/measurement-contract.md",
+            "hash": "20be508375e25b1c56153ed1ff94e85d391df101341309dfb8b4fa78f6f9c0cc",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "design-audit",
@@ -292,7 +537,24 @@
         "pillar": "lifecycle",
         "maturity": "stable",
         "description": "Top-level design assessment for an existing repo or product. USE FOR: repo-wide design audits, prioritizing UX/design debt, generating a remediation backlog from evidence. DO NOT USE FOR: editing only token files in isolation, greenfield system bootstrap from zero.",
-        "hash": "abb39ad6e95aae0bbe4ad912d3066e6f9cfb42e32e6383d61748c7ec6c5ae301"
+        "hash": "d5528a0ffa4ce629a3158648d4baa6c8d8013853eadefff1f45197125944a98f",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "d5528a0ffa4ce629a3158648d4baa6c8d8013853eadefff1f45197125944a98f",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "3aea5736fbca15342d0149a5815cff5dcafee593e103371ca3fefed8d6dda705",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/diagram-audit.md",
+            "hash": "aca24c32014cb5028cd5603478f1527e49c4fcf54649fefc96f6d96472a31305",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "design-bootstrap",
@@ -302,7 +564,19 @@
         "pillar": "lifecycle",
         "maturity": "stable",
         "description": "Greenfield design-system bootstrap entry point. USE FOR: starting a design system from scratch, seeding initial tokens and themes, defining first-pass IA/component foundations. DO NOT USE FOR: auditing an established system, isolated one-off component tweaks.",
-        "hash": "618786d7fbf567a28af2173011fac1925fedd05e86a4fcc1b55cb27546090b10"
+        "hash": "618786d7fbf567a28af2173011fac1925fedd05e86a4fcc1b55cb27546090b10",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "618786d7fbf567a28af2173011fac1925fedd05e86a4fcc1b55cb27546090b10",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "f7c89ae3551b542480c09b3812e3ee546222b05bac951eab9a442d2ef8facf21",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "design-debate",
@@ -312,7 +586,19 @@
         "pillar": "lifecycle",
         "maturity": "beta",
         "description": "Use when you need to choose between competing design approaches with explicit criteria and documented tradeoffs. USE FOR: option tradeoff analysis, design decision records (ADRs), criteria-based comparisons with evidence. DO NOT USE FOR: single artifact polish reviews, token-only mechanical edits.",
-        "hash": "85bb3b5b05b77b7f6821bd6528b28dc7d08d3749665b2d7a51209390ee1111be"
+        "hash": "85bb3b5b05b77b7f6821bd6528b28dc7d08d3749665b2d7a51209390ee1111be",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "85bb3b5b05b77b7f6821bd6528b28dc7d08d3749665b2d7a51209390ee1111be",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "908e0e7c51380106fb56f37750bb20810202fbefd481031ff739c68b4469880a",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "design-drift-detection",
@@ -322,7 +608,24 @@
         "pillar": null,
         "maturity": "stable",
         "description": "Use when auditing whether a live implementation matches its design spec or token definitions. USE FOR: compare rendered DOM against a component spec, detect token value drift between spec and CSS, flag missing ARIA attributes not in wireframe, generate a spec-vs-implementation parity report. DO NOT USE FOR: writing new component code, creating design specs, infrastructure monitoring.",
-        "hash": "c65b430b1f77818853b362d2bf29b63a51eb6fc948ff4b5611c748e868510e73"
+        "hash": "be836dadb92bda1a3def9f13897ad6b3b020e4be9865ea68558a1ffd66bc6bcb",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "be836dadb92bda1a3def9f13897ad6b3b020e4be9865ea68558a1ffd66bc6bcb",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "82f9b378bc5c2927ffd02836be0d9f4aa72fd60975f7d99c29055a5441afcf5a",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/parity-contract.md",
+            "hash": "8bd7fb8b7616f87dbb03f52f3930b1dfb6bdf097c44542e6f8653056c2ce0497",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "design-exploration",
@@ -332,7 +635,24 @@
         "pillar": "lifecycle",
         "maturity": "beta",
         "description": "Use when generating new design directions, concepts, or exploring problem spaces before committing to a single path. USE FOR: concept generation, divergent direction exploration, idea synthesis. DO NOT USE FOR: final decision arbitration, wcag audit reporting.",
-        "hash": "4de5d8ff0c5abf613545e6eddc0f413482ee2044fcb7bed021781abefb896668"
+        "hash": "a753fe363ca5f2028d5c5bb0890710205803116e1b35fe3a55655dc89b39d8f8",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "a753fe363ca5f2028d5c5bb0890710205803116e1b35fe3a55655dc89b39d8f8",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "b70710d30209eeb29021b5f1254e9d48be205ade2c52b0d157cf28aff329099b",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/creative-calibration.md",
+            "hash": "b431adfd8c12fdd77bbada827e358fd45b05a6807abda7d10e91f39a25084e8d",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "design-handoff",
@@ -342,7 +662,19 @@
         "pillar": "lifecycle",
         "maturity": "stable",
         "description": "Use when packaging and preparing design artifacts for engineering handoff, including redlines, annotations, and token exports. USE FOR: engineering handoff packaging, redline and annotation bundling, token/spec export preparation. DO NOT USE FOR: authoring core component specs, backend implementation.",
-        "hash": "596ebdc61d97a130cb919298b348ecc2adeade87b787eb344b0c9fef8b2bd962"
+        "hash": "596ebdc61d97a130cb919298b348ecc2adeade87b787eb344b0c9fef8b2bd962",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "596ebdc61d97a130cb919298b348ecc2adeade87b787eb344b0c9fef8b2bd962",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "926da466cdb3ae5f681cb796ef223fff1727e14b3057a52ea2d2e42dd9b112de",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "design-review",
@@ -352,7 +684,24 @@
         "pillar": "governance",
         "maturity": "stable",
         "description": "Use when critiquing a design artifact against principles, craft standards, or system guidelines. USE FOR: artifact critique, principle-based review, craft issue identification. DO NOT USE FOR: multi-option debate facilitation, full repo audits.",
-        "hash": "bce20b200041699abb29fab733ca07db6e1db3a22c97e5336d39491bf3731f8d"
+        "hash": "4c7fb81cf6db14d2244480bcf48090df30953417112c61c3aa19e1b0b8436586",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "4c7fb81cf6db14d2244480bcf48090df30953417112c61c3aa19e1b0b8436586",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "c151482279db990cb53dae3b16ab9c44c03eb449482b57aed934fb8c54ecd54b",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/real-content-critique.md",
+            "hash": "b077ceb8470a0050c6abc56762c3bcef53a955438b83cb94d509a22c312158af",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "design-sprint",
@@ -362,7 +711,24 @@
         "pillar": null,
         "maturity": "stable",
         "description": "Use when facilitating a design sprint — from problem framing through ideation, prototyping, and user validation. USE FOR: run a GV-style 5-day design sprint, facilitate a 2-hour lightning design sprint, generate How Might We (HMW) questions from a problem brief, produce a sprint map and decision log, create a prototype spec from sprint day-3 storyboard. DO NOT USE FOR: implementing the prototyped solution in production code, project management tooling, user research recruitment.",
-        "hash": "4f8891dbc3f1e71b3a3ecee587b78ad5c83399041b433f12392fa3ecc72eb158"
+        "hash": "b45ce03fa7f5d00a3ac49d7c33a551a32bdee8fc846ea77eb18d2d42bbe3d043",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "b45ce03fa7f5d00a3ac49d7c33a551a32bdee8fc846ea77eb18d2d42bbe3d043",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "b96bf980f159d16490bc2dfdaba4bd5b494996ee732804782ca5d8d4e175197d",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/facilitation-contract.md",
+            "hash": "0b59e5ad13a88498842c246fe098c9fd4ebf1d9eaa84dd5256c26503a7974d99",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "design-suggest",
@@ -372,7 +738,19 @@
         "pillar": "lifecycle",
         "maturity": "beta",
         "description": "Use when generating targeted design improvement suggestions or prioritized quick-win recommendations. USE FOR: targeted improvement suggestions, quick design wins, prioritized recommendation lists. DO NOT USE FOR: full repository audits, formal conformance claims.",
-        "hash": "811f5feee8ea8f5e0d121a38310558f91645042e47105d6d08bd16065eedcccb"
+        "hash": "811f5feee8ea8f5e0d121a38310558f91645042e47105d6d08bd16065eedcccb",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "811f5feee8ea8f5e0d121a38310558f91645042e47105d6d08bd16065eedcccb",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "c9e27c0973572521157c9f544af9df17cd3810d12542d22ff968c094e1764b93",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "design-system-audit",
@@ -382,7 +760,19 @@
         "pillar": "components",
         "maturity": "stable",
         "description": "Use when auditing a design system for token coherence, component consistency, and system-level drift. USE FOR: token/component coherence checks, design drift detection, system-level consistency audits. DO NOT USE FOR: repo-wide UX debt triage, new system bootstrap.",
-        "hash": "547cc92ec6d8b96741b89553e86f7a2577daa856f7dc1db8eb668fa6ae11f059"
+        "hash": "547cc92ec6d8b96741b89553e86f7a2577daa856f7dc1db8eb668fa6ae11f059",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "547cc92ec6d8b96741b89553e86f7a2577daa856f7dc1db8eb668fa6ae11f059",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "b34d752ab57ea9e576da004030350769f626d9437ff0a3aefdf86e112b07a32b",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "design-system-versioning",
@@ -392,7 +782,24 @@
         "pillar": null,
         "maturity": "stable",
         "description": "Use when managing design system versioning, planning breaking changes, or authoring migration guides. USE FOR: bump design system semver, classify a token rename as breaking vs non-breaking, author a migration guide for a major version, generate a changelog from token and component diffs, plan a deprecation timeline. DO NOT USE FOR: application feature versioning, API semver decisions unrelated to design, package release automation.",
-        "hash": "6d2159478bf5e8a3b35da118fc2898b34f2eb05d0d65e0decf8d9d0f8d7c139f"
+        "hash": "1dd9dacd54566ae5dd88cb949fb4344c9f9ead082364c0acc6ea179be2ab01e8",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "1dd9dacd54566ae5dd88cb949fb4344c9f9ead082364c0acc6ea179be2ab01e8",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "cedebe9653f1c8be248aec898aa8eab5fc280b113791543b8757a79a912eaf1a",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/versioning-contract.md",
+            "hash": "afb76d6495e2223a8d7fc6bd400cea7cefda6eb1ae0f8e6f8f3b6f81fcf5f167",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "design-to-code",
@@ -402,7 +809,24 @@
         "pillar": null,
         "maturity": "stable",
         "description": "Use when generating component code scaffolds from design specs, tokens, or Figma exports. USE FOR: scaffold a React/Vue/Web Component from a component spec, generate token-bound CSS/SCSS from a design spec, convert a wireframe spec to a typed component interface, produce Storybook story shells from component anatomy. DO NOT USE FOR: business logic implementation, backend API design, infrastructure provisioning.",
-        "hash": "37a777cc987d9487c358c8625b91f6c910da08ae0ba51443738a8828aeba905b"
+        "hash": "5ab5be35bc7a26fc365397432dd42bbd09720c3d2c0ee425403d44e7f8c02784",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "5ab5be35bc7a26fc365397432dd42bbd09720c3d2c0ee425403d44e7f8c02784",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "be6304741952b15875506763db19c80bcfbff555c87a2683544030578d5ce5f3",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/scaffold-contract.md",
+            "hash": "3de2771a7af1e68badc4f4f70542e8aa52922bcfecce2f6faec3acf1cf3153f8",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "design-tokens",
@@ -412,7 +836,19 @@
         "pillar": "foundations",
         "maturity": "stable",
         "description": "Author and evolve DTCG token source-of-truth. USE FOR: creating or editing core/semantic tokens, adding token aliases safely, maintaining token schema integrity. DO NOT USE FOR: choosing brand palette strategy alone, running full-repo UX audits.",
-        "hash": "420b69188325ca67e7f4181a5319a3f3ba7470b152b5a12817242c196124224e"
+        "hash": "420b69188325ca67e7f4181a5319a3f3ba7470b152b5a12817242c196124224e",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "420b69188325ca67e7f4181a5319a3f3ba7470b152b5a12817242c196124224e",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "fcf29b381ea737693f9f472da24e22e2ff48365a819685daba4e084b78499424",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "design-update",
@@ -422,7 +858,19 @@
         "pillar": "lifecycle",
         "maturity": "beta",
         "description": "Use when planning or executing a design system modernization, token migration, or theme evolution rollout. USE FOR: design system modernization, token migration planning, theme evolution rollout. DO NOT USE FOR: from-scratch bootstrap, single-component specs.",
-        "hash": "7c219ea207950df26de193e0f2bbdc94ec74e1612d9e9e44ca44d75a692aca3b"
+        "hash": "7c219ea207950df26de193e0f2bbdc94ec74e1612d9e9e44ca44d75a692aca3b",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "7c219ea207950df26de193e0f2bbdc94ec74e1612d9e9e44ca44d75a692aca3b",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "dafe8399a9025c6f22c611d1b112b607c220ef5a1910414e7b769146cb984212",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "documentation-diagram",
@@ -432,7 +880,104 @@
         "pillar": null,
         "maturity": "stable",
         "description": "Use when generating static, skin-aware SVG diagrams for code and product documentation. USE FOR: render a bar/line/sankey/treemap/gantt/kanban/story-map/user-journey/quadrant/fishbone/funnel/org-chart/loop/timeline/venn/security-matrix diagram from a JSON spec, embed an accessible diagram in a docs page, generate a diagram that automatically follows the current theme's diagram skin. DO NOT USE FOR: live/reporting dashboards with real-time data (use skills/data-visualisation), scatter/polar/radar/Wardley-map diagrams (explicitly out of scope, see ADR-006), animated or interactive charts.",
-        "hash": "1278cbad3bc9df0c97cc6b48cee963febd8be3020dda00a08631156f297e2e13"
+        "hash": "59e6f1deb6fdef4123c884e728bde1098b75bc0cd9ee4d4c4f865bfd5f8d5871",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "59e6f1deb6fdef4123c884e728bde1098b75bc0cd9ee4d4c4f865bfd5f8d5871",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "c71c4a1921f11740524f03ae9a70d35bb6c850cffb6f62245013c77dd0e7c6b2",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/renderer-contract.md",
+            "hash": "5c0ec8a826f805d7249349d0d37fb5bde17b0400558070ddc507c6d57bbb3941",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "samples/bar.json",
+            "hash": "bcb697bd350cc8d4ac6f9adff8d9e6394dba2d11eb1268c50eaae7c8f0597140",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "samples/fishbone.json",
+            "hash": "757c544a558e1648af86056d4954d35f47f5bd02c97b964cbade632b91fa13d3",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "samples/funnel.json",
+            "hash": "a66db465b72865d2d3665f84ab3bbbcc0c610bdda1cea713d6f050ed0d2c3f02",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "samples/gantt.json",
+            "hash": "b86cc5b51e4305727b51db56e1361ed4f362270beeb0297f97cbc5c20d132a2b",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "samples/kanban.json",
+            "hash": "51ff31b44fbab7ccfb34208aefc47886488adb75dcf5c9d99393cff78a169775",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "samples/line.json",
+            "hash": "da4b15884f23eccd41574ce2d6711899d02afba34f538dc47caff80fcd5aab5d",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "samples/loop.json",
+            "hash": "032b3d122b72dfc953cf34cdc924bca6ec9a54d03f4f9229b418b2e29cedc5b9",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "samples/org-chart.json",
+            "hash": "72df15a598a382b3f0e5d0cee486e90e1f7000d7a267a56c33e589db92e8df84",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "samples/quadrant.json",
+            "hash": "c213fe357dab22a350fcb85cdf4684b873687eb9b5fec98d5b98eb9e6bc0dcc4",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "samples/sankey.json",
+            "hash": "f6ad6c1bd90528206b1459b207c6bc1c16caea03284681f73ed0335268ff19f6",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "samples/security-matrix.json",
+            "hash": "fa386ad676ce380e5debe19779bf64341d564e62ccddce16f5ef6f0dd7acf65f",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "samples/story-map.json",
+            "hash": "f9775a87309c7e03bcf6636c5cad9f45edabc16f47763672933e38a26a9786ae",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "samples/timeline.json",
+            "hash": "1c5f6f5f65240714e26a7ed28df88d2b07957ee43db0706b4b20b050e271687e",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "samples/treemap.json",
+            "hash": "295ee9a51c8ea8fd3b8fd81a891cbc156d6101a84c7c086929a91aab436453af",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "samples/user-journey.json",
+            "hash": "3adb837f6130a0634b876ec35fa61afb2af3dd76035e69dbf6a12edddc7d91b8",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "samples/venn.json",
+            "hash": "c4ae70ebdf8b6c6705ececa3001b9fec9df88a387d4bede055b15d25d18cdee7",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "ethical-design",
@@ -442,7 +987,24 @@
         "pillar": null,
         "maturity": "stable",
         "description": "Use when detecting dark patterns, coercive UX, deceptive consent flows, or ethically problematic design choices. USE FOR: audit a checkout flow for dark patterns (hidden costs, confirmshaming, roach motel), review a consent UI against GDPR/ISO 29184, detect coercive or manipulative UX patterns, score a design against ethical design principles, recommend ethical alternatives to a problematic pattern. DO NOT USE FOR: legal advice or GDPR compliance certification, backend data processing audits, security penetration testing.",
-        "hash": "475c163b58f7415739f2a75bc185411b30fa96b9af59a091e5f62ef21f4695e1"
+        "hash": "c1ac6b93073cce5439d21be1bf229811d708e7ad8a9f1541d2236ac7a23d1ebd",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "c1ac6b93073cce5439d21be1bf229811d708e7ad8a9f1541d2236ac7a23d1ebd",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "338c41bcbb0d7fd1a489d819fbf3757b774e5ced0aaabae4d82e45d178cd8026",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/ethics-contract.md",
+            "hash": "50fc4c6f47de243cdec0c9bc65279fb21009c5e9d4ac32faf65c47e1ee2b42e0",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "experience-blueprint",
@@ -452,7 +1014,24 @@
         "pillar": "lifecycle",
         "maturity": "draft",
         "description": "Implementation-neutral orchestrator for a product's end-to-end UI/UX contract. USE FOR: audit an existing application's full experience and produce evidence-backed findings, generate a new experience from a product brief and archetype, coordinate brand/voice/IA/layout/page/flow specialists into one coherent contract, validate cross-artifact relationships and state coverage, produce a source-linked handoff for implementation. DO NOT USE FOR: brand-only identity work (brand-identity), IA-only sitemap/taxonomy work (information-architecture), single-component specification (component-spec), app-specific component or layout gallery maintenance alone (app-component-catalog, app-layout-catalog), writing runtime UI code (design-to-code, frontend-dev).",
-        "hash": "ef58f7d5a79430aca2dac5a18c2a956fd8dafad22a6178e5dd061dd2f621fc77"
+        "hash": "96aa22c684d7fd7092d177697a58f2a6d17ad81b8efff59bc9570a0ffb687e3d",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "96aa22c684d7fd7092d177697a58f2a6d17ad81b8efff59bc9570a0ffb687e3d",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "5c7fb6d0eaae4eccadd115c8fdfbf707022b06e5ce2df3b115494ad0d5642493",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/orchestration-contract.md",
+            "hash": "4bde1e7fc7e91da3d8b8eca742a509e262e080711bf267fc661cd6e01ae4f7a7",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "font-mapping",
@@ -462,7 +1041,19 @@
         "pillar": "mapping",
         "maturity": "beta",
         "description": "Use when inventorying font usage in a codebase to map weights, styles, and sizes to type token candidates. USE FOR: font usage inventory, weight/style mapping, type token candidate mapping. DO NOT USE FOR: new typography scale creation, a11y conformance statements.",
-        "hash": "aa70943736aa8a9df532650a349f766758ee0de35f5dbf956dc88bd1206d5e0e"
+        "hash": "aa70943736aa8a9df532650a349f766758ee0de35f5dbf956dc88bd1206d5e0e",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "aa70943736aa8a9df532650a349f766758ee0de35f5dbf956dc88bd1206d5e0e",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "f175e1c3d05efe2af7e199b9dd48981db9ed506a1fbad55dfe36a6821b3e06a2",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "i18n-framework-mapping",
@@ -472,7 +1063,19 @@
         "pillar": "mapping",
         "maturity": "beta",
         "description": "Use when detecting i18n framework usage and inventorying locale coverage and translation key gaps. USE FOR: i18n framework detection, locale coverage inventory, translation key gap mapping. DO NOT USE FOR: i18n strategy design, component variants.",
-        "hash": "b1b9dbf9b7b3c6b8c05b41e9c96e2010587d4cc2add488d1511a641dc669bc2d"
+        "hash": "b1b9dbf9b7b3c6b8c05b41e9c96e2010587d4cc2add488d1511a641dc669bc2d",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "b1b9dbf9b7b3c6b8c05b41e9c96e2010587d4cc2add488d1511a641dc669bc2d",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "2acdd67ef70492198b21f695f650b85ed4a419453604e7011d007ea07f41e8d8",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "iconography",
@@ -482,7 +1085,19 @@
         "pillar": "foundations",
         "maturity": "beta",
         "description": "Use when defining or auditing an icon system — grid rules, stroke sizing, and icon naming conventions. USE FOR: icon grid definition, stroke and sizing rules, icon naming taxonomy. DO NOT USE FOR: logo standards, full brand identity.",
-        "hash": "6cef3697b307b617026764a720723a1baab765caeb2b73a122e0047be0a5024a"
+        "hash": "6cef3697b307b617026764a720723a1baab765caeb2b73a122e0047be0a5024a",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "6cef3697b307b617026764a720723a1baab765caeb2b73a122e0047be0a5024a",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "46a4185f296050543557cd20f345108f1de024bf669949a4f526e92e0d8e61b1",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "imagery-illustration",
@@ -492,7 +1107,19 @@
         "pillar": "brand",
         "maturity": "beta",
         "description": "Use when defining imagery style direction, illustration system constraints, or art-direction guidelines. USE FOR: imagery style direction, illustration system guidance, art-direction constraints. DO NOT USE FOR: logo safe-area rules, token architecture.",
-        "hash": "25c7f33d2226f8f564e34fd60fa99190cf5166f56a22476f574b064e22f7fc25"
+        "hash": "25c7f33d2226f8f564e34fd60fa99190cf5166f56a22476f574b064e22f7fc25",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "25c7f33d2226f8f564e34fd60fa99190cf5166f56a22476f574b064e22f7fc25",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "dc2c6d4897a465a43766f1fa1f4b1481d9e925a4eccc967e3f1e8f09626bfa8d",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "information-architecture",
@@ -502,7 +1129,19 @@
         "pillar": "ia",
         "maturity": "stable",
         "description": "Use when structuring site maps, content models, or navigation architectures. USE FOR: site map structuring, content model definition, navigation architecture planning. DO NOT USE FOR: pixel-level component specs, palette generation.",
-        "hash": "ef6ce4f74f689f041675307cde9bb6329d969312501c6ebaeff618c35e19f9e5"
+        "hash": "ef6ce4f74f689f041675307cde9bb6329d969312501c6ebaeff618c35e19f9e5",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "ef6ce4f74f689f041675307cde9bb6329d969312501c6ebaeff618c35e19f9e5",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "665bda21990350497f7ba9318c8f1a04d75c8e35afe1d175d22505b69284e09c",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "landing-page-design",
@@ -512,7 +1151,19 @@
         "pillar": "usability",
         "maturity": "beta",
         "description": "Use when planning or reviewing landing page structure, hero/CTA hierarchy, and conversion-focused section layout. USE FOR: landing page structure, hero/cta hierarchy, conversion-focused section planning. DO NOT USE FOR: full IA maps, WCAG conformance audits.",
-        "hash": "17b8977601e44b0121f76da5cd3acbbca7669aaf8dfc871b1730b749b57037e9"
+        "hash": "17b8977601e44b0121f76da5cd3acbbca7669aaf8dfc871b1730b749b57037e9",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "17b8977601e44b0121f76da5cd3acbbca7669aaf8dfc871b1730b749b57037e9",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "7c7162ca99bc9cf14f826e643d43b34e472bf4cee43a9a8927856e3b10855904",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "layout-grid-spacing",
@@ -522,7 +1173,19 @@
         "pillar": "foundations",
         "maturity": "stable",
         "description": "Use when designing spacing scales, grid systems, gutters, or breakpoint planning. USE FOR: spacing scale design, grid and gutters, breakpoint planning. DO NOT USE FOR: single-screen responsive QA, component anatomy specs.",
-        "hash": "aa14621fc18a76a799b42bb21baf0a7c995388288f34e7087eabf081ec9d94e9"
+        "hash": "aa14621fc18a76a799b42bb21baf0a7c995388288f34e7087eabf081ec9d94e9",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "aa14621fc18a76a799b42bb21baf0a7c995388288f34e7087eabf081ec9d94e9",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "c08d1ecfc1c58f183343c74a7846ce3d9c0913a8d13014b405afb7a5566cc348",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "logo-usage",
@@ -532,7 +1195,19 @@
         "pillar": "brand",
         "maturity": "stable",
         "description": "Use when documenting or enforcing logo variant rules, clear-space requirements, and misuse prevention guidance. USE FOR: logo variant guidance, clear-space rules, misuse prevention examples. DO NOT USE FOR: icon system grids, usability audits.",
-        "hash": "ad40220d9af9f4b42d6890ae78a62b7a673944986f8873987e86dc53789b81c6"
+        "hash": "ad40220d9af9f4b42d6890ae78a62b7a673944986f8873987e86dc53789b81c6",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "ad40220d9af9f4b42d6890ae78a62b7a673944986f8873987e86dc53789b81c6",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "9f1db1f0149eae1d5c17fc8af8b8b9786990f0d218922832d9b6ee4e0865c062",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "mobile-native-design",
@@ -542,7 +1217,24 @@
         "pillar": null,
         "maturity": "stable",
         "description": "Use when designing for iOS, Android, or cross-platform mobile/native experiences. USE FOR: map a web component spec to iOS HIG conventions, adapt a design system to Android Material You dynamic theming, spec gesture interactions for a mobile screen, audit a mobile design for platform-native accessibility, generate a cross-platform parity report between iOS and Android specs. DO NOT USE FOR: web-only responsive design, backend mobile API design, mobile CI/CD pipeline setup.",
-        "hash": "1a9d758c30cdae8a1406b028bdf5c91a6a5b7427caa8a60c8fc0258f5ca3bcab"
+        "hash": "f4a1ae5a601501e94fa1606f1221aa3b04fdd2ee51eec911daa870e11111b85a",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "f4a1ae5a601501e94fa1606f1221aa3b04fdd2ee51eec911daa870e11111b85a",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "09478993fd99d3d1279fd7ecc2f97f1d7f7dc9b0901dc18cdf2cfc1a29b8de33",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/native-contract.md",
+            "hash": "1639b1781058986a443951c2f58b97d08a1507af86a72f3873e4d84c345d0499",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "motion-elevation",
@@ -552,7 +1244,24 @@
         "pillar": "foundations",
         "maturity": "beta",
         "description": "Use when defining or validating motion tokens, elevation rules, and material/translucency guidance. USE FOR: duration and easing tokens, elevation level rules, material/translucency guidance. DO NOT USE FOR: full interaction state specs, usability heuristic reviews.",
-        "hash": "93470720212f80e01b101cbab55dfd84981dafff8f184ed1c277ccc33061d916"
+        "hash": "9ba65f1b3e793228b4e431d13ee0e046712e1d4d31c9d4fe370f72b6f0ce4c79",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "9ba65f1b3e793228b4e431d13ee0e046712e1d4d31c9d4fe370f72b6f0ce4c79",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "33eca94dcad990963a361b3c677cc47a972df349890d95f71c7d5989a6344435",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/attention-budget.md",
+            "hash": "d75d926fe7a5433d7e9d8ea9814a9fce5d8c2b085764937200a28e1d07cd5c3b",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "multilingual",
@@ -562,7 +1271,19 @@
         "pillar": "content",
         "maturity": "stable",
         "description": "Use when designing i18n/l10n strategy, locale externalization patterns, or RTL and pluralization guidance. USE FOR: i18n/l10n strategy, locale externalization planning, rtl/pluralization guidance. DO NOT USE FOR: framework detection only, color contrast checks.",
-        "hash": "e4e0564d12a5705835d1b53a9abfe8d66ec6cd40eac7419a433c71da17e6073d"
+        "hash": "e4e0564d12a5705835d1b53a9abfe8d66ec6cd40eac7419a433c71da17e6073d",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "e4e0564d12a5705835d1b53a9abfe8d66ec6cd40eac7419a433c71da17e6073d",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "14673b7a5495ce4e56cc6145b3d2599773008fe9a2af807082f3a68cfb3393fb",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "navigation-design",
@@ -572,7 +1293,19 @@
         "pillar": "ia",
         "maturity": "stable",
         "description": "Use when designing global or local navigation patterns, wayfinding flows, or menu and breadcrumb structures. USE FOR: global/local nav patterns, wayfinding design, menu/breadcrumb strategy. DO NOT USE FOR: content ontology modeling, theme token changes.",
-        "hash": "de3c5c73777ba017824dd59b843c63f5d2cc16622ab5ab01cf82a386e40648e7"
+        "hash": "de3c5c73777ba017824dd59b843c63f5d2cc16622ab5ab01cf82a386e40648e7",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "de3c5c73777ba017824dd59b843c63f5d2cc16622ab5ab01cf82a386e40648e7",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "c3670b01ff89d126c232c22f982c8fbda60c6e40adbbff0e69ac6528cffe2a27",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "ontology",
@@ -582,7 +1315,19 @@
         "pillar": "ia",
         "maturity": "beta",
         "description": "Use when modeling entity relationships, semantic schemas, or attribute constraint definitions for a content or data system. USE FOR: entity relationship modeling, semantic schema definition, attribute constraint mapping. DO NOT USE FOR: flat category taxonomies, brand color work.",
-        "hash": "07344232beb0ad6d1c6249e917f4701e7cc6051155d8d93298ec2623faf2f919"
+        "hash": "07344232beb0ad6d1c6249e917f4701e7cc6051155d8d93298ec2623faf2f919",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "07344232beb0ad6d1c6249e917f4701e7cc6051155d8d93298ec2623faf2f919",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "43aac3eace7b6aa7e086050445ecb723bc60d57183125ff50af8644d87109042",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "pattern-library",
@@ -592,7 +1337,19 @@
         "pillar": "components",
         "maturity": "stable",
         "description": "Use when documenting, cataloging, or composing reusable design patterns into a shared pattern library. USE FOR: pattern documentation, pattern composition guidance, pattern index authoring, choosing a proven UI pattern (modal, tabs, accordion, card, breadcrumb, dropdown, tooltip, toast, stepper, data table, command palette, empty state). DO NOT USE FOR: single component deep specs, token schema validation.",
-        "hash": "517efa5eefb963efcedff1f4a1123f61dd6382f359b36e67d8693424a9079320"
+        "hash": "517efa5eefb963efcedff1f4a1123f61dd6382f359b36e67d8693424a9079320",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "517efa5eefb963efcedff1f4a1123f61dd6382f359b36e67d8693424a9079320",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "09b4e70b7143f943e85ce5784ed82aa03789112596ab412715d94ed82d5afcaf",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "performance-aware-design",
@@ -602,7 +1359,24 @@
         "pillar": null,
         "maturity": "stable",
         "description": "Use when evaluating design decisions for their impact on Core Web Vitals, font loading, image strategy, or animation performance. USE FOR: assess whether a design choice will degrade LCP or CLS, recommend a font loading strategy for the type scale, evaluate hero image design for LCP budget, flag animation token values that will cause jank, score a design against INP thresholds. DO NOT USE FOR: backend performance tuning, database query optimization, server infrastructure scaling.",
-        "hash": "41066c024416e95839dfdcfe0716a0535694ed6109329633eb51e6d756d8464d"
+        "hash": "2726f8843452f6876441e2a5007a6627d080dd50b171d537bef029990a7629ae",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "2726f8843452f6876441e2a5007a6627d080dd50b171d537bef029990a7629ae",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "1e0bc4c548a90e656b8cd3e58fe5cd4e1a306429f2075581375d730ce38dc0b2",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/performance-contract.md",
+            "hash": "a0cd68400de041eaed7dd38d791dd26b1d6adfdaefe08e1113784138a381a528",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "responsive-design",
@@ -612,7 +1386,19 @@
         "pillar": "usability",
         "maturity": "stable",
         "description": "Use when defining breakpoint behaviors, responsive reflow strategies, or adaptive layout guidance. USE FOR: breakpoint behavior definition, responsive reflow planning, adaptive layout guidance. DO NOT USE FOR: spacing-scale authoring, brand tone guidance.",
-        "hash": "5864013db7d739690af9b73e01d493bdcf11847ec2d9cf9b534be2f553166f75"
+        "hash": "5864013db7d739690af9b73e01d493bdcf11847ec2d9cf9b534be2f553166f75",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "5864013db7d739690af9b73e01d493bdcf11847ec2d9cf9b534be2f553166f75",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "9d3c577511d31498dcb20f47dc29aaef8864525ef3e781e3b29ecf2a3f7d96f3",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "secure-ux",
@@ -622,7 +1408,19 @@
         "pillar": "security",
         "maturity": "beta",
         "description": "Use when hardening UX for auth flows, consent surfaces, error states, and input privacy safety. USE FOR: safe error-state design, auth/consent ux hardening, input-feedback privacy safety. DO NOT USE FOR: backend threat modeling, penetration testing.",
-        "hash": "cefe023eca3e28ee9d2b40775189e313d6f6dc69fa9e7857cef8f3b87b92e7b4"
+        "hash": "cefe023eca3e28ee9d2b40775189e313d6f6dc69fa9e7857cef8f3b87b92e7b4",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "cefe023eca3e28ee9d2b40775189e313d6f6dc69fa9e7857cef8f3b87b92e7b4",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "02fa6c1636a24d7d70f1b545c333865978e7b1db914ba3e00b03f9c36b9a4b87",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "sheen-onboard",
@@ -632,7 +1430,19 @@
         "pillar": null,
         "maturity": "stable",
         "description": "Use when onboarding a new consumer repository to the basecoat-sheen design governance framework. USE FOR: run the full 5-phase sheen consumer lifecycle (integrate, onboard, inventory, audit, use), bootstrap a .sheen.yml config, run sync against basecoat-sheen, generate an onboarding health report. DO NOT USE FOR: implementing product features, writing application business logic, deploying infrastructure.",
-        "hash": "ca0ae793ec949314d0cdeb4c39e20c2e3bdde1db26ae758e1377b3470b8f7fb7"
+        "hash": "ca0ae793ec949314d0cdeb4c39e20c2e3bdde1db26ae758e1377b3470b8f7fb7",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "ca0ae793ec949314d0cdeb4c39e20c2e3bdde1db26ae758e1377b3470b8f7fb7",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "8ee0923d7b2c0532cf3986964b2980d80e0c6dd77375060511523b54a4b1783b",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "style-guide-authoring",
@@ -642,7 +1452,19 @@
         "pillar": "governance",
         "maturity": "stable",
         "description": "Use when compiling, publishing, or consolidating a style guide or pattern library for a product or team. USE FOR: style-guide compilation, pattern library publication, guideline consolidation. DO NOT USE FOR: single-component-only specs, token validation scripts.",
-        "hash": "f36452dc65daeac8895888eb10484968e09806ae8621c5a8e8e206ac11146730"
+        "hash": "f36452dc65daeac8895888eb10484968e09806ae8621c5a8e8e206ac11146730",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "f36452dc65daeac8895888eb10484968e09806ae8621c5a8e8e206ac11146730",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "4bfa0169654302872bc3e33e836200bd9afc3523b5eabe88a3ed35faac4cd414",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "taxonomy",
@@ -652,7 +1474,19 @@
         "pillar": "ia",
         "maturity": "beta",
         "description": "Use when designing controlled vocabularies, category hierarchies, or tag schema definitions. USE FOR: controlled vocabulary design, category hierarchy rules, tag schema definition. DO NOT USE FOR: entity relationship modeling, component state specs.",
-        "hash": "ca93aac58a6eb47b8c29973a7d7dd16019141b3285e8ebbf789af246b08042af"
+        "hash": "ca93aac58a6eb47b8c29973a7d7dd16019141b3285e8ebbf789af246b08042af",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "ca93aac58a6eb47b8c29973a7d7dd16019141b3285e8ebbf789af246b08042af",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "f6b6b8dd274b2c36a3f421aa58c5a7f930ad62448d135418d6ad550ab95fd620",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "theming",
@@ -662,7 +1496,29 @@
         "pillar": "foundations",
         "maturity": "stable",
         "description": "Use when auditing or generating app-specific themes through comparable previews, scoped selection, and application readiness. USE FOR: theme candidate discovery and comparison, approved theme selection reuse, semantic overrides and theme completeness, custom theme creation and revision, theme application readiness and drift audit. DO NOT USE FOR: new semantic key creation, brand-only identity or voice guidance, reporting or chart generation, full accessibility audits.",
-        "hash": "dbb12f0ca06b1c7dbbcb4f9a11f3c5d5ef87b52276e947e04f5be08db3311d90"
+        "hash": "dbb12f0ca06b1c7dbbcb4f9a11f3c5d5ef87b52276e947e04f5be08db3311d90",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "dbb12f0ca06b1c7dbbcb4f9a11f3c5d5ef87b52276e947e04f5be08db3311d90",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "93dba128ef1735af2457bc2928a373410494ca4fd90d6e20f775a40fd62f5cf8",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/lifecycle-contract.md",
+            "hash": "9212983058f61f5daa291e23ec9c223423ef1e9071453d3cfe1b802171715863",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "templates/lifecycle-record.md",
+            "hash": "9dfd0ded7cb1dfb305399a197315d9ead21d70948ab565768677024454976898",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "typography",
@@ -672,7 +1528,19 @@
         "pillar": "foundations",
         "maturity": "stable",
         "description": "Use when defining a type ramp, font pairing rules, or mapping text roles to type tokens. USE FOR: type ramp definition, font pairing, text role mapping. DO NOT USE FOR: font inventory mapping, full usability audits.",
-        "hash": "5b875f339b57df810b8c4c3c87ab6f639bdc0f61a10d4e3487b6cd8298f20231"
+        "hash": "5b875f339b57df810b8c4c3c87ab6f639bdc0f61a10d4e3487b6cd8298f20231",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "5b875f339b57df810b8c4c3c87ab6f639bdc0f61a10d4e3487b6cd8298f20231",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "2d3c80fced1405ccfedd6869b728f6aeb1df6fed07ebe94a1697759d30cb7407",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "ui-states-interaction",
@@ -682,7 +1550,19 @@
         "pillar": "components",
         "maturity": "stable",
         "description": "Use when modeling interaction states, transition behaviors, or empty/error/loading state guidance for UI components. USE FOR: interaction state modeling, transition behavior definition, empty/error/loading state guidance. DO NOT USE FOR: component anatomy-only specs, enterprise security pen-tests.",
-        "hash": "9ce6ad26cd1b8462436b8eca0c60d73a5896f5c75e74e8a6be27799ee6443d22"
+        "hash": "9ce6ad26cd1b8462436b8eca0c60d73a5896f5c75e74e8a6be27799ee6443d22",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "9ce6ad26cd1b8462436b8eca0c60d73a5896f5c75e74e8a6be27799ee6443d22",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "e84242fad23876705fa92fa726ca6f92bcaafc5e194a8fd7ccc5b411c4afbe9f",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "usability-mapping",
@@ -692,7 +1572,19 @@
         "pillar": "mapping",
         "maturity": "beta",
         "description": "Use when mapping screens or flows to usability heuristics and identifying coverage gaps. USE FOR: flow-to-heuristic coverage mapping, screen inventory audits, usability gap mapping. DO NOT USE FOR: full heuristic critique writeups, token schema edits.",
-        "hash": "b63fc31759b34180678480e2030eeac353cd2bf34ab4f6efab97043ab694e84b"
+        "hash": "b63fc31759b34180678480e2030eeac353cd2bf34ab4f6efab97043ab694e84b",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "b63fc31759b34180678480e2030eeac353cd2bf34ab4f6efab97043ab694e84b",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "8eb3e52d5fd991ac552c734dc3fb0628b5ea41b986c847228c1ec0db47e41b1a",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "user-research",
@@ -702,7 +1594,19 @@
         "pillar": "governance",
         "maturity": "beta",
         "description": "Use when planning user research, synthesizing interview findings, or designing usability test protocols. USE FOR: research planning, interview/persona synthesis, usability test protocol design. DO NOT USE FOR: heuristic-only reviews, token schema authoring.",
-        "hash": "0c3338b59fb95ec81455df9b1e47775e7e601458fce5a7ac9f07778bced64087"
+        "hash": "0c3338b59fb95ec81455df9b1e47775e7e601458fce5a7ac9f07778bced64087",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "0c3338b59fb95ec81455df9b1e47775e7e601458fce5a7ac9f07778bced64087",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "90921ec7349ddddf6cc7a4854c9c0918f13f80d9733f5219e596725c6683586b",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "ux-writing",
@@ -712,7 +1616,19 @@
         "pillar": "content",
         "maturity": "beta",
         "description": "Use when authoring microcopy, error/empty-state text, or rewriting UI strings for plain language and clarity. USE FOR: microcopy authoring, error/empty-state text, plain-language rewriting. DO NOT USE FOR: brand identity systems, token architecture.",
-        "hash": "3869c690d9c973ccdccd75a5d79eda4bba0e28cc695beeac728b4622c200e42d"
+        "hash": "3869c690d9c973ccdccd75a5d79eda4bba0e28cc695beeac728b4622c200e42d",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "3869c690d9c973ccdccd75a5d79eda4bba0e28cc695beeac728b4622c200e42d",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "f7a7c7a17d0600cff56b93bf0f7b2903ea533153ed72bb67c1c91c0ab921f4d5",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "visual-regression",
@@ -722,7 +1638,24 @@
         "pillar": "governance",
         "maturity": "beta",
         "description": "Use when setting up visual snapshot baselines, triaging visual diffs, or detecting design QA drift. USE FOR: snapshot baseline setup, visual diff triage, design QA drift detection. DO NOT USE FOR: functional test authoring, security threat modeling.",
-        "hash": "55448e1974c703d373c3f563c04b1cfd19ac7abaec1f044c011994fc33b172fd"
+        "hash": "c07ac73b33115ae52f24ffd0cad63ad7065b23b65ce1a8f60e3922fd911dc47c",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "c07ac73b33115ae52f24ffd0cad63ad7065b23b65ce1a8f60e3922fd911dc47c",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "7a3dc18b744f64563c41e92ffbcb36fbc681f7a850148156f04fd449be91073f",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/pixel-diff-pipeline.md",
+            "hash": "d286116ce01e3e06ed4d19c0b4ab5ad0686ce1a77311ab392bc7a2481d1852f7",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "web-usability-review",
@@ -732,7 +1665,19 @@
         "pillar": "usability",
         "maturity": "stable",
         "description": "Heuristic usability evaluation grounded in NN/g and ISO 9241 principles. USE FOR: reviewing flow usability, scoring heuristic violations, generating prioritized usability recommendations. DO NOT USE FOR: standards-based accessibility conformance audits, creating new token primitives.",
-        "hash": "ad4fd94559c64d4b32cd17e26b5533ffdc65ae146e7ef7b132f99eb15434842d"
+        "hash": "ad4fd94559c64d4b32cd17e26b5533ffdc65ae146e7ef7b132f99eb15434842d",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "ad4fd94559c64d4b32cd17e26b5533ffdc65ae146e7ef7b132f99eb15434842d",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "d06238117d2b09701fee39d176cce8f6fa68044914e324ad5fa1c2bfb7aa5494",
+            "hash_mode": "text-lf"
+          }
+        ]
       },
       {
         "name": "wireframing",
@@ -742,7 +1687,19 @@
         "pillar": "ia",
         "maturity": "stable",
         "description": "Use when drafting screen wireframes, planning layout hierarchies, or defining flow skeletons before visual design. USE FOR: screen wireframe drafting, layout hierarchy planning, flow skeleton definition. DO NOT USE FOR: final visual polish, token refactoring.",
-        "hash": "52d4614a26e377922519fb3f126aafc4f07a15289c556ea710edc99e86b4187f"
+        "hash": "52d4614a26e377922519fb3f126aafc4f07a15289c556ea710edc99e86b4187f",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "hash": "52d4614a26e377922519fb3f126aafc4f07a15289c556ea710edc99e86b4187f",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "eval.yaml",
+            "hash": "28f69bf4d49b3c5055e3a96921fb61bf07ee2d8e0944354ec34c7136c8e31aac",
+            "hash_mode": "text-lf"
+          }
+        ]
       }
     ],
     "agents": [
