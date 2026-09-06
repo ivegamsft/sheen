@@ -58,13 +58,6 @@ function Add-Finding {
     })
 }
 
-# --- helpers -----------------------------------------------------------
-
-function Get-KebabTokensFromLine {
-    param([string]$Line)
-    [regex]::Matches($Line, '`([a-z0-9][a-z0-9-]*)`') | ForEach-Object { $_.Groups[1].Value }
-}
-
 # --- 1. Skill folder / frontmatter conventions --------------------------
 
 $skillNames = @()
@@ -186,29 +179,10 @@ foreach ($name in $skillNames) {
     $skillMd = Join-Path $skillsDir $name 'SKILL.md'
     if (-not (Test-Path -LiteralPath $skillMd)) { continue }
     $content = Get-Content -LiteralPath $skillMd -Raw
-    if ($content -notmatch '(?ms)^##\s*Delegates.*?\n(.*?)(\n##|\z)') { continue }
-    $section = $Matches[1]
-    foreach ($rawLine in ($section -split "`n")) {
-        $line = $rawLine.Trim()
-        if (-not $line.StartsWith('-')) { continue }
-        $line = $line.TrimStart('-').Trim()
-        if ($line -match '^spec references?:') { continue }  # file-path refs, not skill/agent names
-
-        $isAgentLine = $line -match '^agent:\s*'
-        if ($isAgentLine) { $line = $line -replace '^agent:\s*', '' }
-
-        $tokens = @(Get-KebabTokensFromLine -Line $line)
-        if ($tokens.Count -eq 0 -and $line -match '^([a-z0-9][a-z0-9-]*)\s*$') {
-            # A bare, unquoted single-token line (no backticks, no prose) —
-            # high-confidence reference, e.g. "- logo-usage".
-            $tokens = @($Matches[1])
-        }
-        foreach ($ref in $tokens) {
-            if ($ref -like 'specs/*' -or $ref -like '*.md') { continue }
-            $known = ($skillNames -contains $ref) -or ($agentNames -contains $ref)
-            if (-not $known) {
-                Add-Finding -Severity warning -Category 'skill-delegates' -Target "skills/$name/SKILL.md" -Message "'Delegates / pairs with' references unknown skill/agent '$ref'"
-            }
+    foreach ($ref in @(Get-AssetDelegates $content)) {
+        $known = ($skillNames -contains $ref) -or ($agentNames -contains $ref)
+        if (-not $known) {
+            Add-Finding -Severity warning -Category 'skill-delegates' -Target "skills/$name/SKILL.md" -Message "'Delegates / pairs with' references unknown skill/agent '$ref'"
         }
     }
 }

@@ -73,6 +73,7 @@ function Parse-EvalFile {
         if ($line -match '^description:\s*(.+?)\s*$') { $eval.description = ConvertTo-PlainYamlValue $Matches[1]; continue }
         if ($line -match '^skill:\s*(.+?)\s*$') { $eval.skill = ConvertTo-PlainYamlValue $Matches[1]; continue }
         if ($line -match '^\s*-\s*\{\s*id:\s*([^,]+),\s*input:\s*(.+),\s*expect_activation:\s*(true|false)\s*\}\s*$') {
+            if ($current) { $eval.scenarios += $current }
             $eval.scenarios += [ordered]@{ id = ConvertTo-PlainYamlValue $Matches[1]; input = ConvertTo-PlainYamlValue $Matches[2]; expect_activation = [bool]::Parse($Matches[3]) }
             $current = $null
             continue
@@ -82,8 +83,14 @@ function Parse-EvalFile {
             $current = [ordered]@{ id = ConvertTo-PlainYamlValue $Matches[1]; input = $null; expect_activation = $null }
             continue
         }
-        if ($null -ne $current -and $line -match '^\s*input:\s*(.+?)\s*$') { $current.input = ConvertTo-PlainYamlValue $Matches[1]; continue }
+        if ($null -ne $current -and $line -match '^\s*input:\s*(.+?)\s*$') {
+            $rawInput = $Matches[1]
+            $current.input = ConvertTo-PlainYamlValue $rawInput
+            if ($rawInput -match '^[|>]') { $eval.parse_errors += "scenario $($current.id): multiline input is unsupported; use a single-line scalar" }
+            continue
+        }
         if ($null -ne $current -and $line -match '^\s*expect_activation:\s*(true|false)\s*$') { $current.expect_activation = [bool]::Parse($Matches[1]); continue }
+        if ($line -match '^\s*-\s*') { $eval.parse_errors += 'unrecognized scenario row' }
     }
     if ($current) { $eval.scenarios += $current }
     if (-not $eval.name) { $eval.parse_errors += 'missing top-level name' }
@@ -97,6 +104,51 @@ function Parse-EvalFile {
         if ($null -eq $s.expect_activation) { $eval.parse_errors += "scenario $i missing expect_activation" }
     }
     return [pscustomobject]$eval
+}
+
+function Get-AssetFrontmatter {
+    param([string]$Content)
+    if ($Content -match '\A---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|\z)') { return $Matches[1] }
+    return ''
+}
+
+function Get-AgentComposedSkills {
+    param([string]$Content)
+    $fm = Get-AssetFrontmatter $Content
+    if ($fm -notmatch '(?m)^composes:[ \t]*\r?\n((?:[ \t]+[^\r\n]*\r?\n?)*)') { return }
+    $block = $Matches[1]
+    if ($block -match '(?m)^  skills:[ \t]*\[([^\]\r\n]*)\][ \t]*\r?$') {
+        foreach ($item in ($Matches[1] -split ',')) {
+            $name = ConvertTo-PlainYamlValue $item
+            if ($name -match '^[a-z0-9][a-z0-9-]*$') { $name }
+        }
+    } elseif ($block -match '(?m)^  skills:[ \t]*\r?\n((?:    -[^\r\n]*\r?\n?)*)') {
+        foreach ($line in ($Matches[1] -split '\r?\n')) {
+            if ($line -match '^    -[ \t]+(.+?)\s*$') {
+                $name = ConvertTo-PlainYamlValue $Matches[1]
+                if ($name -match '^[a-z0-9][a-z0-9-]*$') { $name }
+            }
+        }
+    }
+}
+
+function Get-AssetDelegates {
+    param([string]$Content, [switch]$IncludeLegacyPairing)
+    $heading = if ($IncludeLegacyPairing) { '(?:Delegates[^\r\n]*|Agent Pairing)' } else { 'Delegates[^\r\n]*' }
+    if ($Content -notmatch "(?ms)^##[ \t]+$heading[ \t]*\r?\n(.*?)(?=\r?\n##[ \t]|\z)") { return }
+    foreach ($rawLine in ($Matches[1] -split '\r?\n')) {
+        $line = $rawLine.Trim()
+        if ($line.StartsWith('|')) { $line = ($line -split '\|')[1].Trim() }
+        elseif ($line.StartsWith('-')) { $line = $line.TrimStart('-').Trim() }
+        else { continue }
+        if ($line -match '^spec references?:') { continue }
+        $line = $line -replace '^(agent|Feeds):\s*', ''
+        if ($line -match '^`[a-z0-9][a-z0-9-]*`') {
+            foreach ($item in ($line -split ',')) {
+                if ($item.Trim() -match '^`([a-z0-9][a-z0-9-]*)`') { $Matches[1] }
+            }
+        } elseif ($line -match '^([a-z0-9][a-z0-9-]*)\s*$') { $Matches[1] }
+    }
 }
 
 function Get-ReferencedAssetText {
@@ -221,4 +273,3 @@ function Invoke-EvalAudit {
     }
     return @($results | Sort-Object score, path)
 }
-

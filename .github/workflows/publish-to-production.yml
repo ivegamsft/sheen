@@ -99,6 +99,7 @@ jobs:
             'scripts/lint-frontmatter.sh'
             'scripts/lint-router.ps1'
             'scripts/warn-rules.ps1'
+            'scripts/test-warn-rules.ps1'
             'scripts/test-eval-routing.ps1'
             'scripts/eval-routing-lib.ps1'
             'scripts/generate-release-notes.sh'

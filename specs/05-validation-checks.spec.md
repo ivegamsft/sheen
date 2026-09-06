@@ -39,6 +39,9 @@ Declares the rule set the validators run. Rules are grouped by severity:
 ### 2.2 Suggested `warn` rules
 
 - **token-budget** — `SKILL.md` body over ~500 tokens.
+- **accessibility-routing (W04)** — positive accessibility routing scenarios with
+  no resolved specialist relationship, or evidence that cannot be evaluated
+  (section 3.1). This is not the artifact-content check below.
 - **description-overlap** — high similarity between two skill descriptions.
 - **maturity-docs** — a `stable` asset lacking a docs page.
 - **aria-keyboard-present** — a `component-spec`/`ui-states-interaction` artifact
@@ -61,6 +64,56 @@ the relevant skills/instructions.
 | `scripts/contrast-check` | Contrast portion of rule 5 (callable standalone) |
 
 Scripts MUST be runnable locally and in CI with identical results.
+
+### 3.1 Advisory routing diagnostics
+
+Run `pwsh scripts/warn-rules.ps1` at a source checkout, or pass
+`-RepoRoot <consumer-root>` to that same source script. It loads the adjacent
+`eval-routing-lib.ps1`; these internal audit scripts are not provisioned by sync
+or included in the public mirror. No copied standalone-script guarantee applies.
+
+W03 retains its existing **greater than 2500 body characters** heuristic
+(frontmatter removed, lines joined by LF), approximately 500 tokens; it is not a
+tokenizer or a hard gate. Move detail to linked skill-local references/templates,
+not out of the contract.
+
+W04 reads supported block/inline eval scenarios through the shared routing
+parser. Only **positive** inputs mentioning ARIA, keyboard, screen reader or
+focus ring trigger relationship checks. Negative scenarios are anti-triggers,
+not requests for the evaluated skill to own accessibility.
+
+A route resolves when the evaluated skill is composed by the installed,
+correctly named `accessibility-auditor`, directly pairs with that agent, or
+directly pairs with one of that agent's existing, correctly named composed
+skills (for example, `accessibility-audit` or `color-contrast-check`). Pair
+declarations are leading backticked asset names in bullets or first table cells
+under **Delegates / pairs with**, or a bare single-name bullet; `agent:` is
+supported, as are legacy **Agent Pairing** bullets with explicit `Feeds:` lists.
+Description, example and eval mentions are not declarations. Do not
+infer arbitrary transitive routes through peers. This heuristic establishes
+declared availability, not adequacy for a particular request, executed handoff,
+or WCAG conformance; criterion-level evidence remains required.
+
+The eval's `skill` must identify its own existing sibling skill. Consumer copies
+may retain the source `skills/<name>/SKILL.md` path or use the installed
+`.github/skills/<name>/SKILL.md` path. Missing/mismatched assets, invalid eval
+records, and unsupported multiline inputs produce advisory diagnostics rather
+than successful routing claims. Eval inputs use single-line scalars.
+
+Source scans include root skills and agents only. In consumers, W02-W05 use
+`.sheen/manifest.json` (`sheen-manifest/v1`, `files` array) to include only
+Sheen-owned skill/eval/agent files, not installed BaseCoat or local content.
+An invalid manifest warns that scope is unavailable; an empty owned set is
+valid. Missing manifest-owned routing files warn. W01 keeps its semantic-token
+directory scope. Missing specialist assets in a selective sync cannot establish
+a specialist route.
+
+`scripts/test-warn-rules.ps1` exercises source and consumer fixtures, true
+warnings, negative-only cases, missing references, malformed evidence, direct
+skill/agent composition and misleading mentions. CI gates regressions in the
+checker, then runs the advisory report; actual W01-W05 findings still exit zero.
+Operational failures such as an unreadable root or absent helper are errors,
+not advisory findings.
 
 ## 4. CI workflows (`.github/workflows`)
 

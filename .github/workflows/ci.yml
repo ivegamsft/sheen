@@ -157,6 +157,12 @@ jobs:
       - name: Validate - eval routing specificity
         run: pwsh -NonInteractive -File scripts/test-eval-routing.ps1
 
+      - name: Validate - advisory routing diagnostic regressions
+        run: pwsh -NonInteractive -File scripts/test-warn-rules.ps1
+
+      - name: Report - advisory design rules
+        run: pwsh -NonInteractive -File scripts/warn-rules.ps1
+
   tokens:
     runs-on: ubuntu-latest
     timeout-minutes: 10

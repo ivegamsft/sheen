@@ -19,6 +19,12 @@
   "rules": {
     "error": [
       {
+        "id": "warn-rules-regressions",
+        "applies_to": ["scripts/warn-rules.ps1", "scripts/eval-routing-lib.ps1", "scripts/test-warn-rules.ps1"],
+        "description": "Source/consumer fixtures verify advisory diagnostic behavior; findings from warn-rules itself remain non-blocking.",
+        "script": "scripts/test-warn-rules"
+      },
+      {
         "id": "theme-lifecycle-scenarios",
         "applies_to": ["skills/theming/**", "tests/fixtures/theme-lifecycle/**", "scripts/test-theme-lifecycle.ps1"],
         "description": "Illustrative T01-T14 evidence-to-decision assertions and incorrect-output rejection; not rendered quality or downstream schema validation.",
@@ -68,6 +74,12 @@
       }
     ],
     "warn": [
+      {
+        "id": "accessibility-routing",
+        "applies_to": ["skills/**/eval.yaml", "skills/**/SKILL.md", "agents/accessibility-auditor.agent.md"],
+        "description": "W04: positive accessibility scenarios without a resolved owning agent or direct specialist pair; malformed routing evidence is advisory.",
+        "script": "scripts/warn-rules"
+      },
       {
         "id": "token-budget",
         "applies_to": ["skills/**/SKILL.md"],

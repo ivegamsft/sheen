@@ -7,6 +7,15 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+### Fixed
+
+- Accessibility routing diagnostics now distinguish positive scenarios from
+  negative anti-triggers and resolve real agent composition/direct specialist
+  pairs rather than searching for an agent name in eval text. Consumer scans
+  use Sheen manifest ownership; malformed evidence remains advisory. Added
+  source/consumer regression cases and preserved block scenarios before inline
+  rows in the shared eval parser (#204).
+
 ## [0.12.0] — 2026-09-06
 
 | Field | Value |
