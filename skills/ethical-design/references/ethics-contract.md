@@ -41,7 +41,7 @@ MAJOR — Misdirection: "Continue as guest" uses low-contrast grey (#9e9e9e on w
 MAJOR — Confirmshaming: Cancel button reads "No thanks, I'll pay full price".
   Recommend: Neutral label "Cancel" or "Maybe later".
 
-Gate: FAIL (2 critical, 2 major)
+Gate: FAIL (1 critical, 2 major)
 ```
 
 ### Review consent UI

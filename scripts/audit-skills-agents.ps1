@@ -29,6 +29,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 . (Join-Path $PSScriptRoot 'eval-routing-lib.ps1')
+. (Join-Path $PSScriptRoot 'external-delegates-lib.ps1')
 
 $repoRoot = Get-RepoRoot -Start $PSScriptRoot
 $skillsDir = Join-Path $repoRoot 'skills'
@@ -175,16 +176,16 @@ if (Test-Path -LiteralPath $catalogPath) {
 
 # --- 4. Skill "Delegates / pairs with" references ------------------------
 
-foreach ($name in $skillNames) {
+$delegateAssets = foreach ($name in $skillNames) {
     $skillMd = Join-Path $skillsDir $name 'SKILL.md'
     if (-not (Test-Path -LiteralPath $skillMd)) { continue }
     $content = Get-Content -LiteralPath $skillMd -Raw
-    foreach ($ref in @(Get-AssetDelegates $content)) {
-        $known = ($skillNames -contains $ref) -or ($agentNames -contains $ref)
-        if (-not $known) {
-            Add-Finding -Severity warning -Category 'skill-delegates' -Target "skills/$name/SKILL.md" -Message "'Delegates / pairs with' references unknown skill/agent '$ref'"
-        }
-    }
+    [pscustomobject]@{ path = "skills/$name/SKILL.md"; content = $content }
+}
+$registry = Get-ExternalDelegateRegistry -RepoRoot $repoRoot
+$delegates = Invoke-SourceDelegateAudit -Assets @($delegateAssets) -SkillNames $skillNames -AgentNames $agentNames -Registry $registry
+foreach ($diagnostic in @($registry.diagnostics) + @($delegates.findings)) {
+    Add-Finding -Severity $diagnostic.severity -Category $diagnostic.category -Target $diagnostic.target -Message $diagnostic.message
 }
 
 # --- 5. Wrap lint-router.ps1 -----------------------------------------------
@@ -208,6 +209,7 @@ $errorCount = @($findings | Where-Object { $_.severity -eq 'error' }).Count
 $warningCount = @($findings | Where-Object { $_.severity -eq 'warning' }).Count
 
 if (-not $Quiet) {
+    Write-Host "Verified external handoffs: $($delegates.external_resolutions.Count) (provider/kind/name/path in report)."
     if ($findings.Count -eq 0) {
         Write-Host "audit-skills-agents: no findings across $($skillNames.Count) skills, $($agentNames.Count) agents."
     } else {
@@ -224,6 +226,7 @@ $report = [pscustomobject]@{
     agent_count   = $agentNames.Count
     error_count   = $errorCount
     warning_count = $warningCount
+    external_resolutions = @($delegates.external_resolutions)
     findings      = @($findings | Sort-Object severity, category, target)
 }
 

@@ -23,13 +23,14 @@ Compare live DOM/CSS with design intent for token, state, structure, and ARIA pa
 4. Produce parity/token-drift/variant-coverage reports, apply the gate, and route fixes or spec clarification.
 
 ## Guardrails
-- Gate requires zero CRITICAL token or ARIA drifts; block the PR for CRITICAL token references outside the system.
-- Required focus/error/loading states missing: MAJOR, log issue. Within-range visual deviation: MINOR, log warning and track as issues. Undocumented variants: INFO, document.
+- Gate requires zero CRITICAL token or ARIA drifts; block for token references outside the system or missing/incorrect required ARIA role/name/state against the accepted component contract.
+- Required ARIA violations override MAJOR missing-state ratings. Otherwise missing required focus/error/loading states: MAJOR, log issue. Within-range visual deviation: MINOR, log warning and track as issues. Undocumented variants: INFO, document.
+- Respect valid native semantics; optional/irrelevant ARIA is not required. N/A needs a reason; missing evidence is UNKNOWN, never a pass. Apply the reference's applicability and evidence rules.
 - Audit only: do not write new component code, create design specs, or perform infrastructure monitoring.
 
 ## Output
 - Downstream parity report, token diff table, and missing-variant matrix.
-- Reference `audit-report` schema: component/spec, dimension/severity/spec/implementation/file/line findings, severity counts, `gate_passed`.
+- Reference `audit-report` schema: component/spec, check results, located drifts, severity counts, `gate_status` and `gate_passed` (null when unresolved).
 
 ## Delegates / pairs with
 - Triggered by: `design-reviewer` (visual QA), `ci` (pre-merge).

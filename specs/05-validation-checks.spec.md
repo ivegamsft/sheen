@@ -117,6 +117,53 @@ the relevant skills/instructions.
 
 Scripts MUST be runnable locally and in CI with identical results.
 
+### 3.0 Source audit consistency gates
+
+`test-audit-contracts.ps1` reads the operative AI review, ethics checkout and
+parity contracts plus parity SKILL guards. It requires nonempty recognized
+examples, reconciles actual findings with gate totals and taxonomy/table
+severity, and checks applicability/unknown-evidence rules. It rejects negative
+mutations of those documents (including fairness/required-ARIA downgrades,
+missing criteria, stale totals and image-alt requirements on ordinary text).
+N/A requires an applicability reason; missing evidence is UNKNOWN, never a pass.
+Both AI and parity contracts expose per-dimension/check results, reasons and
+evidence references. Their gate schemas include non-approving UNRESOLVED;
+parity pairs `gate_status` with nullable `gate_passed` (null only when unresolved).
+Confirmed CRITICAL failures take precedence; otherwise unknown/no-applicable
+checks cannot pass. The suite exercises 14 worked gate decisions and rejects
+mutated schemas or decisions that collapse unresolved outcomes into approval or
+confirmed failure. Existing report consumers must handle these states explicitly.
+These are deterministic document-consistency checks, **not** agent behavioral
+evaluation, rendered accessibility testing, WCAG proof or downstream approval.
+Contract wording changes may require deliberate matching test updates.
+
+`audit-skills-agents.ps1` section 4 uses the shared delegate parser, resolves
+root-owned skills/agents first, then only verified entries from the source-only
+`scripts/external-delegates.json` registry. The whole-root inventory still
+excludes installed/upstream/vendor assets. Registry version 1 declares
+provider/kind/name/path; allowed roots are `.github/skills` and `.github/agents`,
+with exact kind/name path shapes. Validate schema, duplicate keys/names and
+boundaries before accepting declarations. Read only declared bounded headers;
+reject traversal/absolute/network paths and link/reparse escapes. Missing or
+invalid registry is an error, not an empty-success fallback. Missing, unsafe or
+identity-mismatched external targets are visible warnings and remain unverified;
+unknown/unregistered delegate references remain advisory warnings.
+
+The audit reports verified `external_resolutions` separately with
+source/provider/kind/name/path (no content). Source availability does not imply
+consumer installation or authority: downstream execution MUST resolve tools
+there. No W04 ownership, delegate parsing scope, transitive graph or production
+authority changes are implied. `test-external-delegates.ps1` tests the actual
+shared resolver and source integration, including local precedence, true unknowns,
+invalid registry/targets, hidden fixtures and link escapes.
+
+Both suites are CI/checks.json gates using existing PowerShell tooling. The
+registry, resolver, tests and source auditor (which already depends on an internal
+routing helper) are stripped from the public mirror by `INTERNAL_PATTERNS`,
+rather than publishing orphaned script dependencies. The publisher still retains
+the trusted metadata builder outside the payload and regenerates metadata after
+sanitation.
+
 ### 3.1 Advisory routing diagnostics
 
 Run `pwsh scripts/warn-rules.ps1` at a source checkout, or pass

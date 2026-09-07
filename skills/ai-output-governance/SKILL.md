@@ -20,11 +20,12 @@ Review AI-generated copy, imagery, and UI for bias, hallucination, brand safety,
 1. Identify content type/scope and load downstream brand and AI-content policies.
 2. Read and apply the [review contract](references/review-contract.md): dimensions, severity table, scenarios, artifact roles, and schema.
 3. Check claims against sources, fairness, brand, accessibility, token compliance, moderation, and disclosure.
-4. Record findings, recommendations, severity counts, and a PASS/WARN/FAIL gate; hand off revisions and final QA.
+4. Record dimension results, findings, severity counts, and a PASS/WARN/FAIL/UNRESOLVED gate; hand off revisions and final QA.
 
 ## Guardrails
 - Factual inaccuracy, unfair representation, and harmful/explicit/legally risky content are CRITICAL; never silently clear them.
 - Brand, accessibility, token, and disclosure failures are MAJOR. Enforce required policy labels; do not invent missing policy or evidence.
+- N/A needs an applicability reason. Missing evidence is UNKNOWN; return UNRESOLVED unless a known CRITICAL failure already requires FAIL.
 - Review content, not model inference, training data, or backend ML pipelines.
 
 ## Output

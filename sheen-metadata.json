@@ -164,11 +164,11 @@
         "pillar": null,
         "maturity": "stable",
         "description": "Use when reviewing AI-generated UI copy, imagery, or components for bias, hallucination, brand safety, and accessibility compliance. USE FOR: audit AI-generated copy for harmful bias or hallucinated facts, review AI-generated images for brand compliance and representational fairness, flag AI-generated UI components that violate accessibility or token standards, enforce content moderation thresholds before AI output reaches users. DO NOT USE FOR: implementing AI model inference, training data curation, backend ML pipeline design.",
-        "hash": "acdf6780435cfd15025088c3663481c28db8dff746c30f01b8f64e35ac517eee",
+        "hash": "ef408b49d5c0b3ccb91d3769bab32cb9a699ce39b38f8e457cafc4d0313e579c",
         "files": [
           {
             "path": "SKILL.md",
-            "hash": "acdf6780435cfd15025088c3663481c28db8dff746c30f01b8f64e35ac517eee",
+            "hash": "ef408b49d5c0b3ccb91d3769bab32cb9a699ce39b38f8e457cafc4d0313e579c",
             "hash_mode": "text-lf"
           },
           {
@@ -178,7 +178,7 @@
           },
           {
             "path": "references/review-contract.md",
-            "hash": "c4cd46043f9aee130baeda0a4bdc2025ede5e226f60fe26e819f01a05ef4c669",
+            "hash": "f4492024888b9cf1a83caae7316d5551b6b228739ab686e3fb7873b743081797",
             "hash_mode": "text-lf"
           }
         ]
@@ -608,11 +608,11 @@
         "pillar": null,
         "maturity": "stable",
         "description": "Use when auditing whether a live implementation matches its design spec or token definitions. USE FOR: compare rendered DOM against a component spec, detect token value drift between spec and CSS, flag missing ARIA attributes not in wireframe, generate a spec-vs-implementation parity report. DO NOT USE FOR: writing new component code, creating design specs, infrastructure monitoring.",
-        "hash": "be836dadb92bda1a3def9f13897ad6b3b020e4be9865ea68558a1ffd66bc6bcb",
+        "hash": "e7c73cda8ed66ffc43e3b57c82913260b024bc311be2912ef6df5a5573dd12db",
         "files": [
           {
             "path": "SKILL.md",
-            "hash": "be836dadb92bda1a3def9f13897ad6b3b020e4be9865ea68558a1ffd66bc6bcb",
+            "hash": "e7c73cda8ed66ffc43e3b57c82913260b024bc311be2912ef6df5a5573dd12db",
             "hash_mode": "text-lf"
           },
           {
@@ -622,7 +622,7 @@
           },
           {
             "path": "references/parity-contract.md",
-            "hash": "8bd7fb8b7616f87dbb03f52f3930b1dfb6bdf097c44542e6f8653056c2ce0497",
+            "hash": "b515d13b5d24116cf90c9d9f54811d1cb0b82f9ccd335f5e51ab0b42e39088f1",
             "hash_mode": "text-lf"
           }
         ]
@@ -1001,7 +1001,7 @@
           },
           {
             "path": "references/ethics-contract.md",
-            "hash": "50fc4c6f47de243cdec0c9bc65279fb21009c5e9d4ac32faf65c47e1ee2b42e0",
+            "hash": "e5677a9ba95b5138a8eb0c64d2f0d625bc564ebcd8fcc928cc94c60ada87e893",
             "hash_mode": "text-lf"
           }
         ]

@@ -119,6 +119,12 @@ jobs:
       - name: Validate - instruction path scopes
         run: pwsh -NonInteractive -File scripts/test-instruction-scopes.ps1
 
+      - name: Validate - operative audit contracts
+        run: pwsh -NonInteractive -File scripts/test-audit-contracts.ps1
+
+      - name: Validate - explicit source external delegates
+        run: pwsh -NonInteractive -File scripts/test-external-delegates.ps1
+
       - name: Validate - metadata drift
         run: pwsh -NonInteractive -File scripts/build-metadata.ps1 -Check
 

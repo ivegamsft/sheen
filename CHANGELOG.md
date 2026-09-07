@@ -7,6 +7,24 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+### Upgrade notes
+
+- AI and parity audit reports now record explicit PASS/FAIL/N/A/UNKNOWN check
+  results and a non-approving UNRESOLVED gate. Parity `gate_passed` is null when
+  unresolved, retaining true/false for decided outcomes. Report consumers must
+  handle these states rather than defaulting unavailable evidence to approval
+  or inventing a violation (#213).
+
+### Fixed
+
+- Align AI review image-alternative applicability, ethical checkout totals and
+  required-ARIA parity severity/gates; preserve critical fairness and downstream
+  authority. Add operative-document consistency regressions, not WCAG proof (#213).
+- Verify explicit source-only external delegate declarations and headers while
+  retaining missing/unregistered diagnostics and local precedence. Report external
+  handoffs separately; test registry, identity and path boundaries without
+  changing consumer availability or W04 ownership (#214).
+
 ## [0.12.1] — 2026-09-06
 
 | Field | Value |

@@ -11,7 +11,7 @@ and pre-production reviews. Example paths refer to the downstream project.
 | Factual accuracy | Claims match cited sources; no hallucinated data | CRITICAL |
 | Representational fairness | No stereotyped, exclusionary, or marginalised depictions | CRITICAL |
 | Brand safety | Tone, terminology, and imagery match brand guide | MAJOR |
-| Accessibility | AI copy has alt text; AI images have meaningful descriptions | MAJOR |
+| Accessibility | Images require appropriate text alternatives; ordinary text needs no image alt attributes; components require appropriate accessibility behavior | MAJOR |
 | Token compliance | AI-generated UI uses design system tokens, not hardcoded values | MAJOR |
 | Content moderation | No harmful, explicit, or legally risky content | CRITICAL |
 | Disclosure | AI-generated content labelled where required by policy | MAJOR |
@@ -34,12 +34,18 @@ Factual accuracy:  ✅ No hallucinated claims detected
 Representational:  ⚠️  CRITICAL — "users who struggle with technology" is exclusionary.
                        Recommend: "users new to [product]"
 Brand safety:      ✅ Tone matches brand-guide.md (friendly, direct)
-Accessibility:     ✅ No image alt text required for text-only copy
+Image alternatives: N/A — text-only copy contains no images; image alt attributes do not apply.
+Other accessibility: UNKNOWN — rendered context not supplied; no WCAG approval claimed.
 Content moderation:✅ No harmful content detected
 Disclosure:        ⚠️  MAJOR — policy requires "AI-assisted" label on generated bios.
 
 Gate: FAIL (1 critical, 1 major)
 ```
+
+Use N/A only for an inapplicable check, with the reason. Missing evidence is
+UNKNOWN, not N/A or PASS; request the evidence and leave that check unresolved.
+An image-alternative N/A does not approve other accessibility checks or WCAG
+conformance. Apply relevant text checks and component behavior checks separately.
 
 ### Review AI-generated imagery
 
@@ -80,6 +86,11 @@ Create them using the dimensions and schema in this reference.
 discriminator: audit-report
 content_type: copy | imagery | component | mixed
 dimensions_reviewed: [string]
+dimension_results:
+  - dimension: string
+    status: PASS | FAIL | N/A | UNKNOWN
+    reason: string
+    evidence_refs: [string]
 findings:
   - dimension: string
     severity: CRITICAL | MAJOR | MINOR | INFO
@@ -88,8 +99,34 @@ findings:
 summary:
   critical: number
   major: number
-gate: PASS | WARN | FAIL
+gate: PASS | WARN | FAIL | UNRESOLVED
 ```
+
+Each evaluated dimension has a result; only confirmed failures create
+severity-bearing findings. N/A and UNKNOWN require reasons; record available
+evidence references and identify what is missing. They are not passing results
+and do not add to severity counts. Every finding must match a FAIL dimension.
+
+Gate precedence: any confirmed CRITICAL finding means FAIL, even with unknown
+checks. Otherwise any UNKNOWN check, or no applicable checks, means UNRESOLVED.
+With complete applicable evidence, MAJOR findings mean WARN; otherwise PASS.
+UNRESOLVED is non-approving and requests evidence, not a fabricated violation.
+Consumers must handle the new result and gate states explicitly.
+
+### Gate decision examples
+
+These rows isolate gate logic; they do not replace per-dimension reasons or
+evidence. The illustrative failures below are CRITICAL or MAJOR only.
+
+| Check statuses | Critical | Major | Gate |
+|---|---:|---:|---|
+| UNKNOWN | 0 | 0 | UNRESOLVED |
+| FAIL, UNKNOWN | 1 | 0 | FAIL |
+| FAIL, UNKNOWN | 0 | 1 | UNRESOLVED |
+| FAIL | 0 | 1 | WARN |
+| PASS, N/A | 0 | 0 | PASS |
+| N/A | 0 | 0 | UNRESOLVED |
+| PASS | 0 | 0 | PASS |
 
 ## Policy sources
 

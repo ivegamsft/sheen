@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "dependencies": [
+    { "provider": "basecoat", "kind": "skill", "name": "decision-log-capture", "path": ".github/skills/decision-log-capture/SKILL.md" },
+    { "provider": "basecoat", "kind": "skill", "name": "docs-site", "path": ".github/skills/docs-site/SKILL.md" },
+    { "provider": "basecoat", "kind": "skill", "name": "frontend-dev", "path": ".github/skills/frontend-dev/SKILL.md" }
+  ]
+}
