@@ -151,7 +151,7 @@ try {
     Write-Warn "Could not read .sheen.yml: $_"
 }
 
-if (-not $Source) { $Source = 'https://github.com/IBuySpy-Shared/basecoat-sheen.git' }
+if (-not $Source) { $Source = 'https://github.com/ivegamsft/sheen.git' }
 if (-not $Ref)    { $Ref    = 'main' }
 
 Write-Ok "Upgrade target: $Source @ $Ref"

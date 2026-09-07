@@ -1,6 +1,6 @@
 # Contributing
 
-Use the repository's [CONTRIBUTING.md](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/CONTRIBUTING.md)
+Use the repository's [CONTRIBUTING.md](https://github.com/ivegamsft/sheen/blob/main/CONTRIBUTING.md)
 as the source of truth for contribution workflow and review expectations.
 
 ## For docs changes

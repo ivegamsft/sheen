@@ -13,18 +13,18 @@ Issues are logged on GitHub for every unimplemented requirement.
 
 | Spec | Gap | Severity | Issue |
 |------|-----|----------|-------|
-| 01 | Token build pipeline: DTCG → CSS/JS/TS output | 🔴 High | [#43](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/43) |
-| 01 | Semantic layer incomplete: space, elevation, motion, border, interactive-state tokens | 🔴 High | [#44](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/44) |
-| 05 | `scripts/contrast-check` not a standalone callable script | 🟡 Medium | [#45](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/45) |
-| 02 | Agent eval quality below Spec 02 §7 specificity rubric (>= 7/10) | 🔴 High | [#46](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/46) |
-| 03 | `composes.instructions: []` empty on all 6 agents | 🟡 Medium | [#47](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/47) |
-| 03 | Agent descriptions are generic template text | 🟡 Medium | [#51](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/51) |
-| 05 | Warn-rule scripts not implemented (6 rules in checks.json have no enforcer) | 🟡 Medium | [#48](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/48) |
-| 06 | sync.* missing manifest recording and token build step | 🔴 High | [#49](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/49) |
-| 08 | No VPAT-style conformance statement template | 🟡 Medium | [#50](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/50) |
-| 05 | markdownlint missing; CI workflow names don't match Spec 05 §4 | 🟢 Low | [#52](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/52) |
-| 09 | `discriminator` field not in sheen.vocab.yaml | 🟡 Medium | [#40](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/40) *(prev)* |
-| 09 | `lint-router.ps1` and `router-contract` CI gate missing | 🟡 Medium | [#41](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/41) *(prev)* |
+| 01 | Token build pipeline: DTCG → CSS/JS/TS output | 🔴 High | [#43](https://github.com/ivegamsft/sheen/issues/43) |
+| 01 | Semantic layer incomplete: space, elevation, motion, border, interactive-state tokens | 🔴 High | [#44](https://github.com/ivegamsft/sheen/issues/44) |
+| 05 | `scripts/contrast-check` not a standalone callable script | 🟡 Medium | [#45](https://github.com/ivegamsft/sheen/issues/45) |
+| 02 | Agent eval quality below Spec 02 §7 specificity rubric (>= 7/10) | 🔴 High | [#46](https://github.com/ivegamsft/sheen/issues/46) |
+| 03 | `composes.instructions: []` empty on all 6 agents | 🟡 Medium | [#47](https://github.com/ivegamsft/sheen/issues/47) |
+| 03 | Agent descriptions are generic template text | 🟡 Medium | [#51](https://github.com/ivegamsft/sheen/issues/51) |
+| 05 | Warn-rule scripts not implemented (6 rules in checks.json have no enforcer) | 🟡 Medium | [#48](https://github.com/ivegamsft/sheen/issues/48) |
+| 06 | sync.* missing manifest recording and token build step | 🔴 High | [#49](https://github.com/ivegamsft/sheen/issues/49) |
+| 08 | No VPAT-style conformance statement template | 🟡 Medium | [#50](https://github.com/ivegamsft/sheen/issues/50) |
+| 05 | markdownlint missing; CI workflow names don't match Spec 05 §4 | 🟢 Low | [#52](https://github.com/ivegamsft/sheen/issues/52) |
+| 09 | `discriminator` field not in sheen.vocab.yaml | 🟡 Medium | [#40](https://github.com/ivegamsft/sheen/issues/40) *(prev)* |
+| 09 | `lint-router.ps1` and `router-contract` CI gate missing | 🟡 Medium | [#41](https://github.com/ivegamsft/sheen/issues/41) *(prev)* |
 
 ---
 

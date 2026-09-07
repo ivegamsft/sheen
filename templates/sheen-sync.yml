@@ -36,7 +36,7 @@ jobs:
     name: Sync sheen assets
     uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@main
     with:
-      source_repo: IBuySpy-Shared/basecoat-sheen
+      source_repo: ivegamsft/sheen
       # source_ref is read from .sheen.yml by the callable workflow.
       # Override here or via workflow_dispatch input to force a specific ref.
       source_ref: ${{ inputs.source_ref || '' }}

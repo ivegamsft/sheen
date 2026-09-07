@@ -14,7 +14,7 @@
 
 param(
     # Source repo URL (override if using a private mirror)
-    [string]$Source = 'https://github.com/IBuySpy-Shared/basecoat-sheen.git',
+    [string]$Source = 'https://github.com/ivegamsft/sheen.git',
     # Ref to pin to (tag, branch, or SHA). 'main' for latest.
     [string]$Ref = 'main',
     # Skip the interactive .sheen.yml prompts and use minimal defaults

@@ -1,5 +1,5 @@
 # Cross-Org Mode — product team variant
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: v0.5.0  # sync from central platform team version
 
 # Design-focused skills (adjust based on team role)

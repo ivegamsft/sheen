@@ -29,7 +29,7 @@ Enterprise monorepo, multiple product teams, shared design governance, org-wide 
 
 ```yaml
 # Cross-Org Mode — org-wide reference, maintained by platform team
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git  # or internal mirror
+source: https://github.com/ivegamsft/sheen.git  # or internal mirror
 ref: v0.5.0  # pin to release tag for production stability
 
 # Platform team: all assets (full reference)
@@ -48,7 +48,7 @@ sync:
 
 ```yaml
 # Cross-Org Mode — product team variant (design-focused)
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: v0.5.0  # sync from central platform team version
 
 # Design-focused skills only
@@ -69,7 +69,7 @@ themes: [light, dark]
 
 ```yaml
 # Cross-Org Mode — product team variant (implementation-focused)
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: v0.5.0
 
 # Implementation-focused skills
@@ -124,7 +124,7 @@ For air-gapped environments:
 
 ```bash
 # Central team mirrors upstream weekly
-git mirror https://github.com/IBuySpy-Shared/basecoat-sheen.git \
+git mirror https://github.com/ivegamsft/sheen.git \
   https://git.internal.company/mirrors/basecoat-sheen.git
 ```
 
