@@ -131,6 +131,9 @@ jobs:
       - name: Validate - complete skill payload metadata
         run: pwsh -NonInteractive -File scripts/test-build-metadata.ps1
 
+      - name: Validate - release provenance and public completeness
+        run: pwsh -NonInteractive -File scripts/test-release-reliability.ps1
+
       - name: Validate - theme lifecycle worked contracts (T01-T14)
         run: pwsh -NonInteractive -File scripts/test-theme-lifecycle.ps1 -OutFile dist/theme-lifecycle-evidence.json
 

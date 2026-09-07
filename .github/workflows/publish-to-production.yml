@@ -49,22 +49,42 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Retain source release completion helper
+        run: |
+          set -euo pipefail
+          # Retain before tag checkout: older tags do not contain this source-only helper.
+          cp scripts/publish-release.py "${RUNNER_TEMP}/sheen-publish-release.py"
+
       - name: Resolve publish tag
         id: resolve_tag
+        env:
+          REQUESTED_TAG: ${{ inputs.tag }}
         run: |
           set -euo pipefail
           if [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
             TAG="${GITHUB_REF_NAME}"
-          elif [[ -n "${{ inputs.tag }}" ]]; then
-            TAG="${{ inputs.tag }}"
+          elif [[ -n "${REQUESTED_TAG}" ]]; then
+            TAG="${REQUESTED_TAG}"
           else
-            TAG=$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | head -1)
+            TAG=""
+            TAGS=$(git tag --list --sort=-v:refname)
+            while IFS= read -r candidate; do
+              if [[ "$candidate" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+                TAG="$candidate"
+                break
+              fi
+            done <<< "$TAGS"
             if [[ -z "${TAG}" ]]; then
               echo "::error::No semver tags found; provide inputs.tag or push a version tag"
               exit 1
             fi
             echo "Resolved latest semver tag: ${TAG}"
           fi
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Publish tag must be a vX.Y.Z semver tag"
+            exit 1
+          fi
+          git show-ref --verify --quiet "refs/tags/$TAG" || { echo "::error::Publish tag does not exist"; exit 1; }
           echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
           echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
 
@@ -114,6 +134,9 @@ jobs:
             'scripts/file-audit-issues.ps1'
             'scripts/README-audit-skills-agents.md'
             'scripts/generate-release-notes.sh'
+            'scripts/publish-release.py'
+            'scripts/test-release-reliability.ps1'
+            'scripts/test-release-reliability.py'
             'scripts/audit-evals.ps1'
             'vendor/**'
           )
@@ -379,51 +402,19 @@ jobs:
             || echo "Warning: could not update repo metadata (non-fatal)"
 
       - name: Create GitHub release on production repository
+        timeout-minutes: 10
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PRODUCTION_TOKEN: ${{ secrets.PRODUCTION_REPO_TOKEN }}
           TAG: ${{ steps.resolve_tag.outputs.tag }}
         run: |
           set -euo pipefail
+          python3 "${RUNNER_TEMP}/sheen-publish-release.py"
 
-          SOURCE_RELEASE=$(curl -sf \
-            -H "Authorization: token ${GITHUB_TOKEN}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/tags/${TAG}" || echo "null")
-
-          if [ "$SOURCE_RELEASE" = "null" ] || [ -z "$SOURCE_RELEASE" ]; then
-            echo "No source release found for ${TAG} — skipping release creation."
-            exit 0
-          fi
-
-          RELEASE_BODY=$(echo "$SOURCE_RELEASE" | jq -r '.body // empty')
-
-          EXISTING=$(curl -sf \
-            -H "Authorization: token ${PRODUCTION_TOKEN}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/ivegamsft/sheen/releases/tags/${TAG}" \
-            -o /dev/null -w "%{http_code}" || true)
-
-          if [ "$EXISTING" = "200" ]; then
-            RELEASE_ID=$(curl -sf \
-              -H "Authorization: token ${PRODUCTION_TOKEN}" \
-              -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/ivegamsft/sheen/releases/tags/${TAG}" \
-              | jq -r '.id')
-            curl -sf -X PATCH \
-              -H "Authorization: token ${PRODUCTION_TOKEN}" \
-              -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/ivegamsft/sheen/releases/${RELEASE_ID}" \
-              -d "{\"body\": $(echo "$RELEASE_BODY" | jq -Rs .)}" >/dev/null
-            echo "Updated release ${TAG} on production repo."
-          else
-            curl -sf -X POST \
-              -H "Authorization: token ${PRODUCTION_TOKEN}" \
-              -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/ivegamsft/sheen/releases" \
-              -d "{\"tag_name\": \"${TAG}\", \"name\": \"${TAG}\", \"body\": $(echo "$RELEASE_BODY" | jq -Rs .)}" >/dev/null
-            echo "Created release ${TAG} on production repo."
-          fi
+      - name: Remove retained release completion helper
+        if: always()
+        run: |
+          rm -f -- "${RUNNER_TEMP}/sheen-publish-release.py"
 
       - name: Trigger docs build on production repository
         if: always() && steps.push-production.outcome == 'success'

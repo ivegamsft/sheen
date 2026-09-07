@@ -19,6 +19,12 @@
   "rules": {
     "error": [
       {
+        "id": "release-reliability-regressions",
+        "applies_to": [".github/workflows/release.yml", ".github/workflows/publish-to-production.yml", "scripts/publish-release.py", "scripts/test-release-reliability.*"],
+        "description": "Execute tagged-repository payload provenance and bounded, fail-closed public release completion with offline transport fixtures and workflow wiring checks; not live publication proof.",
+        "script": "scripts/test-release-reliability"
+      },
+      {
         "id": "audit-contract-regressions",
         "applies_to": ["skills/ai-output-governance/**", "skills/ethical-design/**", "skills/design-drift-detection/**", "scripts/test-audit-contracts.ps1"],
         "description": "Operative document tables, examples and guards agree on applicability, severity and totals; negative mutations must fail. Not agent behavior or WCAG proof.",

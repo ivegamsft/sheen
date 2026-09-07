@@ -225,6 +225,79 @@ not advisory findings.
 
 Merges to the default branch require `eval`, `token-lint`, and `lint` to pass.
 
+### 4.1 Release provenance and completeness
+
+`scripts/test-release-reliability.ps1` is a hard CI/checks.json gate. The existing
+PowerShell runner invokes Python's standard-library `unittest`; no added packages
+are needed. Bash workflow blocks execute in isolated Git fixtures under `dist/`,
+with divergent tag/dispatch versions, changelogs, note generators and sync assets.
+The tests verify archived and uploaded bytes, create/rerun paths, history fallback,
+invalid/missing/injection-shaped tags, mismatched versions and workflow ordering.
+A negative checkout mutation reproduces the original mixed-payload failure.
+
+`release.yml` resolves `inputs.tag || github.ref_name` only through an environment
+variable, accepts exact `vX.Y.Z`, requires `refs/tags/<tag>` to exist and checks out
+that tag before any payload/version/note operation. A same-named branch is not a
+tag. The note generator itself comes from the requested tag; its `GITHUB_SHA`
+is overridden with checked-out HEAD so older generators' history fallback cannot
+read the dispatch commit. Before the coverage gate and notes run, local tag refs
+in the disposable job checkout are limited to the selected tag and the greatest
+lower-version exact semver tag that is an ancestor of the selected commit. No
+remote refs are modified. This keeps old generators from selecting a future or
+unrelated tag as their history baseline; without a predecessor they use initial
+history. Fixtures cover non-latest reruns, non-ancestor candidates and the first
+release with newer tags present. The ZIP uses the fully qualified selected tag.
+No new source-release helper is required inside historical tags.
+
+The public publisher also reads explicit tag input through an environment
+variable and requires an exact existing semver tag before checkout, stripping or
+mirror writes. Tag pushes use the event tag; an empty dispatch input selects the
+highest version-sorted exact semver tag, ignoring prerelease and malformed names.
+No valid tag is an error. Execution fixtures cover all three selection paths and
+prove invalid or branch-only references cannot produce publication outputs.
+
+`publish-to-production.yml` retains `scripts/publish-release.py` from its initial
+workflow checkout **before** checking out the publish tag. This enables dispatch
+of older tags that lack the helper. The helper and its regression runners are
+internal strip-list entries, never public payload dependencies. The retained
+copy is removed by an `always()` cleanup step. Existing trusted metadata-builder
+retention, post-sanitization regeneration/checks, public push and protection
+restoration ordering remain unchanged.
+
+The release completion gate requires a matching source tag, positive integer ID,
+boolean draft/prerelease state, nonblank string notes and a published timestamp;
+draft/unpublished, wrong-tag or malformed successful responses fail immediately.
+It retries source absence (404), HTTP 408/429/500/502/503/504 and enumerated transient
+curl failures (DNS/connect, partial transfer, timeout, send/receive/empty reply).
+Each lookup is capped at **8 attempts**, with **10 seconds** between attempts.
+Every request has a **10-second connect** and **20-second curl total** timeout,
+plus a **25-second subprocess wall-clock** guard. Other statuses, TLS/configuration
+errors and malformed responses fail immediately. Public lookup uses the same
+transient policy, but **only HTTP 404** permits creation; authorization/server
+failures never masquerade as absence.
+
+Source notes are rewritten using the mirror's existing owner/URL mappings before
+JSON serialization. A case-insensitive final internal-identifier gate must pass
+before any public write. PATCH/POST sets the requested tag, notes, published state
+and source prerelease flag. Only the expected 200/201 response with matching
+tag/body/state (and existing ID for updates) proves completion. Writes are not
+retried automatically because an ambiguous response may hide a successful POST.
+Two maximally delayed lookups plus one write are bounded to **565 seconds** of
+request/wait budget, within the **10-minute release step** and existing 15-minute
+job timeout; preceding mirror work consumes part of that job budget.
+
+Offline tests mock transport commands, not the completion implementation. They
+cover immediate/delayed/exhausted readiness, source/public authorization and
+permanent/transient errors, invalid bodies/state/tags, create/update/repair,
+sanitized Unicode/quoted notes, timeout limits and failed/malformed writes.
+They are not proof of live API permissions or publication. On gate failure,
+inspect the named tag's source/public releases and workflow logs, correct the
+underlying cause, then rerun the publisher for the same tag. A mirror push may
+already have completed; a failed completion gate is **not** a successful release.
+An ambiguous write requires checking the public release before rerunning.
+Roll out via the next explicitly authorized release; rollback via a normal
+revert PR. This change does not bump versions, tag, publish or alter protections.
+
 ## 5. Advisory philosophy
 
 Content/craft rules are advisory (`warn`) so authors aren't blocked by taste;

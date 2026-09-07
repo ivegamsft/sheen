@@ -17,6 +17,18 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ### Fixed
 
+- Resolve source release tags through environment input, verify exact tag existence,
+  and check out the requested tag before version checks, notes and uploaded assets;
+  history fallback also uses the selected commit rather than the dispatch SHA.
+  Historical reruns constrain local baseline tags to a lower-version ancestor,
+  preventing empty or unrelated future-tag history ranges.
+  The public publisher validates explicit/event/latest tag selection before any
+  mirror changes, rejecting missing or malformed references (#217).
+- Require bounded matching source-release readiness and verified public create/update
+  responses instead of successfully skipping a racing release. Sanitize source notes
+  before outgoing writes; fail visibly on authorization, malformed data, exhaustion
+  or write failures. Add offline execution regressions and retain source-only tooling
+  outside old-tag/public payloads (#218).
 - Align AI review image-alternative applicability, ethical checkout totals and
   required-ARIA parity severity/gates; preserve critical fairness and downstream
   authority. Add operative-document consistency regressions, not WCAG proof (#213).

@@ -39,16 +39,45 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Resolve tag
+      - name: Resolve and check out release tag
         id: tag
+        env:
+          REQUESTED_TAG: ${{ inputs.tag || github.ref_name }}
         shell: bash
         run: |
           set -euo pipefail
-          tag="${{ inputs.tag || github.ref_name }}"
+          tag="$REQUESTED_TAG"
           if [[ ! "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "::error::Tag '$tag' is not a vX.Y.Z semver tag"
             exit 1
           fi
+          git show-ref --verify --quiet "refs/tags/$tag" || { echo "::error::Requested tag does not exist"; exit 1; }
+          git checkout --detach "refs/tags/$tag"
+          # Historical generators pick the highest other tag. Limit this disposable
+          # checkout to the selected release and its predecessor; no remote tag changes.
+          tags=$(git tag --list --sort=-v:refname)
+          previous_tag=""
+          below_selected=false
+          while IFS= read -r candidate; do
+            if [[ "$candidate" == "$tag" ]]; then
+              below_selected=true
+              continue
+            fi
+            if [[ "$below_selected" == true && "$candidate" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              if git merge-base --is-ancestor "refs/tags/$candidate" HEAD; then
+                previous_tag="$candidate"
+                break
+              else
+                status=$?
+                if [[ "$status" -ne 1 ]]; then exit "$status"; fi
+              fi
+            fi
+          done <<< "$tags"
+          while IFS= read -r candidate; do
+            if [[ "$candidate" != "$tag" && "$candidate" != "$previous_tag" ]]; then
+              git tag --delete -- "$candidate" >/dev/null
+            fi
+          done <<< "$tags"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
 
@@ -111,7 +140,7 @@ jobs:
           set -euo pipefail
           tag="${{ steps.tag.outputs.tag }}"
           artifact="${GITHUB_REPOSITORY#*/}-${tag}.zip"
-          git archive --format=zip --output "$artifact" "$tag"
+          git archive --format=zip --output "$artifact" "refs/tags/$tag"
           echo "artifact=$artifact" >> "$GITHUB_OUTPUT"
 
       - name: Generate release notes
@@ -119,6 +148,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # Older tag generators use GITHUB_SHA for history fallback; dispatch SHA is not the payload.
+          export GITHUB_SHA="$(git rev-parse HEAD)"
           bash scripts/generate-release-notes.sh "${{ steps.tag.outputs.tag }}" "${{ steps.tag.outputs.version }}" release-notes.md
           echo "notes=release-notes.md" >> "$GITHUB_OUTPUT"
 
