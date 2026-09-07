@@ -9,7 +9,7 @@ foundation that basecoat provides: basecoat governs the *engineering* surface,
 sheen governs the *design* surface, and the two namespaces (`basecoat-*` /
 `sheen-*`) never collide, so a consumer can adopt both together.
 
-> **Status:** v0.12.0 release — 61 skills, 7 agents, 10 instruction layers, and
+> **Status:** v0.12.1 release — 61 skills, 7 agents, 10 instruction layers, and
 > 18 templates, all validated against [`checks.json`](checks.json) in CI. The
 > contract is specified in [`SPEC.md`](SPEC.md) and [`specs/`](specs/); see
 > [`CHANGELOG.md`](CHANGELOG.md) for release history.

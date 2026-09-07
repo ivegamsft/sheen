@@ -7,7 +7,17 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
-### Changed
+## [0.12.1] — 2026-09-06
+
+| Field | Value |
+|---|---|
+| Version | v0.12.1 |
+| Range | v0.12.0..v0.12.1 |
+| Wave | wave:9 |
+| Sprint | N/A |
+| Release date | 2026-09-06 |
+
+### Highlights
 
 - Reduced all 20 oversized source-owned skill bodies below the existing W03
   2500-character heuristic, retaining critical guards and handoffs in concise
@@ -16,7 +26,13 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
   routing, and accessibility pairings; clarified shared-source and downstream
   artifact paths and documented the reference-folder contract in spec 02 (#203).
 
-### Fixed
+### Breaking changes
+
+- No asset-name or token-key changes. Skill metadata remains additive v1;
+  its legacy `hash` still describes SKILL.md alone. Complete-skill comparisons
+  must use the new per-file `files` evidence (#206, #207).
+
+### Fixes and improvements
 
 - Corrected the extracted AI review example to classify representational
   unfairness as CRITICAL and report FAIL (1 critical, 1 major), consistent with
@@ -35,6 +51,40 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
   use Sheen manifest ownership; malformed evidence remains advisory. Added
   source/consumer regression cases and preserved block scenarios before inline
   rows in the shared eval parser (#204).
+
+- Public publication now regenerates metadata after internal-tool stripping
+  and URL sanitization, so recorded hashes describe the published files
+  rather than the source payload. The retained builder stays outside the
+  public archive (#210).
+
+### Known issues
+
+- The source-only unified audit still reports four external-inventory handoff
+  advisories for intentionally preserved specialist references; these are
+  distinct from the resolved W03/W04 findings (#206).
+- Character budgets and routing declarations are heuristics, not proof of
+  executed accessibility reviews or downstream UI quality (#205, #206).
+
+### Upgrade notes
+
+- Pin `.sheen.yml` to `ref: v0.12.1` and run the normal sync command. Sync
+  complete skill folders, including their mandatory supporting references;
+  copying only SKILL.md omits operative contracts (#206).
+- Internal audit users should invoke `warn-rules.ps1` from a source checkout
+  with its adjacent helper, using `-RepoRoot` for consumers. Consumer scope
+  comes from `.sheen/manifest.json`; these audit tools are not distributed
+  in the public mirror (#205).
+- Metadata consumers comparing whole skills must compare relative paths,
+  hashes, and hash modes in `files`. Text uses normalized LF/BOM handling;
+  binary assets use exact byte hashes. Reserved build/dependency noise is
+  excluded; bundled symbolic links are rejected (#207).
+- No token or asset migration is needed. To roll back, pin `v0.12.0` and use
+  the existing rollback/sync guidance while retaining downstream-owned work.
+
+### Contributors
+
+- Copilot and repository reviewers; delivered through #205 and #206, with
+  publication preparation tracked in #209 and the publishing fix in #210.
 
 ## [0.12.0] — 2026-09-06
 

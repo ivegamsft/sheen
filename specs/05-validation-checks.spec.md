@@ -21,6 +21,11 @@ the entire `files` array (paths, hashes, and hash modes), not only `hash`.
 The existing sync manifest separately records managed file paths and the source
 commit; it does not consume these hashes or prove content currency.
 
+Publication MUST regenerate and check metadata after stripping internal files
+and rewriting public identifiers, before the final safety gate and commit.
+Retain the trusted builder outside the publish tree for this step; it must not
+be shipped merely to refresh payload evidence.
+
 Every skill entry includes `files: [{path, hash, hash_mode}]`: all regular bundled
 files in that skill folder, including `SKILL.md`, `eval.yaml`, root-level assets,
 `references/`, `templates/`, `samples/`, and executable supporting scripts.

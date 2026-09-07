@@ -81,6 +81,9 @@ jobs:
         run: |
           set -euo pipefail
 
+          # Keep the trusted builder outside the payload for post-sanitization hashes.
+          cp scripts/build-metadata.ps1 "${RUNNER_TEMP}/sheen-build-metadata.ps1"
+
           # Strip files that are internal CI/governance tooling.
           # Only docs.yml is kept in the mirror; it is dispatched by the source repo
           # after publishing. All other workflows are source-repo automation only.
@@ -218,7 +221,12 @@ jobs:
               .github/workflows/docs.yml
           fi
 
-          # Final safety gate: internal owner/repo details must not leak into public payload.
+          # Public URLs and stripped assets must be reflected in the published inventory.
+          pwsh -NoProfile -File "${RUNNER_TEMP}/sheen-build-metadata.ps1"
+          pwsh -NoProfile -File "${RUNNER_TEMP}/sheen-build-metadata.ps1" -Check
+          rm -- "${RUNNER_TEMP}/sheen-build-metadata.ps1"
+
+          # Final safety gate also covers the regenerated metadata and vocabulary.
           FORBIDDEN_MATCHES=$(git grep -inI -E 'IBuySpy-Shared|ibuyspy-shared\.github\.io' -- . || true)
           UNEXPECTED_MATCHES=$(printf '%s\n' "$FORBIDDEN_MATCHES" \
             | grep -v '^$' \

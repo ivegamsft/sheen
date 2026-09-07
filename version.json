@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "releaseDate": "2026-09-06",
-  "notes": "v0.12.0: Experience Blueprint, app-specific component/layout catalogs, theme lifecycle, craft calibration, and dependency maintenance from Waves 6-8."
+  "notes": "v0.12.1: Wave 9 skill-body hygiene, scenario-aware accessibility routing, complete skill payload metadata, and public metadata integrity."
 }

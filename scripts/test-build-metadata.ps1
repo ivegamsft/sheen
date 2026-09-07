@@ -167,6 +167,33 @@ try {
             Invoke-Builder $root -Check -Expected 1 -Diagnostic 'Skill payload must not contain symbolic links or reparse points'
         } finally { Remove-Item -LiteralPath $rootLink -Force }
         Invoke-Builder $root -Check
+
+        # Publishing strips internal tools before rewriting URLs in the payload.
+        $sourceBuilder = $builder
+        $internalCopy = Join-Path $root 'scripts/build-metadata.ps1'
+        $retainedBuilder = Join-Path $fixtureRoot 'retained-build-metadata.ps1'
+        New-Item -ItemType Directory -Force (Split-Path -Parent $internalCopy) | Out-Null
+        Copy-Item -LiteralPath $sourceBuilder -Destination $internalCopy
+        Copy-Item -LiteralPath $internalCopy -Destination $retainedBuilder
+        Remove-Item -LiteralPath $internalCopy
+        Assert (-not (Test-Path -LiteralPath $internalCopy)) 'Internal builder must not remain in public payload'
+        $publicReference = Join-Path $skillRoot 'references/publish.md'
+        Write-Text $publicReference "Read https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/SPEC.md`n"
+        Invoke-Builder $root
+        Write-Text $publicReference "Read https://github.com/ivegamsft/sheen/blob/main/SPEC.md`n"
+        Invoke-Builder $root -Check -Expected 1
+        try {
+            $builder = $retainedBuilder
+            Invoke-Builder $root
+            Invoke-Builder $root -Check
+            $published = Read-Skill $root
+            $publishedReference = @($published.files | Where-Object path -EQ 'references/publish.md')[0]
+            Assert ($publishedReference.hash -eq (Get-FileHash -LiteralPath $publicReference -Algorithm SHA256).Hash.ToLowerInvariant()) 'Public metadata must hash rewritten payload, not source URLs'
+            Assert (-not ([IO.File]::ReadAllText($metadataPath).Contains('IBuySpy-Shared'))) 'Regenerated metadata reintroduced internal identifiers'
+        } finally {
+            $builder = $sourceBuilder
+            Remove-Item -LiteralPath $retainedBuilder
+        }
     }
     Write-Host "test-build-metadata: OK (2 source/consumer roots; $checks real -Check runs; $assertions assertions)."
 } finally {
