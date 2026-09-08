@@ -52,6 +52,13 @@ ref: main
 # materialize_tokens: when true, runs scripts/build-tokens.ps1 after sync to
 # generate dist/tokens/sheen.css, sheen.js, sheen.esm.js, and sheen.d.ts from
 # the synced DTCG token source (spec 01 §4 / spec 06 §2).
+# Sync appends only missing exact Git ignore rules for these four generated files.
+# Commit .gitignore if changed. Existing broad ignores and effective ! inclusions
+# are respected; no ignore edits when materialization is disabled.
+# Already tracked files need a reviewed git rm --cached migration (local files stay).
+# To intentionally version an output, put e.g. !/dist/tokens/sheen.css after its
+# ignore rule and ensure parent directories are not excluded. No extra config key.
+# Builds must regenerate outputs from sheen/tokens; ignores do not stop generation.
 # Set to true if your project consumes tokens directly (web, design tools, CI).
 # materialize_tokens: true
 

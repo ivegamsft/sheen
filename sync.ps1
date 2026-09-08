@@ -161,6 +161,40 @@ function Add-ManifestFile {
     if (-not $ManifestFiles.Contains($rel)) { [void]$ManifestFiles.Add($rel) }
 }
 
+function Protect-GeneratedTokens {
+    $ignorePath = Join-Path $repoRoot '.gitignore'
+    $rules = New-Object System.Collections.Generic.List[string]
+    foreach ($name in @('sheen.css', 'sheen.js', 'sheen.esm.js', 'sheen.d.ts')) {
+        $path = "dist/tokens/$name"
+        $tracked = git -C $repoRoot ls-files -- $path
+        if ($LASTEXITCODE -ne 0) { throw "Cannot inspect tracked token output: $path" }
+        if ($tracked) {
+            Write-Warning "sheen sync: generated output is already tracked: $path. Ignore rules do not untrack files. After confirming it regenerates, run: git rm --cached -- $path (keeps the local file), then commit. To deliberately keep versioning it, use an explicit !/$path inclusion after ignore rules."
+        }
+        git -C $repoRoot check-ignore --no-index --quiet -- $path
+        $ignoreExit = $LASTEXITCODE
+        if ($ignoreExit -eq 0) { continue }
+        if ($ignoreExit -ne 1) { throw "Cannot inspect ignore policy: $path" }
+        # Verbose check-ignore returns success for negations too; quiet mode does not.
+        $match = git -C $repoRoot -c core.quotePath=false check-ignore --no-index --verbose -- $path
+        if ($LASTEXITCODE -notin @(0, 1)) { throw "Cannot inspect ignore pattern: $path" }
+        if ($match -match '^.*:\d+:!.*\t') {
+            Write-Warning "sheen sync: preserving explicit Git inclusion for $path; generated output may be staged/versioned. Consumer ignore policy was not overridden."
+            continue
+        }
+        $rules.Add("/$path")
+    }
+    if ($rules.Count -eq 0) { return }
+    [byte[]]$existing = @()
+    if (Test-Path -LiteralPath $ignorePath) { $existing = [System.IO.File]::ReadAllBytes($ignorePath) }
+    $text = [System.Text.Encoding]::UTF8.GetString($existing)
+    $newline = if ($text -match '\r\n|\n') { $Matches[0] } else { "`n" }
+    $separator = if ($existing.Length -gt 0 -and $existing[-1] -ne 10) { $newline } else { '' }
+    # Append without re-encoding the consumer's original bytes (including a BOM).
+    [System.IO.File]::AppendAllText($ignorePath, $separator + ($rules -join $newline) + $newline, [System.Text.UTF8Encoding]::new($false))
+    Write-Host 'sheen sync: added generated-token rules to .gitignore; review and commit .gitignore.'
+}
+
 $source = if ($env:SHEEN_REPO) { $env:SHEEN_REPO } else { Get-ConfigScalar -Key 'source' }
 if (-not $source) { $source = $DefaultSource }
 $ref = if ($env:SHEEN_REF) { $env:SHEEN_REF } else { Get-ConfigScalar -Key 'ref' }
@@ -309,11 +343,14 @@ try {
             }
         }
         if (Test-Path -LiteralPath $buildScript) {
+            Protect-GeneratedTokens
             # Always pass consumer token paths explicitly (#92). build-tokens.ps1 also
             # auto-detects sheen/tokens, but sync must not rely on defaults alone.
             $tokensDir = Join-Path $repoRoot 'sheen' 'tokens'
             $outDir = Join-Path $repoRoot 'dist' 'tokens'
             Write-Host "sheen sync: running token build (materialize_tokens=true; TokensDir=$tokensDir)..."
+            # A successful PowerShell-only builder need not set a native exit code.
+            $global:LASTEXITCODE = 0
             & $buildScript -TokensDir $tokensDir -OutDir $outDir
             if ($LASTEXITCODE -and $LASTEXITCODE -ne 0) { throw "token build failed (exit $LASTEXITCODE)" }
         }

@@ -42,6 +42,43 @@ Rules:
 - Runs token build (spec 01 §4) if the consumer opts into materialized tokens.
 - PowerShell and shell entry points MUST stay behavior-equivalent.
 
+### 2.1 Generated-token Git hygiene
+
+When token materialization runs, sync MUST protect only these root-relative outputs:
+
+```gitignore
+/dist/tokens/sheen.css
+/dist/tokens/sheen.js
+/dist/tokens/sheen.esm.js
+/dist/tokens/sheen.d.ts
+```
+
+- Use native Git effective ignore evaluation (`check-ignore --no-index`, including
+  tracked paths). Existing broad coverage MUST NOT cause unnecessary edits.
+- Preserve effective consumer negations, including nested `.gitignore` overrides,
+  and warn that explicitly included outputs may be staged/versioned. Verbose
+  `check-ignore` can succeed for a negation; its exit code alone is not ignore proof.
+- Append only necessary exact rules to the root `.gitignore`; never blanket-ignore
+  `dist/` or `dist/tokens/`. Preserve its existing bytes, BOM, comments and newline
+  style; add a separator if its last line has no newline. Repeated sync adds nothing.
+- Disabled materialization MUST NOT change `.gitignore`. Ignore rules MUST NOT
+  prevent the builder from generating local outputs.
+- Detect tracked known outputs and warn: after confirming regeneration, consumers
+  may run `git rm --cached -- <exact-output-path>` and commit to stop tracking while
+  keeping local files. Sync MUST NOT edit the index, untrack or delete outputs.
+  Deliberate versioning remains a consumer choice via effective `!` inclusions.
+- Neither `.gitignore` nor generated outputs belong in the ownership manifest;
+  rollback MUST NOT own or delete the consumer's ignore file.
+- Bootstrap guidance MUST include committing `.gitignore` when present, without
+  giving an unconditional missing-path `git add`. Consumer `git add -A` stages new
+  ignore rules, but not ignored untracked outputs. Already tracked files still stage.
+
+`.sheen/` is intentional sync state; `sheen/tokens/` and `sheen/templates/` are
+intentional source assets. The default skill destination is `.github/skills/`,
+not `.agents/skills/`. Preserve other tools' assets and unrelated application
+outputs. Consumers regenerate ignored outputs during builds (see the
+[consumer lifecycle guide](../docs/guides/consumer-lifecycle.md#generated-token-policy)).
+
 ## 3. `rollback.*` (`rollback.ps1` / `rollback.sh`)
 
 - Reverts the last sync (or to a named prior manifest/ref).

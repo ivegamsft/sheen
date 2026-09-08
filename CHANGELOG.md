@@ -17,6 +17,12 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ### Fixed
 
+- Prevent accidental downstream `git add -A` commits of the four materialized
+  Sheen token outputs in both sync entry points. Append only missing exact ignore
+  rules, preserve consumer byte formatting and explicit inclusions, and warn with
+  non-destructive migration advice for already tracked outputs. Bootstrap and
+  consumer guidance cover committing ignore rules and regenerating builds (#220).
+
 - Resolve source release tags through environment input, verify exact tag existence,
   and check out the requested tag before version checks, notes and uploaded assets;
   history fallback also uses the selected commit rather than the dispatch SHA.

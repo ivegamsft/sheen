@@ -145,8 +145,71 @@ Expect `sheen: OK` on all checks. Any `ERROR` must be resolved before proceeding
 
 ```bash
 git add .sheen.yml .sheen/manifest.json .github/ sheen/
+# If .gitignore exists (for example, token materialization created it):
+[ ! -f .gitignore ] || git add .gitignore
 git commit -m "chore: integrate basecoat-sheen v0.7.0"
 ```
+
+In PowerShell, use `if (Test-Path .gitignore) { git add .gitignore }` for the
+conditional line. Review the staged changes before committing.
+
+#### Generated-token policy
+
+Both `.sheen/` (sync state/manifest) and `sheen/` (token/template sources) are
+intentional; keep them. Skills default to `.github/skills/`. A folder such as
+`.agents/skills/` may belong to another tool and is not Sheen's default installer
+ownership—do not remove it as part of token cleanup.
+
+With `materialize_tokens: true`, sync generates local outputs and appends only
+missing root-anchored rules for these four known generated files:
+
+```gitignore
+/dist/tokens/sheen.css
+/dist/tokens/sheen.js
+/dist/tokens/sheen.esm.js
+/dist/tokens/sheen.d.ts
+```
+
+Commit `.gitignore` when created/changed. Existing broad ignore coverage needs no
+edits; effective explicit `!` inclusions (including nested ignore files) are
+preserved with a warning. Sync preserves existing ignore bytes/comments and never
+adds `.gitignore` or generated outputs to its ownership manifest. Disabled
+materialization does not edit ignore rules. Other `dist/` files are not covered by
+the new rules.
+
+**Already tracked outputs:** ignore rules cannot untrack files, so sync warns but
+never changes your index or deletes artifacts. First regenerate and verify your
+build, inspect `git ls-files -- dist/tokens/sheen.css dist/tokens/sheen.js
+dist/tokens/sheen.esm.js dist/tokens/sheen.d.ts`, then run the following **only for
+each known file that is tracked and that you want to stop versioning**:
+
+```bash
+git rm --cached -- dist/tokens/sheen.css
+```
+
+Repeat with the exact `sheen.js`, `sheen.esm.js` or `sheen.d.ts` path as needed;
+review and commit the staged removals with the ignore rules. `--cached` keeps
+local files. Do not remove all of `dist/`, source tokens/templates, state directories
+or other tools' assets.
+
+**Intentional versioning:** instead of untracking, add exact negations after the
+corresponding ignore rules, for example `!/dist/tokens/sheen.css`. Ensure parent
+directories are not excluded: an existing `dist/` exclusion requires re-including
+the parents first (`!/dist/`, `!/dist/tokens/`) and reviewing the resulting policy
+for unrelated output files. Inspect effective policy with
+`git check-ignore --no-index --verbose -- dist/tokens/sheen.css`; a displayed `!`
+means explicit inclusion, not exclusion. A normal `git add -A` may then stage that
+output by design. No additional Sheen setting is needed.
+
+**Build regeneration:** ignored files still exist locally after sync, but a clean
+checkout needs the token build before application bundling:
+
+```powershell
+pwsh -NonInteractive -File scripts/build-tokens.ps1 -TokensDir sheen/tokens -OutDir dist/tokens
+```
+
+Commit the provisioned `scripts/build-tokens.ps1` when using it in your build.
+Ignore rules do not change the builder or stop it generating these files.
 
 #### Step 5 — Reset Copilot context ⚠️
 
@@ -266,7 +329,8 @@ Do **not** hand-edit it; re-run the script after any token change.
 ### Output
 
 - `.github/workflows/ci.yml` — with token validation and eval routing gates
-- `dist/tokens/sheen.css` — first CSS output (add to `dist/` gitignore)
+- `dist/tokens/sheen.css` — first local CSS output (sync provisions narrow ignore
+  rules; see [generated-token policy](#generated-token-policy))
 - `DESIGN.md` — AI-readable design context (colours, type, spacing, radii)
 - Design-tokens gap report (missing semantic layers, naming violations)
 - Team onboarding checklist (Markdown, commit to `docs/`)

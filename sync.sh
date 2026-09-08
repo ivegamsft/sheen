@@ -296,6 +296,46 @@ EOF
 
 echo "sheen sync: wrote ${COUNT} file(s); manifest at .sheen/manifest.json"
 
+protect_generated_tokens() {
+  local name path tracked status match newline=$'\n' first='' separator=''
+  local rules=()
+  for name in sheen.css sheen.js sheen.esm.js sheen.d.ts; do
+    path="dist/tokens/$name"
+    tracked="$(git -C "$REPO_ROOT" ls-files -- "$path")"
+    if [ -n "$tracked" ]; then
+      echo "sheen sync: generated output is already tracked: $path. Ignore rules do not untrack files. After confirming it regenerates, run: git rm --cached -- $path (keeps the local file), then commit. To deliberately keep versioning it, use an explicit !/$path inclusion after ignore rules." >&2
+    fi
+    if git -C "$REPO_ROOT" check-ignore --no-index --quiet -- "$path"; then
+      continue
+    else
+      status=$?
+      [ "$status" -eq 1 ] || { echo "Cannot inspect ignore policy: $path" >&2; return "$status"; }
+    fi
+    # Verbose check-ignore returns success for negations too; quiet mode does not.
+    match="$(git -C "$REPO_ROOT" -c core.quotePath=false check-ignore --no-index --verbose -- "$path")" || {
+      status=$?
+      [ "$status" -eq 1 ] || return "$status"
+    }
+    if [[ "$match" =~ ^.*:[0-9]+:!.*$'\t' ]]; then
+      echo "sheen sync: preserving explicit Git inclusion for $path; generated output may be staged/versioned. Consumer ignore policy was not overridden." >&2
+      continue
+    fi
+    rules+=("/$path")
+  done
+  [ "${#rules[@]}" -gt 0 ] || return 0
+  if [ -s "$REPO_ROOT/.gitignore" ]; then
+    IFS= read -r first < "$REPO_ROOT/.gitignore" || true
+    [[ "$first" == *$'\r' ]] && newline=$'\r\n'
+    [ "$(tail -c 1 "$REPO_ROOT/.gitignore" | wc -l)" -ne 0 ] || separator="$newline"
+  fi
+  # Append only: preserve all existing bytes, including BOM and missing final newline.
+  {
+    printf '%s' "$separator"
+    printf "%s$newline" "${rules[@]}"
+  } >> "$REPO_ROOT/.gitignore"
+  echo 'sheen sync: added generated-token rules to .gitignore; review and commit .gitignore.'
+}
+
 MATERIALIZE="$(yml_value 'materialize_tokens')"
 if [ "$MATERIALIZE" = 'true' ]; then
   BUILD_PS="$REPO_ROOT/scripts/build-tokens.ps1"
@@ -311,6 +351,7 @@ if [ "$MATERIALIZE" = 'true' ]; then
     fi
   fi
   if command -v pwsh >/dev/null 2>&1 && [ -f "$BUILD_PS" ]; then
+    protect_generated_tokens
     # Always pass consumer token paths explicitly (#92). build-tokens.ps1 also
     # auto-detects sheen/tokens, but sync must not rely on defaults alone.
     TOKENS_DIR="$REPO_ROOT/sheen/tokens"

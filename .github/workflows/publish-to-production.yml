@@ -137,6 +137,8 @@ jobs:
             'scripts/publish-release.py'
             'scripts/test-release-reliability.ps1'
             'scripts/test-release-reliability.py'
+            'scripts/test-downstream-token-hygiene.ps1'
+            'scripts/test-downstream-token-hygiene.py'
             'scripts/audit-evals.ps1'
             'vendor/**'
           )

@@ -359,7 +359,8 @@ class ProvenanceTests(unittest.TestCase):
     def test_actual_strip_removes_internal_helpers_and_preserves_public_assets(self):
         steps = workflow_steps("publish-to-production.yml")
         internal = ("publish-release.py", "test-release-reliability.py",
-                    "test-release-reliability.ps1", "build-metadata.ps1")
+                    "test-release-reliability.ps1", "build-metadata.ps1",
+                    "test-downstream-token-hygiene.ps1", "test-downstream-token-hygiene.py")
         for name in internal:
             shutil.copyfile(ROOT / "scripts" / name, self.repo / "scripts" / name)
         workflows = self.repo / ".github" / "workflows"

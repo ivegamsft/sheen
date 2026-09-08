@@ -19,6 +19,12 @@
   "rules": {
     "error": [
       {
+        "id": "downstream-token-hygiene-regressions",
+        "applies_to": ["sync.ps1", "sync.sh", "bootstrap.ps1", "bootstrap.sh", "scripts/test-downstream-token-hygiene.*"],
+        "description": "Execute both real sync entry points against local Git upstream/consumer fixtures; verify generated-token ignore, staging, consumer policy, byte/index preservation and old-behavior negative mutation. Fixture builder/config decoder are not DTCG/YAML validation.",
+        "script": "scripts/test-downstream-token-hygiene"
+      },
+      {
         "id": "release-reliability-regressions",
         "applies_to": [".github/workflows/release.yml", ".github/workflows/publish-to-production.yml", "scripts/publish-release.py", "scripts/test-release-reliability.*"],
         "description": "Execute tagged-repository payload provenance and bounded, fail-closed public release completion with offline transport fixtures and workflow wiring checks; not live publication proof.",

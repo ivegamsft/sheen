@@ -298,6 +298,27 @@ An ambiguous write requires checking the public release before rerunning.
 Roll out via the next explicitly authorized release; rollback via a normal
 revert PR. This change does not bump versions, tag, publish or alter protections.
 
+### 4.2 Downstream generated-token hygiene
+
+`scripts/test-downstream-token-hygiene.ps1` is a hard CI/checks.json gate using
+Python standard-library `unittest`, Git, Bash and PowerShell. Both actual sync
+entry points clone a local upstream into isolated consumer fixtures under `dist/`;
+fixture TEMP/TMP/TMPDIR stay there too. A minimal builder verifies source delivery
+and writes the four outputs; this is Git/sync integration, not DTCG validation.
+The runner first probes `ConvertFrom-Yaml`. When unavailable it uses a strict,
+test-local decoder for only the three fixture config scalars (source, ref and
+materialize_tokens), never a substitute sync or ignore implementation.
+
+Scenarios verify missing/empty/preexisting/broad/exact ignores, original byte
+prefixes including BOM/CRLF/no-final-newline, root and nested negations, tracked
+outputs with unchanged index bytes and scoped migration warnings, repeat sync,
+disabled materialization, unrelated outputs/source/state/other-tool preservation,
+and manifest exclusions. Real `git add -A` proves staging outcomes and new ignore
+rules are staged. A mutation removing only the hygiene invocation reproduces the
+old accidental staging in each real entry point. Public strip execution tests
+verify both source-only regression scripts are absent from the published payload;
+trusted post-sanitization metadata generation remains unchanged.
+
 ## 5. Advisory philosophy
 
 Content/craft rules are advisory (`warn`) so authors aren't blocked by taste;
