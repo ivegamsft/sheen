@@ -21,7 +21,7 @@
       {
         "id": "downstream-token-hygiene-regressions",
         "applies_to": ["sync.ps1", "sync.sh", "bootstrap.ps1", "bootstrap.sh", "scripts/test-downstream-token-hygiene.*"],
-        "description": "Execute both real sync entry points against local Git upstream/consumer fixtures; verify generated-token ignore, staging, consumer policy, byte/index preservation and old-behavior negative mutation. Fixture builder/config decoder are not DTCG/YAML validation.",
+        "description": "Execute both real sync entry points against local Git fixtures; verify narrow ignores, automatic staged deletion of verified clean generated remnants, local regeneration, explicit inclusion, unrelated index preservation, fail-closed dirty/staged/custom ownership and assume-unchanged/skip-worktree flags, and old-behavior mutation. Fixture builder/config decoder are not DTCG/YAML validation.",
         "script": "scripts/test-downstream-token-hygiene"
       },
       {

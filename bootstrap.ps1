@@ -92,6 +92,7 @@ ref: "$Ref"
 
 # Uncomment to build CSS/JS token output after every sync:
 # Sync protects the four generated files with Git ignore rules; commit .gitignore.
+# Clean tracked generated remnants are staged for deletion; local outputs rebuild.
 # materialize_tokens: true
 
 # Uncomment to generate DESIGN.md (AI-readable design context):
@@ -122,6 +123,7 @@ Write-Host "       git add .sheen.yml .sheen/manifest.json .github/ sheen/"
 if (Test-Path -LiteralPath (Join-Path $repoRoot '.gitignore')) {
     Write-Host "       git add .gitignore   # review generated-token ignore rules, if added"
 }
+Write-Host "       git diff --cached --stat   # includes any automatic generated-token deletions"
 Write-Host "       git commit -m 'chore: integrate basecoat-sheen'"
 Write-Host "  3. Reset Copilot context (REQUIRED for skills to appear):"
 Write-Host "     • CLI:    exit  then  gh copilot"

@@ -55,7 +55,12 @@ ref: main
 # Sync appends only missing exact Git ignore rules for these four generated files.
 # Commit .gitignore if changed. Existing broad ignores and effective ! inclusions
 # are respected; no ignore edits when materialization is disabled.
-# Already tracked files need a reviewed git rm --cached migration (local files stay).
+# Clean tracked outputs with the Sheen generator header are automatically removed
+# from version control; commit the staged deletions. Local outputs regenerate.
+# Dirty/staged output edits or unrecognized ownership block cleanup/build visibly;
+# preserve/review conflicting work before retrying. Unrelated index entries stay.
+# Tracked outputs with assume-unchanged/skip-worktree flags block cleanup/build,
+# even if apparently clean; sync never clears consumer index flags automatically.
 # To intentionally version an output, put e.g. !/dist/tokens/sheen.css after its
 # ignore rule and ensure parent directories are not excluded. No extra config key.
 # Builds must regenerate outputs from sheen/tokens; ignores do not stop generation.

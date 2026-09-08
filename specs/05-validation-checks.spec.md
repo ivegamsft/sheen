@@ -310,8 +310,14 @@ test-local decoder for only the three fixture config scalars (source, ref and
 materialize_tokens), never a substitute sync or ignore implementation.
 
 Scenarios verify missing/empty/preexisting/broad/exact ignores, original byte
-prefixes including BOM/CRLF/no-final-newline, root and nested negations, tracked
-outputs with unchanged index bytes and scoped migration warnings, repeat sync,
+prefixes including BOM/CRLF/no-final-newline, root and nested negations, automatic
+staged deletions of verified clean tracked remnants with unrelated index entries
+preserved, repeat sync/regeneration and retained deletions after `git add -A`,
+dirty/staged generated edits and custom ownership failing before token/index/
+ignore changes (including deliberate inclusion and preflight of the last output),
+`assume-unchanged`/`skip-worktree` separately and combined hiding local edits from
+real Git diff, clean-flag refusal and explicit inclusion with flag/index/byte
+preservation,
 disabled materialization, unrelated outputs/source/state/other-tool preservation,
 and manifest exclusions. Real `git add -A` proves staging outcomes and new ignore
 rules are staged. A mutation removing only the hygiene invocation reproduces the

@@ -19,9 +19,15 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 - Prevent accidental downstream `git add -A` commits of the four materialized
   Sheen token outputs in both sync entry points. Append only missing exact ignore
-  rules, preserve consumer byte formatting and explicit inclusions, and warn with
-  non-destructive migration advice for already tracked outputs. Bootstrap and
-  consumer guidance cover committing ignore rules and regenerating builds (#220).
+  rules and preserve consumer byte formatting and explicit inclusions. Automatically
+  stage deletion of clean, verified generated tracked remnants under the default
+  policy, regenerating current local ignored artifacts. Dirty/staged output edits
+  and ambiguous ownership block cleanup/build rather than discard work; unrelated
+  index entries remain intact. Tracked token outputs with `assume-unchanged` or
+  `skip-worktree` flags fail preflight even when Git diff reports clean; flags are
+  never cleared automatically. Unix FIFOs and dangling links are rejected before
+  opening output files. Bootstrap and consumer guidance cover committing
+  the cleanup and regenerating builds (#220).
 
 - Resolve source release tags through environment input, verify exact tag existence,
   and check out the requested tag before version checks, notes and uploaded assets;
