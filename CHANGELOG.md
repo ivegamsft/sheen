@@ -7,6 +7,13 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+### Documentation
+
+- Specify the proposed `brand-guide-html` skill: approved-input composition,
+  reference-neutral templates, responsive/offline HTML, refresh ownership,
+  accessibility and safe-content evidence. Specification only; no live skill,
+  renderer, identity defaults or reference assets are added (#223).
+
 ### Upgrade notes
 
 - AI and parity audit reports now record explicit PASS/FAIL/N/A/UNKNOWN check

@@ -20,6 +20,7 @@ extensions; a specification does not itself establish implementation status.
 | 11 | [App Component Catalog](11-app-component-catalog.spec.md) | Logical component selection, placement, composition, gallery, audit/generate behavior |
 | 12 | [App Layout Catalog](12-app-layout-catalog.spec.md) | Logical layout selection, regions, navigation/IA placement, component constraints, gallery |
 | 13 | [App-Specific Theme Lifecycle](13-theme-lifecycle.spec.md) | Implemented agent contracts and illustrative T01-T14 checks for previews, scoped selection, readiness, custom reuse/revision; downstream visual validation remains separate |
+| 14 | [HTML Brand Guide](14-html-brand-guide.spec.md) | Proposed `brand-guide-html` authoring skill: reference isolation, approved inputs, reusable modules, offline HTML, refresh and review evidence; not implemented |
 
 ## Conventions used in these specs
 
@@ -30,6 +31,7 @@ extensions; a specification does not itself establish implementation status.
 
 ## Status
 
-Draft v0.1 — tracks root `SPEC.md` §1–§13. Update this set and the root spec
-together; a `checks.json` drift rule (see spec 05) fails CI if the catalog and
-these specs disagree.
+The table above lists the tracked specifications; each document states its
+implementation status. Keep this index and root `SPEC.md` aligned when adding
+specifications. Proposed specifications do not register live assets; implemented
+asset registrations remain subject to catalog and metadata drift checks (spec 05).

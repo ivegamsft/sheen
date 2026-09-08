@@ -31,3 +31,15 @@ paths and the illustrative T01-T14 checks. Review/closeout is tracked by
 [epic #190](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/190).
 This is agent-contract capability, not a product deployment or proof of
 downstream rendered visual quality.
+
+## Proposed HTML guide authoring
+
+[Spec 14: HTML Brand Guide](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/specs/14-html-brand-guide.spec.md)
+specifies a proposed `brand-guide-html` skill for template, approved-input
+generation and refresh modes. It composes existing specialists into an offline,
+responsive reference guide with reusable sections, explicit evidence states and
+strict separation between structural references and permitted output inputs.
+
+This is a specification, not an available skill, renderer or publishing service.
+It does not import a reference's identity, assets, values, wording or metadata.
+Implementation and live catalog registration require separate authorization.
