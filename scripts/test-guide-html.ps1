@@ -73,10 +73,10 @@ Repeated heading fixture.
     Assert-True (Test-Path -LiteralPath "$overPath.blocked.html") 'Over-budget output may retain only a labeled diagnostic artifact'
 
     Write-Host '[3/8] invalid budget overrides are rejected'
-    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bad-budget.html') -BudgetBytes -2 } 'Negative budget overrides must be rejected' 'BudgetBytes'
-    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'zero-budget.html') -BudgetBytes 0 -OverrideRationale 'Fixture' -OverrideAuthorizer 'test' } 'Explicit zero budget overrides must be rejected' 'zero is invalid'
-    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'missing-auth.html') -BudgetBytes 100 } 'Budget overrides require rationale and authorizer' 'requires rationale'
-    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bad-lang.html') -Language 'en" onclick="bad' } 'Language must be validated before being written to an HTML attribute' 'Language'
+    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bad-budget.html') -BudgetBytes -2 -RepoRoot $scratch } 'Negative budget overrides must be rejected' 'BudgetBytes'
+    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'zero-budget.html') -BudgetBytes 0 -OverrideRationale 'Fixture' -OverrideAuthorizer 'test' -RepoRoot $scratch } 'Explicit zero budget overrides must be rejected' 'zero is invalid'
+    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'missing-auth.html') -BudgetBytes 100 -RepoRoot $scratch } 'Budget overrides require rationale and authorizer' 'requires rationale'
+    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bad-lang.html') -Language 'en" onclick="bad' -RepoRoot $scratch } 'Language must be validated before being written to an HTML attribute' 'Language'
     $quick = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'quick-reference.html') -Profile quick-reference -RepoRoot $scratch
     $quickContent = Get-Content -LiteralPath (Join-Path $scratch 'quick-reference.html') -Raw
     Assert-Equal 'DRAFT' $quick.State 'Quick-reference profile must render as an explicit supported profile'
@@ -118,6 +118,20 @@ Repeated heading fixture.
     Assert-Throws { Resolve-GuideHtmlPath -RepoRoot $scratch -Path '..\outside.svg' } 'Asset paths must not traverse outside RepoRoot' 'traversal'
     Assert-Throws { Resolve-GuideHtmlOutputPath -RepoRoot $scratch -Path '..\outside.html' } 'Output paths must not traverse outside RepoRoot' 'Output path traversal'
     Assert-Throws { Resolve-GuideHtmlPath -RepoRoot $scratch -Path 'https://example.com/asset.svg' } 'Remote asset dependencies must not be fetched' 'Remote'
+    $outsideGuide = Join-Path ([System.IO.Path]::GetTempPath()) ("sga-229-outside-guide-" + [Guid]::NewGuid().ToString('N') + '.md')
+    Set-Content -LiteralPath $outsideGuide -Value '# Outside' -NoNewline
+    try {
+        Assert-Throws { New-StyleGuideHtml -MarkdownPath $outsideGuide -OutputPath (Join-Path $scratch 'outside-guide.html') -RepoRoot $scratch } 'Markdown inputs must stay inside RepoRoot' 'Path traversal'
+    } finally {
+        Remove-Item -LiteralPath $outsideGuide -Force -ErrorAction SilentlyContinue
+    }
+    $outsideManifest = Join-Path ([System.IO.Path]::GetTempPath()) ("sga-229-outside-assets-" + [Guid]::NewGuid().ToString('N') + '.json')
+    @{ assets = @() } | ConvertTo-Json | Set-Content -LiteralPath $outsideManifest -NoNewline
+    try {
+        Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'outside-manifest.html') -AssetManifestPath $outsideManifest -RepoRoot $scratch } 'Asset manifests must stay inside RepoRoot' 'Path traversal'
+    } finally {
+        Remove-Item -LiteralPath $outsideManifest -Force -ErrorAction SilentlyContinue
+    }
     $badMediaTypeManifest = Join-Path $scratch 'bad-media-type-assets.json'
     @{ assets = @(@{ id = 'bad-media'; path = 'swatch.png'; mediaType = 'x" onerror="alert(1)"'; alt = 'Bad'; permission = 'embed' }) } |
         ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $badMediaTypeManifest -NoNewline
@@ -143,6 +157,12 @@ Repeated heading fixture.
     @{ assets = @(@{ id = 'bad'; path = 'bad.svg'; mediaType = 'image/svg+xml'; alt = 'Bad'; permission = 'embed' }) } |
         ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $badManifest -NoNewline
     Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bad-svg.html') -AssetManifestPath $badManifest -RepoRoot $scratch } 'SVG must fail closed when no approved sanitizer is available' 'unsupported media type'
+    $renamedSvg = Join-Path $scratch 'renamed.png'
+    Set-Content -LiteralPath $renamedSvg -Value '<svg xmlns="http://www.w3.org/2000/svg"></svg>' -NoNewline
+    $renamedSvgManifest = Join-Path $scratch 'renamed-svg-assets.json'
+    @{ assets = @(@{ id = 'renamed'; path = 'renamed.png'; mediaType = 'image/png'; alt = 'Renamed'; permission = 'embed' }) } |
+        ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $renamedSvgManifest -NoNewline
+    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'renamed-svg.html') -AssetManifestPath $renamedSvgManifest -RepoRoot $scratch } 'Renamed SVG bytes must not pass as raster content' 'SVG/XML bytes'
 
     Write-Host '[8/8] CLI emits JSON and returns nonzero for budget failure'
     $cli = Join-Path $repoRoot 'skills' -AdditionalChildPath 'style-guide-authoring', 'scripts', 'render-html-guide.ps1'
@@ -158,6 +178,10 @@ Repeated heading fixture.
     $bundleAgain = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'index.html') -Packaging local-bundle -AssetManifestPath $bundleManifest -RepoRoot $scratch
     Assert-Equal 'DRAFT' $bundleAgain.State 'Repeated local bundle generation should refresh managed assets only'
     Assert-True (Test-Path -LiteralPath $consumerAsset) 'Local bundle publication must not delete consumer-owned assets'
+    $managedAsset = Join-Path $scratch 'bundle' -AdditionalChildPath 'assets', 'swatch-a.png'
+    [System.IO.File]::WriteAllBytes($managedAsset, [byte[]](1, 2, 3, 4))
+    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'index.html') -Packaging local-bundle -AssetManifestPath $bundleManifest -RepoRoot $scratch } 'Edited managed assets must block overwrite during refresh' 'edited outside'
+    Copy-Item -LiteralPath $asset -Destination $managedAsset -Force
     $bundleNoAssets = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'index.html') -Packaging local-bundle -RepoRoot $scratch
     Assert-Equal 'DRAFT' $bundleNoAssets.State 'Local bundle refresh with no assets should still reconcile managed assets'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'assets', 'swatch-a.png'))) 'Removed local bundle assets must be cleaned up when no longer managed'

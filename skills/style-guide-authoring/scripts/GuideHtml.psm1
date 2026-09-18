@@ -11,6 +11,21 @@ function Get-Utf8ByteCount {
     return [System.Text.Encoding]::UTF8.GetByteCount($Text)
 }
 
+function Get-BytesSha256 {
+    param([Parameter(Mandatory)][byte[]]$Bytes)
+    $sha = [System.Security.Cryptography.SHA256]::Create()
+    try { return ([System.BitConverter]::ToString($sha.ComputeHash($Bytes)) -replace '-', '').ToLowerInvariant() }
+    finally { $sha.Dispose() }
+}
+
+function Test-IsPathUnderDirectory {
+    param([Parameter(Mandatory)][string]$Path, [Parameter(Mandatory)][string]$Directory)
+    $comparison = if ($IsWindows) { [System.StringComparison]::OrdinalIgnoreCase } else { [System.StringComparison]::Ordinal }
+    $dir = [System.IO.Path]::GetFullPath($Directory).TrimEnd([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar)
+    $full = [System.IO.Path]::GetFullPath($Path)
+    return $full.Equals($dir, $comparison) -or $full.StartsWith($dir + [System.IO.Path]::DirectorySeparatorChar, $comparison)
+}
+
 function ConvertTo-HtmlText {
     param([Parameter(Mandatory)][AllowEmptyString()][string]$Text)
     return [System.Net.WebUtility]::HtmlEncode($Text)
@@ -48,15 +63,16 @@ function ConvertTo-SafeInlineHtml {
 
 function Resolve-GuideHtmlPath {
     param([Parameter(Mandatory)][string]$RepoRoot, [Parameter(Mandatory)][string]$Path)
-    if ([System.Uri]::IsWellFormedUriString($Path, [System.UriKind]::Absolute)) {
+    if ($Path -match '^(?i)(https?|data|javascript)://' -or $Path -match '^(?i)(https?|data|javascript):') {
         throw "Remote or absolute URI dependencies are not permitted: $Path"
-    }
-    if ([System.IO.Path]::IsPathRooted($Path)) {
-        throw "Absolute paths are not permitted: $Path"
     }
     $rootFull = [System.IO.Path]::GetFullPath($RepoRoot)
     $rootNormalized = $rootFull.TrimEnd([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar)
-    $candidate = [System.IO.Path]::GetFullPath((Join-Path $rootFull $Path))
+    $candidate = if ([System.IO.Path]::IsPathRooted($Path)) {
+        [System.IO.Path]::GetFullPath($Path)
+    } else {
+        [System.IO.Path]::GetFullPath((Join-Path $rootFull $Path))
+    }
     $comparison = if ($IsWindows) { [System.StringComparison]::OrdinalIgnoreCase } else { [System.StringComparison]::Ordinal }
     $rootWithSep = $rootNormalized + [System.IO.Path]::DirectorySeparatorChar
     if (-not $candidate.Equals($rootNormalized, $comparison) -and -not $candidate.StartsWith($rootWithSep, $comparison)) {
@@ -129,6 +145,17 @@ function Get-DetectedImageMediaType {
     return 'unknown'
 }
 
+function Get-ImageExtensionForMediaType {
+    param([Parameter(Mandatory)][string]$MediaType)
+    switch ($MediaType) {
+        'image/png'  { return '.png' }
+        'image/jpeg' { return '.jpg' }
+        'image/gif'  { return '.gif' }
+        'image/webp' { return '.webp' }
+        default { throw "Unsupported media type '$MediaType'." }
+    }
+}
+
 function Get-GuideHtmlAssetRecords {
     param(
         [string]$AssetManifestPath,
@@ -139,7 +166,8 @@ function Get-GuideHtmlAssetRecords {
     $records = [System.Collections.Generic.List[object]]::new()
     $destinations = @{}
     if (-not $AssetManifestPath) { return @($records) }
-    $manifest = Get-Content -LiteralPath $AssetManifestPath -Raw | ConvertFrom-Json -AsHashtable
+    $resolvedManifestPath = Resolve-GuideHtmlPath -RepoRoot $RepoRoot -Path $AssetManifestPath
+    $manifest = Get-Content -LiteralPath $resolvedManifestPath -Raw | ConvertFrom-Json -AsHashtable
     $assetIndex = 0
     foreach ($asset in @($manifest.assets)) {
         $assetIndex++
@@ -171,7 +199,7 @@ function Get-GuideHtmlAssetRecords {
             })
         } else {
             if ($permission -ne 'copy') { throw "Asset '$id' requires embed permission; local-bundle output cannot copy it silently." }
-            $safeName = (ConvertTo-GuideHtmlId -Text $id) + $extension
+            $safeName = (ConvertTo-GuideHtmlId -Text $id) + (Get-ImageExtensionForMediaType -MediaType $mediaType)
             if ($destinations.ContainsKey($safeName)) { throw "Asset '$id' normalizes to duplicate bundle destination '$safeName'." }
             $destinations[$safeName] = $true
             $assetDir = Join-Path $OutputDirectory 'assets'
@@ -181,6 +209,7 @@ function Get-GuideHtmlAssetRecords {
             $records.Add([ordered]@{
                 Id = $id; Mode = 'copied'; Bytes = $bytes.Length; MediaType = $mediaType; Alt = $alt
                 ContributionBytes = $bytes.Length
+                Hash = Get-BytesSha256 -Bytes $bytes
                 Html = "<figure class=`"sga-asset`"><img src=`"assets/$safeName`" alt=`"$(ConvertTo-HtmlText $alt)`"><figcaption>$(ConvertTo-HtmlText $id)</figcaption></figure>"
                 DeliveredPath = $destination
                 RelativePath = "assets/$safeName"
@@ -264,7 +293,8 @@ function New-StyleGuideHtml {
         [string]$OverrideAuthorizer,
         [ValidatePattern('^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$')][string]$Language = 'en'
     )
-    $markdown = Get-Content -LiteralPath $MarkdownPath -Raw
+    $resolvedMarkdownPath = Resolve-GuideHtmlPath -RepoRoot $RepoRoot -Path $MarkdownPath
+    $markdown = Get-Content -LiteralPath $resolvedMarkdownPath -Raw
     Assert-SafeGuideMarkdown -Markdown $markdown
     if ($BudgetBytes -lt -1) { throw 'BudgetBytes must be a positive integer override, or omitted to use the default.' }
     if ($BudgetBytes -eq -1) {
@@ -298,7 +328,7 @@ function New-StyleGuideHtml {
 .sga-skip{position:absolute;left:-999px}.sga-skip:focus{left:1rem;top:1rem;background:#fff;padding:.5rem;border:2px solid var(--sga-accent)}
 .sga-shell{display:grid;grid-template-columns:minmax(12rem,18rem) 1fr;gap:2rem;max-width:72rem;margin:auto;padding:1rem}
 nav{position:sticky;top:0;align-self:start}nav a{display:block;padding:.35rem;color:var(--sga-accent)}nav a:focus{outline:3px solid var(--sga-accent)}
-main{min-width:0}section,.sga-card{border:1px solid var(--sga-border);border-radius:.5rem;padding:1rem;margin:1rem 0}.sga-asset img{max-width:100%;height:auto}
+main{min-width:0;overflow-wrap:anywhere;word-break:break-word}section,.sga-card{border:1px solid var(--sga-border);border-radius:.5rem;padding:1rem;margin:1rem 0}.sga-asset img{max-width:100%;height:auto}
 .sga-table-wrap{max-width:100%;overflow-x:auto}table{border-collapse:collapse;width:100%;margin:1rem 0}th,td{border:1px solid var(--sga-border);padding:.4rem;text-align:left;vertical-align:top}
 .sga-profile-reference-manual main{max-width:52rem}
 .sga-profile-presentation-inspired main{max-width:60rem}.sga-profile-presentation-inspired h2{font-size:2rem;margin-top:2.5rem}.sga-profile-presentation-inspired .sga-card{font-size:1.125rem}
@@ -324,8 +354,8 @@ $assetHtml
     $htmlBytes = Get-Utf8ByteCount -Text $html
     $assetBytes = 0
     foreach ($asset in $assets) { $assetBytes += [int]$asset.Bytes }
-    $managedAssetPaths = @($assets | Where-Object { $_.RelativePath } | ForEach-Object { $_.RelativePath })
-    $managedManifestJson = if ($Packaging -eq 'local-bundle') { if ($managedAssetPaths.Count -eq 0) { '[]' } else { ($managedAssetPaths | ConvertTo-Json) } } else { '' }
+    $managedRecords = @($assets | Where-Object { $_.RelativePath } | ForEach-Object { [ordered]@{ path = $_.RelativePath; hash = $_.Hash } })
+    $managedManifestJson = if ($Packaging -eq 'local-bundle') { if ($managedRecords.Count -eq 0) { '[]' } else { ($managedRecords | ConvertTo-Json -Depth 4) } } else { '' }
     $managedManifestBytes = if ($Packaging -eq 'local-bundle') { Get-Utf8ByteCount -Text $managedManifestJson } else { 0 }
     $bundleBytes = if ($Packaging -eq 'self-contained') { $htmlBytes } else { $htmlBytes + $assetBytes + $managedManifestBytes }
     $passed = $bundleBytes -le $effectiveBudget
@@ -338,34 +368,47 @@ $assetHtml
             New-Item -ItemType Directory -Path $targetAssets -Force | Out-Null
             $managedPath = Join-Path $targetAssets '.sga-html-assets.json'
             [void](Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path $managedPath)
-            $oldManaged = @()
-            if (Test-Path -LiteralPath $managedPath) { $oldManaged = @((Get-Content -LiteralPath $managedPath -Raw | ConvertFrom-Json)) }
+            $oldManaged = @{}
+            if (Test-Path -LiteralPath $managedPath) {
+                foreach ($entry in @((Get-Content -LiteralPath $managedPath -Raw | ConvertFrom-Json))) {
+                    if (-not $entry.path -or -not $entry.hash) { throw 'Managed asset marker is malformed.' }
+                    $oldManaged[[string]$entry.path] = [string]$entry.hash
+                }
+            }
             $newManaged = @()
+            $targetAssetsFull = [System.IO.Path]::GetFullPath($targetAssets)
             foreach ($asset in $assets) {
                 $relativeAsset = $asset.RelativePath
                 if ([System.IO.Path]::IsPathRooted($relativeAsset) -or $relativeAsset -match '(^|[\\/])\.\.([\\/]|$)') { throw "Managed asset path is unsafe: $relativeAsset" }
                 $target = Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path (Join-Path $outputDirectory $relativeAsset)
-                if (-not $target.StartsWith($targetAssets, [System.StringComparison]::OrdinalIgnoreCase)) { throw "Managed asset target escapes the bundle assets directory: $relativeAsset" }
-                if ((Test-Path -LiteralPath $target) -and $oldManaged -notcontains $relativeAsset) {
+                if (-not (Test-IsPathUnderDirectory -Path $target -Directory $targetAssetsFull)) { throw "Managed asset target escapes the bundle assets directory: $relativeAsset" }
+                if ((Test-Path -LiteralPath $target) -and -not $oldManaged.ContainsKey($relativeAsset)) {
                     throw "Refusing to overwrite unmanaged bundle asset: $relativeAsset"
+                }
+                if ((Test-Path -LiteralPath $target) -and $oldManaged.ContainsKey($relativeAsset)) {
+                    $currentHash = Get-BytesSha256 -Bytes ([System.IO.File]::ReadAllBytes($target))
+                    if ($currentHash -ne $oldManaged[$relativeAsset]) { throw "Managed bundle asset was edited outside the HTML helper: $relativeAsset" }
                 }
                 $newManaged += $relativeAsset
             }
-            foreach ($old in $oldManaged) {
+            foreach ($old in $oldManaged.Keys) {
                 if ([System.IO.Path]::IsPathRooted([string]$old) -or [string]$old -match '(^|[\\/])\.\.([\\/]|$)') { throw "Managed asset marker contains unsafe path: $old" }
                 $oldTarget = Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path (Join-Path $outputDirectory ([string]$old))
-                if (-not $oldTarget.StartsWith($targetAssets, [System.StringComparison]::OrdinalIgnoreCase)) { throw "Managed asset marker escapes the bundle assets directory: $old" }
+                if (-not (Test-IsPathUnderDirectory -Path $oldTarget -Directory $targetAssetsFull)) { throw "Managed asset marker escapes the bundle assets directory: $old" }
             }
             foreach ($asset in $assets) {
                 $relativeAsset = $asset.RelativePath
                 $target = Join-Path $outputDirectory $relativeAsset
+                if ((Test-Path -LiteralPath $target) -and (Get-BytesSha256 -Bytes ([System.IO.File]::ReadAllBytes($target))) -eq $asset.Hash) { continue }
                 Copy-Item -LiteralPath $asset.DeliveredPath -Destination $target -Force
             }
-            foreach ($old in $oldManaged) {
+            foreach ($old in $oldManaged.Keys) {
                 if ($newManaged -contains $old) { continue }
                 Remove-Item -LiteralPath (Join-Path $outputDirectory $old) -Force -ErrorAction SilentlyContinue
             }
-            Set-Content -LiteralPath $managedPath -Value $managedManifestJson -NoNewline
+            if (-not (Test-Path -LiteralPath $managedPath) -or (Get-Content -LiteralPath $managedPath -Raw) -ne $managedManifestJson) {
+                Set-Content -LiteralPath $managedPath -Value $managedManifestJson -NoNewline
+            }
         }
         $stagedBytes = [System.IO.File]::ReadAllBytes($stagedOutput)
         if ((Test-Path -LiteralPath $outputFullPath) -and [System.Linq.Enumerable]::SequenceEqual([byte[]]([System.IO.File]::ReadAllBytes($outputFullPath)), [byte[]]$stagedBytes)) {
@@ -397,6 +440,7 @@ $assetHtml
         AssetBytes = $assetBytes
         BudgetBytes = $effectiveBudget
         BudgetPassed = $passed
+        BudgetOverride = if ($BudgetBytes -eq -1) { $null } else { [ordered]@{ bytes = $BudgetBytes; rationale = $OverrideRationale; authorizer = $OverrideAuthorizer } }
         Assets = @(
             if ($passed) {
                 $publishedAssets | Sort-Object contributionBytes -Descending
