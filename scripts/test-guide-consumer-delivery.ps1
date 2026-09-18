@@ -90,22 +90,17 @@ try {
     New-Item -ItemType Directory -Path $consumer -Force | Out-Null
     git -C $consumer init --quiet
     if ($LASTEXITCODE -ne 0) { throw 'git init failed for consumer fixture' }
-    $sourcePath = (Resolve-Path $sourceFixture).Path.Replace("'", "''")
-    Set-Content -LiteralPath (Join-Path $consumer '.sheen.yml') -Value @"
-source: '$sourcePath'
-ref: main
-skills:
-  - style-guide-authoring
-agents:
-  - design-reviewer
-templates:
-  - style-guide
-"@ -NoNewline
+    $previousSheenRepo = $env:SHEEN_REPO
+    $previousSheenRef = $env:SHEEN_REF
+    $env:SHEEN_REPO = (Resolve-Path $sourceFixture).Path
+    $env:SHEEN_REF = 'main'
     Push-Location $consumer
     try {
         & (Join-Path $repoRoot 'sync.ps1') | Out-Host
     } finally {
         Pop-Location
+        $env:SHEEN_REPO = $previousSheenRepo
+        $env:SHEEN_REF = $previousSheenRef
     }
     $consumerSkillRoot = Join-Path $consumer '.github' -AdditionalChildPath 'skills', 'style-guide-authoring'
     foreach ($relative in $requiredSkillFiles) {
