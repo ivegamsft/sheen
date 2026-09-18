@@ -156,6 +156,32 @@ function Get-RunsFromInput {
 }
 
 function Get-RunsFromGitHub {
+  # When a specific SourceRunId is supplied, fetch it directly instead of
+  # relying on it appearing within the latest --limit MaxRuns run-list page.
+  # On a busy repository, more than MaxRuns newer runs can land before this
+  # job executes, silently dropping the requested run from the list and
+  # causing the caller to report a false CLEAR/no-failures-detected result.
+  if ($SourceRunId -gt 0) {
+    $runJson = Invoke-Gh -Arguments @(
+      "run", "view", $SourceRunId.ToString(),
+      "--repo", $TargetRepo,
+      "--json", "databaseId,workflowName,headBranch,conclusion,createdAt,url"
+    )
+    $row = $runJson | ConvertFrom-Json
+    if ($null -eq $row) {
+      throw "SourceRunId $SourceRunId was not found in $TargetRepo; failing closed instead of reporting a false CLEAR result."
+    }
+
+    $runs = ConvertTo-RunObjects -Rows @($row)
+    foreach ($run in $runs) {
+      if ($run.conclusion -eq "failure") {
+        $run.log_excerpt = Get-RunLogExcerpt -RunId $run.run_id
+      }
+    }
+
+    return $runs
+  }
+
   $json = Invoke-Gh -Arguments @(
     "run", "list",
     "--repo", $TargetRepo,
@@ -395,7 +421,7 @@ $allRuns = if (-not [string]::IsNullOrWhiteSpace($FailureInputPath)) {
 $filteredRuns = $allRuns | Where-Object {
   $branchMatch = if ([string]::IsNullOrWhiteSpace($TargetBranch)) { $true } else { $_.branch -eq $TargetBranch }
   $workflowMatch = if ([string]::IsNullOrWhiteSpace($WorkflowName)) { $true } else { $_.workflow_name -eq $WorkflowName }
-  $sourceMatch = if ($SourceRunId -gt 0) { $_.run_id -eq $SourceRunId -or $branchMatch } else { $true }
+  $sourceMatch = if ($SourceRunId -gt 0) { $_.run_id -eq $SourceRunId } else { $true }
   $branchMatch -and $workflowMatch -and $sourceMatch
 }
 

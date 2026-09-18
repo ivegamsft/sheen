@@ -104,7 +104,7 @@ conventions and can be synced alongside basecoat, but owns its own catalog.
 basecoat is **vendored into this repo** at [`vendor/basecoat/`](vendor/basecoat/)
 so sheen's design/UX finish coat ships on top of basecoat's engineering foundation
 in one place. See [`vendor/basecoat/VENDOR.md`](vendor/basecoat/VENDOR.md) for
-provenance (pinned commit `daf8364`, 2026-08-10) and the include/exclude list.
+provenance (pinned commit `6573f38`, 2026-09-18) and the include/exclude list.
 
 - The vendored tree is **read-only**; changes belong upstream. Refresh by
   re-cloning at a new commit and bumping the provenance note.

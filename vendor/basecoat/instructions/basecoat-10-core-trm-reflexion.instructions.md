@@ -1,6 +1,6 @@
 ---
 description: "TRM (Tiny Recursive Model) Reflexion loop for intent classification and turn budget estimation. Apply whenever classifying task intent or tracking progress against a turn budget."
-applyTo: "**/*"
+applyTo: "agents/**/*,skills/**/*,prompts/**/*,.github/**/*"
 ---
 
 # TRM Reflexion — Intent Classification & Progress Tracking
@@ -119,7 +119,7 @@ TRM operates **within** each HRM tier — it is the reasoning engine that decide
 a tier's result is sufficient to converge, or whether escalation to the next tier is
 needed.
 
-```
+```text
 L2 → TRM Pass 1+2 → confidence ≥ 0.80 → CONVERGE (stay at L2)
                    → confidence < 0.50 → ELEVATE to L3
 L3 → TRM Pass 1 → hit → CONVERGE (stay at L3)

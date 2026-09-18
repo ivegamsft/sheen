@@ -3,14 +3,9 @@ description: "BaseCoat compatibility alias for governance rules. Preserves the l
 applyTo: "**/*"
 compatibilityAlias: true
 canonicalInstruction: "basecoat-20-lang-governance.instructions.md"
+distribute: false
 ---
 
-# Governance Instructions
+# BaseCoat compatibility alias for governance rules
 
-This legacy alias mirrors `basecoat-20-lang-governance.instructions.md`.
-Keep it in sync so older references still receive the full governance guidance.
-
-## LOG-FIRST Gate
-
-Before implementation starts, confirm there is a tracking issue for the task.
-This is a hard block.
+See `basecoat-20-lang-governance.instructions.md`.

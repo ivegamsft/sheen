@@ -1,6 +1,6 @@
 ---
 description: "Use when working with backend-dev, frontend-dev, middleware-dev, or data-tier agents. Covers shared code style, error handling, security, logging, testing, and agent collaboration expectations."
-applyTo: "**/*"
+applyTo: "**/*.{cs,csproj,fs,fsproj,ts,tsx,js,jsx,py,go,java,kt,rb,php,rs,sql}"
 ---
 
 # Development Standards
@@ -73,6 +73,7 @@ The four dev core agents operate as a coordinated team. Follow this handoff orde
 **Conflict resolution:** When two agents need to agree on a shape, the backend-dev agent's API contract is the tie-breaker. Data-tier changes that break the contract require backend-dev review before merging.
 
 **No agent should:**
+
 - Bypass the repository pattern to call the database from a handler or middleware layer.
 - Embed API-response formatting logic in a repository or data access function.
 - Define business rules in a migration, query, or infrastructure configuration.

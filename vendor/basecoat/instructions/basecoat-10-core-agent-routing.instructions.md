@@ -1,6 +1,6 @@
 ---
 description: "Use when deciding which agent tier to invoke for a task. Provides cost-aware, security-conscious agent routing to avoid mismatches between task requirements and agent capabilities."
-applyTo: "**/*"
+applyTo: "agents/**/*,skills/**/*,prompts/**/*,.github/**/*"
 ---
 
 # Agent-Tier Routing for Copilot Workflows
@@ -131,7 +131,7 @@ When asking for debugging or workflow help, mention the exact files up front. Th
 reduces exploration turns and improves first-pass accuracy.
 
 ```text
-Debug workflow failures in @.github/workflows/issue-approve.yml
+Debug workflow failures in @.github/workflows/project-rules-drift-audit.yml
 and @scripts/validate-basecoat.ps1. Focus on failed status checks only.
 ```
 

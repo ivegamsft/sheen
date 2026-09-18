@@ -27,6 +27,108 @@ function Get-DriftOutcome {
     return 'pass'
 }
 
+function Get-BaselineConditionSignature {
+    param([object]$Condition)
+    if (-not $Condition) { return $null }
+    switch ($Condition.type) {
+        'pull_request_event' { return "pull_request:$($Condition.event)" }
+        'issue_event' { return "issue:$($Condition.event)" }
+        'field_value_change' { return "field_value:$($Condition.field)=$($Condition.value)" }
+        'label_added' { return "label_added:$($Condition.label_prefix)" }
+        'item_added_to_project' { return 'item_added' }
+        default { return "unknown:$($Condition.type)" }
+    }
+}
+
+function Get-BaselineActionSignature {
+    param([object]$Action)
+    if (-not $Action) { return $null }
+    switch ($Action.type) {
+        'set_field' { return "set_field:$($Action.field)=$($Action.value)" }
+        'archive_item' { return 'archive' }
+        'add_to_project' { return 'add_to_project' }
+        default { return "unknown:$($Action.type)" }
+    }
+}
+
+function Test-ConditionSignatureMatch {
+    param(
+        [object]$Condition,
+        [string]$ExpectedSignature,
+        [array]$LiveSignatures
+    )
+    # label_added baseline conditions declare a label *prefix* (e.g. "sprint:"),
+    # not an exact label name, so the baseline signature ("label_added:sprint:")
+    # and a live signature built from an actual applied label ("label_added:sprint:42")
+    # are expected to differ. Match by prefix for this condition type; every
+    # other condition type still requires an exact signature match.
+    if ($Condition -and $Condition.type -eq 'label_added') {
+        $prefix = "label_added:$($Condition.label_prefix)"
+        return [bool]($LiveSignatures | Where-Object { $_.StartsWith($prefix) } | Select-Object -First 1)
+    }
+    return $LiveSignatures -contains $ExpectedSignature
+}
+
+function Get-OptionalPropertyValue {
+    param(
+        [object]$InputObject,
+        [string]$Name
+    )
+    # GraphQL union-typed objects (trigger/action variants) only carry the
+    # fields belonging to whichever concrete variant was returned; fields
+    # from other variants are entirely absent from the object, not merely
+    # $null. Under this script's Set-StrictMode -Version Latest, a direct
+    # `$obj.SomeAbsentField` access throws PropertyNotFoundException instead
+    # of returning $null, so every optional union field must be looked up
+    # via PSObject.Properties first.
+    if ($null -eq $InputObject) { return $null }
+    $property = $InputObject.PSObject.Properties[$Name]
+    if ($null -eq $property) { return $null }
+    return $property.Value
+}
+
+function Get-LiveTriggerSignature {
+    param([object]$Trigger)
+    if (-not $Trigger) { return 'unknown' }
+    $pullRequestEvent = Get-OptionalPropertyValue -InputObject $Trigger -Name 'pullRequestEvent'
+    if ($null -ne $pullRequestEvent) { return "pull_request:$pullRequestEvent" }
+    $issueEvent = Get-OptionalPropertyValue -InputObject $Trigger -Name 'issueEvent'
+    if ($null -ne $issueEvent) { return "issue:$issueEvent" }
+    $field = Get-OptionalPropertyValue -InputObject $Trigger -Name 'field'
+    if ($null -ne $field) {
+        $fieldName = Get-OptionalPropertyValue -InputObject $field -Name 'name'
+        $value = Get-OptionalPropertyValue -InputObject $Trigger -Name 'value'
+        return "field_value:$fieldName=$value"
+    }
+    $label = Get-OptionalPropertyValue -InputObject $Trigger -Name 'label'
+    if ($null -ne $label) {
+        $labelName = Get-OptionalPropertyValue -InputObject $label -Name 'name'
+        return "label_added:$labelName"
+    }
+    $addWhen = Get-OptionalPropertyValue -InputObject $Trigger -Name 'addWhen'
+    if ($null -ne $addWhen) { return 'item_added' }
+    $archiveWhen = Get-OptionalPropertyValue -InputObject $Trigger -Name 'archiveWhen'
+    if ($null -ne $archiveWhen) { return "archive_trigger:$archiveWhen" }
+    $type = Get-OptionalPropertyValue -InputObject $Trigger -Name 'type'
+    return "unknown:$type"
+}
+
+function Get-LiveActionSignature {
+    param([object]$Action)
+    if (-not $Action) { return 'unknown' }
+    $field = Get-OptionalPropertyValue -InputObject $Action -Name 'field'
+    if ($null -ne $field) {
+        $fieldName = Get-OptionalPropertyValue -InputObject $field -Name 'name'
+        $value = Get-OptionalPropertyValue -InputObject $Action -Name 'value'
+        return "set_field:$fieldName=$value"
+    }
+    $archived = Get-OptionalPropertyValue -InputObject $Action -Name 'archived'
+    if ($null -ne $archived) { return 'archive' }
+    if ($Action.PSObject.Properties.Name -contains 'dummy') { return 'add_to_project' }
+    $type = Get-OptionalPropertyValue -InputObject $Action -Name 'type'
+    return "unknown:$type"
+}
+
 function Compare-Rules {
     param(
         [array]$BaselineRules,
@@ -80,10 +182,59 @@ function Compare-Rules {
             })
         }
 
-        # Note: condition/action drift detection is deferred.
-        # The GraphQL response shape (triggers[]/actions[]) differs from the baseline manifest
-        # shape (condition{}/action{}), so a raw JSON comparison produces false positives on
-        # every rule. Deep normalization is tracked as a future enhancement.
+        # Check condition/action drift: compare the baseline's declarative
+        # condition/action shape against the live workflow's GraphQL
+        # triggers[]/actions[] shape (using the type-specific field group each
+        # union member carries, since the schemas differ structurally). This
+        # catches a rule silently redirected to a different event/field while
+        # still reporting enabled=true, which name/enabled comparison alone
+        # would miss.
+        $expectedConditionSignature = Get-BaselineConditionSignature $rule.condition
+        $expectedActionSignature = Get-BaselineActionSignature $rule.action
+        $liveTriggers = if ($matched.triggers) { @($matched.triggers) } else { @() }
+        $liveActions = if ($matched.actions) { @($matched.actions) } else { @() }
+        $liveTriggerSignatures = @($liveTriggers | ForEach-Object { Get-LiveTriggerSignature $_ })
+        $liveActionSignatures = @($liveActions | ForEach-Object { Get-LiveActionSignature $_ })
+
+        if ($expectedConditionSignature -and (-not (Test-ConditionSignatureMatch -Condition $rule.condition -ExpectedSignature $expectedConditionSignature -LiveSignatures $liveTriggerSignatures))) {
+            $findings.Add([PSCustomObject]@{
+                finding_id     = "$($rule.rule_id)-modified-condition"
+                rule_id        = $rule.rule_id
+                rule_name      = $rule.name
+                drift_type     = 'modified'
+                # skills/project-rules-drift-audit/SKILL.md:57 classifies
+                # "Condition or action deviates from baseline" as `high`
+                # severity unconditionally -- it is not scaled by the rule's
+                # own severity_if_missing (which governs the *absent* case,
+                # not the *deviated* case). Using severity_if_missing here
+                # let a low/medium-severity baseline rule produce a
+                # non-blocking condition-drift finding, contrary to the
+                # documented contract.
+                severity       = 'high'
+                baseline_value = @{ condition = $rule.condition }
+                live_value     = @{ triggers = $liveTriggerSignatures }
+                remediation    = "Restore rule '$($rule.name)' trigger to match the baseline condition: $($rule.condition | ConvertTo-Json -Compress)."
+                effort         = 'minutes'
+                rationale      = $rule.rationale
+            })
+        }
+
+        if ($expectedActionSignature -and ($liveActionSignatures -notcontains $expectedActionSignature)) {
+            $findings.Add([PSCustomObject]@{
+                finding_id     = "$($rule.rule_id)-modified-action"
+                rule_id        = $rule.rule_id
+                rule_name      = $rule.name
+                drift_type     = 'modified'
+                # See the modified-condition finding above: SKILL.md:57 fixes
+                # this at `high` regardless of severity_if_missing.
+                severity       = 'high'
+                baseline_value = @{ action = $rule.action }
+                live_value     = @{ actions = $liveActionSignatures }
+                remediation    = "Restore rule '$($rule.name)' action to match the baseline: $($rule.action | ConvertTo-Json -Compress)."
+                effort         = 'minutes'
+                rationale      = $rule.rationale
+            })
+        }
     }
 
     # Report extra rules not in baseline — use unique rule_id per extra rule for determinism

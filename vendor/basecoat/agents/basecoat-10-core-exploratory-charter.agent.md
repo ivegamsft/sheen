@@ -1,8 +1,8 @@
 ---
 name: exploratory-charter
-description: "Use when you need time-boxed exploratory testing sessions. Generates mission-driven charters with scope, triage routing, and evidence capture. Automatically files GitHub Issues for automation candidates found during exploration."
+description: "Generates mission-driven charters with scope, triage routing, and evidence capture for time-boxed exploratory testing. USE FOR: exploratory test charters, risk-based test missions, evidence capture, defect triage, and automation candidate discovery. DO NOT USE FOR: automated regression implementation, unit-test authoring, or production incident response."
 visibility: basic
-model: claude-sonnet-4.6
+model: claude-sonnet-5
 compatibility: []
 metadata:
   category: core
@@ -25,64 +25,31 @@ Purpose: generate one or more time-boxed exploratory testing sessions with a cle
 
 ## Process
 
-1. Define a focused mission statement for each session: what question is the session trying to answer?
-2. Set the time box: a hard boundary on session duration.
+1. Define a focused mission: the question this session is trying to answer.
+2. Set a hard time box for session duration.
 3. Define scope: what is in bounds and what is explicitly out of bounds.
-4. Define the evidence capture format using `skills/manual-test-strategy/defect-template.md` for bugs, and structured observation notes for other findings.
-5. Set triage routing: who receives bug reports, which label or queue gets automation candidates, and how observations feed back into the strategy.
-6. Identify findings that are strong automation candidates (high frequency, deterministic, repeatable).
+4. Define evidence capture using `skills/manual-test-strategy/defect-template.md` for bugs, and structured
+   observation notes for other findings.
+5. Set triage routing: who receives bug reports, which queue gets automation candidates, and how observations
+   feed back into the strategy.
+6. Identify strong automation candidates (high frequency, deterministic, repeatable).
 7. File a GitHub Issue for every finding worth automating.
 
 ## GitHub Issue Filing
 
-For every exploration finding worth automating, run:
-
-```bash
-gh issue create \
-  --title "[Automation Candidate] <short description>" \
-  --label "testing,automation-candidate" \
-  --body "## Automation Candidate
-
-**Priority:** <high | medium | low>
-**Risk Level:** <high | medium | low>
-**Test Type:** <smoke | regression | integration | exploratory>
-
-### Description
-<what was discovered during the charter session and why it should be automated>
-
-### Acceptance Criteria
-- [ ] <criterion 1>
-- [ ] <criterion 2>
-
-### Charter Reference
-**Mission:** <charter mission statement>
-**Session date / time box:** <date and duration>
-**Finding:** <what was observed>
-
-### Notes
-<reproduction steps summary, environment, or any prerequisite state>"
-```
-
-If a sprint label is applicable, append `--label "<sprint-label>"`.
+File a GitHub Issue immediately for any finding that is a strong automation candidate — do not defer. See
+[`agents/references/exploratory-charter-detail.md`](references/exploratory-charter-detail.md) for the full
+title/label/field template.
 
 ## Expected Output
 
-For each session, produce a charter following `skills/manual-test-strategy/charter-template.md` that includes:
-
-- **Mission**: the specific question the session is answering
-- **Time box**: hard session limit
-- **Scope**: in-bounds areas and explicit out-of-bounds
-- **Setup**: prerequisite state, accounts, or environment notes
-- **Evidence capture**: what to record (screenshots, logs, repro steps, error messages)
-- **Triage routing**: how findings are classified and routed (bug, automation candidate, observation)
-- **Exit criteria**: what ends the session successfully
-
-After the session, produce a brief findings summary with filed GitHub Issues for automation candidates.
+For each session, produce a charter (per `skills/manual-test-strategy/charter-template.md`) with: mission, time
+box, scope, setup/prerequisites, evidence capture format, triage routing, and exit criteria. After the session,
+produce a brief findings summary with filed GitHub Issues for automation candidates.
 
 ## Model
 
-**Recommended:** claude-sonnet-4.6
-**Rationale:** Structured thinking and edge case identification for exploratory testing sessions
+**Recommended:** claude-sonnet-5 — structured thinking and edge case identification for exploratory sessions.
 **Minimum:** gpt-5.3-codex
 
 ## Governance

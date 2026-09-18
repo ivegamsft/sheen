@@ -115,13 +115,13 @@ $enforcer = Join-Path $PSScriptRoot 'release-gate-enforcer.ps1'
   -E2eStatus (Get-StatusOrDefault $gates 'e2e' 'not_run') `
   -SecurityStatus (Get-StatusOrDefault $gates 'security' 'not_run') `
   -SmokeStatus (Get-StatusOrDefault $gates 'smoke' 'not_run') `
-  -SpecStatus (Get-StatusOrDefault $artifacts 'spec' 'present') `
-  -DocsStatus (Get-StatusOrDefault $artifacts 'docs' 'present') `
-  -TestsStatus (Get-StatusOrDefault $artifacts 'tests' 'present') `
-  -RunbookStatus (Get-StatusOrDefault $artifacts 'runbook' 'present') `
-  -ReleaseNotesStatus (Get-StatusOrDefault $artifacts 'release_notes' 'present') `
-  -PreviousStageStatus (Get-StatusOrDefault $ctx 'previous_stage' 'pass') `
-  -EnvironmentProtectionStatus (Get-StatusOrDefault $ctx 'environment_protection' 'configured') `
+  -SpecStatus (Get-StatusOrDefault $artifacts 'spec' 'missing') `
+  -DocsStatus (Get-StatusOrDefault $artifacts 'docs' 'missing') `
+  -TestsStatus (Get-StatusOrDefault $artifacts 'tests' 'missing') `
+  -RunbookStatus (Get-StatusOrDefault $artifacts 'runbook' 'missing') `
+  -ReleaseNotesStatus (Get-StatusOrDefault $artifacts 'release_notes' 'missing') `
+  -PreviousStageStatus (Get-StatusOrDefault $ctx 'previous_stage' 'not_run') `
+  -EnvironmentProtectionStatus (Get-StatusOrDefault $ctx 'environment_protection' 'missing') `
   -RequireApproval $requireApproval `
   -ApprovalStatus (Get-StatusOrDefault $ctx 'approval' 'not-required') `
   -RollbackRunbookRef (Get-OrDefault $ctx 'rollback_runbook_ref' '') `

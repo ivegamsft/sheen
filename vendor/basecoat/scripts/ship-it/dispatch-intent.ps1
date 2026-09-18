@@ -332,12 +332,95 @@ function Get-ExecutionLane {
   return "standard"
 }
 
+function Test-PathInTargetRepo {
+  param(
+    [Parameter(Mandatory)]
+    [string]$RelativePath,
+    [Parameter(Mandatory)]
+    [string]$TargetRepo
+  )
+
+  # The dispatch workflow (ship-it-intent-dispatch.yml) checks out only the
+  # host repository -- it never checks out $TargetRepo, since TargetRepo can
+  # legitimately name a different owner/repo for a cross-repo dispatch. A
+  # local Test-Path is therefore only meaningful when TargetRepo IS the
+  # checked-out repository (the common, same-repo case: GITHUB_REPOSITORY,
+  # or unset/local runs). For a genuine cross-repo dispatch, Test-Path
+  # against this checkout says nothing about what exists in $TargetRepo --
+  # querying it would silently attach host-only required checks to (or omit
+  # checks that do exist in) the target repo's generated stage issues,
+  # permanently blocking those PRs. Resolve existence against the target
+  # repository itself via the contents API instead.
+  $hostRepo = $env:GITHUB_REPOSITORY
+  if ([string]::IsNullOrWhiteSpace($hostRepo) -or $TargetRepo -eq $hostRepo) {
+    return Test-Path $RelativePath
+  }
+
+  $apiPath = $RelativePath -replace '\\', '/'
+  $null = & gh api "repos/$TargetRepo/contents/$apiPath" --silent 2>$null
+  return $LASTEXITCODE -eq 0
+}
+
+function Resolve-SprintCloseoutWorkflowPath {
+  param(
+    [Parameter(Mandatory)]
+    [string]$TargetRepo
+  )
+
+  # scripts/configure-downstream-workflows.ps1 renames sprint-closeout-branch-audit.yml
+  # to basecoat-sprint-closeout-branch-audit.yml on install, but this script's
+  # root and distributed copies are byte-identical, so a single hardcoded path
+  # cannot be correct in both this repo (unrenamed) and a downstream consumer
+  # (renamed). Resolve to whichever filename actually exists -- in the target
+  # repository, not necessarily this checkout (see Test-PathInTargetRepo). The
+  # workflow is registered as an opt-in 'templates' class entry, so a default
+  # downstream install will not have it -- returns $null in that case so
+  # callers can fail visibly (omit the dependent required-check/cleanup
+  # metadata) instead of silently pointing at a name that never existed.
+  $renamedPath = ".github/workflows/basecoat-sprint-closeout-branch-audit.yml"
+  $originalPath = ".github/workflows/sprint-closeout-branch-audit.yml"
+  if (Test-PathInTargetRepo -RelativePath $renamedPath -TargetRepo $TargetRepo) {
+    return $renamedPath
+  }
+  if (Test-PathInTargetRepo -RelativePath $originalPath -TargetRepo $TargetRepo) {
+    return $originalPath
+  }
+  return $null
+}
+
+function Resolve-CleanupBranchesScriptPath {
+  param(
+    [Parameter(Mandatory)]
+    [string]$TargetRepo
+  )
+
+  # scripts/cleanup-branches.ps1 lives at the repo root in this (BaseCoat's
+  # own) repo, but downstream sync only distributes the managed
+  # .github/base-coat/scripts/ tree -- a consumer repo has
+  # .github/base-coat/scripts/cleanup-branches.ps1, never scripts/cleanup-branches.ps1
+  # at the root. Resolve to whichever path actually exists -- in the target
+  # repository, not necessarily this checkout (see Test-PathInTargetRepo) --
+  # instead of hardcoding the root-only path, which silently produced a
+  # nonexistent cleanup command in every downstream-generated stage issue.
+  $rootPath = "scripts/cleanup-branches.ps1"
+  $managedPath = ".github/base-coat/scripts/cleanup-branches.ps1"
+  if (Test-PathInTargetRepo -RelativePath $rootPath -TargetRepo $TargetRepo) {
+    return $rootPath
+  }
+  if (Test-PathInTargetRepo -RelativePath $managedPath -TargetRepo $TargetRepo) {
+    return $managedPath
+  }
+  return $null
+}
+
 function Get-StageArtifact {
   param(
     [Parameter(Mandatory)]
     [string]$IntentName,
     [Parameter(Mandatory)]
     [string]$RepoShortName,
+    [Parameter(Mandatory)]
+    [string]$TargetRepo,
     [Parameter(Mandatory)]
     [string]$GoalText,
     [Parameter(Mandatory)]
@@ -363,13 +446,30 @@ function Get-StageArtifact {
   $branchName = "intent/$IntentName/$hashSegment/s$StageIndex-$StageSlug-$safeGoalSlug"
   $prTitlePrefix = if ($IntentName -eq "onboarding-conductor") { "Phase" } else { "Sprint" }
 
-  $requiredChecks = @(
-    "BaseCoat - PR Flow Hygiene / PR readiness routing and weekly hygiene report",
-    "BaseCoat - Sprint Closeout Branch Audit / branch-audit"
-  )
-  if ($StageIndex -eq 3) {
-    $requiredChecks += "BaseCoat - Ship-it Release Gate / Evaluate Ship-it Release Gate"
+  # pr-flow-hygiene.yml is a BaseCoat-repo-only maintenance workflow -- it is
+  # never distributed downstream (not registered in
+  # configure-downstream-workflows.ps1 at all) -- and sprint-closeout-branch-audit.yml
+  # is an opt-in 'templates' class entry excluded from the default ship-it
+  # install. Requiring either check unconditionally would make every
+  # downstream stage PR permanently unable to satisfy
+  # all_required_checks_green after a default install. Only require a check
+  # whose executable workflow is actually present in $TargetRepo (this repo,
+  # or whatever the consumer has chosen to install) -- not merely present in
+  # this workflow run's own checkout, which is irrelevant for a cross-repo
+  # dispatch (see Test-PathInTargetRepo).
+  $requiredChecks = New-Object System.Collections.Generic.List[string]
+  if (Test-PathInTargetRepo -RelativePath ".github/workflows/pr-flow-hygiene.yml" -TargetRepo $TargetRepo) {
+    [void]$requiredChecks.Add("BaseCoat - PR Flow Hygiene / PR readiness routing and weekly hygiene report")
   }
+  $sprintCloseoutWorkflowPath = Resolve-SprintCloseoutWorkflowPath -TargetRepo $TargetRepo
+  if ($sprintCloseoutWorkflowPath) {
+    [void]$requiredChecks.Add("BaseCoat - Sprint Closeout Branch Audit / branch-audit")
+  }
+  if ($StageIndex -eq 3) {
+    [void]$requiredChecks.Add("BaseCoat - Ship-it Release Gate / Evaluate Ship-it Release Gate")
+  }
+
+  $cleanupBranchesScriptPath = Resolve-CleanupBranchesScriptPath -TargetRepo $TargetRepo
 
   return [ordered]@{
     stage = $StageIndex
@@ -380,15 +480,15 @@ function Get-StageArtifact {
     previous_stage_issue_url = $PreviousStageIssueUrl
     merge_policy = [ordered]@{
       sequencing = "serial"
-      required_checks = $requiredChecks
+      required_checks = @($requiredChecks)
       merge_ready_condition = "all_required_checks_green"
       sync_with_latest_main = $true
       wait_for_previous_stage = -not [string]::IsNullOrWhiteSpace($PreviousStageIssueUrl)
       rebase_before_merge = $true
     }
     cleanup_policy = [ordered]@{
-      workflow = ".github/workflows/sprint-closeout-branch-audit.yml"
-      script = "scripts/cleanup-branches.ps1"
+      workflow = if ($sprintCloseoutWorkflowPath) { $sprintCloseoutWorkflowPath } else { "(not installed -- install the sprint-closeout-branch-audit template to enable automated branch cleanup)" }
+      script = if ($cleanupBranchesScriptPath) { $cleanupBranchesScriptPath } else { "(not installed -- scripts/cleanup-branches.ps1 / .github/base-coat/scripts/cleanup-branches.ps1 not found)" }
       audit_log = "GITHUB_STEP_SUMMARY"
     }
   }
@@ -666,6 +766,7 @@ if ($DryRun) {
     $stageArtifact = Get-StageArtifact `
       -IntentName $Intent `
       -RepoShortName $repoName `
+      -TargetRepo $TargetRepo `
       -GoalText $trimmedGoal `
       -StageIndex ($i + 1) `
       -StageSlug $phaseSlug `
@@ -748,6 +849,7 @@ if ($DryRun) {
     $stageArtifact = Get-StageArtifact `
       -IntentName $Intent `
       -RepoShortName $repoName `
+      -TargetRepo $TargetRepo `
       -GoalText $trimmedGoal `
       -StageIndex $index `
       -StageSlug $phaseSlug `
@@ -817,8 +919,7 @@ $(($syncGuardrail -join "`n"))
 
 - Policy: ``$($stageArtifact.merge_policy.sequencing)``
 - Required checks before merge:
-  - ``$($stageArtifact.merge_policy.required_checks[0])``
-  - ``$($stageArtifact.merge_policy.required_checks[1])``
+$(($stageArtifact.merge_policy.required_checks | ForEach-Object { "  - ``$_``" }) -join "`n")
 $(($mergeSequencingChecklist -join "`n"))
 
 ## Release Gate Enforcement

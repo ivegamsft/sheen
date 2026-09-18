@@ -8,8 +8,15 @@
     - basecoat-agent-<capability>.yml   (advanced templates)
     - basecoat-internal-<capability>.yml (internal workflows)
 
-    Default behavior installs only reusable workflows. Template and internal workflows are
-    opt-in via parameters.
+    Default behavior installs reusable workflows plus the ship-it class (required
+    preflight infrastructure for the ship-it skill: ship-it-intent-dispatch.yml,
+    ship-it-build-guard.yml, ship-it-release-gate.yml). Template and internal
+    workflows -- including adoption-metrics.yml (onboarding-telemetry class) --
+    remain opt-in via parameters, since those take autonomous actions
+    (auto-merge, issue creation, scheduled pushes to gh-pages) a maintainer
+    should consciously enable. See
+    docs/design/memory-workflow-distribution.md for the distribution policy
+    this follows.
 
     Source workflows are expected in .github/base-coat/workflows (as synced by BaseCoat).
 
@@ -29,16 +36,20 @@
     Include internal workflows (in addition to reusable workflows).
 
 .PARAMETER InstallClass
-    Workflow classes to install. Valid values: reusable, templates, internal.
-    Defaults to reusable.
+    Workflow classes to install. Valid values: reusable, ship-it,
+    onboarding-telemetry, templates, internal.
+    Defaults to reusable and ship-it. onboarding-telemetry (adoption-metrics.yml)
+    is opt-in like templates/internal because it takes autonomous, scheduled
+    actions (contents: write, issues: write, pushes to gh-pages) -- pass it
+    explicitly via -InstallClass to enable it.
 
 .PARAMETER Workflow
     Install only the named workflow source or destination files. Exact names are
     required. Targeted installs preserve all non-selected and unknown workflows.
 
 .PARAMETER KeepUnknownBc
-    Keep unknown managed workflow files already present in destination.
-    Managed prefixes are bc-, basecoat-, basecoat-agent-, basecoat-internal-.
+    Retained for compatibility. Unmarked workflow files are now always preserved
+    because they are repository-owned by default.
 
 .PARAMETER DryRun
     Print planned actions without modifying files.
@@ -59,8 +70,8 @@ param(
     [switch]$IncludeUnsupported,
     [switch]$IncludeTemplates,
     [switch]$IncludeInternal,
-    [ValidateSet('reusable', 'templates', 'internal')]
-    [string[]]$InstallClass = @('reusable'),
+    [ValidateSet('reusable', 'ship-it', 'onboarding-telemetry', 'templates', 'internal')]
+    [string[]]$InstallClass = @('reusable', 'ship-it'),
     [string[]]$Workflow = @(),
     [switch]$KeepUnknownBc,
     [switch]$DryRun
@@ -78,6 +89,12 @@ if (-not $repoRoot) {
     throw 'This script must be run inside a git repository.'
 }
 Set-Location $repoRoot
+
+$ownershipModulePath = Join-Path $PSScriptRoot 'workflow-ownership.ps1'
+if (-not (Test-Path -LiteralPath $ownershipModulePath -PathType Leaf)) {
+    throw "Workflow ownership guard not found: $ownershipModulePath"
+}
+. $ownershipModulePath
 
 $resolvedSource = if ([System.IO.Path]::IsPathRooted($SourceDir)) {
     $SourceDir
@@ -103,6 +120,11 @@ $resolvedGovernanceDest = if ([System.IO.Path]::IsPathRooted($GovernanceDestinat
 
 if (-not (Test-Path -Path $resolvedSource -PathType Container)) {
     throw "Source workflow directory not found: $resolvedSource"
+}
+$ownershipManifestPath = Join-Path $resolvedSource 'workflow-ownership-manifest.json'
+$hasOwnershipManifest = Test-Path -LiteralPath $ownershipManifestPath -PathType Leaf
+if (-not $hasOwnershipManifest) {
+    Write-Warn "Workflow ownership manifest is missing from '$SourceDir'; workflows will install, but no retirement will occur."
 }
 
 if (-not (Test-Path -Path $resolvedDest -PathType Container)) {
@@ -254,6 +276,94 @@ $workflowMap = @(
         Class = 'templates'
     }
     [pscustomobject]@{
+        # Destination intentionally preserves the source filename (no basecoat-
+        # prefix): the ship-it skill, its tests, and its comment-command
+        # dispatch chain hardcode this exact path under .github/workflows/.
+        # Name intentionally preserves the source display name (not a
+        # "BaseCoat Template - ..." rewrite): ship-it-build-guard.yml's
+        # workflow_run trigger listens for the literal source name, so
+        # renaming on install would break that trigger downstream.
+        #
+        # Class is 'ship-it' (not 'templates'): this is required preflight
+        # infrastructure documented by skills/ship-it/SKILL.md step 2 ("If
+        # any is missing, stop and report it"), not an optional automation a
+        # maintainer opts into. It must install by default so the skill's
+        # documented default-install path actually works. See issue #2943.
+        Source = 'ship-it-intent-dispatch.yml'
+        Destination = 'ship-it-intent-dispatch.yml'
+        LegacyDestinations = @()
+        Name = 'BaseCoat - Ship-it Intent Dispatch'
+        Supported = $true
+        Class = 'ship-it'
+    }
+    [pscustomobject]@{
+        Source = 'ship-it-build-guard.yml'
+        Destination = 'ship-it-build-guard.yml'
+        LegacyDestinations = @()
+        Name = 'BaseCoat - Ship-it Build Guard'
+        Supported = $true
+        Class = 'ship-it'
+    }
+    [pscustomobject]@{
+        Source = 'ship-it-release-gate.yml'
+        Destination = 'ship-it-release-gate.yml'
+        LegacyDestinations = @()
+        Name = 'BaseCoat - Ship-it Release Gate'
+        Supported = $true
+        Class = 'ship-it'
+    }
+    [pscustomobject]@{
+        Source = 'post-merge-release-chain.yml'
+        Destination = 'post-merge-release-chain.yml'
+        LegacyDestinations = @()
+        Name = 'BaseCoat Template - Post-merge Release Chain'
+        Supported = $true
+        Class = 'templates'
+    }
+    [pscustomobject]@{
+        Source = 'automation-stuck-state-watchdog.yml'
+        Destination = 'automation-stuck-state-watchdog.yml'
+        LegacyDestinations = @()
+        Name = 'BaseCoat Template - Automation Stuck-state Watchdog'
+        Supported = $true
+        Class = 'templates'
+    }
+    [pscustomobject]@{
+        # Destination preserves the source filename: the security drift-auditor
+        # agent (agents/basecoat-50-security-project-rules-drift-auditor.agent.md)
+        # hardcodes this exact path under .github/workflows/.
+        Source = 'project-rules-drift-audit.yml'
+        Destination = 'project-rules-drift-audit.yml'
+        LegacyDestinations = @()
+        Name = 'BaseCoat Template - Project Rules Drift Audit'
+        Supported = $true
+        Class = 'templates'
+    }
+    [pscustomobject]@{
+        # Destination preserves the source filename: the onboarding-telemetry
+        # skill (skills/onboarding-telemetry/SKILL.md) hardcodes this exact
+        # path under .github/workflows/. Classed 'onboarding-telemetry'
+        # (opt-in, like 'templates') rather than default-installed: unlike
+        # the ship-it class (pure CI preflight infrastructure with no side
+        # effects until a maintainer explicitly runs a ship-it intent), this
+        # workflow itself takes autonomous, scheduled action on every install
+        # -- `contents: write`/`issues: write` permissions, a cron trigger,
+        # unconditional pushes to the gh-pages branch, and creation of weekly
+        # summary/degradation issues. Installing it by default would silently
+        # activate that in every consumer, contradicting this installer's
+        # opt-in-for-autonomous-workflows rule (see module doc comment above)
+        # and docs/design/memory-workflow-distribution.md's distribution
+        # policy. The onboarding-telemetry skill instead documents a
+        # fail-closed contract (stop and report installation guidance) for
+        # when this workflow is absent -- see skills/onboarding-telemetry/SKILL.md.
+        Source = 'adoption-metrics.yml'
+        Destination = 'adoption-metrics.yml'
+        LegacyDestinations = @()
+        Name = 'BaseCoat Template - Adoption Metrics'
+        Supported = $true
+        Class = 'onboarding-telemetry'
+    }
+    [pscustomobject]@{
         Source = 'auto-approve-cloud-agent-workflows.yml'
         Destination = 'basecoat-internal-auto-approve-cloud-agent-workflows.yml'
         LegacyDestinations = @()
@@ -311,6 +421,11 @@ $factoryOnlyWorkflowFiles = @(
     'bc-database-ci-cd.yml',
     'basecoat-internal-database-ci-cd.yml'
 )
+if ($hasOwnershipManifest) {
+    Assert-FactoryOwnershipManifestCoverage `
+        -WorkflowNames ($knownManagedFiles + $factoryOnlyWorkflowFiles) `
+        -OwnershipManifestPath $ownershipManifestPath
+}
 
 $copied = 0
 $removed = 0
@@ -337,13 +452,21 @@ foreach ($workflowEntry in $workflowMap) {
 
     if (-not $workflowEntry.Supported -and -not $IncludeUnsupported) {
         if (Test-Path $destFile) {
-            if ($DryRun) {
-                Write-Info "Would remove unsupported workflow: $($workflowEntry.Destination)"
+            if (-not $hasOwnershipManifest) {
+                Write-Warn "Preserving unsupported workflow without an ownership manifest: $($workflowEntry.Destination)"
+                $skipped++
+            } elseif ($DryRun) {
+                Write-Info "Would retire unsupported factory workflow: $($workflowEntry.Destination)"
+                $removed++
             } else {
-                Remove-Item -Path $destFile -Force
-                Write-Ok "Removed unsupported workflow: $($workflowEntry.Destination)"
+                [void](Remove-FactoryOwnedWorkflow `
+                        -WorkflowName $workflowEntry.Destination `
+                        -WorkflowDirectory $resolvedDest `
+                        -OwnershipManifestPath $ownershipManifestPath `
+                        -Reason 'unsupported workflow' `
+                        -DryRun:$DryRun)
+                $removed++
             }
-            $removed++
         } else {
             Write-Info "Skipping unsupported workflow: $($workflowEntry.Destination)"
             $skipped++
@@ -389,13 +512,21 @@ foreach ($workflowEntry in $workflowMap) {
         }
         $legacyPath = Join-Path $resolvedDest $legacyName
         if (Test-Path -Path $legacyPath -PathType Leaf) {
-            if ($DryRun) {
-                Write-Info "Would remove legacy workflow filename: $legacyName"
+            if (-not $hasOwnershipManifest) {
+                Write-Warn "Preserving legacy workflow without an ownership manifest: $legacyName"
+                $skipped++
+            } elseif ($DryRun) {
+                Write-Info "Would retire legacy factory workflow filename: $legacyName"
+                $removed++
             } else {
-                Remove-Item -Path $legacyPath -Force
-                Write-Ok "Removed legacy workflow filename: $legacyName"
+                [void](Remove-FactoryOwnedWorkflow `
+                        -WorkflowName $legacyName `
+                        -WorkflowDirectory $resolvedDest `
+                        -OwnershipManifestPath $ownershipManifestPath `
+                        -Reason 'legacy filename replacement' `
+                        -DryRun:$DryRun)
+                $removed++
             }
-            $removed++
         }
     }
 
@@ -437,13 +568,8 @@ if (-not $KeepUnknownBc -and -not $targetedInstall) {
         }
 
     foreach ($file in $unknownManagedFiles) {
-        if ($DryRun) {
-            Write-Info "Would remove unknown managed workflow: $($file.Name)"
-        } else {
-            Remove-Item -Path $file.FullName -Force
-            Write-Ok "Removed unknown managed workflow: $($file.Name)"
-        }
-        $removed++
+        Write-Warn "Preserving unmarked workflow as repository-owned: $($file.Name)"
+        $skipped++
     }
 }
 
@@ -451,13 +577,21 @@ if (-not $targetedInstall) {
     foreach ($factoryWorkflow in $factoryOnlyWorkflowFiles) {
         $factoryPath = Join-Path $resolvedDest $factoryWorkflow
         if (Test-Path -Path $factoryPath -PathType Leaf) {
-            if ($DryRun) {
-                Write-Info "Would remove factory-only workflow: $factoryWorkflow"
+            if (-not $hasOwnershipManifest) {
+                Write-Warn "Preserving factory-only workflow without an ownership manifest: $factoryWorkflow"
+                $skipped++
+            } elseif ($DryRun) {
+                Write-Info "Would retire factory-only workflow: $factoryWorkflow"
+                $removed++
             } else {
-                Remove-Item -Path $factoryPath -Force
-                Write-Ok "Removed factory-only workflow: $factoryWorkflow"
+                [void](Remove-FactoryOwnedWorkflow `
+                        -WorkflowName $factoryWorkflow `
+                        -WorkflowDirectory $resolvedDest `
+                        -OwnershipManifestPath $ownershipManifestPath `
+                        -Reason 'factory-only retirement' `
+                        -DryRun:$DryRun)
+                $removed++
             }
-            $removed++
         }
     }
 }

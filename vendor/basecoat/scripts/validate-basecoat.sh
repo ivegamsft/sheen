@@ -12,6 +12,97 @@ if [[ ${2:-} == "--fail-on-warning" ]]; then
 fi
 cd "$ROOT_DIR"
 
+has_frontmatter_field() {
+  local field="$1"
+  local file="$2"
+  awk -v field="$field" 'NR <= 20 && tolower($0) ~ "^" tolower(field) ":" { found = 1 } END { exit(found ? 0 : 1) }' "$file"
+}
+
+# Prints the raw scalar value of a top-level field from the YAML frontmatter
+# block only (never the body), or nothing if absent. Scoping to the frontmatter
+# block avoids false positives from fenced code samples elsewhere in the file.
+frontmatter_field() {
+  local field="$1" file="$2"
+  awk -v field="$field" '
+    NR == 1 && $0 != "---" { exit }
+    NR == 1 { infm = 1; next }
+    infm && $0 == "---" { exit }
+    infm && tolower($0) ~ "^" tolower(field) ":" {
+      line = $0
+      sub("^[^:]*:[ \t]*", "", line)
+      sub("[ \t]+#.*$", "", line)
+      print line
+      exit
+    }
+  ' "$file"
+}
+
+# Prints "1" when a top-level field key is present in the YAML frontmatter block
+# (regardless of value), else nothing. Used to distinguish an absent field from
+# a present-but-empty one, so `ships:` with no value is rejected rather than
+# silently defaulted.
+frontmatter_has_field() {
+  local field="$1" file="$2"
+  awk -v field="$field" '
+    NR == 1 && $0 != "---" { exit }
+    NR == 1 { infm = 1; next }
+    infm && $0 == "---" { exit }
+    infm && tolower($0) ~ "^" tolower(field) ":" { print "1"; exit }
+  ' "$file"
+}
+
+# Normalizes a frontmatter scalar: strips surrounding quotes and surrounding
+# whitespace only (never interior whitespace, so a malformed `t rue` stays
+# malformed), then lowercases.
+normalize_scalar() {
+  printf '%s' "$1" \
+    | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//; s/^["'"'"']//; s/["'"'"']$//; s/^[[:space:]]+//; s/[[:space:]]+$//' \
+    | tr '[:upper:]' '[:lower:]'
+}
+
+# Validates the #3374 asset distribution classification (ships/dogfood/status).
+# Kept in sync with scripts/validate-asset-distribution.ps1.
+check_asset_distribution() {
+  local file="$1" ships dogfood status eff_ships eff_dogfood eff_status
+  ships="$(normalize_scalar "$(frontmatter_field ships "$file")")"
+  dogfood="$(normalize_scalar "$(frontmatter_field dogfood "$file")")"
+  status="$(normalize_scalar "$(frontmatter_field status "$file")")"
+
+  if [[ -z "$ships" && -n "$(frontmatter_has_field ships "$file")" ]]; then
+    echo "Invalid ships '' in $file (expected true or false)" >&2
+    exit 1
+  fi
+  if [[ -z "$dogfood" && -n "$(frontmatter_has_field dogfood "$file")" ]]; then
+    echo "Invalid dogfood '' in $file (expected true or false)" >&2
+    exit 1
+  fi
+  if [[ -z "$status" && -n "$(frontmatter_has_field status "$file")" ]]; then
+    echo "Invalid status '' in $file (expected experimental, active, or deprecated)" >&2
+    exit 1
+  fi
+
+  if [[ -n "$ships" && "$ships" != "true" && "$ships" != "false" ]]; then
+    echo "Invalid ships '$ships' in $file (expected true or false)" >&2
+    exit 1
+  fi
+  if [[ -n "$dogfood" && "$dogfood" != "true" && "$dogfood" != "false" ]]; then
+    echo "Invalid dogfood '$dogfood' in $file (expected true or false)" >&2
+    exit 1
+  fi
+  if [[ -n "$status" && "$status" != "experimental" && "$status" != "active" && "$status" != "deprecated" ]]; then
+    echo "Invalid status '$status' in $file (expected experimental, active, or deprecated)" >&2
+    exit 1
+  fi
+
+  eff_ships="${ships:-true}"
+  eff_dogfood="${dogfood:-false}"
+  eff_status="${status:-active}"
+  if [[ "$eff_ships" == "false" && "$eff_dogfood" == "false" && "$eff_status" != "experimental" && "$eff_status" != "deprecated" ]]; then
+    echo "Invalid distribution in $file: ships:false and dogfood:false requires status experimental or deprecated" >&2
+    exit 1
+  fi
+}
+
 required=(README.md CHANGELOG.md version.json asset-manifest.json instructions skills prompts agents)
 if [[ ! -d workflows || -e .git ]]; then
   required+=(sync.sh sync.ps1)
@@ -38,14 +129,18 @@ while IFS= read -r file; do
     exit 1
   fi
 
-  if ! sed -n '1,20p' "$file" | grep -qi '^description:'; then
+  if ! has_frontmatter_field 'description' "$file"; then
     echo "Missing description in frontmatter for $file" >&2
     exit 1
   fi
 
+  case "$(basename "$file")" in
+    *.agent.md | SKILL.md | *.prompt.md) check_asset_distribution "$file" ;;
+  esac
+
   if [[ "$(basename "$file")" == *.agent.md ]]; then
-    if ! sed -n '2,30p' "$file" | grep -qxF -- '---'; then
-      echo "Missing YAML frontmatter closing '---' within first 30 lines in $file" >&2
+    if ! awk 'NR >= 2 && NR <= 60 && $0 == "---" { found = 1; exit } END { exit(found ? 0 : 1) }' "$file"; then
+      echo "Missing YAML frontmatter closing '---' within first 60 lines in $file" >&2
       exit 1
     fi
 
@@ -66,9 +161,22 @@ while IFS= read -r file; do
   fi
 
   if [[ "$(basename "$file")" == "SKILL.md" ]]; then
-    if ! sed -n '1,20p' "$file" | grep -qi '^name:'; then
+    if ! has_frontmatter_field 'name' "$file"; then
       echo "Missing name in frontmatter for $file" >&2
       exit 1
+    fi
+
+    # Skills: visibility, when present, must be public|private. Agents use a
+    # different routing-tier taxonomy (basic|specialized|advanced|internal),
+    # so this enum check is scoped to SKILL.md only. Kept in sync with
+    # scripts/validate-skill-visibility.ps1.
+    visibility_line="$(awk 'NR==1 && /^---[[:space:]]*$/{inblock=1; next} inblock && /^---[[:space:]]*$/{exit} inblock{print}' "$file" | grep -E '^visibility:\s*' | head -n 1 || true)"
+    if [[ -n "$visibility_line" ]]; then
+      visibility_value="$(echo "$visibility_line" | sed -E 's/^visibility:\s*//; s/^["'"'"']?//; s/["'"'"']?$//' | tr -d '[:space:]')"
+      if [[ "$visibility_value" != "public" && "$visibility_value" != "private" ]]; then
+        echo "Invalid skill visibility '$visibility_value' in $file (expected 'public' or 'private')" >&2
+        exit 1
+      fi
     fi
 
     token_count=$(python3 - "$file" <<'PY'

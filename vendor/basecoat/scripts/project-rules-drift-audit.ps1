@@ -155,8 +155,9 @@ query {
         throw "GraphQL request failed (exit code $LASTEXITCODE). Check GH_TOKEN scope (read:project required)."
     }
     $result = $stdout | ConvertFrom-Json
-    if ($result.errors) {
-        Write-AuditLog WARN "GraphQL errors encountered: $($result.errors | ConvertTo-Json -Compress)"
+    $errors = Get-OptionalPropertyValue -InputObject $result -Name 'errors'
+    if ($errors) {
+        Write-AuditLog WARN "GraphQL errors encountered: $($errors | ConvertTo-Json -Compress)"
     }
     return $result.data.node
 }

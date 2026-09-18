@@ -1,6 +1,6 @@
 ---
 name: rollout-basecoat
-description: "Use when onboarding a repository to BaseCoat in an enterprise setting. Focuses on pinned versions, safe rollout, installation method, and validation steps."
+description: "BaseCoat consumer rollout and update specialist. USE FOR: onboarding or updating a BaseCoat consumer, installing immutable BaseCoat releases, configuring downstream update notifications, creating guarded upgrade PR policy, and validating consumer sync provenance. DO NOT USE FOR: editing BaseCoat framework internals, designing unrelated agents or skills, deploying application infrastructure, or bypassing consumer branch protection."
 visibility: basic
 model: gpt-5.3-codex
 compatibility: []
@@ -22,6 +22,7 @@ Purpose: onboard a repository or portfolio to BaseCoat using safe, repeatable re
 - Preferred installation channel
 - Approved BaseCoat version or release tag
 - Any enterprise constraints such as restricted egress or internal mirrors
+- Consumer update mode, approval policy, and allowed SemVer bumps
 
 ## Process
 
@@ -39,6 +40,9 @@ Purpose: onboard a repository or portfolio to BaseCoat using safe, repeatable re
    See `skills/rollout-basecoat/references/delivery-lifecycle.md` for the exact
    change-path and no-change-path commands.
 6. Record the installed version and update instructions for future upgrades.
+7. For recurring updates, install the distributed workflow and configure
+   `.basecoat.yml` `updates`. Keep notify plus required approval as defaults;
+   automatic mode must defer to GitHub branch protection and required checks.
 
 ## Expected Output
 
@@ -53,35 +57,11 @@ Purpose: onboard a repository or portfolio to BaseCoat using safe, repeatable re
 **Rationale:** Repeatable rollout steps with well-defined validation — speed and cost matter most
 **Minimum:** gpt-5.4-mini
 
-## Distribution Channels
+## Reference
 
-| Channel | When to Use | Command |
-|---|---|---|
-| GitHub Release ZIP | Air-gapped / restricted egress | Download from releases page, extract to `.github/` |
-| Sync script (PowerShell) | Windows CI / local dev | `pwsh sync.ps1 -Version v2.1.1` |
-| Sync script (Bash) | Linux/macOS CI | `./sync.sh --version v2.1.1` |
-
-## Validation Checklist
-
-After installation, verify:
-
-- [ ] `agents/*.agent.md` files are present (no taxonomy subdirs)
-- [ ] `instructions/*.instructions.md` files are present
-- [ ] `skills/*/SKILL.md` directories are intact
-- [ ] `prompts/*.prompt.md` files are present
-- [ ] No duplicate `agents/` directories in the consumer repo
-- [ ] `pwsh scripts/validate-basecoat.ps1` passes (if available)
-
-## GitHub Issue Filing
-
-File issues for rollout failures:
-
-```bash
-gh issue create \
-  --title "fix(rollout): <failure summary>" \
-  --label "bug,infrastructure" \
-  --body "<description with version, channel, and error output>"
-```
+Distribution channels/commands, the post-install validation checklist, and the
+rollout-failure issue-filing template:
+[`agents/references/rollout-basecoat-detail.md`](references/rollout-basecoat-detail.md).
 
 ## Governance
 

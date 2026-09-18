@@ -1,21 +1,159 @@
 {
-  "schema": "basecoat-model-capabilities/v1",
+  "schema": "basecoat-model-capabilities/v2",
   "owner": "basecoat-sheen maintainers",
   "update_cadence": "on model/runtime changes",
+  "generated_at": "2026-09-18T17:00:00Z",
+  "provenance": {
+    "source": "GitHub Copilot CLI session tool descriptors and current repository asset audit",
+    "evidence_time": "2026-09-18T17:00:00Z",
+    "copilot_cli_version": "1.0.86",
+    "copilot_session": "db7a79c5-a367-49f7-a304-543cd156b7d8",
+    "repository_audit_revision": "b487abad8b69a99a293356a0ba989998f79bf309",
+    "basecoat_release": "v4.5.0",
+    "basecoat_commit": "6573f38529d846facb0c4a1f9cd500a1a6a3d2e8",
+    "refresh": "Update this file and docs/reference/model-capabilities.md in the same PR as any model-specific routing guidance or runtime/model change.",
+    "limits": [
+      "This catalog records host/surface evidence, not effective organization or user entitlement.",
+      "Unknown-to-catalog means unverified for this repository, not unavailable in every host.",
+      "Do not substitute the GitHub Models inference catalog for Copilot runtime availability."
+    ]
+  },
+  "runtime_surfaces": [
+    {
+      "host": "github-copilot-cli",
+      "surface": "interactive-cli",
+      "provider": "github-copilot",
+      "evidence": "Session task tool model descriptors expose model IDs, long-context eligibility, and reasoning-effort override eligibility.",
+      "entitlement_scope": "runtime-authenticated user and organization policy"
+    },
+    {
+      "host": "github-copilot-cli",
+      "surface": "agent-frontmatter",
+      "provider": "github-copilot",
+      "evidence": "Source Sheen agents do not pin model IDs; capability inheritance is intentional.",
+      "entitlement_scope": "runtime-authenticated user and organization policy"
+    },
+    {
+      "host": "github-copilot-cli",
+      "surface": "skill-frontmatter",
+      "provider": "github-copilot",
+      "evidence": "Source Sheen skills do not pin model IDs; capability inheritance is intentional.",
+      "entitlement_scope": "runtime-authenticated user and organization policy"
+    },
+    {
+      "host": "github-copilot-cli",
+      "surface": "prompt-frontmatter",
+      "provider": "github-copilot",
+      "evidence": "Vendored BaseCoat v4.5.0 prompts contain exact model pins; prompt-frontmatter runtime support remains surface-specific evidence.",
+      "entitlement_scope": "runtime-authenticated user and organization policy"
+    }
+  ],
+  "capability_contract": {
+    "reasoning_depth": "Task-shaping metadata only; never copy automatically into provider reasoning_effort.",
+    "reasoning_effort": "Provider/runtime parameter; emit only when the selected model, host, surface, and authenticated runtime support the exact value.",
+    "family_aliases": "Aliases are routing preferences, not portable provider model IDs.",
+    "unknown_model_policy": "Report as unknown-to-catalog and preserve intentional inheritance unless a concrete assignment requires replacement."
+  },
   "models": [
     {
       "id": "gpt-5.3-codex",
       "provider": "github-copilot",
-      "reasoning_effort_configurable": false,
-      "supports_tools": true,
-      "supports_long_context": true
+      "host": "github-copilot-cli",
+      "surfaces": {
+        "interactive-cli": {
+          "supported": true,
+          "reasoning_effort_configurable": true,
+          "supported_reasoning_efforts": [
+            "xhigh"
+          ],
+          "supports_tools": true,
+          "supports_long_context": true
+        },
+        "agent-frontmatter": {
+          "supported": "unknown",
+          "reasoning_effort_configurable": "unknown",
+          "supports_tools": "unknown",
+          "supports_long_context": "unknown"
+        },
+        "prompt-frontmatter": {
+          "supported": "unknown",
+          "reasoning_effort_configurable": "unknown",
+          "supports_tools": "unknown",
+          "supports_long_context": "unknown"
+        }
+      },
+      "notes": "Observed as a configurable-effort option in the CLI task surface; do not infer agent-frontmatter or entitlement support."
     },
     {
       "id": "gpt-5.4-mini",
       "provider": "github-copilot",
-      "reasoning_effort_configurable": false,
-      "supports_tools": true,
-      "supports_long_context": true
+      "host": "github-copilot-cli",
+      "surfaces": {
+        "interactive-cli": {
+          "supported": true,
+          "reasoning_effort_configurable": true,
+          "supported_reasoning_efforts": [
+            "xhigh"
+          ],
+          "supports_tools": true,
+          "supports_long_context": true
+        },
+        "agent-frontmatter": {
+          "supported": "unknown",
+          "reasoning_effort_configurable": "unknown",
+          "supports_tools": "unknown",
+          "supports_long_context": "unknown"
+        },
+        "prompt-frontmatter": {
+          "supported": "unknown",
+          "reasoning_effort_configurable": "unknown",
+          "supports_tools": "unknown",
+          "supports_long_context": "unknown"
+        }
+      },
+      "notes": "Observed as a configurable-effort option in the CLI task surface; do not infer agent-frontmatter or entitlement support."
+    },
+    {
+      "id": "claude-sonnet-5",
+      "provider": "anthropic-via-copilot",
+      "host": "github-copilot-cli",
+      "surfaces": {
+        "interactive-cli": {
+          "supported": true,
+          "reasoning_effort_configurable": true,
+          "supported_reasoning_efforts": [
+            "xhigh"
+          ],
+          "supports_tools": true,
+          "supports_long_context": true
+        },
+        "prompt-frontmatter": {
+          "supported": "unknown",
+          "reasoning_effort_configurable": "unknown",
+          "supports_tools": "unknown",
+          "supports_long_context": "unknown"
+        }
+      },
+      "notes": "Observed as a configurable-effort option in the CLI task surface and as a vendored BaseCoat prompt pin; do not infer prompt-frontmatter entitlement support."
     }
-  ]
+  ],
+  "family_aliases": [
+    {
+      "alias": "sonnet",
+      "provider": "anthropic-via-copilot",
+      "status": "unknown-to-catalog",
+      "policy": "Treat as a family preference unless a host-specific exact ID is documented."
+    }
+  ],
+  "assignment_audit": {
+    "source_agents_model_pins": 0,
+    "source_skills_model_pins": 0,
+    "source_prompts_model_pins": 0,
+    "vendored_basecoat_prompts_model_pins": 6,
+    "vendored_basecoat_prompt_model_counts": {
+      "claude-sonnet-5": 5,
+      "gpt-5.4-mini": 1
+    },
+    "policy": "No global model replacement is required for source Sheen assets; vendored BaseCoat prompt pins are audited separately."
+  }
 }

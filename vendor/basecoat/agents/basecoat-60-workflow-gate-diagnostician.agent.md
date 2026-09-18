@@ -2,14 +2,14 @@
 name: workflow-gate-diagnostician
 description: "Diagnoses policy and environment gate blockers in delivery workflows and produces minimal-safe unblock actions with deterministic evidence artifacts. USE FOR: environment approval deadlocks, permissions and branch-policy gate failures, Pages/deployment gate state diagnostics, and workflow-blocker RCA with validation reruns. DO NOT USE FOR: broad feature implementation, bypassing required approvals, or editing unrelated application logic."
 visibility: specialized
-model: claude-sonnet-4.6
+model: claude-sonnet-5
 compatibility: []
 metadata:
   category: workflow
   maturity: alpha
   audience:
     - developer
-allowed-tools: []
+allowed-tools: [bash, git, gh]
 ---
 
 # Workflow Gate Diagnostician Agent

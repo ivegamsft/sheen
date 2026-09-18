@@ -340,7 +340,7 @@ Do not script `git push ... main` in routine automation workflows. If a special 
 
 ## Cloud Agent Workflow Auto-Approval
 
-When the cloud agent (`app/copilot-swe-agent`) opens a PR, it triggers the GitHub Actions workflows defined in this repository. To streamline execution and reduce manual intervention, the `auto-approve-cloud-agent-workflows.yml` workflow automatically approves pending workflows.
+When the cloud agent opens a PR, it triggers the GitHub Actions workflows defined in this repository. To streamline execution and reduce manual intervention, the `auto-approve-cloud-agent-workflows.yml` workflow automatically approves pending workflows.
 
 ### How It Works
 
@@ -351,9 +351,9 @@ When the cloud agent (`app/copilot-swe-agent`) opens a PR, it triggers the GitHu
 
 ### Security & Permissions
 
-- **Trigger:** Only activates when `github.actor == 'app/copilot-swe-agent'`
-- **Permissions:** Uses `pull-requests: read` and `contents: read` only
-- **Approval scope:** Limited to workflow runs associated with the agent's PR
+- **Trigger:** Runs from the trusted default-branch `pull_request_target` context only when the PR author is the stable Copilot cloud-agent user ID (`198982749`).
+- **Permissions:** Uses `pull-requests: read`, `contents: read`, and `actions: write`.
+- **Approval scope:** Limited to unique requested runs associated with that PR's current head SHA; stale-head runs are never approved.
 - **Error handling:** Fails gracefully if insufficient permissions; logs warnings instead of blocking
 
 ### Skipping Auto-Approval
@@ -582,20 +582,22 @@ distribute: false
 ---
 ```
 
-Sync scripts (`sync.ps1`, `sync.sh`) skip any instruction file containing
-`distribute: false` when copying assets to downstream repositories.
+The `distribute: false` marker identifies an asset as internal for
+`scripts/show-context.ps1`. Downstream sync, package, and bootstrap paths do not
+yet enforce the marker; enforcement is tracked in #3359.
 
 Files currently marked `distribute: false`:
 
 - `instructions/basecoat-20-lang-governance.instructions.md` — BaseCoat repo-governance rules
+- `instructions/governance.instructions.md` — compatibility alias for repo-governance rules
 - `instructions/basecoat-10-core-enterprise-configuration.instructions.md` — enterprise setup guidance
 - `instructions/basecoat-10-core-hrm-execution.instructions.md` — internal execution hierarchy
 - `instructions/basecoat-50-security-token-economics.instructions.md` — cost-routing rules for this repo
 - `instructions/basecoat-10-core-memory-index.instructions.md` — hot-cache memory index
 
 When adding a new instruction, ask: "Should downstream repos receive this?" If the
-answer is no (it references BaseCoat tooling, sprints, or internal conventions), add
-`distribute: false`.
+answer is no (it references BaseCoat tooling, sprints, or internal conventions),
+add `distribute: false` to signal internal intent.
 
 ---
 

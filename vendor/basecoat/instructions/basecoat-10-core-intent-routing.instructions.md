@@ -1,6 +1,6 @@
 ---
 description: "Intent prefix routing — interprets user-defined prefixes to determine urgency, timing, and which agents or skills to invoke. Applies to all conversations."
-applyTo: "**/*"
+applyTo: "agents/**/*,skills/**/*,prompts/**/*,.github/**/*"
 ---
 
 # Intent Prefix Routing
@@ -33,6 +33,7 @@ Rules:
 | `bug:` | Defect, regression, broken behavior | Now | `@code-review`, `@self-healing-ci`, `@config-auditor` |
 | `feature:` | New capability or enhancement | Later | `@sprint-planner`, `@solution-architect` |
 | `audit:` | Review, assess, validate — no changes | Now | `@security-analyst`, `@config-auditor`, `@github-security-posture` |
+| `investigate:` | Diagnose an open-ended concern and report findings — no changes | Now (read-only) | `@rca`, `@config-auditor`, `@performance-analyst` |
 | `plan:` | Sprint or project planning | Now | `@sprint-planner`, `@product-manager` |
 | `optimize:` | Convert high-entropy requests into normalized execution packets before action | Now | `@task-scope-validator`, `@orchestrator`, `@prompt-coach` |
 | `spike:` | Time-boxed investigation, no deliverable | Now | `@solution-architect` |
@@ -41,6 +42,7 @@ Rules:
 | `workflow:` | GitHub Actions/workflow failure triage and repair | Now | `@broken-build-troubleshooter`, `@self-healing-ci`, `@devops-engineer` |
 | `actions:` | GitHub Actions configuration, runs, and policy checks | Now | `@self-healing-ci`, `@ci-failure-escalation`, `@devops-engineer` |
 | `pr:` | Pull request lifecycle execution: remaining WIP logging, mergeability, broken-build recovery, lane closeout, and safe cleanup | Now | `lane-closeout` skill, `@orphaned-pr-cleanup`, `@merge-coordinator`, `@broken-build-troubleshooter`, `@branch-hygiene-sweeper` |
+| `repo-cleanup:` | Bulk post-merge hygiene sweep: sync `main`, prune stale/orphaned worktrees, delete merged local+remote branches | Now | `repo-cleanup` skill, `git-worktrees` skill |
 | `issue:` | GitHub issue triage, labeling, and backlog hygiene | Now | `@issue-triage`, `@sprint-planner` |
 | `portfolio:` | Project audit for issue/PR dedupe, categorization, dependency mapping, feature grouping, and project linkage | Now | `@issue-triage`, `@orphaned-pr-cleanup`, `@sprint-project-mapper`, `@sprint-planner`, `@governance-auditor` |
 | `release:` | Release planning, version bumping, and publication | Now | `@release-manager`, `@release-readiness-chair`, `@release-impact-advisor` |
@@ -54,12 +56,14 @@ Rules:
 | `architect:` | Architecture design or system-design decision | Later | `@solution-architect` |
 | `docs:` | Documentation only | Soon | `@tech-writer` |
 | `chronicle:` | Export session/worktree learnings into durable story artifacts and follow-up issue packets | Soon | `@memory-promoter`, `@tech-writer` |
+| `learn:` | Opt-in extract or consult of recurring CI/workflow signatures in `docs/reference/repo-pathways.md` | Now | `repo-learning` skill, `@rca`, `@self-healing-ci`, `@ci-failure-escalation` |
 | `version:` | BaseCoat version inspection and drift check | Now | `@release-manager`, `@devops-engineer` |
 | `test:` | Test coverage gap or test failure | Now | `@manual-test-strategy`, `@strategy-to-automation` |
 | `refactor:` | Structural improvement, no behavior change | Later | `@code-review`, `@performance-analyst` |
-| `ui:` | User interface: components, layout, visual and interaction implementation | Soon | `@frontend-dev`, `@ux-designer` |
-| `ux:` | User experience: user flows, usability, journeys, interaction design | Soon | `@ux-designer`, `@frontend-dev` |
-| `ia:` | Information architecture: content structure, navigation, taxonomy, sitemap | Soon | `@ux-designer`, `@tech-writer` |
+| `ui:` | User interface: components, layout, visual and interaction implementation | Soon | `@frontend-dev`, `@ux-designer`; conditional sheen delegate for governance/audit |
+| `ux:` | User experience: user flows, usability, journeys, interaction design | Soon | `@ux-designer`, `@frontend-dev`; conditional sheen delegate for governance/audit |
+| `ia:` | Information architecture: content structure, navigation, taxonomy, sitemap | Soon | `@ux-designer`, `@tech-writer`; conditional sheen delegate for governance/audit |
+| `design:` | Product-definition and UX/UI governance, design system, component audit, or finish-coat work; `debate:` requests compare options before implementation | Soon | Read downstream `PRODUCT.md`, use `.github/base-coat/docs/reference/design-debate-format.md` (or custom overlay location), then delegate to the `IBuySpy-Shared/basecoat-sheen` catalog when applicable |
 | `sprint:` | Sprint planning, execution, or closeout | Now | `@sprint-planner`, `@sprint-closeout-auditor` |
 | `wave:` | Dependency-ordered batch within a sprint (issues and PRs) | Now | `@sprint-planner`, `@parallel-session-coordinator` |
 | `autopilot:` | Continuous oldest-to-newest backlog burndown in dependency-ordered waves, unattended until stopped or blocked | Now | `@backlog-autopilot`, `@parallel-session-coordinator`, `@ship-it-control-loop`, `@delivery-autopilot` |
@@ -118,6 +122,49 @@ Execution contract:
 
 `audit:` is always read-only unless the user explicitly says "and fix" or
 "resolve."
+
+## Investigate Mode (`investigate:`)
+
+`investigate:` is **read-only**. It asks "why is this happening / how bad is
+it?" and its deliverable is **findings, evidence, and recommended options** —
+never an implementation.
+
+Read-only intents: `audit:`, `investigate:`, `rca:`, `spike:`, `plan:`.
+
+### Contract
+
+1. Gather evidence, quantify the problem, and identify root cause.
+2. Report findings with measurements, ranked options, and a recommended next
+   action.
+3. **Stop.** Do not create branches, edit files, open PRs, or change settings.
+4. Logging issues to capture findings is permitted — it records the
+   investigation rather than acting on it.
+5. To act on the findings, the user issues a **new** intent
+   (`bug:`, `perf:`, `ship-it:`).
+
+### Autonomy does not override read-only
+
+Autonomous, unattended, or "work without me" modes **raise the bar for acting,
+they do not lower it**. If a read-only intent is active and the operator is
+unavailable:
+
+- Do **not** treat unavailability as approval to implement.
+- Do **not** escalate from analysis to implementation because the fix looks
+  obvious, low-risk, or fast.
+- Complete the investigation, report findings, and end the turn.
+
+An unanswered clarifying question is a **stop signal on a read-only intent**,
+not a delegation of authority. Autonomy applies to *how thoroughly you
+investigate*, not to *whether you may start changing things*.
+
+### Scope escalation requires a new intent
+
+| Situation | Correct response |
+|---|---|
+| Investigation reveals an obvious one-line fix | Report it; do not apply it |
+| Investigation reveals a critical security hole | Report immediately with severity; do not patch |
+| Operator unavailable, findings are clear | Report and stop |
+| User says "investigate and fix" | Read-only no longer applies; proceed |
 
 ## Fleet Routing
 
@@ -255,6 +302,23 @@ Execution contract:
 9. In `pr-lifecycle=full` mode, do not mark the request complete while WIP
    tasks or uncommitted changes remain unresolved.
 
+## Dependent PR Stack Routing
+
+Stacked PRs are allowed only for explicit dependency chains. They are not the
+default shape for independent wave work.
+
+Routing rules:
+
+1. Route dependent multi-PR work to `feature/*` integration lanes.
+2. Keep independent items on separate branches and avoid artificial stacking.
+3. Retarget every upper PR after its parent merges, then rerun validation.
+4. Use a single `feature/* -> main` finalization PR when the stack is collapsed.
+5. Keep `agent/*` as the authoring lane and `feature/*` as the integration lane
+   only when ordering constraints require it.
+
+This routing must stay synchronized with `docs/operations/hybrid-branching-policy-contract.md`
+and the current ship-it/lane-closeout control-loop assets.
+
 ## Plan-First Enforcement
 
 For any implementation intent that touches multiple files or requires design
@@ -300,12 +364,32 @@ interpretation.
 ### Design terms (UI vs UX vs IA)
 
 `ui`, `ux`, and `ia` are distinct disciplines and must not collapse to one route.
+All three may delegate to `IBuySpy-Shared/basecoat-sheen` for AI-assisted UX/UI
+governance, design-system auditing, and finish-coat work. This delegation is
+conditional: direct implementation remains with the local frontend/UX route,
+while governance and audit requests may use the downstream delegate.
 
 | Term | Discipline | Normalized intent | Route to |
 |---|---|---|---|
-| `ui` | User interface — components, layout, visual and interaction implementation | `ui:` | `@frontend-dev`, `@ux-designer` |
-| `ux` | User experience — flows, usability, journeys, interaction design | `ux:` | `@ux-designer`, `@frontend-dev` |
-| `ia` | Information architecture — content structure, navigation, taxonomy, sitemap | `ia:` | `@ux-designer`, `@tech-writer` |
+| `ui` | User interface — components, layout, visual and interaction implementation | `ui:` | `@frontend-dev`, `@ux-designer`; conditional sheen delegate for governance/audit |
+| `ux` | User experience — flows, usability, journeys, interaction design | `ux:` | `@ux-designer`, `@frontend-dev`; conditional sheen delegate for governance/audit |
+| `ia` | Information architecture — content structure, navigation, taxonomy, sitemap | `ia:` | `@ux-designer`, `@tech-writer`; conditional sheen delegate for governance/audit |
+| `design` / `finish-coat` / `sheen` | AI-assisted UX/UI governance, design system, or finish-coat work | `design:` | Delegate to the downstream `basecoat-sheen` catalog |
+
+## Downstream Delegate: basecoat-sheen
+
+`IBuySpy-Shared/basecoat-sheen` is the finish-coat layer of BaseCoat, providing
+AI-assisted UX/UI governance skills.
+
+Delegate routing contract:
+
+1. When a `ui:`, `ux:`, `ia:`, or `design:` request is primarily about
+   governance, auditing, or design-system enforcement, route to `basecoat-sheen`.
+2. When the request is a direct implementation task (write the React component,
+   fix the CSS), route to `@frontend-dev` as primary, with sheen for review.
+3. Verify the downstream repository's current catalog and entry point before
+   delegating; BaseCoat does not assume skill names or contracts in that repo.
+4. Public catalog: [basecoat-sheen](https://github.com/ivegamsft/sheen)
 
 ### Error and failure terms (noun-keyed)
 
@@ -325,6 +409,19 @@ before acting. The `outage:` aliases (`broke`, `broken`, `down`, `dead`,
 running service, site, or app; application code or test defects route to `bug:`
 and GitHub Actions workflow/CI failures route to `workflow:`.
 
+### Credential exposure security subroute
+
+Treat `token exposed`, `secret leaked`, `credential in logs`, `key disclosed`,
+and equivalent phrases as an active `security:` incident. Route to
+`@incident-responder` for containment and closure tracking, then
+`@secrets-manager` for revocation, replacement, and consumer verification, and
+finally `@guardrail` for prevention validation.
+
+Do not introduce a separate intent for credential exposure. Keep the incident
+open and blocked while any credential-owner action remains. Deleting a log,
+removing the disclosure path, or replacing a repository secret does not prove
+the exposed source credential was revoked.
+
 ### Work-in-progress and cleanup
 
 | Term or phrase | Normalized intent | Route to |
@@ -333,11 +430,17 @@ and GitHub Actions workflow/CI failures route to `workflow:`.
 | `backlog wip` | `issue:` (backlog WIP triage) | `@issue-triage` |
 | `clean up branches` / `stale branches` | `chore:` | `@branch-hygiene-sweeper` |
 | `clean up worktrees` / `clean up work trees` / `prune worktrees` | `chore:` | `@branch-hygiene-sweeper` + `git-worktrees` skill |
+| `sync main and clean up branches and worktrees` / `repo cleanup` | `repo-cleanup:` | `repo-cleanup` skill |
 | `finish this lane` / `close out this branch` / `return to main` | `pr:` | `lane-closeout` skill |
 
 Branch cleanup routes to `@branch-hygiene-sweeper`; worktree cleanup additionally
 uses the `git-worktrees` skill (`skills/git-worktrees/SKILL.md`), which owns the
-stale-worktree pruning workflow and its safety checks.
+stale-worktree pruning workflow and its safety checks. A combined "sync main +
+prune worktrees + delete merged branches" ask routes to `repo-cleanup:`,
+which performs its own branch classification and deletion directly (with
+exact-ref safeguards) rather than delegating to `@branch-hygiene-sweeper`,
+and orchestrates only the `git-worktrees` skill for worktree pruning, as
+one bulk sweep (`skills/repo-cleanup/SKILL.md`).
 
 Lane finish requests route first to `skills/lane-closeout/SKILL.md`. It owns
 dirty-WIP capture, sync/publish, PR create-or-update, terminal-state

@@ -9,6 +9,11 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ### Documentation
 
+- Refresh vendored BaseCoat from v4.1.0 (`daf8364`) to v4.5.0
+  (`6573f38`) and update provenance for downstream sync parity. The prior
+  vendor-only `sheen-integrate.prompt.md` and `sheen-upgrade.prompt.md` files
+  are retired with the BaseCoat refresh; consumers should use the maintained
+  sheen onboarding and upgrade scripts/docs instead (#239).
 - Specify guide authoring and HTML delivery: approved-input composition,
   reference-neutral templates, responsive/offline HTML, refresh ownership,
   accessibility and safe-content evidence (#223). Correct the initial new-skill
@@ -19,6 +24,11 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ### Upgrade notes
 
+- Consumers that previously synced `vendor/basecoat/prompts/sheen-integrate.prompt.md`
+  or `vendor/basecoat/prompts/sheen-upgrade.prompt.md` should let the next Sheen
+  sync remove those previously managed vendor-only prompts. Use
+  `skills/sheen-onboard`, `scripts/upgrade-sheen.ps1`, or
+  `scripts/upgrade-sheen.sh` for maintained onboarding and upgrade flows.
 - AI and parity audit reports now record explicit PASS/FAIL/N/A/UNKNOWN check
   results and a non-approving UNRESOLVED gate. Parity `gate_passed` is null when
   unresolved, retaining true/false for decided outcomes. Report consumers must

@@ -31,19 +31,19 @@ param(
   [string]$ExecutionLane = "standard",
 
   [ValidateSet("present", "missing", "not_applicable")]
-  [string]$SpecStatus = "present",
+  [string]$SpecStatus = "missing",
 
   [ValidateSet("present", "missing", "not_applicable")]
-  [string]$DocsStatus = "present",
+  [string]$DocsStatus = "missing",
 
   [ValidateSet("present", "missing", "not_applicable")]
-  [string]$TestsStatus = "present",
+  [string]$TestsStatus = "missing",
 
   [ValidateSet("present", "missing", "not_applicable")]
-  [string]$RunbookStatus = "present",
+  [string]$RunbookStatus = "missing",
 
   [ValidateSet("present", "missing", "not_applicable")]
-  [string]$ReleaseNotesStatus = "present",
+  [string]$ReleaseNotesStatus = "missing",
 
   [string]$GoalIds = "",
 

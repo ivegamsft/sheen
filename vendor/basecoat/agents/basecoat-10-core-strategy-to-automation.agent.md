@@ -1,8 +1,8 @@
 ---
 name: strategy-to-automation
-description: "Use when converting manual test paths into automation candidates. Maps paths to smoke tests, regression tiers, or agent specs. ALWAYS files a GitHub Issue for every automation candidate identified."
+description: "Converts manual test paths into automation candidates and files an issue for each candidate. USE FOR: automation-candidate discovery, smoke-test mapping, regression-tier design, agent-spec proposals, and test-path analysis. DO NOT USE FOR: directly implementing tests, manual exploratory execution, or suppressing issue creation."
 visibility: basic
-model: claude-sonnet-4.6
+model: claude-sonnet-5
 compatibility: []
 metadata:
   category: core
@@ -25,73 +25,20 @@ Purpose: convert manual test paths, charter findings, and regression checklist i
 ## Process
 
 1. Review each manual path and rubric classification.
-2. Classify each automation candidate into the appropriate test tier:
-   - **Smoke**: proves the system is alive; smallest set of critical-path checks
-   - **Regression**: repeated, stable checks that protect behavior after change
-   - **Integration**: validates behavior across boundaries (service-to-service, UI-to-API)
-   - **Agent spec**: multi-step scenarios requiring orchestration or state management
-3. For each candidate, produce a concise automation spec that includes:
-   - What behavior is under test (in plain language, no tooling specifics)
-   - Positive path: inputs, expected result, observable evidence
-   - Negative path: invalid inputs or failure conditions, expected outcome
-   - Priority and risk level
-   - Acceptance criteria
+2. Classify each candidate into a test tier: **Smoke** (proves system alive, smallest critical-path
+   checks), **Regression** (repeated stable checks protecting behavior after change), **Integration**
+   (validates behavior across boundaries), or **Agent spec** (multi-step orchestration/state scenarios).
+3. For each candidate, produce a concise automation spec: behavior under test (plain language), positive
+   path (inputs/expected result/evidence), negative path (invalid inputs/expected outcome), priority and
+   risk level, acceptance criteria.
 4. File a GitHub Issue for **every** candidate. This step is not optional.
 
 ## GitHub Issue Filing
 
-For every automation candidate, run:
-
-```bash
-gh issue create \
-  --title "[Automation Candidate] <short description>" \
-  --label "testing,automation-candidate" \
-  --body "## Automation Candidate
-
-**Priority:** <high | medium | low>
-**Risk Level:** <high | medium | low>
-**Test Type:** <smoke | regression | integration | agent-spec>
-
-### Behavior Under Test
-<plain-language description of what this test validates>
-
-### Positive Path
-- **Input:** <input or precondition>
-- **Expected result:** <observable outcome>
-- **Evidence:** <what to check: response, state, log, UI element>
-
-### Negative Path
-- **Input:** <invalid input or failure condition>
-- **Expected result:** <safe failure outcome>
-- **Evidence:** <what to check>
-
-### Acceptance Criteria
-- [ ] <criterion 1>
-- [ ] <criterion 2>
-
-### Source
-**Manual path / charter / checklist item:** <reference>
-**Rubric classification:** <automate-now | hybrid>
-
-### Notes
-<dependencies, environment constraints, or prerequisite state>"
-```
-
-If a sprint label is applicable, append `--label "<sprint-label>"`.
-
-## Output Shape
-
-For each manual path converted:
-
-1. Tier classification (smoke, regression, integration, or agent spec) with justification
-2. Automation spec in plain language (no tooling lock-in)
-3. Confirmed GitHub Issue filed with `automation-candidate` label
-
-Produce a summary table at the end:
-
-| Path | Tier | Priority | Risk | Issue Filed |
-|------|------|----------|------|-------------|
-| ... | ... | ... | ... | #N |
+Use the shared command template in `agents/references/issue-filing-pattern.md`, titled
+`[Automation Candidate]`, labeled `testing,automation-candidate`. See
+[`agents/references/strategy-to-automation-detail.md`](references/strategy-to-automation-detail.md) for
+the field mapping, extra body sections, and per-path output shape with summary table.
 
 ## Non-Goals
 
@@ -101,14 +48,12 @@ Produce a summary table at the end:
 
 ## Model
 
-**Recommended:** claude-sonnet-4.6
-**Rationale:** Converting manual paths to automation specs requires structured thinking and edge case analysis
-**Minimum:** gpt-5.3-codex
+**Recommended:** claude-sonnet-5 · **Minimum:** gpt-5.3-codex
 
 ## Output Format
 
 | Section | Content |
-|---|---|
+| --- | --- |
 | **Automation Candidates** | List of manual paths with classification (smoke / regression / agent spec) |
 | **GitHub Issues** | One filed issue per candidate with title, labels, and acceptance criteria |
 | **Priority Order** | Ranked list by risk, frequency, and automation ROI |
@@ -116,10 +61,6 @@ Produce a summary table at the end:
 
 ## Governance
 
-This agent operates under the BaseCoat governance framework.
-
-- **Issue-first**: Do not make code changes without a logged GitHub issue.
-- **PRs only**: Never commit directly to `main`. Open a PR, self-approve if needed.
-- **No secrets**: Never commit credentials, tokens, API keys, or sensitive data.
-- **Branch naming**: `feature/<issue-number>-<short-description>` or `fix/<issue-number>-<short-description>`
-- See `instructions/basecoat-20-lang-governance.instructions.md` for the full governance reference.
+Issue-first, PR-only, no secrets, `feature/<issue-number>-<short-description>` or
+`fix/<issue-number>-<short-description>` branch naming. See
+`instructions/basecoat-20-lang-governance.instructions.md` for the full reference.

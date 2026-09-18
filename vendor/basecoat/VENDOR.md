@@ -8,19 +8,20 @@ provides the engineering-SDLC foundation that basecoat-sheen (the design/UX
 
 | Field | Value |
 |---|---|
-| Source | https://github.com/IBuySpy-Shared/basecoat |
-| Commit | `daf83646e67abd6a4e71852917b4acd9fa4075c0` |
-| Commit date | 2026-08-10 |
-| Vendored on | 2026-08-13 |
+| Source | <https://github.com/IBuySpy-Shared/basecoat> |
+| Ref | `v4.5.0` |
+| Commit | `6573f38529d846facb0c4a1f9cd500a1a6a3d2e8` |
+| Commit date | 2026-09-18 |
+| Vendored on | 2026-09-18 |
 | License | See [`LICENSE`](LICENSE) |
 
 ## What is included
 
 The customization assets and the tooling that operates them:
 
-- `skills/` — basecoat skill library (566 files)
-- `agents/` — basecoat agents (371 files)
-- `instructions/` — layered `basecoat-*` instructions (128 files)
+- `skills/` — basecoat skill library
+- `agents/` — basecoat agents
+- `instructions/` — layered `basecoat-*` instructions
 - `prompts/`, `templates/`, `scripts/`
 - Root governance/config: `checks.json`, `.basecoat.yml.example`,
   `basecoat-metadata.json`, `version.json`, `sync.*`, `rollback.*`,
@@ -38,6 +39,9 @@ Heavy, generated, or repo-specific content not needed for the asset library:
 
 - Treat this tree as **read-only**. Do not hand-edit vendored files; changes belong
   upstream in basecoat.
+- Downstream security mitigations must be tracked upstream and update vendored
+  manifest hashes; this snapshot redacts reusable-workflow secret diagnostics
+  pending IBuySpy-Shared/basecoat#3420.
 - Refresh by re-cloning at a new pinned commit and replacing this directory, then
   bumping the Provenance table above and noting it in the repo `CHANGELOG.md`.
 - sheen assets live at the repo root (`../../skills`, `../../agents`, etc.) and MUST

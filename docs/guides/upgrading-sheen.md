@@ -102,6 +102,16 @@ The script runs in six phases:
 Your `.sheen.yml` is **not modified** by the upgrade script. It controls which
 assets are synced, and the upgrade simply re-runs sync at the new ref.
 
+### Retired vendor-only prompts
+
+The BaseCoat v4.5.0 refresh retired the prior vendor-only
+`vendor/basecoat/prompts/sheen-integrate.prompt.md` and
+`vendor/basecoat/prompts/sheen-upgrade.prompt.md` files. They were not
+source-owned Sheen assets. If they were previously synced into your repository,
+let the next Sheen sync remove those managed copies and use `skills/sheen-onboard`
+plus `scripts/upgrade-sheen.ps1` or `scripts/upgrade-sheen.sh` for maintained
+onboarding and upgrade flows.
+
 ---
 
 ## Pinning to a release tag (recommended for production)
@@ -251,4 +261,3 @@ skill is missing from the picker:
 | Skill not visible after reset | SKILL.md in wrong directory | Confirm `path = .github/skills/<name>/SKILL.md` (not `skills/<name>/`) |
 | Old description shown | Context not fully reset | Reload VS Code window again or restart Copilot CLI |
 | `/sheen` routes to wrong skill | Skill description too generic | Check `description:` frontmatter in `SKILL.md`; update and reload |
-
