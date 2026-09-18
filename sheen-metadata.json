@@ -1451,17 +1451,32 @@
         "category": "governance",
         "pillar": "governance",
         "maturity": "stable",
-        "description": "Use when compiling, publishing, or consolidating a style guide or pattern library for a product or team. USE FOR: style-guide compilation, pattern library publication, guideline consolidation. DO NOT USE FOR: single-component-only specs, token validation scripts.",
-        "hash": "f36452dc65daeac8895888eb10484968e09806ae8621c5a8e8e206ac11146730",
+        "description": "Compile or review guides from approved guidance. USE FOR: style-guide compilation, pattern library publication, guideline consolidation, author an offline HTML guide, refresh a generated guide, check guide freshness. DO NOT USE FOR: single-component-only specs, token validation scripts, inventing an identity, choosing a theme, copying a reference deck, generating reporting dashboards.",
+        "hash": "b207deb6226930b7b5042313823926e2535b249e4049127aee651fdb02f04671",
         "files": [
           {
             "path": "SKILL.md",
-            "hash": "f36452dc65daeac8895888eb10484968e09806ae8621c5a8e8e206ac11146730",
+            "hash": "b207deb6226930b7b5042313823926e2535b249e4049127aee651fdb02f04671",
             "hash_mode": "text-lf"
           },
           {
             "path": "eval.yaml",
-            "hash": "4bfa0169654302872bc3e33e836200bd9afc3523b5eabe88a3ed35faac4cd414",
+            "hash": "b738296790940fa64674f84ee2a6000c339e14fdd9517d916db1180f94767a1e",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/guide-contract.md",
+            "hash": "57c8332bb84643f25424fc8e5ab915f3963513c41dccba20ca961875f9bfa6b2",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/module-recipes.md",
+            "hash": "ec71fd71ea806d41fc11202b4bb4e6c0d61025c1bebbf843165a92c8031e6fc3",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "templates/guide-outline.md",
+            "hash": "7c4b47556b1241073cb94a375bfa44e41c1bd19ff84042266f17d1e3310f8c5b",
             "hash_mode": "text-lf"
           }
         ]
@@ -1725,7 +1740,7 @@
         "pillar": "governance",
         "maturity": "draft",
         "description": "Craft-bar critiques, structured design tradeoff decisions, and design governance for sheen surfaces. USE FOR: run craft-quality reviews against design bar criteria, facilitate structured design debates with weighted tradeoffs, produce design decision packages with risks and rationale, govern design consistency and standards conformance across a product portfolio, evaluate design system adoption health. DO NOT USE FOR: pixel-level implementation, brand campaign direction, accessibility WCAG audit, backend engineering.",
-        "hash": "68592fae58e16261904714213f5526b64f855aa49fbbe3b75927f864a63d0095"
+        "hash": "e21890a6fb82df5a1e223c9a6fc2722ecf20ec91d834865bf2705aa7b510e918"
       },
       {
         "name": "design-system-architect",

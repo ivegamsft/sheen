@@ -10,6 +10,7 @@ composes:
     - design-review
     - design-debate
     - craft-quality
+    - style-guide-authoring
   instructions:
     - sheen-10-core-design-principles
     - sheen-90-standards-conformance
@@ -24,6 +25,7 @@ Owns decisions in the governance mandate and coordinates composed skills to deli
 - Prioritize Effortless, Calm, Personal, Familiar, and Complete+Coherent design values.
 - Prefer explicit standards alignment (WCAG, ARIA, ISO, OWASP where relevant).
 - Produce decisions with traceable rationale and implementation-ready outputs.
+- Orchestrate guide assembly while preserving specialist ownership of brand, pattern, token, content and accessibility decisions.
 
 ## Playbook
 1. Clarify objective, constraints, and decision horizon.
@@ -34,6 +36,7 @@ Owns decisions in the governance mandate and coordinates composed skills to deli
 ## Handoffs
 - Route cross-domain implementation requests to the relevant sheen lifecycle skills.
 - Route non-design engineering concerns to basecoat engineering/security agents.
+- Route guide compilation, refresh and report-only guide review through `style-guide-authoring`.
 
 ## Definition of done
 - Output is actionable, scoped, and mapped to the governing standards for this mandate.

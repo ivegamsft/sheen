@@ -2,18 +2,33 @@ name: "style-guide-authoring-routing"
 description: "Routing evaluation — validates trigger activation for style-guide-authoring."
 skill: "skills/style-guide-authoring/SKILL.md"
 scenarios:
-  - id: "pos-1"
-    input: "Need help with style-guide compilation for our product experience."
+  - id: "pos-generate-markdown-guide"
+    input: "Compile our approved tokens, brand voice, pattern records, and component usage rules into a populated Markdown style guide without publishing it."
     expect_activation: true
-  - id: "pos-2"
-    input: "Create a plan for pattern library publication in an upcoming release."
+  - id: "pos-offline-html-profile"
+    input: "Author an offline HTML guide from approved downstream guidance and include provenance, module status, and unresolved input slots."
     expect_activation: true
-  - id: "pos-3"
-    input: "Compare approaches for guideline consolidation and recommend one."
+  - id: "pos-audit-report-only"
+    input: "Review this existing style guide for non-conformance and return findings, severity, owners, and a decision log without writing files."
     expect_activation: true
-  - id: "neg-1"
-    input: "This request is only about single-component-only specs."
+  - id: "pos-refresh-generated-guide"
+    input: "Refresh the generated style guide after an approved typography role revision while preserving stable section IDs and consumer additions."
+    expect_activation: true
+  - id: "pos-freshness-check"
+    input: "Check whether this generated guide is stale against its recorded source revisions and do not change any files."
+    expect_activation: true
+  - id: "pos-template-shell"
+    input: "Produce an unpopulated HTML template shell for a guide using neutral placeholders and an input checklist only."
+    expect_activation: true
+  - id: "neg-pattern-definition-only"
+    input: "Define a new reusable interaction pattern and composition rules, but do not assemble or review a style guide."
     expect_activation: false
-  - id: "neg-2"
-    input: "Please focus exclusively on token validation scripts."
+  - id: "neg-theme-selection"
+    input: "Choose a new application theme from competing color palette and typography candidates for implementation."
+    expect_activation: false
+  - id: "neg-identity-policy-only"
+    input: "Define the new identity principles, logo usage policy, and asset approval rules before any guide authoring starts."
+    expect_activation: false
+  - id: "neg-reporting-dashboard"
+    input: "Build a live revenue dashboard with reporting charts, data refresh, and production deployment."
     expect_activation: false

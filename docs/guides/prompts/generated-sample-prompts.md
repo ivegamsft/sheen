@@ -91,7 +91,7 @@
 | responsive-design | Need help with breakpoint behavior definition for our product experience. |
 | secure-ux | Harden the auth and consent UX so permission prompts are clear, reversible, and least-privilege. |
 | sheen-onboard | Run the full sheen consumer lifecycle from integration through first agent use for this repo |
-| style-guide-authoring | Need help with style-guide compilation for our product experience. |
+| style-guide-authoring | Compile our approved tokens, brand voice, pattern records, and component usage rules into a populated Markdown style guide without publishing it. |
 | taxonomy | Need help with controlled vocabulary design for our product experience. |
 | theming | Create a new partner theme with light, dark, and high-contrast values mapped to existing semantic tokens. |
 | typography | Need help with type ramp definition for our product experience. |

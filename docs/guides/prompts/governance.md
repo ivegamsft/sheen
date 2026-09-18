@@ -270,27 +270,25 @@ CI integration point, and failure triage workflow.
 ### `style-guide-authoring` — Style guide documentation
 
 **Intent:** `style-guide-authoring`  
-**Keywords:** style-guide, document-guidelines, component-spec-page
+**Keywords:** style-guide, document-guidelines, guide-authoring, offline-html-guide, guide-refresh, guide-freshness
 
 **Sample prompt:**
 
 ```
 /sheen style-guide
-Write a style guide entry for our Button component.
-Include: overview, variants (primary/secondary/ghost/danger), sizes (sm/md/lg),
-states (default/hover/focus/active/disabled/loading), usage do/don't,
-accessibility requirements, and token references. Format: Markdown, suitable
-for our docs site.
+Compile our approved tokens, brand voice, pattern records, and component usage
+rules into a populated Markdown style guide. Include provenance, module status,
+review checks, and unresolved input slots; do not publish or update URLs.
 ```
 
 **Flow:**
-1. Define component overview and variants.
-2. Document all sizes and states.
-3. Write usage do/don't rules.
-4. Add accessibility requirements and token references.
-5. Format in Markdown for the docs site.
+1. Classify intent: audit, template, generate, refresh, or freshness check.
+2. Select delivery format: explicit request, existing refresh format, otherwise Markdown.
+3. Map approved inputs to guide modules with provenance and owner status.
+4. Produce the guide for authoring requests; keep audit/check requests report-only.
+5. Return state, review checks, resource inventory, and decision log.
 
-**Output:** Style guide Markdown entry · Variant table · State documentation · Token reference list
+**Output:** Markdown guide by default · HTML profile only when requested · provenance/status summary · audit/check report without writes
 
 ---
 

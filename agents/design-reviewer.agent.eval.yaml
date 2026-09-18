@@ -14,6 +14,9 @@ scenarios:
   - id: "pos-coordinate-review-skills"
     input: "Coordinate design-review, design-debate, and craft-quality into a concise decision log for leadership."
     expect_activation: true
+  - id: "pos-guide-orchestration"
+    input: "Have design-reviewer orchestrate style-guide-authoring for an approved Markdown guide while retaining brand and token owner decisions."
+    expect_activation: true
   - id: "neg-wcag-audit"
     input: "Run a WCAG accessibility audit with contrast findings and ARIA remediation details."
     expect_activation: false

@@ -146,7 +146,7 @@ listed in the table beneath the chart — node labels are abbreviated to fit).
 | ♿ Accessibility | @accessibility-auditor | 3 |
 | 🗂️ Information Architecture | @information-architect | 4 |
 | 🧭 Experience | @experience-architect | 4 |
-| ✅ Governance | @design-reviewer | 3 |
+| ✅ Governance | @design-reviewer | 4 |
 
 ## Skill catalog composition
 

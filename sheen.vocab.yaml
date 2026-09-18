@@ -185,10 +185,10 @@ intents:
     agent: "design-reviewer"
     discriminator: "audit-report"
   - intent: "style-guide-authoring"
-    keywords: ["style-guide", "document-guidelines", "component-spec-page"]
+    keywords: ["style-guide", "document-guidelines", "guide-authoring", "offline-html-guide", "guide-refresh", "guide-freshness"]
     skill: "style-guide-authoring"
     agent: "design-reviewer"
-    discriminator: "component-spec"
+    discriminator: "brand-guide"
   - intent: "design-system-audit"
     keywords: ["design-system-audit", "system-health", "ds-audit"]
     skill: "design-system-audit"

@@ -103,7 +103,7 @@ All 46 intents mapped to their agent, skill, and trigger keywords.
 | `pattern-library-review` | pattern, pattern-library, component-pattern | pattern-library | @design-reviewer |
 | `secure-ux-review` | secure-ux, privacy-ux, security-design | secure-ux | @design-reviewer |
 | `visual-regression` | regression, visual-regression, snapshot | visual-regression | @design-reviewer |
-| `style-guide-authoring` | style-guide, document-guidelines, component-spec-page | style-guide-authoring | @design-reviewer |
+| `style-guide-authoring` | style-guide, document-guidelines, guide-authoring, offline-html-guide, guide-refresh, guide-freshness | style-guide-authoring | @design-reviewer |
 | `design-system-audit` | design-system-audit, system-health, ds-audit | design-system-audit | @design-reviewer |
 | `component-spec` | component-spec, component-anatomy, spec | component-spec | @ux-designer |
 | `design-handoff` | handoff, design-handoff, dev-handoff | design-handoff | @ux-designer |
