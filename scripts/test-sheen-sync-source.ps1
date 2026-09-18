@@ -142,6 +142,11 @@ Assert-Contains $bootstrapSh 'SOURCE="${SHEEN_SOURCE:-https://github.com/ivegams
 Assert-Contains $bootstrapPs1 '[string]$Source = ''https://github.com/ivegamsft/sheen.git''' 'bootstrap.ps1 must generate public mirror source by default'
 Assert-Contains (Read-RepoText '.sheen.yml.example') 'source: https://github.com/ivegamsft/sheen.git' '.sheen.yml.example must scaffold the public mirror source'
 Assert-Contains (Read-RepoText 'docs/getting-started/quick-start.md') 'source: https://github.com/ivegamsft/sheen.git' 'quick-start guide must scaffold the public mirror source'
+foreach ($example in Get-ChildItem -LiteralPath (Join-Path $repoRoot 'docs' 'examples') -Force -File -Filter '.sheen.yml*') {
+    $exampleText = Get-Content -LiteralPath $example.FullName -Raw
+    Assert-NotContains $exampleText 'IBuySpy-Shared/basecoat-sheen' "copyable example $($example.Name) must not default to the private source"
+    Assert-NotContains $exampleText 'ref: v0.5.0' "copyable example $($example.Name) must not pin a nonexistent public mirror tag"
+}
 
 Write-Host '[3/6] scheduled sync template uses internal callable and .sheen.yml source precedence'
 $template = Read-RepoText 'templates/sheen-sync.yml'
