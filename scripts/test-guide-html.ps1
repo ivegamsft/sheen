@@ -74,6 +74,9 @@ Repeated heading fixture.
     Assert-Equal 'BLOCKED' $over.State 'An artifact one byte over the effective limit must fail'
     Assert-True (-not (Test-Path -LiteralPath $overPath)) 'Over-budget output must not publish a normal-looking HTML file'
     Assert-True (Test-Path -LiteralPath "$overPath.blocked.html") 'Over-budget output may retain only a labeled diagnostic artifact'
+    $unmanagedOutput = Join-Path $scratch 'unmanaged.html'
+    Set-Content -LiteralPath $unmanagedOutput -Value 'consumer-authored' -NoNewline
+    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath $unmanagedOutput -RepoRoot $scratch } 'Existing unmanaged HTML outputs must not be overwritten silently' 'unmanaged HTML output'
 
     Write-Host '[3/8] invalid budget overrides are rejected'
     Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bad-budget.html') -BudgetBytes -2 -RepoRoot $scratch } 'Negative budget overrides must be rejected' 'BudgetBytes'
@@ -103,7 +106,11 @@ Repeated heading fixture.
     $bundle = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'index.html') -Packaging local-bundle -AssetManifestPath $bundleManifest -RepoRoot $scratch
     Assert-Equal 'DRAFT' $bundle.State 'Explicit local bundle packaging must pass when in budget without implying READY'
     Assert-Equal ((Get-Item -LiteralPath $asset).Length * 2) $bundle.AssetBytes 'Local bundle budget must count each delivered duplicate copy'
-    Assert-True (Test-Path -LiteralPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'assets', 'swatch-a.png')) 'Local bundle must copy relative asset dependency'
+    Assert-True (Test-Path -LiteralPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'assets', 'index', 'sga-swatch-a.png')) 'Local bundle must copy relative asset dependency'
+    $bundleExact = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle-exact' -AdditionalChildPath 'index.html') -Packaging local-bundle -AssetManifestPath $bundleManifest -RepoRoot $scratch -BudgetBytes $bundle.Bytes -OverrideRationale 'Fixture exact bundle limit' -OverrideAuthorizer 'test'
+    Assert-Equal 'DRAFT' $bundleExact.State 'A local bundle exactly at the effective byte limit must pass'
+    $bundleOver = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle-over' -AdditionalChildPath 'index.html') -Packaging local-bundle -AssetManifestPath $bundleManifest -RepoRoot $scratch -BudgetBytes ($bundle.Bytes - 1) -OverrideRationale 'Fixture over bundle limit' -OverrideAuthorizer 'test'
+    Assert-Equal 'BLOCKED' $bundleOver.State 'A local bundle one byte over the effective limit must fail'
     $duplicateDestManifest = Join-Path $scratch 'duplicate-dest-assets.json'
     @{ assets = @(
         @{ id = 'logo/a'; path = 'swatch.png'; mediaType = 'image/png'; alt = 'A'; permission = 'copy' },
@@ -120,6 +127,9 @@ Repeated heading fixture.
     Write-Host '[6/8] path traversal and remote dependencies are rejected'
     Assert-Throws { Resolve-GuideHtmlPath -RepoRoot $scratch -Path '..\outside.svg' } 'Asset paths must not traverse outside RepoRoot' 'traversal'
     Assert-Throws { Resolve-GuideHtmlOutputPath -RepoRoot $scratch -Path '..\outside.html' } 'Output paths must not traverse outside RepoRoot' 'Output path traversal'
+    $directoryOutput = Join-Path $scratch 'directory-output'
+    New-Item -ItemType Directory -Path $directoryOutput -Force | Out-Null
+    Assert-Throws { Resolve-GuideHtmlOutputPath -RepoRoot $scratch -Path $directoryOutput } 'Output paths must identify files, not directories' 'must be a file'
     Assert-Throws { Resolve-GuideHtmlPath -RepoRoot $scratch -Path 'https://example.com/asset.svg' } 'Remote asset dependencies must not be fetched' 'Remote'
     $outsideGuide = Join-Path ([System.IO.Path]::GetTempPath()) ("sga-229-outside-guide-" + [Guid]::NewGuid().ToString('N') + '.md')
     Set-Content -LiteralPath $outsideGuide -Value '# Outside' -NoNewline
@@ -175,13 +185,17 @@ Repeated heading fixture.
     $parsed = $json | ConvertFrom-Json
     Assert-Equal 'BLOCKED' $parsed.State 'CLI JSON must report BLOCKED for over-budget output'
     Assert-True (@($parsed.Assets).Count -gt 0) 'Blocked budget output must still report diagnostic asset inventory'
+    $cliProfileJson = & $cli -MarkdownPath $guide -OutputPath (Join-Path $scratch 'cli-quick.html') -RepoRoot $scratch -Profile quick-reference 2>$null
+    Assert-Equal 0 $LASTEXITCODE 'CLI must forward supported profile values to the helper'
+    $cliProfile = $cliProfileJson | ConvertFrom-Json
+    Assert-Equal 'quick-reference' $cliProfile.Profile 'CLI profile output must preserve the requested profile'
 
     $consumerAsset = Join-Path $scratch 'bundle' -AdditionalChildPath 'assets', 'consumer-owned.txt'
     Set-Content -LiteralPath $consumerAsset -Value 'do not delete' -NoNewline
     $bundleAgain = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'index.html') -Packaging local-bundle -AssetManifestPath $bundleManifest -RepoRoot $scratch
     Assert-Equal 'DRAFT' $bundleAgain.State 'Repeated local bundle generation should refresh managed assets only'
     Assert-True (Test-Path -LiteralPath $consumerAsset) 'Local bundle publication must not delete consumer-owned assets'
-    $managedAsset = Join-Path $scratch 'bundle' -AdditionalChildPath 'assets', 'swatch-a.png'
+    $managedAsset = Join-Path $scratch 'bundle' -AdditionalChildPath 'assets', 'index', 'sga-swatch-a.png'
     [System.IO.File]::WriteAllBytes($managedAsset, [byte[]](1, 2, 3, 4))
     Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'index.html') -Packaging local-bundle -AssetManifestPath $bundleManifest -RepoRoot $scratch } 'Edited managed assets must block overwrite during refresh' 'edited outside'
     Copy-Item -LiteralPath $asset -Destination $managedAsset -Force
@@ -190,7 +204,7 @@ Repeated heading fixture.
     Copy-Item -LiteralPath $asset -Destination $managedAsset -Force
     $bundleNoAssets = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'index.html') -Packaging local-bundle -RepoRoot $scratch
     Assert-Equal 'DRAFT' $bundleNoAssets.State 'Local bundle refresh with no assets should still reconcile managed assets'
-    Assert-True (-not (Test-Path -LiteralPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'assets', 'swatch-a.png'))) 'Removed local bundle assets must be cleaned up when no longer managed'
+    Assert-True (-not (Test-Path -LiteralPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'assets', 'index', 'sga-swatch-a.png'))) 'Removed local bundle assets must be cleaned up when no longer managed'
     Assert-True (Test-Path -LiteralPath $consumerAsset) 'No-asset refresh must still preserve consumer-owned files'
 
     Write-Host 'All style-guide-authoring HTML packaging scenarios passed (8 scenarios).'

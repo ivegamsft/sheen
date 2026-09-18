@@ -110,6 +110,7 @@ function Resolve-GuideHtmlOutputPath {
     if ($parent) { [void](Resolve-GuideHtmlPath -RepoRoot $rootNormalized -Path ([System.IO.Path]::GetRelativePath($rootNormalized, $parent))) }
     if (Test-Path -LiteralPath $candidate) {
         $item = Get-Item -LiteralPath $candidate -Force
+        if ($item.PSIsContainer) { throw "Output path must be a file, not an existing directory: $Path" }
         $isLink = (($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0)
         if ($item.PSObject.Properties['LinkType'] -and $item.LinkType) { $isLink = $true }
         if ($isLink) { throw "Output path cannot be a symbolic link or reparse point: $Path" }
@@ -161,7 +162,8 @@ function Get-GuideHtmlAssetRecords {
         [string]$AssetManifestPath,
         [Parameter(Mandatory)][string]$RepoRoot,
         [Parameter(Mandatory)][string]$Packaging,
-        [Parameter(Mandatory)][string]$OutputDirectory
+        [Parameter(Mandatory)][string]$OutputDirectory,
+        [string]$BundleId
     )
     $records = [System.Collections.Generic.List[object]]::new()
     $destinations = @{}
@@ -199,20 +201,21 @@ function Get-GuideHtmlAssetRecords {
             })
         } else {
             if ($permission -ne 'copy') { throw "Asset '$id' requires embed permission; local-bundle output cannot copy it silently." }
-            $safeName = (ConvertTo-GuideHtmlId -Text $id) + (Get-ImageExtensionForMediaType -MediaType $mediaType)
+            $safeName = 'sga-' + (ConvertTo-GuideHtmlId -Text $id) + (Get-ImageExtensionForMediaType -MediaType $mediaType)
             if ($destinations.ContainsKey($safeName)) { throw "Asset '$id' normalizes to duplicate bundle destination '$safeName'." }
             $destinations[$safeName] = $true
             $assetDir = Join-Path $OutputDirectory 'assets'
             New-Item -ItemType Directory -Path $assetDir -Force | Out-Null
             $destination = Join-Path $assetDir $safeName
             Copy-Item -LiteralPath $resolved -Destination $destination -Force
+            $relativePath = if ($BundleId) { "assets/$BundleId/$safeName" } else { "assets/$safeName" }
             $records.Add([ordered]@{
                 Id = $id; Mode = 'copied'; Bytes = $bytes.Length; MediaType = $mediaType; Alt = $alt
                 ContributionBytes = $bytes.Length
                 Hash = Get-BytesSha256 -Bytes $bytes
-                Html = "<figure class=`"sga-asset`"><img src=`"assets/$safeName`" alt=`"$(ConvertTo-HtmlText $alt)`"><figcaption>$(ConvertTo-HtmlText $id)</figcaption></figure>"
+                Html = "<figure class=`"sga-asset`"><img src=`"$relativePath`" alt=`"$(ConvertTo-HtmlText $alt)`"><figcaption>$(ConvertTo-HtmlText $id)</figcaption></figure>"
                 DeliveredPath = $destination
-                RelativePath = "assets/$safeName"
+                RelativePath = $relativePath
             })
         }
     }
@@ -246,6 +249,10 @@ function Convert-GuideMarkdownToHtmlBody {
             }
             $i--
             [void]$body.AppendLine('</tbody></table></div>')
+            continue
+        }
+        if ($line -match '^\s*<!--.*-->\s*$') {
+            if ($inList) { [void]$body.AppendLine('</ul>'); $inList = $false }
             continue
         }
         if ($line -match '^(?<hash>#{1,6})\s+(?<title>.+?)\s*$') {
@@ -307,12 +314,16 @@ function New-StyleGuideHtml {
     }
     $outputFullPath = Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path $OutputPath
     $outputDirectory = Split-Path -Parent $outputFullPath
+    $outputLeaf = [System.IO.Path]::GetFileNameWithoutExtension($outputFullPath)
+    $bundleId = ConvertTo-GuideHtmlId -Text $outputLeaf
+    if (-not $bundleId) { $bundleId = 'guide' }
+    $outputMarkerPath = Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path "$outputFullPath.sga-html-output.json"
     $stagingDirectory = Join-Path ([System.IO.Path]::GetTempPath()) ("sga-html-" + [Guid]::NewGuid().ToString('N'))
     New-Item -ItemType Directory -Path $stagingDirectory -Force | Out-Null
     $stagedOutput = Join-Path $stagingDirectory (Split-Path -Leaf $OutputPath)
     try {
     $converted = Convert-GuideMarkdownToHtmlBody -Markdown $markdown
-    $assets = @(Get-GuideHtmlAssetRecords -AssetManifestPath $AssetManifestPath -RepoRoot $RepoRoot -Packaging $Packaging -OutputDirectory $stagingDirectory)
+    $assets = @(Get-GuideHtmlAssetRecords -AssetManifestPath $AssetManifestPath -RepoRoot $RepoRoot -Packaging $Packaging -OutputDirectory $stagingDirectory -BundleId $bundleId)
     $assetHtml = ($assets | ForEach-Object { $_.Html }) -join "`n"
     $nav = ($converted.Navigation | ForEach-Object { "<a href=`"#$($_.Id)`">$(ConvertTo-HtmlText $_.Title)</a>" }) -join "`n"
     $title = if ($converted.Navigation.Count -gt 0) { $converted.Navigation[0].Title } else { 'Style guide' }
@@ -363,9 +374,21 @@ $assetHtml
     $publishedAssets = @()
     if ($passed) {
         New-Item -ItemType Directory -Path $outputDirectory -Force | Out-Null
+        $stagedBytes = [System.IO.File]::ReadAllBytes($stagedOutput)
+        $stagedHash = Get-BytesSha256 -Bytes $stagedBytes
+        if (Test-Path -LiteralPath $outputFullPath) {
+            $existingHash = Get-BytesSha256 -Bytes ([System.IO.File]::ReadAllBytes($outputFullPath))
+            if (Test-Path -LiteralPath $outputMarkerPath) {
+                $marker = Get-Content -LiteralPath $outputMarkerPath -Raw | ConvertFrom-Json
+                if (-not $marker.hash) { throw 'HTML output ownership marker is malformed.' }
+                if ($existingHash -ne [string]$marker.hash) { throw "HTML output was edited outside the HTML helper: $OutputPath" }
+            } elseif ($existingHash -ne $stagedHash) {
+                throw "Refusing to overwrite unmanaged HTML output: $OutputPath"
+            }
+        }
         if ($Packaging -eq 'local-bundle') {
-            $targetAssets = Join-Path $outputDirectory 'assets'
-            [void](Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path $targetAssets)
+            $targetAssets = Join-Path $outputDirectory -ChildPath 'assets' -AdditionalChildPath $bundleId
+            [void](Resolve-GuideHtmlPath -RepoRoot $RepoRoot -Path $targetAssets)
             New-Item -ItemType Directory -Path $targetAssets -Force | Out-Null
             $managedPath = Join-Path $targetAssets '.sga-html-assets.json'
             [void](Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path $managedPath)
@@ -409,17 +432,20 @@ $assetHtml
             }
             foreach ($old in $oldManaged.Keys) {
                 if ($newManaged -contains $old) { continue }
-                Remove-Item -LiteralPath (Join-Path $outputDirectory $old) -Force -ErrorAction SilentlyContinue
+                Remove-Item -LiteralPath (Join-Path $outputDirectory ([string]$old)) -Force -ErrorAction SilentlyContinue
             }
             if (-not (Test-Path -LiteralPath $managedPath) -or (Get-Content -LiteralPath $managedPath -Raw) -ne $managedManifestJson) {
                 Set-Content -LiteralPath $managedPath -Value $managedManifestJson -NoNewline
             }
         }
-        $stagedBytes = [System.IO.File]::ReadAllBytes($stagedOutput)
         if ((Test-Path -LiteralPath $outputFullPath) -and [System.Linq.Enumerable]::SequenceEqual([byte[]]([System.IO.File]::ReadAllBytes($outputFullPath)), [byte[]]$stagedBytes)) {
             $null = $true
         } else {
             Move-Item -LiteralPath $stagedOutput -Destination $outputFullPath -Force
+        }
+        $outputMarkerJson = ([ordered]@{ path = [System.IO.Path]::GetFileName($outputFullPath); hash = $stagedHash } | ConvertTo-Json -Depth 4)
+        if (-not (Test-Path -LiteralPath $outputMarkerPath) -or (Get-Content -LiteralPath $outputMarkerPath -Raw) -ne $outputMarkerJson) {
+            Set-Content -LiteralPath $outputMarkerPath -Value $outputMarkerJson -NoNewline
         }
         foreach ($asset in $assets) {
             $publishedAssets += [ordered]@{
@@ -427,7 +453,7 @@ $assetHtml
                 mode = $asset.Mode
                 bytes = $asset.Bytes
                 contributionBytes = $asset.ContributionBytes
-                path = if ($asset.DeliveredPath) { Join-Path $outputDirectory ([System.IO.Path]::GetRelativePath($stagingDirectory, $asset.DeliveredPath)) } else { $null }
+                path = if ($asset.RelativePath) { Join-Path $outputDirectory $asset.RelativePath } else { $null }
             }
         }
     } else {
@@ -456,8 +482,8 @@ $assetHtml
             }
         )
         Checks = [ordered]@{
-            localFile = 'PASS'; offline = 'PASS'; noJavaScript = 'PASS'
-            navigation = if ($converted.Navigation.Count -gt 0) { 'PASS' } else { 'UNKNOWN' }
+            localFile = 'UNKNOWN'; offline = 'UNKNOWN'; noJavaScript = 'UNKNOWN'
+            navigation = 'UNKNOWN'
             print = 'UNKNOWN'
             outline = $converted.Outline
         }
