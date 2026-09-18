@@ -37,8 +37,8 @@ jobs:
     # Pinned to a commit SHA, matching the basecoat consumer-update convention.
     # The callable workflow exists only in the internal source repo; the public
     # ivegamsft/sheen mirror hosts docs/bootstrap assets and does NOT host it.
-    # SHA below is basecoat-sheen v0.12.1.
-    uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@2060ffc487c2b8c52d7ef918d95657b8813c606c
+    # SHA below includes the Sheen public-mirror fallback and source normalization fixes.
+    uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@256da85bbdfb1e86b43b1ea8d05208a9e1ad6110
     with:
       # source_repo and source_ref are read from .sheen.yml by default.
       # Override source_repo here to force a source; source_ref can also be
