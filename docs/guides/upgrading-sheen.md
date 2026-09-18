@@ -110,7 +110,7 @@ For stable, reproducible upgrades pin `ref` in `.sheen.yml` to a semver tag:
 
 ```yaml
 # .sheen.yml
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: v0.7.0   # ← pin to a release tag
 ```
 
