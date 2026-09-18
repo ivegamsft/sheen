@@ -14,7 +14,7 @@ Classify the request before producing output:
 | Audit | Review a supplied guide against applicable contracts. Return findings, severity, remediation owners and a decision log. Do not create, refresh or publish artifacts. |
 | Template | Produce an original neutral shell labeled `TEMPLATE` with visible placeholders and an input checklist. Do not invent values or approvals. |
 | Generate | Populate included modules from approved inputs. Missing, proposed or unknown decisions remain visible and unresolved. |
-| Refresh | Update only explicitly guide-owned artifacts from changed approved inputs. Preserve stable IDs and consumer additions; block when ownership is unclear. |
+| Refresh | Reuse freshness evidence for an existing guide. CURRENT is a no-op; STALE/UNKNOWN remains a report-only PARTIAL result until separately authorized regeneration updates owned content and evidence. Preserve stable IDs and consumer additions; block when ownership is unclear. |
 | Check | Compare an existing generated guide and its recorded provenance with current authorized inputs and current evidence for guide-owned artifacts. Report CURRENT only when both comparison inputs are available and unchanged; report STALE for verified differences and UNKNOWN when current inputs or owned-artifact evidence are unavailable. Do not mutate guide files, sources, metadata or timestamps. |
 
 Select delivery format independently from intent. An explicit HTML request selects the HTML profile. A refresh keeps the existing guide format unless the request names a replacement. Otherwise authoring defaults to Markdown. Do not create both Markdown and HTML unless explicitly requested.

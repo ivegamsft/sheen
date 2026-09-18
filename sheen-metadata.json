@@ -1452,11 +1452,11 @@
         "pillar": "governance",
         "maturity": "stable",
         "description": "Compile or review guides from approved guidance. USE FOR: style-guide compilation, pattern library publication, guideline consolidation, author an offline HTML guide, refresh a generated guide, check guide freshness. DO NOT USE FOR: single-component-only specs, token validation scripts, inventing an identity, choosing a theme, copying a reference deck, generating reporting dashboards.",
-        "hash": "b207deb6226930b7b5042313823926e2535b249e4049127aee651fdb02f04671",
+        "hash": "7fa1746146f3c39c1c4deb60b235cd553512dbaeba5d1c2bdf0f177c1e54c8e2",
         "files": [
           {
             "path": "SKILL.md",
-            "hash": "b207deb6226930b7b5042313823926e2535b249e4049127aee651fdb02f04671",
+            "hash": "7fa1746146f3c39c1c4deb60b235cd553512dbaeba5d1c2bdf0f177c1e54c8e2",
             "hash_mode": "text-lf"
           },
           {
@@ -1466,7 +1466,12 @@
           },
           {
             "path": "references/guide-contract.md",
-            "hash": "57c8332bb84643f25424fc8e5ab915f3963513c41dccba20ca961875f9bfa6b2",
+            "hash": "bdea7a6c0b67373feeb0112db8e85799ef8d497bce9c8c5041da81cf9babbdcd",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/input-provenance.md",
+            "hash": "dcaf86eef1f454a4f54aaf8cf964e7121679b22de6c4eea1ce4e4beaf3ae416c",
             "hash_mode": "text-lf"
           },
           {
@@ -1475,8 +1480,23 @@
             "hash_mode": "text-lf"
           },
           {
+            "path": "scripts/GuideInputs.psm1",
+            "hash": "823b4a519a510771da1313215a565fbaab3b63dcc5b5b80971e6c4497b459549",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "scripts/check-guide-freshness.ps1",
+            "hash": "f269dbc331c351fbc4b6196b9c0a03564b3e0052b5e1f225f83a85ce9c5368c3",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "scripts/refresh-guide.ps1",
+            "hash": "78230ced3c30bb1848dc87b55a8ba8ea7135b854fc1debcd7d69d031342f8ee8",
+            "hash_mode": "text-lf"
+          },
+          {
             "path": "templates/guide-outline.md",
-            "hash": "7c4b47556b1241073cb94a375bfa44e41c1bd19ff84042266f17d1e3310f8c5b",
+            "hash": "66c53623457854e6ed2fa9d1ce531641f03d8f2d0de0ffc5b1118959d931ea5f",
             "hash_mode": "text-lf"
           }
         ]

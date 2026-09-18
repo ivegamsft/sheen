@@ -16,12 +16,13 @@ must identify the exact guide content authorized by that source.
 
 | Source ID | Revision or digest | Approval state | Supported module or rule |
 |---|---|---|---|
-| {{source_identifier}} | {{revision_or_digest}} | {{APPROVED|PROPOSED|UNKNOWN}} | {{module_or_rule}} |
+| {{source_identifier}} | {{revision_or_digest}} | {{APPROVED|PROPOSED|DERIVED|UNKNOWN|TEMPLATE}} | {{module_or_rule}} |
 
 ### Module status
 
 Use source IDs from the approved-input table so every populated module remains
-traceable to its authorized revisions.
+traceable to its authorized revisions. For `not applicable`, put the rationale
+in `Missing or proposed items`.
 
 | Module | Status | Owner | Approved source IDs | Missing or proposed items |
 |---|---|---|---|---|

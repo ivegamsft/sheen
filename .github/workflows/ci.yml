@@ -122,6 +122,9 @@ jobs:
       - name: Validate - operative audit contracts
         run: pwsh -NonInteractive -File scripts/test-audit-contracts.ps1
 
+      - name: Validate - style guide authoring canonical inputs and freshness (#228)
+        run: pwsh -NonInteractive -File scripts/test-guide-inputs.ps1
+
       - name: Validate - explicit source external delegates
         run: pwsh -NonInteractive -File scripts/test-external-delegates.ps1
 
@@ -156,6 +159,17 @@ jobs:
           else
             echo "invalid-sample.json correctly failed the Experience Blueprint contract checks."
           fi
+
+  guide-inputs-windows:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v4
+
+      - name: Validate - style guide authoring canonical inputs and freshness (#228)
+        shell: pwsh
+        run: .\scripts\test-guide-inputs.ps1
 
   eval-routing:
     runs-on: ubuntu-latest

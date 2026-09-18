@@ -20,13 +20,14 @@ Compile or review style guides from approved product, brand, pattern and design-
 Before acting, read:
 - `references/guide-contract.md`
 - `references/module-recipes.md`
+- `references/input-provenance.md` for source IDs, scope, status and freshness precedence
 - `templates/guide-outline.md` when authoring or refreshing
 
 ## Workflow
 1. Classify request intent as audit, template, generate, refresh or freshness check.
 2. Select delivery format: explicit request first, then existing guide format for refresh, otherwise Markdown.
 3. Separate structural references from approved downstream inputs; never promote reference content into output.
-4. Map each module to provenance, status and retained specialist owner.
+4. Map each module to a permitted source ID, scope, status, revision and retained specialist owner (`references/input-provenance.md`); conflicting approved sources for one scope are BLOCKED, missing evidence stays unresolved.
 5. Perform only the selected operation and deliver the scoped output.
 
 ## Guardrails
@@ -34,7 +35,8 @@ Before acting, read:
 - Do not hide uncertainty in compliance judgments.
 - Do not recommend changes without clear ownership and closure criteria.
 - Do not conflate style preference with contractual requirement.
-- Do not write artifacts for audit-only or freshness-check requests.
+- Do not write artifacts, sources or metadata/timestamps for audit-only or freshness-check requests; freshness (CURRENT/STALE/UNKNOWN) is never a promotion to READY.
+- Do not require `scripts/*.ps1` in this folder for a downstream/copied skill; an equivalent approved artifact with the same scope and evidence is sufficient.
 - Do not publish, configure URLs, package portable HTML, or change application styles without separate authorization.
 
 ## Output
