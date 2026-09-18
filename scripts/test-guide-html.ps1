@@ -73,10 +73,18 @@ Repeated heading fixture.
     Assert-True (Test-Path -LiteralPath "$overPath.blocked.html") 'Over-budget output may retain only a labeled diagnostic artifact'
 
     Write-Host '[3/8] invalid budget overrides are rejected'
-    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bad-budget.html') -BudgetBytes -1 } 'Negative budget overrides must be rejected' 'BudgetBytes'
+    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bad-budget.html') -BudgetBytes -2 } 'Negative budget overrides must be rejected' 'BudgetBytes'
+    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'zero-budget.html') -BudgetBytes 0 -OverrideRationale 'Fixture' -OverrideAuthorizer 'test' } 'Explicit zero budget overrides must be rejected' 'zero is invalid'
     Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'missing-auth.html') -BudgetBytes 100 } 'Budget overrides require rationale and authorizer' 'requires rationale'
     Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bad-lang.html') -Language 'en" onclick="bad' } 'Language must be validated before being written to an HTML attribute' 'Language'
-    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'unsupported-profile.html') -Profile quick-reference } 'Unsupported profiles must be rejected until they have distinct rendering behavior' 'Profile'
+    $quick = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'quick-reference.html') -Profile quick-reference -RepoRoot $scratch
+    $quickContent = Get-Content -LiteralPath (Join-Path $scratch 'quick-reference.html') -Raw
+    Assert-Equal 'DRAFT' $quick.State 'Quick-reference profile must render as an explicit supported profile'
+    Assert-True ($quickContent -match 'sga-profile-quick-reference') 'Quick-reference profile must use distinct layout hooks'
+    $presentation = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'presentation.html') -Profile presentation-inspired -RepoRoot $scratch
+    $presentationContent = Get-Content -LiteralPath (Join-Path $scratch 'presentation.html') -Raw
+    Assert-Equal 'DRAFT' $presentation.State 'Presentation-inspired profile must render as an explicit supported profile'
+    Assert-True ($presentationContent -match 'sga-profile-presentation-inspired') 'Presentation-inspired profile must use distinct layout hooks'
 
     Write-Host '[4/8] local bundle requires explicit selection and counts copied duplicates'
     $bundleManifest = Join-Path $scratch 'bundle-assets.json'
@@ -103,11 +111,12 @@ Repeated heading fixture.
     Write-Host '[5/8] unsafe URLs and raw executable markup fail visibly'
     $unsafe = Join-Path $scratch 'unsafe.md'
     Set-Content -LiteralPath $unsafe -Value '# Unsafe guide' -NoNewline
-    Assert-Throws { Assert-SafeGuideMarkdown -Markdown '[bad](javascript:alert(1))' } 'Executable guide links must be rejected' 'Unsafe'
+    Assert-Throws { Assert-SafeGuideMarkdown -Markdown '[bad](javascript:alert(1))' } 'Executable guide links must be rejected' 'Unsupported URL scheme'
     Assert-Throws { Assert-SafeGuideMarkdown -Markdown '<script>alert(1)</script>' } 'Raw script markup must be rejected' 'Unsafe'
 
     Write-Host '[6/8] path traversal and remote dependencies are rejected'
     Assert-Throws { Resolve-GuideHtmlPath -RepoRoot $scratch -Path '..\outside.svg' } 'Asset paths must not traverse outside RepoRoot' 'traversal'
+    Assert-Throws { Resolve-GuideHtmlOutputPath -RepoRoot $scratch -Path '..\outside.html' } 'Output paths must not traverse outside RepoRoot' 'Output path traversal'
     Assert-Throws { Resolve-GuideHtmlPath -RepoRoot $scratch -Path 'https://example.com/asset.svg' } 'Remote asset dependencies must not be fetched' 'Remote'
     $badMediaTypeManifest = Join-Path $scratch 'bad-media-type-assets.json'
     @{ assets = @(@{ id = 'bad-media'; path = 'swatch.png'; mediaType = 'x" onerror="alert(1)"'; alt = 'Bad'; permission = 'embed' }) } |
@@ -142,6 +151,13 @@ Repeated heading fixture.
     Assert-True ($LASTEXITCODE -ne 0) 'CLI must exit nonzero for a blocked over-budget artifact'
     $parsed = $json | ConvertFrom-Json
     Assert-Equal 'BLOCKED' $parsed.State 'CLI JSON must report BLOCKED for over-budget output'
+    Assert-True (@($parsed.Assets).Count -gt 0) 'Blocked budget output must still report diagnostic asset inventory'
+
+    $consumerAsset = Join-Path $scratch 'bundle' -AdditionalChildPath 'assets', 'consumer-owned.txt'
+    Set-Content -LiteralPath $consumerAsset -Value 'do not delete' -NoNewline
+    $bundleAgain = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'index.html') -Packaging local-bundle -AssetManifestPath $bundleManifest -RepoRoot $scratch
+    Assert-Equal 'DRAFT' $bundleAgain.State 'Repeated local bundle generation should refresh managed assets only'
+    Assert-True (Test-Path -LiteralPath $consumerAsset) 'Local bundle publication must not delete consumer-owned assets'
 
     Write-Host 'All style-guide-authoring HTML packaging scenarios passed (8 scenarios).'
     exit 0

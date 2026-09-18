@@ -23,6 +23,29 @@ function ConvertTo-GuideHtmlId {
     return $id
 }
 
+function Test-SafeGuideUrl {
+    param([Parameter(Mandatory)][string]$Url)
+    $trimmed = $Url.Trim()
+    return $trimmed -match '^(?i)(https?|mailto):' -or $trimmed.StartsWith('#') -or ($trimmed -notmatch ':' -and -not $trimmed.StartsWith('//'))
+}
+
+function ConvertTo-SafeInlineHtml {
+    param([Parameter(Mandatory)][AllowEmptyString()][string]$Text)
+    $pattern = '\[(?<label>[^\]]+)\]\((?<url>[^)]+)\)'
+    $parts = [System.Collections.Generic.List[string]]::new()
+    $last = 0
+    foreach ($m in [regex]::Matches($Text, $pattern)) {
+        $parts.Add((ConvertTo-HtmlText $Text.Substring($last, $m.Index - $last)))
+        $label = $m.Groups['label'].Value
+        $url = $m.Groups['url'].Value.Trim()
+        if (-not (Test-SafeGuideUrl -Url $url)) { throw "Unsupported URL scheme in guide content: $url" }
+        $parts.Add("<a href=`"$(ConvertTo-HtmlText $url)`">$(ConvertTo-HtmlText $label)</a>")
+        $last = $m.Index + $m.Length
+    }
+    $parts.Add((ConvertTo-HtmlText $Text.Substring($last)))
+    return ($parts -join '')
+}
+
 function Resolve-GuideHtmlPath {
     param([Parameter(Mandatory)][string]$RepoRoot, [Parameter(Mandatory)][string]$Path)
     if ([System.Uri]::IsWellFormedUriString($Path, [System.UriKind]::Absolute)) {
@@ -53,14 +76,33 @@ function Resolve-GuideHtmlPath {
     return $candidate
 }
 
+function Resolve-GuideHtmlOutputPath {
+    param([Parameter(Mandatory)][string]$RepoRoot, [Parameter(Mandatory)][string]$Path)
+    $rootFull = [System.IO.Path]::GetFullPath($RepoRoot)
+    $rootNormalized = $rootFull.TrimEnd([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar)
+    $candidate = if ([System.IO.Path]::IsPathRooted($Path)) {
+        [System.IO.Path]::GetFullPath($Path)
+    } else {
+        [System.IO.Path]::GetFullPath((Join-Path $rootFull $Path))
+    }
+    $comparison = if ($IsWindows) { [System.StringComparison]::OrdinalIgnoreCase } else { [System.StringComparison]::Ordinal }
+    $rootWithSep = $rootNormalized + [System.IO.Path]::DirectorySeparatorChar
+    if (-not $candidate.Equals($rootNormalized, $comparison) -and -not $candidate.StartsWith($rootWithSep, $comparison)) {
+        throw "Output path traversal outside RepoRoot is not permitted: $Path"
+    }
+    $parent = Split-Path -Parent $candidate
+    if ($parent) { [void](Resolve-GuideHtmlPath -RepoRoot $rootNormalized -Path ([System.IO.Path]::GetRelativePath($rootNormalized, $parent))) }
+    return $candidate
+}
+
 function Assert-SafeGuideMarkdown {
     param([Parameter(Mandatory)][string]$Markdown)
-    if ($Markdown -match '(?is)<\s*script\b|<\s*iframe\b|on[a-z]+\s*=|javascript\s*:|data\s*:') {
+    if ($Markdown -match '(?is)<\s*script\b|<\s*iframe\b|<[^>]+\son[a-z]+\s*=') {
         throw 'Unsafe markup or executable URL was rejected before HTML rendering.'
     }
     foreach ($m in [regex]::Matches($Markdown, '\[[^\]]+\]\((?<url>[^)]+)\)')) {
         $url = $m.Groups['url'].Value.Trim()
-        if ($url -match '^(?i)(https?|mailto):' -or $url.StartsWith('#') -or ($url -notmatch ':' -and -not $url.StartsWith('//'))) { continue }
+        if (Test-SafeGuideUrl -Url $url) { continue }
         throw "Unsupported URL scheme in guide content: $url"
     }
 }
@@ -102,6 +144,7 @@ function Get-GuideHtmlAssetRecords {
             if ($permission -ne 'embed') { throw "Asset '$id' requires local-bundle packaging; self-contained output cannot copy it silently." }
             $records.Add([ordered]@{
                 Id = $id; Mode = 'embedded'; Bytes = $bytes.Length; MediaType = $mediaType; Alt = $alt
+                ContributionBytes = (Get-Utf8ByteCount -Text ([Convert]::ToBase64String($bytes)))
                 Html = "<figure class=`"sga-asset`"><img src=`"data:$(ConvertTo-HtmlText $mediaType);base64,$([Convert]::ToBase64String($bytes))`" alt=`"$(ConvertTo-HtmlText $alt)`"><figcaption>$(ConvertTo-HtmlText $id)</figcaption></figure>"
                 DeliveredPath = $null
             })
@@ -116,6 +159,7 @@ function Get-GuideHtmlAssetRecords {
             Copy-Item -LiteralPath $resolved -Destination $destination -Force
             $records.Add([ordered]@{
                 Id = $id; Mode = 'copied'; Bytes = $bytes.Length; MediaType = $mediaType; Alt = $alt
+                ContributionBytes = $bytes.Length
                 Html = "<figure class=`"sga-asset`"><img src=`"assets/$safeName`" alt=`"$(ConvertTo-HtmlText $alt)`"><figcaption>$(ConvertTo-HtmlText $id)</figcaption></figure>"
                 DeliveredPath = $destination
             })
@@ -130,6 +174,8 @@ function Convert-GuideMarkdownToHtmlBody {
     $body = [System.Text.StringBuilder]::new()
     $inList = $false
     $usedIds = @{}
+    $h1Count = 0
+    $previousLevel = 0
     $lines = @($Markdown -split '\r?\n')
     for ($i = 0; $i -lt $lines.Count; $i++) {
         $line = $lines[$i]
@@ -137,13 +183,13 @@ function Convert-GuideMarkdownToHtmlBody {
             if ($inList) { [void]$body.AppendLine('</ul>'); $inList = $false }
             $headers = @($line.Trim().Trim('|') -split '\|' | ForEach-Object { $_.Trim() })
             [void]$body.AppendLine('<div class="sga-table-wrap"><table><thead><tr>')
-            foreach ($header in $headers) { [void]$body.AppendLine("<th>$(ConvertTo-HtmlText $header)</th>") }
+            foreach ($header in $headers) { [void]$body.AppendLine("<th>$(ConvertTo-SafeInlineHtml $header)</th>") }
             [void]$body.AppendLine('</tr></thead><tbody>')
             $i += 2
             while ($i -lt $lines.Count -and $lines[$i].Trim().StartsWith('|')) {
                 $cells = @($lines[$i].Trim().Trim('|') -split '\|' | ForEach-Object { $_.Trim() })
                 [void]$body.AppendLine('<tr>')
-                foreach ($cell in $cells) { [void]$body.AppendLine("<td>$(ConvertTo-HtmlText $cell)</td>") }
+                foreach ($cell in $cells) { [void]$body.AppendLine("<td>$(ConvertTo-SafeInlineHtml $cell)</td>") }
                 [void]$body.AppendLine('</tr>')
                 $i++
             }
@@ -154,6 +200,9 @@ function Convert-GuideMarkdownToHtmlBody {
         if ($line -match '^(?<hash>#{1,6})\s+(?<title>.+?)\s*$') {
             if ($inList) { [void]$body.AppendLine('</ul>'); $inList = $false }
             $level = [Math]::Min($Matches.hash.Length, 6)
+            if ($level -eq 1) { $h1Count++ }
+            if ($previousLevel -gt 0 -and $level -gt ($previousLevel + 1)) { throw "Heading level jumps from h$previousLevel to h$level." }
+            $previousLevel = $level
             $title = $Matches.title.Trim()
             $baseId = ConvertTo-GuideHtmlId -Text $title
             $id = $baseId
@@ -167,16 +216,17 @@ function Convert-GuideMarkdownToHtmlBody {
             [void]$body.AppendLine("<h$level id=`"$id`">$(ConvertTo-HtmlText $title)</h$level>")
         } elseif ($line -match '^\s*[-*]\s+(?<item>.+?)\s*$') {
             if (-not $inList) { [void]$body.AppendLine('<ul>'); $inList = $true }
-            [void]$body.AppendLine("<li>$(ConvertTo-HtmlText $Matches.item)</li>")
+            [void]$body.AppendLine("<li>$(ConvertTo-SafeInlineHtml $Matches.item)</li>")
         } elseif ($line.Trim().Length -eq 0) {
             if ($inList) { [void]$body.AppendLine('</ul>'); $inList = $false }
         } else {
             if ($inList) { [void]$body.AppendLine('</ul>'); $inList = $false }
-            [void]$body.AppendLine("<p>$(ConvertTo-HtmlText $line.Trim())</p>")
+            [void]$body.AppendLine("<p>$(ConvertTo-SafeInlineHtml $line.Trim())</p>")
         }
     }
     if ($inList) { [void]$body.AppendLine('</ul>') }
-    return [ordered]@{ Body = $body.ToString(); Navigation = @($nav) }
+    if ($h1Count -ne 1) { throw "HTML guides require exactly one primary H1 heading; found $h1Count." }
+    return [ordered]@{ Body = $body.ToString(); Navigation = @($nav); Outline = 'PASS' }
 }
 
 function New-StyleGuideHtml {
@@ -184,28 +234,30 @@ function New-StyleGuideHtml {
         [Parameter(Mandatory)][string]$MarkdownPath,
         [Parameter(Mandatory)][string]$OutputPath,
         [ValidateSet('self-contained', 'local-bundle')][string]$Packaging = 'self-contained',
-        [ValidateSet('reference-manual')][string]$Profile = 'reference-manual',
+        [ValidateSet('reference-manual', 'presentation-inspired', 'quick-reference')][string]$Profile = 'reference-manual',
         [string]$AssetManifestPath,
         [string]$RepoRoot = (Get-Location).Path,
-        [int]$BudgetBytes = 0,
+        [int]$BudgetBytes = -1,
         [string]$OverrideRationale,
         [string]$OverrideAuthorizer,
         [ValidatePattern('^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$')][string]$Language = 'en'
     )
     $markdown = Get-Content -LiteralPath $MarkdownPath -Raw
     Assert-SafeGuideMarkdown -Markdown $markdown
-    if ($BudgetBytes -lt 0) { throw 'BudgetBytes must be a positive integer override, or 0 to use the default.' }
-    if ($BudgetBytes -eq 0) {
+    if ($BudgetBytes -lt -1) { throw 'BudgetBytes must be a positive integer override, or omitted to use the default.' }
+    if ($BudgetBytes -eq -1) {
         $effectiveBudget = $script:DefaultHtmlBudgets[$Packaging]
     } else {
+        if ($BudgetBytes -eq 0) { throw 'BudgetBytes override must be a positive integer; zero is invalid.' }
         if (-not $OverrideRationale -or -not $OverrideAuthorizer) { throw 'Budget override requires rationale and authorizer.' }
         $effectiveBudget = $BudgetBytes
     }
-    $outputFullPath = [System.IO.Path]::GetFullPath($OutputPath)
+    $outputFullPath = Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path $OutputPath
     $outputDirectory = Split-Path -Parent $outputFullPath
     $stagingDirectory = Join-Path ([System.IO.Path]::GetTempPath()) ("sga-html-" + [Guid]::NewGuid().ToString('N'))
     New-Item -ItemType Directory -Path $stagingDirectory -Force | Out-Null
     $stagedOutput = Join-Path $stagingDirectory (Split-Path -Leaf $OutputPath)
+    try {
     $converted = Convert-GuideMarkdownToHtmlBody -Markdown $markdown
     $assets = @(Get-GuideHtmlAssetRecords -AssetManifestPath $AssetManifestPath -RepoRoot $RepoRoot -Packaging $Packaging -OutputDirectory $stagingDirectory)
     $assetHtml = ($assets | ForEach-Object { $_.Html }) -join "`n"
@@ -227,6 +279,8 @@ nav{position:sticky;top:0;align-self:start}nav a{display:block;padding:.35rem;co
 main{min-width:0}section,.sga-card{border:1px solid var(--sga-border);border-radius:.5rem;padding:1rem;margin:1rem 0}.sga-asset img{max-width:100%;height:auto}
 .sga-table-wrap{max-width:100%;overflow-x:auto}table{border-collapse:collapse;width:100%;margin:1rem 0}th,td{border:1px solid var(--sga-border);padding:.4rem;text-align:left;vertical-align:top}
 .sga-profile-reference-manual main{max-width:52rem}
+.sga-profile-presentation-inspired main{max-width:60rem}.sga-profile-presentation-inspired h2{font-size:2rem;margin-top:2.5rem}.sga-profile-presentation-inspired .sga-card{font-size:1.125rem}
+.sga-profile-quick-reference main{max-width:44rem}.sga-profile-quick-reference p,.sga-profile-quick-reference li{line-height:1.35}.sga-profile-quick-reference .sga-card{padding:.65rem;margin:.65rem 0}
 @media (max-width:40rem){.sga-shell{display:block}nav{position:static}}
 @media print{@page{size:auto;margin:12mm}nav,.sga-skip{display:none}body{font-size:11pt}.sga-shell{display:block;max-width:none}h1,h2,h3{break-after:avoid}section,.sga-card{break-inside:avoid}}
 </style>
@@ -256,14 +310,32 @@ $assetHtml
         Move-Item -LiteralPath $stagedOutput -Destination $outputFullPath -Force
         if ($Packaging -eq 'local-bundle' -and (Test-Path -LiteralPath (Join-Path $stagingDirectory 'assets'))) {
             $targetAssets = Join-Path $outputDirectory 'assets'
-            if (Test-Path -LiteralPath $targetAssets) { Remove-Item -LiteralPath $targetAssets -Recurse -Force }
-            Move-Item -LiteralPath (Join-Path $stagingDirectory 'assets') -Destination $targetAssets
+            New-Item -ItemType Directory -Path $targetAssets -Force | Out-Null
+            $managedPath = Join-Path $targetAssets '.sga-html-assets.json'
+            $oldManaged = @()
+            if (Test-Path -LiteralPath $managedPath) { $oldManaged = @((Get-Content -LiteralPath $managedPath -Raw | ConvertFrom-Json)) }
+            $newManaged = @()
+            foreach ($asset in $assets) {
+                $relativeAsset = [System.IO.Path]::GetRelativePath($stagingDirectory, $asset.DeliveredPath)
+                $target = Join-Path $outputDirectory $relativeAsset
+                if ((Test-Path -LiteralPath $target) -and $oldManaged -notcontains $relativeAsset) {
+                    throw "Refusing to overwrite unmanaged bundle asset: $relativeAsset"
+                }
+                Copy-Item -LiteralPath $asset.DeliveredPath -Destination $target -Force
+                $newManaged += $relativeAsset
+            }
+            foreach ($old in $oldManaged) {
+                if ($newManaged -contains $old) { continue }
+                Remove-Item -LiteralPath (Join-Path $outputDirectory $old) -Force -ErrorAction SilentlyContinue
+            }
+            $newManaged | ConvertTo-Json | Set-Content -LiteralPath $managedPath -NoNewline
         }
         foreach ($asset in $assets) {
             $publishedAssets += [ordered]@{
                 id = $asset.Id
                 mode = $asset.Mode
                 bytes = $asset.Bytes
+                contributionBytes = $asset.ContributionBytes
                 path = if ($asset.DeliveredPath) { Join-Path $outputDirectory ([System.IO.Path]::GetRelativePath($stagingDirectory, $asset.DeliveredPath)) } else { $null }
             }
         }
@@ -272,7 +344,6 @@ $assetHtml
         New-Item -ItemType Directory -Path $outputDirectory -Force | Out-Null
         Set-Content -LiteralPath $diagnosticPath -Value "<!-- BLOCKED: over budget diagnostic artifact, not approved output -->`n$html" -NoNewline -Encoding utf8
     }
-    Remove-Item -LiteralPath $stagingDirectory -Recurse -Force -ErrorAction SilentlyContinue
     return [ordered]@{
         State = if ($passed) { 'DRAFT' } else { 'BLOCKED' }
         Packaging = $Packaging
@@ -283,14 +354,26 @@ $assetHtml
         AssetBytes = $assetBytes
         BudgetBytes = $effectiveBudget
         BudgetPassed = $passed
-        Assets = @($publishedAssets)
+        Assets = @(
+            if ($passed) {
+                $publishedAssets | Sort-Object contributionBytes -Descending
+            } else {
+                $assets | Sort-Object ContributionBytes -Descending | ForEach-Object {
+                    [ordered]@{ id = $_.Id; mode = $_.Mode; bytes = $_.Bytes; contributionBytes = $_.ContributionBytes; path = $null }
+                }
+            }
+        )
         Checks = [ordered]@{
             localFile = 'PASS'; offline = 'PASS'; noJavaScript = 'PASS'
             navigation = if ($converted.Navigation.Count -gt 0) { 'PASS' } else { 'UNKNOWN' }
             print = 'UNKNOWN'
+            outline = $converted.Outline
         }
         Reasons = if ($passed) { @() } else { @("Artifact is $($bundleBytes - $effectiveBudget) byte(s) over the selected packaging budget.") }
     }
+    } finally {
+        Remove-Item -LiteralPath $stagingDirectory -Recurse -Force -ErrorAction SilentlyContinue
+    }
 }
 
-Export-ModuleMember -Function Get-Utf8ByteCount, Resolve-GuideHtmlPath, Assert-SafeGuideMarkdown, Test-SafeSvgContent, New-StyleGuideHtml
+Export-ModuleMember -Function Get-Utf8ByteCount, Resolve-GuideHtmlPath, Resolve-GuideHtmlOutputPath, Assert-SafeGuideMarkdown, Test-SafeSvgContent, New-StyleGuideHtml

@@ -1481,7 +1481,7 @@
           },
           {
             "path": "scripts/GuideHtml.psm1",
-            "hash": "35f2e6445ab5a0d8f690c34f11ba6db6288f6093525f60e3e21f81a3e50cf26c",
+            "hash": "97992592a3ab0fbf2700624bd7ed17f42e765abe923217dd456f05d470eb3ff9",
             "hash_mode": "text-lf"
           },
           {
@@ -1501,7 +1501,7 @@
           },
           {
             "path": "scripts/render-html-guide.ps1",
-            "hash": "758473aec67aaca4a465b333a5855072545be697d6de3d475c91814c1160aaa1",
+            "hash": "594d04f34481b8d1ea3e35e277d0cbf4392d6238332943f3a5a502f67305c5b4",
             "hash_mode": "text-lf"
           },
           {

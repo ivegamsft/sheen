@@ -6,7 +6,7 @@ param(
     [ValidateSet('reference-manual', 'presentation-inspired', 'quick-reference')][string]$Profile = 'reference-manual',
     [string]$AssetManifestPath,
     [string]$RepoRoot = (Get-Location).Path,
-    [int]$BudgetBytes = 0,
+    [int]$BudgetBytes = -1,
     [string]$OverrideRationale,
     [string]$OverrideAuthorizer,
     [ValidatePattern('^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$')][string]$Language = 'en',
