@@ -76,7 +76,7 @@ Repeated heading fixture.
     Assert-True (Test-Path -LiteralPath "$overPath.blocked.html") 'Over-budget output may retain only a labeled diagnostic artifact'
     $consumerDiagnostic = Join-Path $scratch 'consumer-diagnostic.html'
     Set-Content -LiteralPath "$consumerDiagnostic.blocked.html" -Value 'consumer-owned' -NoNewline
-    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath $consumerDiagnostic -AssetManifestPath $manifest -RepoRoot $scratch -BudgetBytes 1 -OverrideRationale 'Fixture diagnostic collision' -OverrideAuthorizer 'test' } 'Blocked diagnostics must not overwrite consumer-owned files' 'unmanaged blocked diagnostic'
+    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath $consumerDiagnostic -AssetManifestPath $manifest -RepoRoot $scratch -BudgetBytes 1 -OverrideRationale 'Fixture diagnostic collision' -OverrideAuthorizer 'test' } 'Blocked diagnostics must not overwrite consumer-owned files' 'unmanaged HTML output'
     $unmanagedOutput = Join-Path $scratch 'unmanaged.html'
     Set-Content -LiteralPath $unmanagedOutput -Value 'consumer-authored' -NoNewline
     Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath $unmanagedOutput -RepoRoot $scratch } 'Existing unmanaged HTML outputs must not be overwritten silently' 'unmanaged HTML output'

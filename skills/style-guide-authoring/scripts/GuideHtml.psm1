@@ -233,7 +233,7 @@ function Get-GuideHtmlAssetRecords {
             $assetDir = Join-Path $OutputDirectory 'assets'
             New-Item -ItemType Directory -Path $assetDir -Force | Out-Null
             $destination = Join-Path $assetDir $safeName
-            Copy-Item -LiteralPath $resolved -Destination $destination -Force
+            [System.IO.File]::WriteAllBytes($destination, $bytes)
             $relativePath = if ($BundleId) { "assets/$BundleId/$safeName" } else { "assets/$safeName" }
             $records.Add([ordered]@{
                 Id = $id; Mode = 'copied'; Bytes = $bytes.Length; MediaType = $mediaType; Alt = $alt
@@ -340,7 +340,7 @@ function New-StyleGuideHtml {
         $effectiveBudget = $script:DefaultHtmlBudgets[$Packaging]
     } else {
         if ($BudgetBytes -eq 0) { throw 'BudgetBytes override must be a positive integer; zero is invalid.' }
-        if (-not $OverrideRationale -or -not $OverrideAuthorizer) { throw 'Budget override requires rationale and authorizer.' }
+        if ([string]::IsNullOrWhiteSpace($OverrideRationale) -or [string]::IsNullOrWhiteSpace($OverrideAuthorizer)) { throw 'Budget override requires rationale and authorizer.' }
         $effectiveBudget = $BudgetBytes
     }
     $outputFullPath = Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path $OutputPath
@@ -393,7 +393,8 @@ $assetHtml
 </body>
 </html>
 "@
-    $html = $html.Replace(('0' * 64), (Get-OwnedHtmlHash -Html $html))
+    $hashPlaceholder = '0' * 64
+    $html = [regex]::Replace($html, "<!-- sga-html-output-sha256: $hashPlaceholder -->", "<!-- sga-html-output-sha256: $(Get-OwnedHtmlHash -Html $html) -->", 1)
     Set-Content -LiteralPath $stagedOutput -Value $html -NoNewline -Encoding utf8
     $htmlBytes = Get-Utf8ByteCount -Text $html
     $assetBytes = 0
@@ -454,7 +455,7 @@ $assetHtml
             }
             foreach ($old in $oldManaged.Keys) {
                 if ($newManaged -contains $old) { continue }
-                Remove-Item -LiteralPath (Join-Path $outputDirectory ([string]$old)) -Force -ErrorAction SilentlyContinue
+                Remove-Item -LiteralPath (Join-Path $outputDirectory ([string]$old)) -Force
             }
             if (-not (Test-Path -LiteralPath $managedPath) -or (Get-Content -LiteralPath $managedPath -Raw) -ne $managedManifestJson) {
                 Set-Content -LiteralPath $managedPath -Value $managedManifestJson -NoNewline
@@ -499,10 +500,10 @@ $assetHtml
     } else {
         $diagnosticPath = Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path "$outputFullPath.blocked.html"
         New-Item -ItemType Directory -Path $outputDirectory -Force | Out-Null
-        if ((Test-Path -LiteralPath $diagnosticPath) -and -not ((Get-Content -LiteralPath $diagnosticPath -Raw) -match 'data-sga-diagnostic="blocked"')) {
-            throw "Refusing to overwrite unmanaged blocked diagnostic output: $diagnosticPath"
-        }
-        $diagnosticHtml = $html -replace '<body>', '<body><div data-sga-diagnostic="blocked" role="alert" style="border:4px solid #b42318;padding:1rem;margin:1rem;font-weight:700">BLOCKED: over budget diagnostic artifact, not approved output.</div>'
+        $diagnosticHtml = $html -replace '<!-- sga-html-output-sha256: [a-f0-9]{64} -->', "<!-- sga-html-output-sha256: $('0' * 64) -->"
+        $diagnosticHtml = $diagnosticHtml -replace '<body>', '<body><div data-sga-diagnostic="blocked" role="alert" style="border:4px solid #b42318;padding:1rem;margin:1rem;font-weight:700">BLOCKED: over budget diagnostic artifact, not approved output.</div>'
+        $diagnosticHtml = [regex]::Replace($diagnosticHtml, "<!-- sga-html-output-sha256: $('0' * 64) -->", "<!-- sga-html-output-sha256: $(Get-OwnedHtmlHash -Html $diagnosticHtml) -->", 1)
+        Assert-OwnedHtmlOutput -Path $diagnosticPath -DisplayPath "$OutputPath.blocked.html" -NewHtml $diagnosticHtml
         Set-Content -LiteralPath $diagnosticPath -Value $diagnosticHtml -NoNewline -Encoding utf8
     }
     return [ordered]@{
