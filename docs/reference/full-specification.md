@@ -32,14 +32,18 @@ paths and the illustrative T01-T14 checks. Review/closeout is tracked by
 This is agent-contract capability, not a product deployment or proof of
 downstream rendered visual quality.
 
-## Proposed HTML guide authoring
+## Guide authoring and HTML delivery
 
-[Spec 14: HTML Brand Guide](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/specs/14-html-brand-guide.spec.md)
-specifies a proposed `brand-guide-html` skill for template, approved-input
-generation and refresh modes. It composes existing specialists into an offline,
-responsive reference guide with reusable sections, explicit evidence states and
-strict separation between structural references and permitted output inputs.
+[Spec 14: Guide Authoring and HTML Delivery](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/specs/14-html-brand-guide.spec.md)
+specifies a proposed extension of the existing `style-guide-authoring` skill,
+not a new skill. It retains Markdown and governance-only requests while adding
+approved-input HTML authoring, bounded offline packaging, safe refresh and
+read-only freshness assessment. It reuses existing guide templates and downstream
+evidence with explicit source precedence and approval states, keeping structural
+references separate from permitted output inputs.
 
-This is a specification, not an available skill, renderer or publishing service.
+These extensions are specified, not implemented; no renderer or publishing
+service is added. The existing skill remains available under its current contract.
+Implementation is tracked in epic #225, separately from specification delivery #226.
 It does not import a reference's identity, assets, values, wording or metadata.
-Implementation and live catalog registration require separate authorization.
+Implementation and live catalog changes require separate authorization.

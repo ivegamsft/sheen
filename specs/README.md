@@ -20,7 +20,7 @@ extensions; a specification does not itself establish implementation status.
 | 11 | [App Component Catalog](11-app-component-catalog.spec.md) | Logical component selection, placement, composition, gallery, audit/generate behavior |
 | 12 | [App Layout Catalog](12-app-layout-catalog.spec.md) | Logical layout selection, regions, navigation/IA placement, component constraints, gallery |
 | 13 | [App-Specific Theme Lifecycle](13-theme-lifecycle.spec.md) | Implemented agent contracts and illustrative T01-T14 checks for previews, scoped selection, readiness, custom reuse/revision; downstream visual validation remains separate |
-| 14 | [HTML Brand Guide](14-html-brand-guide.spec.md) | Proposed `brand-guide-html` authoring skill: reference isolation, approved inputs, reusable modules, offline HTML, refresh and review evidence; not implemented |
+| 14 | [Guide Authoring and HTML Delivery](14-html-brand-guide.spec.md) | Proposed extension of existing `style-guide-authoring`: Markdown/audit compatibility, canonical input reuse, offline HTML budgets, safe refresh and read-only freshness; not implemented (#225, #226) |
 
 ## Conventions used in these specs
 

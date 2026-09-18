@@ -12,7 +12,7 @@
 > consumption/sync (06), per-skill catalog (07), standards (08), router (09),
 > Experience Blueprint (10), App Component Catalog (11), App Layout
 > Catalog (12), implemented App-Specific Theme Lifecycle agent contracts (13),
-> and the proposed HTML Brand Guide skill (14; not implemented).
+> and proposed Guide Authoring and HTML Delivery extensions (14; not implemented).
 
 ---
 

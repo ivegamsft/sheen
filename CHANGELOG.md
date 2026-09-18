@@ -9,10 +9,13 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ### Documentation
 
-- Specify the proposed `brand-guide-html` skill: approved-input composition,
+- Specify guide authoring and HTML delivery: approved-input composition,
   reference-neutral templates, responsive/offline HTML, refresh ownership,
-  accessibility and safe-content evidence. Specification only; no live skill,
-  renderer, identity defaults or reference assets are added (#223).
+  accessibility and safe-content evidence (#223). Correct the initial new-skill
+  proposal to extend existing `style-guide-authoring`, preserving Markdown and
+  governance behavior; define canonical input reuse, packaging budgets and
+  read-only freshness (#226, epic #225). Specification only; no runtime skill
+  changes, renderer, identity defaults or reference assets are added.
 
 ### Upgrade notes
 
