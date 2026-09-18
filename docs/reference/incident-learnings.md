@@ -3,6 +3,156 @@
 Captured operational learnings from build and automation incidents. Keep entries
 short, evidence-based, and actionable.
 
+## 2026-09-09 — Complete frontmatter audit and owner-aware follow-up
+
+**Decision record:** audit follow-up, owned by Sheen maintainers for source and
+consumer integration, and BaseCoat maintainers for canonical imported assets.
+Tracking: [#232](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/232);
+upstream work:
+[IBuySpy-Shared/basecoat#3324](https://github.com/IBuySpy-Shared/basecoat/issues/3324).
+Learning capture is
+[#240](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/240). This
+record logs findings and decisions, not
+implementation approval, release readiness, or completed remediation.
+
+### Audit evidence and recheck boundary
+
+The audit covered 597 actual frontmatter headers and ten fenced examples across
+1,311 Markdown files at Sheen commit
+`8a92f1c34ceece05f06a62e21eff01f49508601a`: 78 source headers, 143 installed
+headers, 373 vendored headers, and three other documentation headers. All 2,293
+tracked file prefixes were considered; no non-Markdown frontmatter was found.
+Templates, supporting documents, ignored build outputs and runtime entrypoints
+were kept distinct. Open PR #231 was not part of the audited snapshot.
+
+Before filing upstream issues, the affected files were rechecked at BaseCoat
+commit `4238b033c862c52b0c3cc85059307b89eb1e4489`, rather than treating the
+vendored pin `daf83646e67abd6a4e71852917b4acd9fa4075c0` as current upstream.
+The security-operations folded tool declaration was already corrected; one of
+five duplicate-visibility cases was corrected; the old Sheen upgrade prompt was
+absent from both current upstream and the declared vendor pin. Absence alone
+does not establish retirement: the prompt's ownership/provenance needs
+reconciliation. These cases do not justify duplicate upstream repair issues.
+
+### Frontmatter audit learnings
+
+1. **Valid YAML is necessary, not sufficient.** The snapshot had two YAML parse
+   failures and five duplicate-key headers. Another header was valid YAML but
+   folded apparent tool-list entries into a visibility string. Use strict
+   mapping/duplicate-key parsing and artifact-specific semantic schemas; a
+   regex match or successful parse alone does not establish a valid contract.
+
+2. **Removing universal globs does not prove isolation.** Nine Sheen instructions
+   still matched every Markdown file, eight matched `server/client/database.py`,
+   and navigation matched `server/routes/orders.ts`. The Wave 6 cases below
+   established specific positive and negative examples, not exhaustive backend
+   exclusion. Expand negative witnesses to nested folders and non-design
+   documentation; preserve intentional frontend and downstream paths.
+
+3. **Discovery is a promise about scope and output.** Authoring that returns only
+   a governance report, IA vocabulary that invites database modeling, and
+   overlapping audit/implementation descriptions create contract ambiguity.
+   Define the primary entry point, delegate and requested output, then exercise
+   neighboring positive and negative cases. Shared vocabulary alone is not
+   proof of a runtime routing failure.
+
+4. **Metadata needs one documented meaning per field.** Twelve source skills
+   omitted pillars and used a category outside the documented vocabulary;
+   generated metadata preserved twelve null pillars. Imported assets also
+   mixed category meanings, discovery tiers, audiences, dependencies and host
+   compatibility. Validate the appropriate schema rather than forcing every
+   artifact into one field set. Neither `visibility: internal` nor an empty
+   tool declaration proves an access-control boundary.
+
+5. **Model declarations are not execution or entitlement evidence.** Source
+   agents inherit selection; imported policies mix family aliases and concrete
+   identifiers. The source capability catalog and active task-tool descriptors
+   need host/surface qualification. Record capability provenance, normalize
+   aliases and pin/preference precedence, and distinguish task depth from
+   provider effort. Missing catalog entries do not prove unavailable models;
+   counts of pins do not establish actual usage, cost or latency.
+
+6. **Follow the distribution path, not just the directory name.** Most vendor
+   definitions are reference assets, but `sync.ps1:23` includes vendored prompts
+   when syncing the full source. The public publisher removes `vendor/**`.
+   Inspect source, sanitized publication and consumer selection separately
+   before claiming an artifact is active or harmless. Vendor-only assets need
+   explicit ownership and migration/removal decisions that preserve
+   consumer-owned edits; missing upstream files are not automatically obsolete.
+
+7. **Recheck upstream and deduplicate by canonical ownership.** The 132 common
+   installed/vendor skill headers were identical after normalization. File one
+   canonical issue for a shared defect and track both refresh surfaces, rather
+   than creating independent repair issues for each copy. Reuse
+   [#227](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/227) for the
+   existing guide-authoring gap. Preserve closed upstream work while logging
+   residual semantic defects that its original acceptance did not cover.
+   Compare the declared pin as well as current upstream before claiming a file
+   was retired or attributing a local overlay defect to upstream.
+
+8. **An existing green gate only proves its stated coverage.** The source
+   frontmatter linter and asset audit passed despite schema and semantic-scope
+   gaps. Report population coverage and runtime limitations explicitly. Extend
+   existing gates with evidence-shaped cases rather than presenting static
+   metadata inspection as verified loader behavior or compliance certification.
+
+### Decisions, alternatives and follow-up
+
+The chosen approach is canonical upstream correction followed by reviewed
+installed/vendor refresh, with source-owned fixes kept in Sheen. Direct vendor
+patches were rejected because they lose provenance and diverge from upstream.
+Blindly filing every snapshot finding upstream was rejected because some were
+already corrected or had no verified upstream origin. Broad model replacement
+was rejected because no workload/entitlement evidence established that it was
+needed.
+
+Sheen maintainers own source scopes, taxonomy, validation and catalog provenance.
+BaseCoat maintainers own imported definitions and host contracts. Refresh work
+depends on the relevant reviewed upstream fixes; availability claims wait for
+separately authorized implementation and consumer evidence. No due dates or
+automatic implementation are inferred from this logging request.
+
+### Finding-to-issue traceability
+
+S denotes source findings, I installed findings, and V vendored findings. The
+upstream links cover shared installed/vendor defects once, not twice.
+
+| Finding | Follow-up |
+|---|---|
+| S1 - backend and Markdown scope leakage | [#233](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/233) |
+| S2 - categories and twelve missing pillars | [#234](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/234) |
+| S3 - authoring/output mismatch | Existing [#227](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/227) under [#225](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/225); specification delivered by [#231](https://github.com/IBuySpy-Shared/basecoat-sheen/pull/231) |
+| S4 - ontology scope ambiguity | [#235](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/235) |
+| S5 - neighboring review and accessibility-target ambiguity | [#236](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/236) |
+| S6 - strict YAML/schema assurance | [#237](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/237) |
+| I-01 - Electron agent identifiers in `applyTo` | [IBuySpy-Shared/basecoat#3330](https://github.com/IBuySpy-Shared/basecoat/issues/3330) |
+| I-02 - model aliases and precedence | [IBuySpy-Shared/basecoat#3331](https://github.com/IBuySpy-Shared/basecoat/issues/3331) |
+| I-03 - conflicting category fields | [IBuySpy-Shared/basecoat#3332](https://github.com/IBuySpy-Shared/basecoat/issues/3332) |
+| I-04 - audit/implementation and namespace boundaries | [IBuySpy-Shared/basecoat#3333](https://github.com/IBuySpy-Shared/basecoat/issues/3333) |
+| I-05 - contradictory API handoff | [IBuySpy-Shared/basecoat#3334](https://github.com/IBuySpy-Shared/basecoat/issues/3334) |
+| I-06 - optional tools versus required dispatch | [IBuySpy-Shared/basecoat#3335](https://github.com/IBuySpy-Shared/basecoat/issues/3335) |
+| V1 - two YAML failures | [IBuySpy-Shared/basecoat#3325](https://github.com/IBuySpy-Shared/basecoat/issues/3325) |
+| V2 - duplicate visibility | [IBuySpy-Shared/basecoat#3326](https://github.com/IBuySpy-Shared/basecoat/issues/3326) for four remaining cases; [#239](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/239) for the corrected fifth case |
+| V3 - folded tool declaration | Already corrected upstream; refresh via [#239](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/239) |
+| V4 - UX alias targets Quality | [IBuySpy-Shared/basecoat#3327](https://github.com/IBuySpy-Shared/basecoat/issues/3327) |
+| V5 - agent-definition paths used as operational scopes | [IBuySpy-Shared/basecoat#3328](https://github.com/IBuySpy-Shared/basecoat/issues/3328) |
+| V6 - upgrade prompt execution/tool mismatch | Absent at current and pinned upstream; reconcile ownership, source sync and consumer remnants via [#239](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/239) |
+| V7 - alias distribution mismatch | [IBuySpy-Shared/basecoat#3329](https://github.com/IBuySpy-Shared/basecoat/issues/3329) |
+| Host-aware model capability evidence | [#238](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/238) |
+| Host schemas and copyable-example advisories | [IBuySpy-Shared/basecoat#3336](https://github.com/IBuySpy-Shared/basecoat/issues/3336) |
+| Reviewed installed/vendor refresh | [#239](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/239) |
+
+Prior upstream scope, pointer-stub and negative-clause work remains recorded in
+[IBuySpy-Shared/basecoat#2975](https://github.com/IBuySpy-Shared/basecoat/issues/2975),
+[IBuySpy-Shared/basecoat#2977](https://github.com/IBuySpy-Shared/basecoat/issues/2977),
+[IBuySpy-Shared/basecoat#2926](https://github.com/IBuySpy-Shared/basecoat/issues/2926)
+and
+[IBuySpy-Shared/basecoat#3134](https://github.com/IBuySpy-Shared/basecoat/issues/3134).
+Closed work was not reopened merely because an older vendor snapshot retained
+its original problem.
+
+---
+
 ## 2026-08-31 — Wave 6 system atlas, instruction scoping, and release
 
 Wave 6 delivered the generated system atlas, two rounds of diagram-rendering
