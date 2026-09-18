@@ -31,7 +31,7 @@ Place this at your design system repo root.
 ```yaml
 # Token-Only Mode — pure design system governance, no AI agents
 source: https://github.com/ivegamsft/sheen.git
-ref: v0.5.0
+ref: v0.12.1
 
 # Exclude all skills/agents (tokens only)
 skills: []

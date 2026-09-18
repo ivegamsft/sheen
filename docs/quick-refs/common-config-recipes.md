@@ -33,5 +33,5 @@ ref: main
 
 ```yaml
 source: https://github.com/ivegamsft/sheen.git
-ref: v1.2.0
+ref: v0.12.1
 ```

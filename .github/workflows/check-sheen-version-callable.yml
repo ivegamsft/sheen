@@ -91,8 +91,8 @@ jobs:
           REF="${{ inputs.source_ref }}"
 
           if [[ -f .sheen.yml ]]; then
-            YML_SOURCE="$(grep -E '^source:' .sheen.yml | head -1 | sed 's/^source:[[:space:]]*//' | tr -d "\"'")" || true
-            YML_REF="$(grep -E '^ref:' .sheen.yml | head -1 | sed 's/^ref:[[:space:]]*//' | tr -d "\"'")" || true
+            YML_SOURCE="$(grep -E '^source:' .sheen.yml | head -1 | sed 's/^source:[[:space:]]*//' | sed 's/[[:space:]]#.*$//' | sed 's/[[:space:]]*$//' | tr -d "\"'")" || true
+            YML_REF="$(grep -E '^ref:' .sheen.yml | head -1 | sed 's/^ref:[[:space:]]*//' | sed 's/[[:space:]]#.*$//' | sed 's/[[:space:]]*$//' | tr -d "\"'")" || true
             [[ -z "$SOURCE" && -n "$YML_SOURCE" ]] && SOURCE="$YML_SOURCE"
             [[ -z "$REF" && -n "$YML_REF" ]] && REF="$YML_REF"
           fi
@@ -104,6 +104,10 @@ jobs:
           NORMALIZED_SOURCE="${NORMALIZED_SOURCE%.git}"
           NORMALIZED_SOURCE_LOWER="$(printf '%s' "$NORMALIZED_SOURCE" | tr '[:upper:]' '[:lower:]')"
           if [[ "$NORMALIZED_SOURCE_LOWER" == "ibuyspy-shared/basecoat-sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then
+            if [[ "$REF" =~ ^[0-9a-fA-F]{7,40}$ ]]; then
+              echo "::error title=Missing Sheen fetch token::source_repo is IBuySpy-Shared/basecoat-sheen with SHA ref '${REF}'. SHA refs cannot be remapped safely to the public mirror; set SHEEN_FETCH_TOKEN or switch to a public tag/branch."
+              exit 1
+            fi
             echo "::notice title=Using public Sheen mirror::No SHEEN_FETCH_TOKEN was provided for IBuySpy-Shared/basecoat-sheen; using ivegamsft/sheen for asset sync. Provide fetch_token only for private-source overrides."
             SOURCE="ivegamsft/sheen"
             SOURCE_URL="https://github.com/ivegamsft/sheen.git"

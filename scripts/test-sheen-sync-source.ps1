@@ -156,9 +156,11 @@ Assert-Contains $callable 'default: ""' 'callable source/ref inputs must be empt
 Assert-Contains $callable 'SOURCE="${SOURCE:-ivegamsft/sheen}"' 'callable source_repo default must be public after .sheen.yml is evaluated'
 Assert-Contains $callable 'REF="${REF:-main}"' 'callable source_ref default must be main after .sheen.yml is evaluated'
 Assert-Contains $callable 'SHEEN_FETCH_TOKEN: ${{ secrets.fetch_token }}' 'callable must evaluate fetch token availability without logging token values'
+Assert-Contains $callable 'sed ''s/[[:space:]]#.*$//''' 'callable must strip valid YAML trailing comments from source/ref values'
 Assert-Contains $callable 'NORMALIZED_SOURCE="${SOURCE#https://github.com/}"' 'callable must normalize URL-style .sheen.yml source values'
 Assert-Contains $callable 'NORMALIZED_SOURCE_LOWER="$(printf ''%s'' "$NORMALIZED_SOURCE" | tr ''[:upper:]'' ''[:lower:]'')"' 'callable must compare GitHub owner/repo case-insensitively'
 Assert-Contains $callable 'if [[ "$NORMALIZED_SOURCE_LOWER" == "ibuyspy-shared/basecoat-sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then' 'callable must detect private source without fetch token'
+Assert-Contains $callable 'SHA refs cannot be remapped safely to the public mirror' 'callable must fail actionably instead of remapping private SHA refs'
 Assert-Contains $callable 'SOURCE="ivegamsft/sheen"' 'callable must fall back to public mirror for private source without fetch token'
 Assert-Contains $callable 'echo "source_url=$SOURCE_URL" >> "$GITHUB_OUTPUT"' 'callable must emit a clone-ready source URL'
 Assert-Contains $callable 'SHEEN_REPO: "${{ steps.config.outputs.source_url }}"' 'sync step must use the resolved clone URL directly'
@@ -171,6 +173,7 @@ $publish = Read-RepoText '.github/workflows/publish-to-production.yml'
 Assert-Contains $publish 'templates/sheen-sync.yml' 'publish workflow must explicitly handle the generated sync template'
 Assert-Contains $publish 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' 'publish workflow must restore the internal callable host after public mirror sanitization'
 Assert-Contains $publish 'grep -v ''^templates/sheen-sync.yml:.*uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@''' 'publish safety gate must allow-list only the generated callable host'
+Assert-Contains $publish '''scripts/test-sheen-sync-source.ps1''' 'publish workflow must strip source-only internal sync source tests from the public mirror'
 $publicTemplate = $template -replace 'IBuySpy-Shared/basecoat-sheen', 'ivegamsft/sheen'
 $publicTemplate = [regex]::Replace($publicTemplate, 'uses:\s+ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@', 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@')
 Assert-Contains $publicTemplate 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' 'sanitized public template must still call the internal reusable workflow'
@@ -231,8 +234,8 @@ try {
 
     $resolverScript = Get-CallableResolverScript -WorkflowText $callable
     $nonGitHub = Invoke-CallableResolverFixture -Root $scratch -ResolverScript $resolverScript -ConfigText @'
-source: https://git.example.internal/platform/sheen.git
-ref: v9.9.9
+source: https://git.example.internal/platform/sheen.git  # or internal mirror
+ref: v9.9.9  # pinned
 '@
     if ($null -ne $nonGitHub) {
         if ($nonGitHub['source_url'] -ne 'https://git.example.internal/platform/sheen.git') {

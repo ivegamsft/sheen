@@ -139,6 +139,7 @@ jobs:
             'scripts/test-release-reliability.py'
             'scripts/test-downstream-token-hygiene.ps1'
             'scripts/test-downstream-token-hygiene.py'
+            'scripts/test-sheen-sync-source.ps1'
             'scripts/audit-evals.ps1'
             'vendor/**'
           )

@@ -29,7 +29,7 @@ Place this at your shared repo root and commit to version control.
 ```yaml
 # Cross-Functional Mode — shared design + eng governance
 source: https://github.com/ivegamsft/sheen.git
-ref: v0.5.0  # pin to release for stability (upgrade quarterly)
+ref: v0.12.1  # pin to release for stability (upgrade quarterly)
 
 # Include all assets for maximum collaboration
 skills: []    # all skills
