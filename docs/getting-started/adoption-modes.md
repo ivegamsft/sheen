@@ -4,20 +4,20 @@ Use this page to choose the lightest workable way to consume sheen.
 
 <div class="grid cards" markdown>
 
--   **Lean mode**
+- **Lean mode**
 
     Solo designers or small teams that want only a few review and usability
     helpers.
 
     [Best for fast onboarding](#lean-mode)
 
--   **Token-only mode**
+- **Token-only mode**
 
     Teams that want design-system consistency without syncing AI assets.
 
     [Best for platform or brand alignment](#token-only-mode)
 
--   **Full mode**
+- **Full mode**
 
     Cross-functional teams that want the full catalog, including skills and
     agents.
@@ -93,6 +93,27 @@ Good fit when:
 - the repo already has clear ownership for skills, agents, and instructions
 - you want maximum reuse across product and platform teams
 - you are ready to validate the full catalog in CI
+
+## Style guide authoring profile
+
+`style-guide-authoring` can be added to any mode when a repo needs a governed
+Markdown guide or an explicitly requested portable HTML profile.
+
+```yaml
+source: https://github.com/ivegamsft/sheen.git
+ref: main
+skills:
+  - style-guide-authoring
+agents:
+  - design-reviewer
+templates:
+  - style-guide
+```
+
+HTML generation remains local artifact creation, not publication. It does not
+update guide URLs, change application styles, or approve brand decisions.
+See [Style Guide Authoring](../guides/style-guide-authoring.md) for the delivered
+consumer payload and evidence checks.
 
 ## How to switch later
 

@@ -20,6 +20,9 @@ scenarios:
   - id: "pos-template-shell"
     input: "Produce an unpopulated HTML template shell for a guide using neutral placeholders and an input checklist only."
     expect_activation: true
+  - id: "pos-quick-reference-profile"
+    input: "Produce a compact quick-reference version of the generated guide without losing use restrictions, unresolved states, or provenance."
+    expect_activation: true
   - id: "neg-pattern-definition-only"
     input: "Define a new reusable interaction pattern and composition rules, but do not assemble or review a style guide."
     expect_activation: false
@@ -28,6 +31,9 @@ scenarios:
     expect_activation: false
   - id: "neg-identity-policy-only"
     input: "Define the new identity principles, logo usage policy, and asset approval rules before any guide authoring starts."
+    expect_activation: false
+  - id: "neg-presentation-slide-viewer"
+    input: "Convert this presentation into a pixel-identical slide viewer with fixed-size pages and animation controls."
     expect_activation: false
   - id: "neg-reporting-dashboard"
     input: "Build a live revenue dashboard with reporting charts, data refresh, and production deployment."
