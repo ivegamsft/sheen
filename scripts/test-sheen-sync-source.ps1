@@ -103,9 +103,9 @@ function Invoke-CallableResolverFixture([string]$Root, [string]$ResolverScript, 
         $env:INPUT_PR_BRANCH_PREFIX = 'chore/sheen-update'
         $env:SHEEN_FETCH_TOKEN = ''
         Push-Location $fixture
-        try { & bash $scriptPath }
+        try { $output = & bash $scriptPath 2>&1 }
         finally { Pop-Location }
-        if ($LASTEXITCODE -ne 0) { throw "callable resolver fixture failed with exit $LASTEXITCODE" }
+        if ($LASTEXITCODE -ne 0) { throw "callable resolver fixture failed with exit $LASTEXITCODE`n$output" }
     }
     finally {
         $env:GITHUB_OUTPUT = $oldOutput
