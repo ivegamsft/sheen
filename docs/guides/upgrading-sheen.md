@@ -36,7 +36,7 @@ targeting. You can check it in several ways:
 - **Automatically:** the upgrade scripts fetch and print the upstream
   `CHANGELOG.md` during Phase 3 of the upgrade run.
 - **Manually:** visit the GitHub releases page or the
-  [CHANGELOG.md](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/CHANGELOG.md)
+  [CHANGELOG.md](https://github.com/ivegamsft/sheen/blob/main/CHANGELOG.md)
   in the upstream source repo.
 
 ---
@@ -169,7 +169,7 @@ jobs:
 
 Scheduled workflows that read from the public `ivegamsft/sheen` mirror do not
 need a fetch credential. If `.sheen.yml` points at the internal source repo
-`IBuySpy-Shared/basecoat-sheen` or another private GitHub source, configure a
+`ivegamsft/sheen` or another private GitHub source, configure a
 repository or organization secret named `SHEEN_FETCH_TOKEN` and pass it to the
 callable workflow as `fetch_token`.
 
@@ -207,7 +207,7 @@ not part of the sync.
 
 The upgrade script relies on `sync.ps1` / `sync.sh` being present at the consumer
 repo root. If it is missing, download the latest version from the
-[sheen release assets](https://github.com/IBuySpy-Shared/basecoat-sheen/releases/latest).
+[sheen release assets](https://github.com/ivegamsft/sheen/releases/latest).
 
 ### Upgrade completed but expected assets are missing
 

@@ -51,6 +51,6 @@ jobs:
       # to trigger further workflows on the resulting PR.
       update_token: ${{ secrets.SHEEN_UPDATE_TOKEN || '' }}
       # fetch_token: read token for private/internal source repositories.
-      # Required when .sheen.yml source is IBuySpy-Shared/basecoat-sheen.
+      # Required when .sheen.yml source is ivegamsft/sheen.
       # Not required for the default public ivegamsft/sheen mirror.
       fetch_token: ${{ secrets.SHEEN_FETCH_TOKEN || '' }}

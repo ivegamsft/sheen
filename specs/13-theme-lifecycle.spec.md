@@ -287,15 +287,15 @@ prove lifecycle behavior or visual quality.
 
 ## 11. Implementation breakdown
 
-Parent epic: [#190](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/190).
+Parent epic: [#190](https://github.com/ivegamsft/sheen/issues/190).
 
 | Issue | Deliverable | Depends on |
 |---|---|---|
-| [#191](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/191) | Comparable preview/discovery contract, examples, routing coverage. | Reviewed Spec 13. |
-| [#192](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/192) | Scoped selection record, approval reuse, reassessment examples. | #191 candidate identity contract. |
-| [#193](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/193) | Readiness evidence, impact/recovery review, bounded application handoff. | #192 selection contract. |
-| [#194](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/194) | Custom generation/revision and existing-theme audit integration. | #191-#193. |
-| [#195](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/195) | Integrated scenarios, routing boundaries, downstream guidance. | #191-#194. |
+| [#191](https://github.com/ivegamsft/sheen/issues/191) | Comparable preview/discovery contract, examples, routing coverage. | Reviewed Spec 13. |
+| [#192](https://github.com/ivegamsft/sheen/issues/192) | Scoped selection record, approval reuse, reassessment examples. | #191 candidate identity contract. |
+| [#193](https://github.com/ivegamsft/sheen/issues/193) | Readiness evidence, impact/recovery review, bounded application handoff. | #192 selection contract. |
+| [#194](https://github.com/ivegamsft/sheen/issues/194) | Custom generation/revision and existing-theme audit integration. | #191-#193. |
+| [#195](https://github.com/ivegamsft/sheen/issues/195) | Integrated scenarios, routing boundaries, downstream guidance. | #191-#194. |
 
 Shared skill ownership favors sequential integration over independent edits to
 the same skill. Supporting contracts/examples MAY live in existing skill

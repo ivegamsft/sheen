@@ -124,7 +124,7 @@ For air-gapped environments:
 
 ```bash
 # Central team mirrors upstream weekly
-git mirror https://github.com/IBuySpy-Shared/basecoat-sheen.git \
+git mirror https://github.com/ivegamsft/sheen.git \
   https://git.internal.company/mirrors/basecoat-sheen.git
 ```
 
