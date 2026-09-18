@@ -1,6 +1,6 @@
 # Style guide module recipes
 
-Use these recipes to assemble one guide model across Markdown and the HTML delivery profile. Markdown remains the default deliverable. HTML selection only changes the delivery profile for this skill; portable packaging, byte budgets, browser checks and offline bundle implementation are owned by later work.
+Use these recipes to assemble one guide model across Markdown and the HTML delivery profile. Markdown remains the default deliverable. HTML selection only changes the delivery profile for this skill; portable packaging, byte budgets and offline bundle implementation are available through the skill-local HTML helper. Browser inspection evidence remains a separate readiness input.
 
 ## Source precedence
 

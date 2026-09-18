@@ -1476,12 +1476,12 @@
           },
           {
             "path": "references/module-recipes.md",
-            "hash": "ec71fd71ea806d41fc11202b4bb4e6c0d61025c1bebbf843165a92c8031e6fc3",
+            "hash": "049c9b9bd271f848cdf153f303a50bfc4889d45530169c612edc5bd2f853cd47",
             "hash_mode": "text-lf"
           },
           {
             "path": "scripts/GuideHtml.psm1",
-            "hash": "89ceb8676030eb46f2cb27a38bb15e20aac3aea1efb2982811f8b27b81f889c0",
+            "hash": "87442b425514b350f50d3b59632d3576c277d334119103f71edbb735e1ea7922",
             "hash_mode": "text-lf"
           },
           {

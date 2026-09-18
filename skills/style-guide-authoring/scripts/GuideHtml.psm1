@@ -18,6 +18,28 @@ function Get-BytesSha256 {
     finally { $sha.Dispose() }
 }
 
+function Get-TextSha256 {
+    param([Parameter(Mandatory)][AllowEmptyString()][string]$Text)
+    return Get-BytesSha256 -Bytes ([System.Text.Encoding]::UTF8.GetBytes($Text))
+}
+
+function Get-OwnedHtmlHash {
+    param([Parameter(Mandatory)][AllowEmptyString()][string]$Html)
+    $placeholder = '0' * 64
+    $normalized = [regex]::Replace($Html, '<!-- sga-html-output-sha256: [a-f0-9]{64} -->', "<!-- sga-html-output-sha256: $placeholder -->", 1)
+    return Get-TextSha256 -Text $normalized
+}
+
+function Assert-OwnedHtmlOutput {
+    param([Parameter(Mandatory)][string]$Path, [Parameter(Mandatory)][string]$DisplayPath, [Parameter(Mandatory)][string]$NewHtml)
+    if (-not (Test-Path -LiteralPath $Path)) { return }
+    $existing = Get-Content -LiteralPath $Path -Raw
+    if ($existing -eq $NewHtml) { return }
+    $match = [regex]::Match($existing, '<!-- sga-html-output-sha256: (?<hash>[a-f0-9]{64}) -->')
+    if (-not $match.Success) { throw "Refusing to overwrite unmanaged HTML output: $DisplayPath" }
+    if ((Get-OwnedHtmlHash -Html $existing) -ne $match.Groups['hash'].Value) { throw "HTML output was edited outside the HTML helper: $DisplayPath" }
+}
+
 function Test-IsPathUnderDirectory {
     param([Parameter(Mandatory)][string]$Path, [Parameter(Mandatory)][string]$Directory)
     $comparison = if ($IsWindows) { [System.StringComparison]::OrdinalIgnoreCase } else { [System.StringComparison]::Ordinal }
@@ -176,7 +198,11 @@ function Get-GuideHtmlAssetRecords {
         $id = if ($asset.ContainsKey('id') -and $asset.id) { [string]$asset.id } else { "asset-$assetIndex" }
         $path = if ($asset.ContainsKey('path')) { [string]$asset.path } else { '' }
         $mediaType = if ($asset.ContainsKey('mediaType') -and $asset.mediaType) { [string]$asset.mediaType } else { 'application/octet-stream' }
+        $decorative = $asset.ContainsKey('decorative') -and [bool]$asset.decorative
         $alt = if ($asset.ContainsKey('alt')) { [string]$asset.alt } else { '' }
+        if (-not $decorative -and -not $asset.ContainsKey('alt')) { throw "Asset '$id' requires alt text or decorative=true." }
+        if (-not $decorative -and [string]::IsNullOrWhiteSpace($alt)) { throw "Asset '$id' requires non-empty alt text unless decorative=true." }
+        if ($decorative) { $alt = '' }
         $permission = if ($asset.ContainsKey('permission')) { [string]$asset.permission } else { '' }
         if ($mediaType -notin @('image/png', 'image/jpeg', 'image/gif', 'image/webp')) { throw "Asset '$id' uses unsupported media type '$mediaType'." }
         if ($permission -notin @('embed', 'copy')) { throw "Asset '$id' is missing explicit embed/copy permission." }
@@ -201,7 +227,7 @@ function Get-GuideHtmlAssetRecords {
             })
         } else {
             if ($permission -ne 'copy') { throw "Asset '$id' requires embed permission; local-bundle output cannot copy it silently." }
-            $safeName = 'sga-' + (ConvertTo-GuideHtmlId -Text $id) + (Get-ImageExtensionForMediaType -MediaType $mediaType)
+            $safeName = 'sga-' + (ConvertTo-GuideHtmlId -Text $id) + '-' + (Get-TextSha256 -Text $id).Substring(0, 8) + (Get-ImageExtensionForMediaType -MediaType $mediaType)
             if ($destinations.ContainsKey($safeName)) { throw "Asset '$id' normalizes to duplicate bundle destination '$safeName'." }
             $destinations[$safeName] = $true
             $assetDir = Join-Path $OutputDirectory 'assets'
@@ -263,7 +289,12 @@ function Convert-GuideMarkdownToHtmlBody {
             if ($level -gt ($previousLevel + 1)) { throw "Heading level jumps from h$previousLevel to h$level." }
             $previousLevel = $level
             $title = $Matches.title.Trim()
-            $baseId = ConvertTo-GuideHtmlId -Text $title
+            $explicitId = $null
+            if ($title -match '^(?<text>.+?)\s+\{#(?<id>[A-Za-z][A-Za-z0-9_-]*)\}$') {
+                $title = $Matches.text.Trim()
+                $explicitId = $Matches.id
+            }
+            $baseId = if ($explicitId) { $explicitId } else { ConvertTo-GuideHtmlId -Text $title }
             $id = $baseId
             $suffix = 2
             while ($usedIds.ContainsKey($id)) {
@@ -315,9 +346,8 @@ function New-StyleGuideHtml {
     $outputFullPath = Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path $OutputPath
     $outputDirectory = Split-Path -Parent $outputFullPath
     $outputLeaf = [System.IO.Path]::GetFileNameWithoutExtension($outputFullPath)
-    $bundleId = ConvertTo-GuideHtmlId -Text $outputLeaf
+    $bundleId = (ConvertTo-GuideHtmlId -Text $outputLeaf) + '-' + (Get-TextSha256 -Text ([System.IO.Path]::GetFileName($outputFullPath))).Substring(0, 12)
     if (-not $bundleId) { $bundleId = 'guide' }
-    $outputMarkerPath = Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path "$outputFullPath.sga-html-output.json"
     $stagingDirectory = Join-Path ([System.IO.Path]::GetTempPath()) ("sga-html-" + [Guid]::NewGuid().ToString('N'))
     New-Item -ItemType Directory -Path $stagingDirectory -Force | Out-Null
     $stagedOutput = Join-Path $stagingDirectory (Split-Path -Leaf $OutputPath)
@@ -330,6 +360,7 @@ function New-StyleGuideHtml {
     $html = @"
 <!doctype html>
 <html lang="$(ConvertTo-HtmlText $Language)">
+<!-- sga-html-output-sha256: $('0' * 64) -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -362,6 +393,7 @@ $assetHtml
 </body>
 </html>
 "@
+    $html = $html.Replace(('0' * 64), (Get-OwnedHtmlHash -Html $html))
     Set-Content -LiteralPath $stagedOutput -Value $html -NoNewline -Encoding utf8
     $htmlBytes = Get-Utf8ByteCount -Text $html
     $assetBytes = 0
@@ -375,17 +407,7 @@ $assetHtml
     if ($passed) {
         New-Item -ItemType Directory -Path $outputDirectory -Force | Out-Null
         $stagedBytes = [System.IO.File]::ReadAllBytes($stagedOutput)
-        $stagedHash = Get-BytesSha256 -Bytes $stagedBytes
-        if (Test-Path -LiteralPath $outputFullPath) {
-            $existingHash = Get-BytesSha256 -Bytes ([System.IO.File]::ReadAllBytes($outputFullPath))
-            if (Test-Path -LiteralPath $outputMarkerPath) {
-                $marker = Get-Content -LiteralPath $outputMarkerPath -Raw | ConvertFrom-Json
-                if (-not $marker.hash) { throw 'HTML output ownership marker is malformed.' }
-                if ($existingHash -ne [string]$marker.hash) { throw "HTML output was edited outside the HTML helper: $OutputPath" }
-            } elseif ($existingHash -ne $stagedHash) {
-                throw "Refusing to overwrite unmanaged HTML output: $OutputPath"
-            }
-        }
+        Assert-OwnedHtmlOutput -Path $outputFullPath -DisplayPath $OutputPath -NewHtml $html
         if ($Packaging -eq 'local-bundle') {
             $targetAssets = Join-Path $outputDirectory -ChildPath 'assets' -AdditionalChildPath $bundleId
             [void](Resolve-GuideHtmlPath -RepoRoot $RepoRoot -Path $targetAssets)
@@ -437,15 +459,33 @@ $assetHtml
             if (-not (Test-Path -LiteralPath $managedPath) -or (Get-Content -LiteralPath $managedPath -Raw) -ne $managedManifestJson) {
                 Set-Content -LiteralPath $managedPath -Value $managedManifestJson -NoNewline
             }
+        } else {
+            $targetAssets = Join-Path $outputDirectory -ChildPath 'assets' -AdditionalChildPath $bundleId
+            $managedPath = Join-Path $targetAssets '.sga-html-assets.json'
+            if (Test-Path -LiteralPath $managedPath) {
+                $oldManaged = @{}
+                foreach ($entry in @((Get-Content -LiteralPath $managedPath -Raw | ConvertFrom-Json))) {
+                    if (-not $entry.path -or -not $entry.hash) { throw 'Managed asset marker is malformed.' }
+                    $oldManaged[[string]$entry.path] = [string]$entry.hash
+                }
+                $targetAssetsFull = [System.IO.Path]::GetFullPath($targetAssets)
+                foreach ($old in $oldManaged.Keys) {
+                    if ([System.IO.Path]::IsPathRooted([string]$old) -or [string]$old -match '(^|[\\/])\.\.([\\/]|$)') { throw "Managed asset marker contains unsafe path: $old" }
+                    $oldTarget = Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path (Join-Path $outputDirectory ([string]$old))
+                    if (-not (Test-IsPathUnderDirectory -Path $oldTarget -Directory $targetAssetsFull)) { throw "Managed asset marker escapes the bundle assets directory: $old" }
+                    if (Test-Path -LiteralPath $oldTarget) {
+                        $oldHash = Get-BytesSha256 -Bytes ([System.IO.File]::ReadAllBytes($oldTarget))
+                        if ($oldHash -ne $oldManaged[$old]) { throw "Managed bundle asset was edited outside the HTML helper: $old" }
+                        Remove-Item -LiteralPath $oldTarget -Force
+                    }
+                }
+                Remove-Item -LiteralPath $managedPath -Force
+            }
         }
         if ((Test-Path -LiteralPath $outputFullPath) -and [System.Linq.Enumerable]::SequenceEqual([byte[]]([System.IO.File]::ReadAllBytes($outputFullPath)), [byte[]]$stagedBytes)) {
             $null = $true
         } else {
             Move-Item -LiteralPath $stagedOutput -Destination $outputFullPath -Force
-        }
-        $outputMarkerJson = ([ordered]@{ path = [System.IO.Path]::GetFileName($outputFullPath); hash = $stagedHash } | ConvertTo-Json -Depth 4)
-        if (-not (Test-Path -LiteralPath $outputMarkerPath) -or (Get-Content -LiteralPath $outputMarkerPath -Raw) -ne $outputMarkerJson) {
-            Set-Content -LiteralPath $outputMarkerPath -Value $outputMarkerJson -NoNewline
         }
         foreach ($asset in $assets) {
             $publishedAssets += [ordered]@{
@@ -459,7 +499,11 @@ $assetHtml
     } else {
         $diagnosticPath = Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path "$outputFullPath.blocked.html"
         New-Item -ItemType Directory -Path $outputDirectory -Force | Out-Null
-        Set-Content -LiteralPath $diagnosticPath -Value "<!-- BLOCKED: over budget diagnostic artifact, not approved output -->`n$html" -NoNewline -Encoding utf8
+        if ((Test-Path -LiteralPath $diagnosticPath) -and -not ((Get-Content -LiteralPath $diagnosticPath -Raw) -match 'data-sga-diagnostic="blocked"')) {
+            throw "Refusing to overwrite unmanaged blocked diagnostic output: $diagnosticPath"
+        }
+        $diagnosticHtml = $html -replace '<body>', '<body><div data-sga-diagnostic="blocked" role="alert" style="border:4px solid #b42318;padding:1rem;margin:1rem;font-weight:700">BLOCKED: over budget diagnostic artifact, not approved output.</div>'
+        Set-Content -LiteralPath $diagnosticPath -Value $diagnosticHtml -NoNewline -Encoding utf8
     }
     return [ordered]@{
         State = if ($passed) { 'DRAFT' } else { 'BLOCKED' }
