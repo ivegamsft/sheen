@@ -125,6 +125,9 @@ jobs:
       - name: Validate - style guide authoring canonical inputs and freshness (#228)
         run: pwsh -NonInteractive -File scripts/test-guide-inputs.ps1
 
+      - name: Validate - style guide authoring HTML packaging (#229)
+        run: pwsh -NonInteractive -File scripts/test-guide-html.ps1
+
       - name: Validate - explicit source external delegates
         run: pwsh -NonInteractive -File scripts/test-external-delegates.ps1
 
@@ -170,6 +173,10 @@ jobs:
       - name: Validate - style guide authoring canonical inputs and freshness (#228)
         shell: pwsh
         run: .\scripts\test-guide-inputs.ps1
+
+      - name: Validate - style guide authoring HTML packaging (#229)
+        shell: pwsh
+        run: .\scripts\test-guide-html.ps1
 
   eval-routing:
     runs-on: ubuntu-latest

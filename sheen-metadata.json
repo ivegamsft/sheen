@@ -1452,11 +1452,11 @@
         "pillar": "governance",
         "maturity": "stable",
         "description": "Compile or review guides from approved guidance. USE FOR: style-guide compilation, pattern library publication, guideline consolidation, author an offline HTML guide, refresh a generated guide, check guide freshness. DO NOT USE FOR: single-component-only specs, token validation scripts, inventing an identity, choosing a theme, copying a reference deck, generating reporting dashboards.",
-        "hash": "7fa1746146f3c39c1c4deb60b235cd553512dbaeba5d1c2bdf0f177c1e54c8e2",
+        "hash": "adbac294f3069169d7e8d89ea67c30acca98015e888d84d83549860f16a288b6",
         "files": [
           {
             "path": "SKILL.md",
-            "hash": "7fa1746146f3c39c1c4deb60b235cd553512dbaeba5d1c2bdf0f177c1e54c8e2",
+            "hash": "adbac294f3069169d7e8d89ea67c30acca98015e888d84d83549860f16a288b6",
             "hash_mode": "text-lf"
           },
           {
@@ -1466,7 +1466,7 @@
           },
           {
             "path": "references/guide-contract.md",
-            "hash": "bdea7a6c0b67373feeb0112db8e85799ef8d497bce9c8c5041da81cf9babbdcd",
+            "hash": "409d938ad86e67ba2c12697ce1ab7b5460af5aa9e947221170ce9e92483dd1f2",
             "hash_mode": "text-lf"
           },
           {
@@ -1477,6 +1477,11 @@
           {
             "path": "references/module-recipes.md",
             "hash": "ec71fd71ea806d41fc11202b4bb4e6c0d61025c1bebbf843165a92c8031e6fc3",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "scripts/GuideHtml.psm1",
+            "hash": "ce893e67952ebe6eb8bb280af1536374d8fc1b7bf9fd78d37800ee5d94f19472",
             "hash_mode": "text-lf"
           },
           {
@@ -1492,6 +1497,11 @@
           {
             "path": "scripts/refresh-guide.ps1",
             "hash": "78230ced3c30bb1848dc87b55a8ba8ea7135b854fc1debcd7d69d031342f8ee8",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "scripts/render-html-guide.ps1",
+            "hash": "c70ad6044a93b7529b7cd1a1c3d4edaed3e7b99600ea6b94340915ce6925158b",
             "hash_mode": "text-lf"
           },
           {
