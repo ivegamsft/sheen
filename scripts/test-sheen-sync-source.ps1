@@ -55,7 +55,8 @@ function New-SyncConsumerFixture([string]$Root, [string]$OldWorkflow) {
 function Assert-MigratedConsumer([string]$Consumer) {
     $workflow = Get-Content -LiteralPath (Join-Path $Consumer '.github' 'workflows' 'sheen-sync.yml') -Raw
     Assert-Contains $workflow 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' 'managed workflow migration must restore the internal callable host'
-    Assert-Contains $workflow 'source_repo: ivegamsft/sheen' 'managed workflow migration must keep the public asset source'
+    Assert-NotContains $workflow 'uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@' 'managed workflow migration must remove the public callable host'
+    Assert-NotContains $workflow 'source_repo: ivegamsft/sheen' 'managed workflow migration must leave asset source precedence to .sheen.yml'
     $manifest = Get-Content -LiteralPath (Join-Path $Consumer '.sheen' 'manifest.json') -Raw | ConvertFrom-Json
     if (@($manifest.files) -notcontains '.github/workflows/sheen-sync.yml') {
         throw 'ASSERTION FAILED: migrated managed workflow must be recorded in .sheen/manifest.json'
@@ -82,16 +83,18 @@ Assert-Contains $bootstrapPs1 '[string]$Source = ''https://github.com/ivegamsft/
 Assert-Contains (Read-RepoText '.sheen.yml.example') 'source: https://github.com/ivegamsft/sheen.git' '.sheen.yml.example must scaffold the public mirror source'
 Assert-Contains (Read-RepoText 'docs/getting-started/quick-start.md') 'source: https://github.com/ivegamsft/sheen.git' 'quick-start guide must scaffold the public mirror source'
 
-Write-Host '[3/6] scheduled sync template uses internal callable but public asset source'
+Write-Host '[3/6] scheduled sync template uses internal callable and .sheen.yml source precedence'
 $template = Read-RepoText 'templates/sheen-sync.yml'
 Assert-Contains $template 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' 'scheduled sync must keep using the internal callable workflow host'
-Assert-Contains $template 'source_repo: ivegamsft/sheen' 'scheduled sync must use public mirror assets by default'
+Assert-NotContains $template 'source_repo: ivegamsft/sheen' 'scheduled sync template must not override .sheen.yml source'
 Assert-NotContains $template 'source_repo: IBuySpy-Shared/basecoat-sheen' 'scheduled sync template must not clone the private source by default'
 Assert-Contains $template 'Not required for the default public ivegamsft/sheen mirror.' 'template must document that fetch_token is optional for the default source'
 
 Write-Host '[4/6] callable workflow falls back from private source to public mirror when no fetch token is provided'
 $callable = Read-RepoText '.github/workflows/check-sheen-version-callable.yml'
-Assert-Contains $callable 'default: ivegamsft/sheen' 'callable source_repo default must be public'
+Assert-Contains $callable 'default: ""' 'callable source/ref inputs must be empty so .sheen.yml can fill them'
+Assert-Contains $callable 'SOURCE="${SOURCE:-ivegamsft/sheen}"' 'callable source_repo default must be public after .sheen.yml is evaluated'
+Assert-Contains $callable 'REF="${REF:-main}"' 'callable source_ref default must be main after .sheen.yml is evaluated'
 Assert-Contains $callable 'SHEEN_FETCH_TOKEN: ${{ secrets.fetch_token }}' 'callable must evaluate fetch token availability without logging token values'
 Assert-Contains $callable 'NORMALIZED_SOURCE="${SOURCE#https://github.com/}"' 'callable must normalize URL-style .sheen.yml source values'
 Assert-Contains $callable 'if [[ "$NORMALIZED_SOURCE" == "IBuySpy-Shared/basecoat-sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then' 'callable must detect private source without fetch token'

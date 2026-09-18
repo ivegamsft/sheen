@@ -10,8 +10,8 @@ name: "Sheen - Consumer Sync"
 #     sync:
 #       uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@<commit-sha>
 #       with:
-#         source_repo: ivegamsft/sheen
-#         source_ref: main        # or pin to a tag
+#         source_repo: ivegamsft/sheen # optional; .sheen.yml source is used when omitted
+#         source_ref: main             # optional; .sheen.yml ref is used when omitted
 #       secrets:
 #         update_token: ${{ secrets.SHEEN_UPDATE_TOKEN }}
 #         fetch_token: ${{ secrets.SHEEN_FETCH_TOKEN }} # only for private/internal source overrides
@@ -26,15 +26,16 @@ on:
       source_repo:
         description: >-
           Source sheen repository (owner/repo). Defaults to the public mirror
-          so scheduled consumer sync does not require private-source credentials.
+          after .sheen.yml is evaluated, so scheduled consumer sync does not
+          require private-source credentials.
         type: string
-        default: ivegamsft/sheen
+        default: ""
       source_ref:
         description: >-
           Git ref to sync from (tag, branch, or SHA). Use 'main' for latest
           or pin to a release tag (e.g. 'v0.8.2') for stability.
         type: string
-        default: main
+        default: ""
       pr_branch_prefix:
         description: Prefix for the sync PR branch name.
         type: string
@@ -85,17 +86,19 @@ jobs:
         run: |
           set -euo pipefail
 
-          # Read .sheen.yml for source/ref overrides (workflow inputs take precedence)
+          # Resolve precedence: explicit workflow input -> .sheen.yml -> public default.
           SOURCE="${{ inputs.source_repo }}"
           REF="${{ inputs.source_ref }}"
 
           if [[ -f .sheen.yml ]]; then
             YML_SOURCE="$(grep -E '^source:' .sheen.yml | head -1 | sed 's/^source:[[:space:]]*//' | tr -d "\"'")" || true
             YML_REF="$(grep -E '^ref:' .sheen.yml | head -1 | sed 's/^ref:[[:space:]]*//' | tr -d "\"'")" || true
-            # .sheen.yml values fill gaps but workflow inputs win
             [[ -z "$SOURCE" && -n "$YML_SOURCE" ]] && SOURCE="$YML_SOURCE"
-            [[ "$REF" == "main" && -n "$YML_REF" && "$YML_REF" != "main" ]] && REF="$YML_REF"
+            [[ -z "$REF" && -n "$YML_REF" ]] && REF="$YML_REF"
           fi
+
+          SOURCE="${SOURCE:-ivegamsft/sheen}"
+          REF="${REF:-main}"
 
           NORMALIZED_SOURCE="${SOURCE#https://github.com/}"
           NORMALIZED_SOURCE="${NORMALIZED_SOURCE%.git}"
