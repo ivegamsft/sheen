@@ -2,7 +2,7 @@
 name: sheen-80-content-multilingual
 compatibility: [github-copilot-cli]
 description: "Path-scoped microcopy, plain-language, i18n/l10n, and content-design rules."
-applyTo: "**/*.html,**/*.jsx,**/*.tsx,**/*.vue,**/*.svelte,**/*.astro,**/*.md,**/*.mdx,**/components/**,**/ui/**,**/frontend/**,**/client/**,**/web/**,**/design/**,**/docs/**,**/locales/**,**/i18n/**,**/translations/**,**/content/**,**/copy/**"
+applyTo: "**/*.html,**/*.jsx,**/*.tsx,**/*.vue,**/*.svelte,**/*.astro,**/components/**,**/ui/**,**/frontend/**,**/web/**,**/design/**,docs/brand/**,docs/components/**,docs/guides/style-guide-authoring.md,docs/usability/**,templates/brand-guidelines/**,templates/component-spec/**,templates/design-review/**,templates/style-guide/**,**/locales/**,**/i18n/**,**/translations/**,**/content/**,**/copy/**"
 metadata:
   band: 80
   layer: content

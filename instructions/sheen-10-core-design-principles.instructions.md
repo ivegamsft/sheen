@@ -2,7 +2,7 @@
 name: sheen-10-core-design-principles
 compatibility: [github-copilot-cli]
 description: "Path-scoped design values and craft principles for design assets, UI surfaces, and reviews."
-applyTo: "**/*.html,**/*.css,**/*.scss,**/*.sass,**/*.less,**/*.styl,**/*.jsx,**/*.tsx,**/*.vue,**/*.svelte,**/*.astro,**/*.md,**/*.mdx,**/*.svg,**/components/**,**/ui/**,**/frontend/**,**/client/**,**/web/**,**/design/**,**/docs/**,**/tokens/**,**/assets/**,**/public/**"
+applyTo: "**/*.html,**/*.css,**/*.scss,**/*.sass,**/*.less,**/*.styl,**/*.jsx,**/*.tsx,**/*.vue,**/*.svelte,**/*.astro,**/*.svg,**/components/**,**/ui/**,**/frontend/**,**/web/**,**/design/**,docs/accessibility/**,docs/brand/**,docs/components/**,docs/foundations/**,docs/guides/style-guide-authoring.md,docs/usability/**,templates/brand-guidelines/**,templates/component-spec/**,templates/design-review/**,templates/style-guide/**,**/tokens/**,**/assets/**,**/public/**"
 metadata:
   band: 10
   layer: core
