@@ -2,7 +2,7 @@
 name: sheen-40-web-usability
 compatibility: [github-copilot-cli]
 description: "Path-scoped web usability rules grounded in the NN/g heuristics and ISO 9241 dialogue principles."
-applyTo: "**/*.html,**/*.css,**/*.scss,**/*.sass,**/*.less,**/*.styl,**/*.jsx,**/*.tsx,**/*.vue,**/*.svelte,**/*.astro,**/*.md,**/*.mdx,**/components/**,**/ui/**,**/frontend/**,**/client/**,**/web/**,**/design/**,**/docs/**"
+applyTo: "**/*.html,**/*.css,**/*.scss,**/*.sass,**/*.less,**/*.styl,**/*.jsx,**/*.tsx,**/*.vue,**/*.svelte,**/*.astro,**/components/**,**/ui/**,**/frontend/**,**/web/**,**/design/**,docs/components/**,docs/guides/style-guide-authoring.md,docs/usability/**,templates/component-spec/**,templates/design-review/**,templates/style-guide/**"
 metadata:
   band: 40
   layer: web-usability

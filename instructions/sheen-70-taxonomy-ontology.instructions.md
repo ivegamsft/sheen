@@ -2,7 +2,7 @@
 name: sheen-70-taxonomy-ontology
 compatibility: [github-copilot-cli]
 description: "Path-scoped controlled vocabulary, relationship, and taxonomy rules for design-system assets."
-applyTo: "**/*.md,**/*.mdx,**/.github/skills/**,**/.github/agents/**,**/.github/instructions/**,**/skills/**,**/agents/**,**/instructions/**,**/tokens/**,**/docs/**,**/.lexicon.md,**/sheen-metadata.json"
+applyTo: ".lexicon.md,sheen-metadata.json,skills/style-guide-authoring/**,skills/pattern-library/**,skills/taxonomy/**,agents/design-reviewer.agent.md,agents/information-architect.agent.md,instructions/**,.github/skills/style-guide-authoring/**,.github/skills/pattern-library/**,.github/agents/design-reviewer.agent.md,.github/agents/information-architect.agent.md,.github/instructions/**,**/tokens/**,docs/reference/skills-catalog.md,docs/reference/agent-roster.md,docs/reference/vocabulary.md,docs/guides/prompts/**,templates/style-guide/**"
 metadata:
   band: 70
   layer: taxonomy-ontology

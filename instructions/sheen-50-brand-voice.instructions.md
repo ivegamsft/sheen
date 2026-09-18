@@ -2,7 +2,7 @@
 name: sheen-50-brand-voice
 compatibility: [github-copilot-cli]
 description: "Path-scoped brand identity constraints for voice, logo, color, typography, and imagery."
-applyTo: "**/*.html,**/*.css,**/*.scss,**/*.sass,**/*.less,**/*.styl,**/*.jsx,**/*.tsx,**/*.vue,**/*.svelte,**/*.astro,**/*.md,**/*.mdx,**/*.svg,**/components/**,**/ui/**,**/frontend/**,**/client/**,**/web/**,**/design/**,**/docs/**,**/tokens/**,**/assets/**,**/public/**,**/locales/**,**/i18n/**"
+applyTo: "**/*.html,**/*.css,**/*.scss,**/*.sass,**/*.less,**/*.styl,**/*.jsx,**/*.tsx,**/*.vue,**/*.svelte,**/*.astro,**/*.svg,**/components/**,**/ui/**,**/frontend/**,**/web/**,**/design/**,docs/brand/**,docs/components/**,docs/guides/style-guide-authoring.md,templates/brand-guidelines/**,templates/design-review/**,templates/style-guide/**,**/tokens/**,**/assets/**,**/public/**,**/locales/**,**/i18n/**"
 metadata:
   band: 50
   layer: brand

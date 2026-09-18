@@ -69,7 +69,7 @@ $positiveCases = [ordered]@{
     'sheen-40-web-usability'            = 'src/pages/Home.tsx'
     'sheen-50-brand-voice'              = 'assets/logo.svg'
     'sheen-60-ia-navigation'            = 'src/navigation/routes.ts'
-    'sheen-70-taxonomy-ontology'        = '.github/skills/example/SKILL.md'
+    'sheen-70-taxonomy-ontology'        = '.github/skills/style-guide-authoring/SKILL.md'
     'sheen-80-content-multilingual'      = 'locales/en-US/common.json'
     'sheen-90-standards-conformance'    = 'tokens/themes/light.tokens.json'
 }
@@ -81,7 +81,26 @@ foreach ($name in $positiveCases.Keys) {
     }
 }
 
+$additionalPositiveCases = @(
+    @{ Name = 'sheen-10-core-design-principles'; Sample = 'docs/components/button.md' }
+    @{ Name = 'sheen-10-core-accessibility'; Sample = 'templates/style-guide/style-guide.md' }
+    @{ Name = 'sheen-60-ia-navigation'; Sample = 'app/routes/catalog.ts' }
+    @{ Name = 'sheen-70-taxonomy-ontology'; Sample = 'skills/style-guide-authoring/SKILL.md' }
+    @{ Name = 'sheen-70-taxonomy-ontology'; Sample = '.github/skills/style-guide-authoring/SKILL.md' }
+    @{ Name = 'sheen-80-content-multilingual'; Sample = 'docs/brand/voice-tone.md' }
+)
+
+foreach ($case in $additionalPositiveCases) {
+    if (-not (Test-PathMatch $case.Sample $scopes[$case.Name])) {
+        throw "$($case.Name) does not match additional producer/downstream design path '$($case.Sample)'."
+    }
+}
+
 $negativePaths = @(
+    'docs/runbooks/database-restore.md'
+    'server/client/database.py'
+    'server/routes/orders.ts'
+    '.github/skills/backend-dev/SKILL.md'
     'src/services/BillingService.cs'
     'infra/main.bicep'
     'database/migrations/001-create-user.sql'
