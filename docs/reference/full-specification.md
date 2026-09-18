@@ -35,15 +35,16 @@ downstream rendered visual quality.
 ## Guide authoring and HTML delivery
 
 [Spec 14: Guide Authoring and HTML Delivery](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/specs/14-html-brand-guide.spec.md)
-specifies a proposed extension of the existing `style-guide-authoring` skill,
-not a new skill. It retains Markdown and governance-only requests while adding
-approved-input HTML authoring, bounded offline packaging, safe refresh and
-read-only freshness assessment. It reuses existing guide templates and downstream
-evidence with explicit source precedence and approval states, keeping structural
-references separate from permitted output inputs.
+extends the existing `style-guide-authoring` skill, not a new skill. It retains
+Markdown and governance-only requests while adding approved-input HTML authoring,
+bounded offline packaging, safe refresh and read-only freshness assessment. It
+reuses existing guide templates and downstream evidence with explicit source
+precedence and approval states, keeping structural references separate from
+permitted output inputs.
 
-These extensions are specified, not implemented; no renderer or publishing
-service is added. The existing skill remains available under its current contract.
-Implementation is tracked in epic #225, separately from specification delivery #226.
-It does not import a reference's identity, assets, values, wording or metadata.
-Implementation and live catalog changes require separate authorization.
+The implementation is delivered through the existing skill name with a
+skill-local renderer and freshness helpers. Evidence is split across canonical
+input/freshness tests, HTML packaging/browser checks, and synced consumer
+complete-folder execution; see [Style Guide Authoring](../guides/style-guide-authoring.md).
+It does not publish a guide, update guide URLs, import a reference's identity,
+assets, values, wording or metadata, or approve downstream brand decisions.

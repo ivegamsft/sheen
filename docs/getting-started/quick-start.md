@@ -136,6 +136,8 @@ Use these to map from business need to concrete assets:
 - Need fast review workflows: start with a small skill subset
 - Need governance language only: start with instruction layers
 - Need design-system consistency: start with tokens and themes
+- Need a governed Markdown or offline HTML guide: add
+  `style-guide-authoring`, `design-reviewer`, and the `style-guide` template
 
 ## Step 5. Pick an integration mode and lock it in
 
@@ -232,6 +234,8 @@ For expanded answers, use the [FAQ](../support/faq.md).
 - Check [FAQ](../support/faq.md) for setup and maintenance answers
 - Browse [Skills Catalog](../reference/skills-catalog.md) for workflow capabilities
 - Use [`.sheen.yml` Guide](../guides/sheen-yml.md) for full config reference
+- Use [Style Guide Authoring](../guides/style-guide-authoring.md) for portable
+  Markdown/HTML guide delivery evidence
 - For token usage patterns, read [Adopting Tokens](../guides/adopting-tokens.md)
 
 When your team is ready, move from Lean or Token-only to Full by removing

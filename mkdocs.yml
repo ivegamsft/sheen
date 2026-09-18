@@ -92,6 +92,7 @@ nav:
       - App Component Catalogs: guides/app-component-catalogs.md
       - App Layout Catalogs: guides/app-layout-catalogs.md
       - Theme Lifecycle: guides/theme-lifecycle.md
+      - Style Guide Authoring: guides/style-guide-authoring.md
       - Upgrading sheen: guides/upgrading-sheen.md
       - Authoring a Skill: guides/authoring-a-skill.md
   - Prompt Guide:

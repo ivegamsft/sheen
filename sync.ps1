@@ -115,7 +115,7 @@ function Normalize-AllowSet {
         $normalized = Normalize-Name -Type $Type -Name ([string]$item)
         if (-not [string]::IsNullOrWhiteSpace($normalized)) { [void]$set.Add($normalized) }
     }
-    return $set
+    return ,$set
 }
 
 function Test-IsExcluded {
