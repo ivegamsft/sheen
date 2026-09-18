@@ -37,6 +37,10 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ### Fixed
 
+- Make scheduled `sheen-sync` fail fast with an actionable
+  `Missing Sheen fetch token` error when `.sheen.yml` points at the internal
+  `IBuySpy-Shared/basecoat-sheen` source without `SHEEN_FETCH_TOKEN`, and
+  document the private-source credential requirement for consumers (#256).
 - Prevent accidental downstream `git add -A` commits of the four materialized
   Sheen token outputs in both sync entry points. Append only missing exact ignore
   rules and preserve consumer byte formatting and explicit inclusions. Automatically

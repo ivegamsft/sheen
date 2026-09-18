@@ -165,6 +165,20 @@ jobs:
         run: bash scripts/upgrade-sheen.sh --silent
 ```
 
+### Private/internal source credentials
+
+Scheduled workflows that read from the public `ivegamsft/sheen` mirror do not
+need a fetch credential. If `.sheen.yml` points at the internal source repo
+`IBuySpy-Shared/basecoat-sheen` or another private GitHub source, configure a
+repository or organization secret named `SHEEN_FETCH_TOKEN` and pass it to the
+callable workflow as `fetch_token`.
+
+The token must have read access to the source repository contents. The
+consumer repository's default `GITHUB_TOKEN` is scoped to the consumer repo and
+cannot clone a separate private/internal source repo. When the token is missing,
+the scheduled workflow fails during preflight with a `Missing Sheen fetch token`
+error instead of reaching an anonymous `git clone` failure.
+
 ---
 
 ## Rolling back

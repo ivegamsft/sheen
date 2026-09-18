@@ -37,8 +37,8 @@ jobs:
     # Pinned to a commit SHA, matching the basecoat consumer-update convention.
     # The callable workflow exists only in the internal source repo; the public
     # ivegamsft/sheen mirror hosts docs/bootstrap assets and does NOT host it.
-    # SHA below includes the Sheen public-mirror fallback and source normalization fixes.
-    uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@256da85bbdfb1e86b43b1ea8d05208a9e1ad6110
+    # SHA below includes explicit missing-token preflight and source normalization fixes.
+    uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@a91cfa003551814f064a829a121c1c60e770e6cd
     with:
       # source_repo and source_ref are read from .sheen.yml by default.
       # Override source_repo here to force a source; source_ref can also be
@@ -50,6 +50,7 @@ jobs:
       # Defaults to GITHUB_TOKEN if not provided. Set this secret if you need
       # to trigger further workflows on the resulting PR.
       update_token: ${{ secrets.SHEEN_UPDATE_TOKEN || '' }}
-      # fetch_token: read token for private/internal source overrides.
+      # fetch_token: read token for private/internal source repositories.
+      # Required when .sheen.yml source is IBuySpy-Shared/basecoat-sheen.
       # Not required for the default public ivegamsft/sheen mirror.
       fetch_token: ${{ secrets.SHEEN_FETCH_TOKEN || '' }}

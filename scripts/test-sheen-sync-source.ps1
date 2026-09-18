@@ -123,6 +123,43 @@ function Invoke-CallableResolverFixture([string]$Root, [string]$ResolverScript, 
     return $result
 }
 
+function Invoke-CallableResolverFailureFixture([string]$Root, [string]$ResolverScript, [string]$ConfigText) {
+    if ($IsWindows -or -not (Get-Command bash -ErrorAction SilentlyContinue)) {
+        Write-Host 'Skipping callable resolver failure fixture because bash is unavailable or running on Windows.'
+        return $null
+    }
+
+    $fixture = Join-Path $Root ([Guid]::NewGuid().ToString('N'))
+    New-Item -ItemType Directory -Force -Path $fixture | Out-Null
+    Set-Content -LiteralPath (Join-Path $fixture '.sheen.yml') -Value $ConfigText -NoNewline
+    $scriptPath = Join-Path $fixture 'resolve.sh'
+    $outputPath = Join-Path $fixture 'github-output.txt'
+    Set-Content -LiteralPath $scriptPath -Value $ResolverScript -NoNewline
+    $oldOutput = $env:GITHUB_OUTPUT
+    $oldSourceRepo = $env:INPUT_SOURCE_REPO
+    $oldSourceRef = $env:INPUT_SOURCE_REF
+    $oldBranchPrefix = $env:INPUT_PR_BRANCH_PREFIX
+    $oldFetchToken = $env:SHEEN_FETCH_TOKEN
+    try {
+        $env:GITHUB_OUTPUT = $outputPath
+        $env:INPUT_SOURCE_REPO = ''
+        $env:INPUT_SOURCE_REF = ''
+        $env:INPUT_PR_BRANCH_PREFIX = 'chore/sheen-update'
+        $env:SHEEN_FETCH_TOKEN = ''
+        Push-Location $fixture
+        try { $output = & bash $scriptPath 2>&1 }
+        finally { Pop-Location }
+        return @{ exitCode = $LASTEXITCODE; output = ($output -join "`n") }
+    }
+    finally {
+        $env:GITHUB_OUTPUT = $oldOutput
+        $env:INPUT_SOURCE_REPO = $oldSourceRepo
+        $env:INPUT_SOURCE_REF = $oldSourceRef
+        $env:INPUT_PR_BRANCH_PREFIX = $oldBranchPrefix
+        $env:SHEEN_FETCH_TOKEN = $oldFetchToken
+    }
+}
+
 Write-Host '[1/6] standalone sync defaults use the public mirror'
 $syncSh = Read-RepoText 'sync.sh'
 $syncPs1 = Read-RepoText 'sync.ps1'
@@ -154,8 +191,9 @@ Assert-Contains $template 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows
 Assert-NotContains $template 'source_repo: ivegamsft/sheen' 'scheduled sync template must not override .sheen.yml source'
 Assert-NotContains $template 'source_repo: IBuySpy-Shared/basecoat-sheen' 'scheduled sync template must not clone the private source by default'
 Assert-Contains $template 'Not required for the default public ivegamsft/sheen mirror.' 'template must document that fetch_token is optional for the default source'
+Assert-Contains $template 'Required when .sheen.yml source is IBuySpy-Shared/basecoat-sheen.' 'template must document internal source fetch-token requirement'
 
-Write-Host '[4/6] callable workflow falls back from private source to public mirror when no fetch token is provided'
+Write-Host '[4/6] callable workflow preflights private source fetch credentials'
 $callable = Read-RepoText '.github/workflows/check-sheen-version-callable.yml'
 Assert-Contains $callable 'default: ""' 'callable source/ref inputs must be empty so .sheen.yml can fill them'
 Assert-Contains $callable 'SOURCE="${SOURCE:-ivegamsft/sheen}"' 'callable source_repo default must be public after .sheen.yml is evaluated'
@@ -165,12 +203,12 @@ Assert-Contains $callable 'sed ''s/[[:space:]]#.*$//''' 'callable must strip val
 Assert-Contains $callable 'sed -E ''s#^[Hh][Tt][Tt][Pp][Ss]://[Gg][Ii][Tt][Hh][Uu][Bb][.][Cc][Oo][Mm]/##; s#[.][Gg][Ii][Tt]$##''' 'callable must normalize GitHub URLs and .git suffix case-insensitively'
 Assert-Contains $callable 'NORMALIZED_SOURCE_LOWER="$(printf ''%s'' "$NORMALIZED_SOURCE" | tr ''[:upper:]'' ''[:lower:]'')"' 'callable must compare GitHub owner/repo case-insensitively'
 Assert-Contains $callable 'if [[ "$NORMALIZED_SOURCE_LOWER" == "ibuyspy-shared/basecoat-sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then' 'callable must detect private source without fetch token'
-Assert-Contains $callable 'SHA refs cannot be remapped safely to the public mirror' 'callable must fail actionably instead of remapping private SHA refs'
-Assert-Contains $callable 'SOURCE="ivegamsft/sheen"' 'callable must fall back to public mirror for private source without fetch token'
+Assert-Contains $callable 'The consumer repo GITHUB_TOKEN cannot clone another repository.' 'callable must explain why GITHUB_TOKEN cannot fetch the internal source'
+Assert-Contains $callable 'Configure a repository or organization secret named SHEEN_FETCH_TOKEN' 'callable must name the required fetch secret'
+Assert-Contains $callable 'change .sheen.yml source to the public mirror https://github.com/ivegamsft/sheen.git' 'callable must offer the public mirror alternative'
 Assert-Contains $callable 'echo "source_url=$SOURCE_URL" >> "$GITHUB_OUTPUT"' 'callable must emit a clone-ready source URL'
 Assert-Contains $callable 'SHEEN_REPO: "${{ steps.config.outputs.source_url }}"' 'sync step must use the resolved clone URL directly'
 Assert-Contains $callable 'if [[ -n "${SHEEN_FETCH_TOKEN}" && "$SHEEN_REPO" == https://github.com/* ]]; then' 'sync step must only inject tokens into GitHub clone URLs'
-Assert-Contains $callable 'Using public Sheen mirror' 'callable must emit an actionable fallback notice'
 Assert-Contains $callable 'Missing Sheen fetch token' 'callable must warn when a non-default source has no fetch token'
 Assert-Contains $callable 'Non-GitHub Sheen source authentication' 'callable must give host-auth guidance for non-GitHub sources'
 
@@ -253,29 +291,32 @@ ref: v9.9.9  # pinned
         }
     }
 
-    $privateDefault = Invoke-CallableResolverFixture -Root $scratch -ResolverScript $resolverScript -ConfigText @'
+    $privateDefault = Invoke-CallableResolverFailureFixture -Root $scratch -ResolverScript $resolverScript -ConfigText @'
 source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
 ref: main
 '@
     if ($null -ne $privateDefault) {
-        if ($privateDefault['source'] -ne 'ivegamsft/sheen') {
-            throw "ASSERTION FAILED: canonical private source without token must fall back to public source; got '$($privateDefault['source'])'"
+        if ($privateDefault['exitCode'] -eq 0) {
+            throw "ASSERTION FAILED: canonical private source without token must fail preflight"
         }
-        if ($privateDefault['source_url'] -ne 'https://github.com/ivegamsft/sheen.git') {
-            throw "ASSERTION FAILED: canonical private source fallback must emit public source_url; got '$($privateDefault['source_url'])'"
+        if (-not $privateDefault['output'].Contains('Missing Sheen fetch token')) {
+            throw "ASSERTION FAILED: canonical private source failure must name Missing Sheen fetch token; got '$($privateDefault['output'])'"
+        }
+        if (-not $privateDefault['output'].Contains('GITHUB_TOKEN cannot clone another repository')) {
+            throw "ASSERTION FAILED: canonical private source failure must explain GITHUB_TOKEN scope; got '$($privateDefault['output'])'"
         }
     }
 
-    $privateLowercase = Invoke-CallableResolverFixture -Root $scratch -ResolverScript $resolverScript -ConfigText @'
+    $privateLowercase = Invoke-CallableResolverFailureFixture -Root $scratch -ResolverScript $resolverScript -ConfigText @'
 source: https://GitHub.com/ibuyspy-shared/basecoat-sheen.Git
 ref: main
 '@
-    if ($null -ne $privateLowercase -and $privateLowercase['source'] -ne 'ivegamsft/sheen') {
-        throw "ASSERTION FAILED: canonical private fallback must be case-insensitive; got '$($privateLowercase['source'])'"
+    if ($null -ne $privateLowercase -and $privateLowercase['exitCode'] -eq 0) {
+        throw 'ASSERTION FAILED: canonical private token preflight must be case-insensitive'
     }
 }
 finally {
     Remove-Item -LiteralPath $scratch -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-Write-Host 'Sheen sync source/token fallback contract passed.'
+Write-Host 'Sheen sync source/token preflight contract passed.'
