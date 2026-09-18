@@ -22,6 +22,7 @@ Before acting, read:
 - `references/module-recipes.md`
 - `references/input-provenance.md` for source IDs, scope, status and freshness precedence
 - `templates/guide-outline.md` when authoring or refreshing
+- `scripts/render-html-guide.ps1` only for separately authorized offline HTML packaging
 
 ## Workflow
 1. Classify request intent as audit, template, generate, refresh or freshness check.
@@ -37,7 +38,7 @@ Before acting, read:
 - Do not conflate style preference with contractual requirement.
 - Do not write artifacts, sources or metadata/timestamps for audit-only or freshness-check requests; freshness (CURRENT/STALE/UNKNOWN) is never a promotion to READY.
 - Do not require `scripts/*.ps1` in this folder for a downstream/copied skill; an equivalent approved artifact with the same scope and evidence is sufficient.
-- Do not publish, configure URLs, package portable HTML, or change application styles without separate authorization.
+- Do not publish, configure URLs, or change application styles without separate authorization; portable HTML packaging requires explicit HTML selection and destination.
 
 ## Output
 - Authoring/template/refresh: the selected Markdown or HTML-profile guide content plus module status, provenance and review-state summary.

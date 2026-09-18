@@ -19,6 +19,8 @@ Classify the request before producing output:
 
 Select delivery format independently from intent. An explicit HTML request selects the HTML profile. A refresh keeps the existing guide format unless the request names a replacement. Otherwise authoring defaults to Markdown. Do not create both Markdown and HTML unless explicitly requested.
 
+The bundled `scripts/render-html-guide.ps1` helper is the portable HTML packaging profile. It creates either the default self-contained HTML file or an explicitly selected local bundle, measures final UTF-8 bytes including embedded or copied assets, and reports `BLOCKED` rather than truncating, remote-hosting or switching profiles to pass a budget.
+
 ## Output requirements
 
 Authoring must return the guide itself, not only a governance report. Include:
@@ -31,6 +33,8 @@ Authoring must return the guide itself, not only a governance report. Include:
 - overall state: TEMPLATE, DRAFT, BLOCKED or READY
 
 Audit and check modes return reports only. A successful audit or CURRENT freshness check does not publish, write, approve or promote a guide to READY.
+
+HTML output must remain readable from a local file without JavaScript, include navigation/main landmarks and print styles, and reject executable markup, unsafe URL schemes, unsafe SVG and paths outside the authorized repository root.
 
 ## State precedence
 
