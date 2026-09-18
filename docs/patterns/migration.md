@@ -149,7 +149,7 @@ Run one skill from each category:
 ### Step 6: Merge PR
 
 1. Create branch: `git checkout -b upgrade/v0.12.1`
-2. Commit: `git add .sheen.yml .sheen.manifest.json && git commit -m "Upgrade: basecoat-sheen to v0.12.1"`
+2. Commit: `git add .sheen.yml .sheen/manifest.json && git commit -m "Upgrade: basecoat-sheen to v0.12.1"`
 3. Push: `git push origin upgrade/v0.12.1`
 4. PR: Request review from design + eng leads
 5. Merge: Once CI passes and team confirms tests work

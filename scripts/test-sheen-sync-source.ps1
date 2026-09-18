@@ -157,7 +157,7 @@ Assert-Contains $callable 'SOURCE="${SOURCE:-ivegamsft/sheen}"' 'callable source
 Assert-Contains $callable 'REF="${REF:-main}"' 'callable source_ref default must be main after .sheen.yml is evaluated'
 Assert-Contains $callable 'SHEEN_FETCH_TOKEN: ${{ secrets.fetch_token }}' 'callable must evaluate fetch token availability without logging token values'
 Assert-Contains $callable 'sed ''s/[[:space:]]#.*$//''' 'callable must strip valid YAML trailing comments from source/ref values'
-Assert-Contains $callable 'NORMALIZED_SOURCE="${SOURCE#https://github.com/}"' 'callable must normalize URL-style .sheen.yml source values'
+Assert-Contains $callable 'sed -E ''s#^[Hh][Tt][Tt][Pp][Ss]://[Gg][Ii][Tt][Hh][Uu][Bb][.][Cc][Oo][Mm]/##; s#[.][Gg][Ii][Tt]$##''' 'callable must normalize GitHub URLs and .git suffix case-insensitively'
 Assert-Contains $callable 'NORMALIZED_SOURCE_LOWER="$(printf ''%s'' "$NORMALIZED_SOURCE" | tr ''[:upper:]'' ''[:lower:]'')"' 'callable must compare GitHub owner/repo case-insensitively'
 Assert-Contains $callable 'if [[ "$NORMALIZED_SOURCE_LOWER" == "ibuyspy-shared/basecoat-sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then' 'callable must detect private source without fetch token'
 Assert-Contains $callable 'SHA refs cannot be remapped safely to the public mirror' 'callable must fail actionably instead of remapping private SHA refs'
@@ -260,7 +260,7 @@ ref: main
     }
 
     $privateLowercase = Invoke-CallableResolverFixture -Root $scratch -ResolverScript $resolverScript -ConfigText @'
-source: https://github.com/ibuyspy-shared/basecoat-sheen.git
+source: https://GitHub.com/ibuyspy-shared/basecoat-sheen.Git
 ref: main
 '@
     if ($null -ne $privateLowercase -and $privateLowercase['source'] -ne 'ivegamsft/sheen') {

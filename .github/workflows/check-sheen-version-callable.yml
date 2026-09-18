@@ -100,8 +100,7 @@ jobs:
           SOURCE="${SOURCE:-ivegamsft/sheen}"
           REF="${REF:-main}"
 
-          NORMALIZED_SOURCE="${SOURCE#https://github.com/}"
-          NORMALIZED_SOURCE="${NORMALIZED_SOURCE%.git}"
+          NORMALIZED_SOURCE="$(printf '%s' "$SOURCE" | sed -E 's#^[Hh][Tt][Tt][Pp][Ss]://[Gg][Ii][Tt][Hh][Uu][Bb][.][Cc][Oo][Mm]/##; s#[.][Gg][Ii][Tt]$##')"
           NORMALIZED_SOURCE_LOWER="$(printf '%s' "$NORMALIZED_SOURCE" | tr '[:upper:]' '[:lower:]')"
           if [[ "$NORMALIZED_SOURCE_LOWER" == "ibuyspy-shared/basecoat-sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then
             if [[ "$REF" =~ ^[0-9a-fA-F]{7,40}$ ]]; then
@@ -112,7 +111,7 @@ jobs:
             SOURCE="ivegamsft/sheen"
             SOURCE_URL="https://github.com/ivegamsft/sheen.git"
           else
-            if [[ "$SOURCE" == https://github.com/* ]]; then
+            if [[ "$SOURCE" =~ ^[Hh][Tt][Tt][Pp][Ss]://[Gg][Ii][Tt][Hh][Uu][Bb][.][Cc][Oo][Mm]/.* ]]; then
               SOURCE="$NORMALIZED_SOURCE"
               SOURCE_URL="https://github.com/${SOURCE}.git"
             elif [[ "$SOURCE" == *://* ]]; then
