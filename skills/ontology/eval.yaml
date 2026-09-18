@@ -3,17 +3,20 @@ description: "Routing evaluation — validates trigger activation for ontology."
 skill: "skills/ontology/SKILL.md"
 scenarios:
   - id: "pos-1"
-    input: "Need help with entity relationship modeling for our product experience."
+    input: "Need help modeling content-domain entities and relationships for our product help center experience."
     expect_activation: true
   - id: "pos-2"
-    input: "Create a plan for semantic schema definition in an upcoming release."
+    input: "Create a plan for semantic schema definition that improves site search and findability."
     expect_activation: true
   - id: "pos-3"
-    input: "Compare approaches for attribute constraint mapping and recommend one."
+    input: "Compare approaches for attribute constraint mapping across navigation labels and recommend one."
     expect_activation: true
   - id: "neg-1"
     input: "This request is only about flat category taxonomies."
     expect_activation: false
   - id: "neg-2"
     input: "Please focus exclusively on brand color work."
+    expect_activation: false
+  - id: "neg-3"
+    input: "Design normalized SQL tables, primary keys, foreign keys, and migrations for an orders database."
     expect_activation: false

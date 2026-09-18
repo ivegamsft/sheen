@@ -1314,17 +1314,17 @@
         "category": "ia",
         "pillar": "ia",
         "maturity": "beta",
-        "description": "Use when modeling entity relationships, semantic schemas, or attribute constraint definitions for a content or data system. USE FOR: entity relationship modeling, semantic schema definition, attribute constraint mapping. DO NOT USE FOR: flat category taxonomies, brand color work.",
-        "hash": "07344232beb0ad6d1c6249e917f4701e7cc6051155d8d93298ec2623faf2f919",
+        "description": "Use when modeling content-domain entities, semantic relationships, or attribute constraints for IA, search, and findability. USE FOR: content-domain ontology modeling, semantic relationship mapping, attribute constraint definitions for navigation and retrieval. DO NOT USE FOR: physical relational database schema design, backend data modeling, flat category taxonomies, brand color work.",
+        "hash": "1444cc2d2520369d9d0da5108de152442563a0d37f5a168320599ecd63a9721e",
         "files": [
           {
             "path": "SKILL.md",
-            "hash": "07344232beb0ad6d1c6249e917f4701e7cc6051155d8d93298ec2623faf2f919",
+            "hash": "1444cc2d2520369d9d0da5108de152442563a0d37f5a168320599ecd63a9721e",
             "hash_mode": "text-lf"
           },
           {
             "path": "eval.yaml",
-            "hash": "43aac3eace7b6aa7e086050445ecb723bc60d57183125ff50af8644d87109042",
+            "hash": "2c29e48fc50425384d7576648cae54af9a9c6a65bc83a4a4432b49e244d0e71d",
             "hash_mode": "text-lf"
           }
         ]
