@@ -377,10 +377,13 @@ try {
     $sheenSyncWorkflow = Join-Path $repoRoot '.github' 'workflows' 'sheen-sync.yml'
     $upstreamTemplate = Join-Path $work 'templates' 'sheen-sync.yml'
     if (Test-Path -LiteralPath $upstreamTemplate) {
+        $normalizedWorkflow = Get-Content -LiteralPath $upstreamTemplate -Raw
+        $normalizedWorkflow = $normalizedWorkflow -replace 'uses:\s+ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@', 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@'
+        $normalizedWorkflow = [regex]::Replace($normalizedWorkflow, '(?m)^[ \t]*source_repo:[ \t]*ivegamsft/sheen[ \t]*\r?\n', '')
         if (-not (Test-Path -LiteralPath $sheenSyncWorkflow)) {
             $workflowsDir = Join-Path $repoRoot '.github' 'workflows'
             New-Item -ItemType Directory -Force -Path $workflowsDir | Out-Null
-            Copy-Item -LiteralPath $upstreamTemplate -Destination $sheenSyncWorkflow -Force
+            Set-Content -LiteralPath $sheenSyncWorkflow -Value $normalizedWorkflow -NoNewline
             Add-ManifestFile -ManifestFiles $manifest.files -RepoRoot $repoRoot -Path $sheenSyncWorkflow
             Write-Host 'sheen sync: deployed .github/workflows/sheen-sync.yml (auto-update workflow)'
         }
@@ -388,9 +391,8 @@ try {
             $existingWorkflow = Get-Content -LiteralPath $sheenSyncWorkflow -Raw
             if ($existingWorkflow.Contains('This file was synced into your repo by basecoat-sheen.')) {
                 Add-ManifestFile -ManifestFiles $manifest.files -RepoRoot $repoRoot -Path $sheenSyncWorkflow
-                $upstreamWorkflow = Get-Content -LiteralPath $upstreamTemplate -Raw
-                if (-not [string]::Equals($existingWorkflow, $upstreamWorkflow, [System.StringComparison]::Ordinal)) {
-                    Copy-Item -LiteralPath $upstreamTemplate -Destination $sheenSyncWorkflow -Force
+                if (-not [string]::Equals($existingWorkflow, $normalizedWorkflow, [System.StringComparison]::Ordinal)) {
+                    Set-Content -LiteralPath $sheenSyncWorkflow -Value $normalizedWorkflow -NoNewline
                     Write-Host 'sheen sync: updated managed .github/workflows/sheen-sync.yml from upstream template'
                 }
             }

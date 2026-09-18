@@ -285,16 +285,21 @@ done
 SHEEN_SYNC_WF="$REPO_ROOT/.github/workflows/sheen-sync.yml"
 UPSTREAM_SYNC_WF="$WORK/templates/sheen-sync.yml"
 if [ -f "$UPSTREAM_SYNC_WF" ]; then
+  NORMALIZED_SYNC_WF="$WORK/templates/sheen-sync.normalized.yml"
+  sed \
+    -e 's#uses: ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@#uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@#g' \
+    -e '/^[[:space:]]*source_repo:[[:space:]]*ivegamsft\/sheen[[:space:]]*$/d' \
+    "$UPSTREAM_SYNC_WF" > "$NORMALIZED_SYNC_WF"
   RECORD_SYNC_WF=0
   if [ ! -f "$SHEEN_SYNC_WF" ]; then
     mkdir -p "$REPO_ROOT/.github/workflows"
-    cp "$UPSTREAM_SYNC_WF" "$SHEEN_SYNC_WF"
+    cp "$NORMALIZED_SYNC_WF" "$SHEEN_SYNC_WF"
     echo 'sheen sync: deployed .github/workflows/sheen-sync.yml (auto-update workflow)'
     RECORD_SYNC_WF=1
   elif grep -Fq 'This file was synced into your repo by basecoat-sheen.' "$SHEEN_SYNC_WF"; then
     RECORD_SYNC_WF=1
-    if ! cmp -s "$UPSTREAM_SYNC_WF" "$SHEEN_SYNC_WF"; then
-      cp "$UPSTREAM_SYNC_WF" "$SHEEN_SYNC_WF"
+    if ! cmp -s "$NORMALIZED_SYNC_WF" "$SHEEN_SYNC_WF"; then
+      cp "$NORMALIZED_SYNC_WF" "$SHEEN_SYNC_WF"
       echo 'sheen sync: updated managed .github/workflows/sheen-sync.yml from upstream template'
     fi
   fi

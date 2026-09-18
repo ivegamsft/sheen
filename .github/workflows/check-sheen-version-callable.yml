@@ -121,7 +121,11 @@ jobs:
               SOURCE_URL="https://github.com/${SOURCE}.git"
             fi
             if [[ "$NORMALIZED_SOURCE_LOWER" != "ivegamsft/sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then
-              echo "::warning title=Missing Sheen fetch token::source_repo is '${SOURCE}' and no fetch_token was provided. Public sources may still work anonymously; private/internal sources require SHEEN_FETCH_TOKEN or will fail during git clone."
+              if [[ "$SOURCE_URL" == https://github.com/* ]]; then
+                echo "::warning title=Missing Sheen fetch token::source_repo is '${SOURCE}' and no fetch_token was provided. Public GitHub sources may still work anonymously; private/internal GitHub sources require SHEEN_FETCH_TOKEN or will fail during git clone."
+              else
+                echo "::warning title=Non-GitHub Sheen source authentication::source_repo is '${SOURCE_URL}' and no GitHub fetch_token will be injected. Configure this runner's Git credentials for that host, use a URL it can clone anonymously, or use ivegamsft/sheen."
+              fi
             fi
           fi
 

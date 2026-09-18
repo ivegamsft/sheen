@@ -129,9 +129,9 @@ $syncPs1 = Read-RepoText 'sync.ps1'
 Assert-Contains $syncSh 'DEFAULT_SOURCE="https://github.com/ivegamsft/sheen.git"' 'sync.sh must not require private source credentials by default'
 Assert-Contains $syncPs1 '$DefaultSource = ''https://github.com/ivegamsft/sheen.git''' 'sync.ps1 must not require private source credentials by default'
 Assert-Contains $syncSh "grep -Fq 'This file was synced into your repo by basecoat-sheen.'" 'sync.sh must recognize marker-owned workflows for migration'
-Assert-Contains $syncSh 'cmp -s "$UPSTREAM_SYNC_WF" "$SHEEN_SYNC_WF"' 'sync.sh must refresh changed marker-owned workflows from the template'
+Assert-Contains $syncSh 'cmp -s "$NORMALIZED_SYNC_WF" "$SHEEN_SYNC_WF"' 'sync.sh must refresh changed marker-owned workflows from the normalized template'
 Assert-Contains $syncPs1 '$existingWorkflow.Contains(''This file was synced into your repo by basecoat-sheen.'')' 'sync.ps1 must recognize marker-owned workflows for migration'
-Assert-Contains $syncPs1 '[string]::Equals($existingWorkflow, $upstreamWorkflow, [System.StringComparison]::Ordinal)' 'sync.ps1 must use case-sensitive workflow template comparison'
+Assert-Contains $syncPs1 '[string]::Equals($existingWorkflow, $normalizedWorkflow, [System.StringComparison]::Ordinal)' 'sync.ps1 must use case-sensitive normalized workflow template comparison'
 Assert-Before $syncSh 'SHEEN_SYNC_WF="$REPO_ROOT/.github/workflows/sheen-sync.yml"' 'cat > "$MANIFEST"' 'sync.sh must record managed workflow before manifest serialization'
 Assert-Before $syncPs1 '$sheenSyncWorkflow = Join-Path $repoRoot ''.github'' ''workflows'' ''sheen-sync.yml''' '($manifest | ConvertTo-Json -Depth 8)' 'sync.ps1 must record managed workflow before manifest serialization'
 
@@ -167,6 +167,7 @@ Assert-Contains $callable 'SHEEN_REPO: "${{ steps.config.outputs.source_url }}"'
 Assert-Contains $callable 'if [[ -n "${SHEEN_FETCH_TOKEN}" && "$SHEEN_REPO" == https://github.com/* ]]; then' 'sync step must only inject tokens into GitHub clone URLs'
 Assert-Contains $callable 'Using public Sheen mirror' 'callable must emit an actionable fallback notice'
 Assert-Contains $callable 'Missing Sheen fetch token' 'callable must warn when a non-default source has no fetch token'
+Assert-Contains $callable 'Non-GitHub Sheen source authentication' 'callable must give host-auth guidance for non-GitHub sources'
 
 Write-Host '[5/6] production publication preserves the internal callable workflow host'
 $publish = Read-RepoText '.github/workflows/publish-to-production.yml'
@@ -191,11 +192,12 @@ Write-Host '[6/6] marker-owned public-host workflows are migrated and recorded'
 $scratch = Join-Path ([System.IO.Path]::GetTempPath()) ("sheen-sync-source-" + [Guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Force -Path $scratch | Out-Null
 try {
-    $source = New-SyncSourceFixture -Root $scratch -Template $template
     $oldWorkflow = $template.Replace(
         'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@',
         'uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@'
     )
+    $oldWorkflow = $oldWorkflow -replace 'with:\r?\n', "with:`n      source_repo: ivegamsft/sheen`n"
+    $source = New-SyncSourceFixture -Root $scratch -Template $oldWorkflow
 
     $consumerPs = New-SyncConsumerFixture -Root (Join-Path $scratch 'ps') -OldWorkflow $oldWorkflow
     $oldRepo = $env:SHEEN_REPO
