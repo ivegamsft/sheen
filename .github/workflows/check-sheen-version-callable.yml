@@ -8,12 +8,17 @@ name: "Sheen - Consumer Sync"
 #
 #   jobs:
 #     sync:
-#       uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@main
+#       uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@<commit-sha>
 #       with:
 #         source_repo: IBuySpy-Shared/basecoat-sheen
 #         source_ref: main        # or pin to a tag
 #       secrets:
 #         update_token: ${{ secrets.SHEEN_UPDATE_TOKEN }}
+#         fetch_token: ${{ secrets.SHEEN_FETCH_TOKEN }}
+#
+# This workflow is hosted ONLY in the internal repo. The public ivegamsft/sheen
+# mirror serves docs and bootstrap assets and does not contain it, so a `uses:`
+# pointing at the mirror cannot resolve and the run fails with zero jobs.
 
 on:
   workflow_call:
@@ -52,8 +57,11 @@ on:
         required: false
       fetch_token:
         description: >-
-          Read token for the source repo if it is private/internal.
-          Not needed when source_repo is the public ivegamsft/sheen mirror.
+          Read token for the source repo when it is private/internal.
+          Required whenever the consumer repo's GITHUB_TOKEN cannot read
+          source_repo -- notably when the consumer is in a different org,
+          which is the normal case. Without it the source clone is attempted
+          anonymously and fails with "could not read Username".
         required: false
 
 jobs:

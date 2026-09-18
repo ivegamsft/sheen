@@ -34,7 +34,11 @@ permissions:
 jobs:
   sheen-sync:
     name: Sync sheen assets
-    uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@main
+    # Pinned to a commit SHA, matching the basecoat consumer-update convention.
+    # The callable workflow exists only in the internal source repo; the public
+    # ivegamsft/sheen mirror hosts docs/bootstrap assets and does NOT host it.
+    # SHA below is basecoat-sheen v0.12.1.
+    uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@2060ffc487c2b8c52d7ef918d95657b8813c606c
     with:
       source_repo: IBuySpy-Shared/basecoat-sheen
       # source_ref is read from .sheen.yml by the callable workflow.
@@ -46,6 +50,8 @@ jobs:
       # Defaults to GITHUB_TOKEN if not provided. Set this secret if you need
       # to trigger further workflows on the resulting PR.
       update_token: ${{ secrets.SHEEN_UPDATE_TOKEN || '' }}
-      # fetch_token: read token for the (private) source repo.
-      # Not required when using the public ivegamsft/sheen mirror.
+      # fetch_token: read token for the internal source repo
+      # (IBuySpy-Shared/basecoat-sheen). Required whenever the consuming repo's
+      # GITHUB_TOKEN cannot read that repo -- notably when the consumer lives in
+      # a different org than the source, which is the normal case.
       fetch_token: ${{ secrets.SHEEN_FETCH_TOKEN || '' }}
