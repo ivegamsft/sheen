@@ -266,6 +266,7 @@ jobs:
           UNEXPECTED_MATCHES=$(printf '%s\n' "$FORBIDDEN_MATCHES" \
             | grep -v '^$' \
             | grep -v '^LICENSE:' \
+            | grep -v '^templates/sheen-sync.yml:.*uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' \
             || true)
           if [ -n "$UNEXPECTED_MATCHES" ]; then
             echo "::error::Internal owner details remain in the public payload:"

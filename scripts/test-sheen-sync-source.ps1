@@ -17,6 +17,12 @@ function Assert-NotContains([string]$Text, [string]$Needle, [string]$Message) {
     if ($Text.Contains($Needle)) { throw "ASSERTION FAILED: $Message" }
 }
 
+function Assert-Before([string]$Text, [string]$First, [string]$Second, [string]$Message) {
+    $firstIndex = $Text.IndexOf($First, [System.StringComparison]::Ordinal)
+    $secondIndex = $Text.IndexOf($Second, [System.StringComparison]::Ordinal)
+    if ($firstIndex -lt 0 -or $secondIndex -lt 0 -or $firstIndex -gt $secondIndex) { throw "ASSERTION FAILED: $Message" }
+}
+
 Write-Host '[1/5] standalone sync defaults use the public mirror'
 $syncSh = Read-RepoText 'sync.sh'
 $syncPs1 = Read-RepoText 'sync.ps1'
@@ -24,6 +30,8 @@ Assert-Contains $syncSh 'DEFAULT_SOURCE="https://github.com/ivegamsft/sheen.git"
 Assert-Contains $syncPs1 '$DefaultSource = ''https://github.com/ivegamsft/sheen.git''' 'sync.ps1 must not require private source credentials by default'
 Assert-Contains $syncSh "grep -Fq 'source_repo: IBuySpy-Shared/basecoat-sheen'" 'sync.sh must migrate managed workflows that still point at the private source'
 Assert-Contains $syncPs1 '$existingWorkflow.Contains(''source_repo: IBuySpy-Shared/basecoat-sheen'')' 'sync.ps1 must migrate managed workflows that still point at the private source'
+Assert-Before $syncSh 'SHEEN_SYNC_WF="$REPO_ROOT/.github/workflows/sheen-sync.yml"' 'cat > "$MANIFEST"' 'sync.sh must record managed workflow before manifest serialization'
+Assert-Before $syncPs1 '$sheenSyncWorkflow = Join-Path $repoRoot ''.github'' ''workflows'' ''sheen-sync.yml''' '($manifest | ConvertTo-Json -Depth 8)' 'sync.ps1 must record managed workflow before manifest serialization'
 
 Write-Host '[2/5] bootstrap-generated .sheen.yml defaults use the public mirror'
 $bootstrapSh = Read-RepoText 'bootstrap.sh'
@@ -53,5 +61,18 @@ Write-Host '[5/5] production publication preserves the internal callable workflo
 $publish = Read-RepoText '.github/workflows/publish-to-production.yml'
 Assert-Contains $publish 'templates/sheen-sync.yml' 'publish workflow must explicitly handle the generated sync template'
 Assert-Contains $publish 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' 'publish workflow must restore the internal callable host after public mirror sanitization'
+Assert-Contains $publish 'grep -v ''^templates/sheen-sync.yml:.*uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@''' 'publish safety gate must allow-list only the generated callable host'
+$publicTemplate = $template -replace 'IBuySpy-Shared/basecoat-sheen', 'ivegamsft/sheen'
+$publicTemplate = [regex]::Replace($publicTemplate, 'uses:\s+ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@', 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@')
+Assert-Contains $publicTemplate 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' 'sanitized public template must still call the internal reusable workflow'
+$forbidden = @()
+$publicLines = $publicTemplate -split "`r?`n"
+for ($i = 0; $i -lt $publicLines.Count; $i++) {
+    if ($publicLines[$i] -match 'IBuySpy-Shared|ibuyspy-shared\.github\.io' -and
+        $publicLines[$i] -notmatch 'uses:\s+IBuySpy-Shared/basecoat-sheen/\.github/workflows/check-sheen-version-callable\.yml@') {
+        $forbidden += "templates/sheen-sync.yml:$($i + 1):$($publicLines[$i])"
+    }
+}
+if ($forbidden.Count -gt 0) { throw "ASSERTION FAILED: sanitized public template leaves unexpected internal owner references: $($forbidden -join '; ')" }
 
 Write-Host 'Sheen sync source/token fallback contract passed.'

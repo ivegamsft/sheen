@@ -279,6 +279,31 @@ for type in $TYPES; do
   fi
 done
 
+# ── Deploy sheen-sync.yml to consumer .github/workflows/ ─────────────────────
+# Provides the same auto-update experience as basecoat: a scheduled workflow
+# opens a PR whenever a new sheen version is available.
+SHEEN_SYNC_WF="$REPO_ROOT/.github/workflows/sheen-sync.yml"
+UPSTREAM_SYNC_WF="$WORK/templates/sheen-sync.yml"
+if [ -f "$UPSTREAM_SYNC_WF" ]; then
+  RECORD_SYNC_WF=0
+  if [ ! -f "$SHEEN_SYNC_WF" ]; then
+    mkdir -p "$REPO_ROOT/.github/workflows"
+    cp "$UPSTREAM_SYNC_WF" "$SHEEN_SYNC_WF"
+    echo 'sheen sync: deployed .github/workflows/sheen-sync.yml (auto-update workflow)'
+    RECORD_SYNC_WF=1
+  elif grep -Fq 'This file was synced into your repo by basecoat-sheen.' "$SHEEN_SYNC_WF"; then
+    RECORD_SYNC_WF=1
+    if grep -Fq 'source_repo: IBuySpy-Shared/basecoat-sheen' "$SHEEN_SYNC_WF"; then
+      cp "$UPSTREAM_SYNC_WF" "$SHEEN_SYNC_WF"
+      echo 'sheen sync: updated managed .github/workflows/sheen-sync.yml to public mirror source'
+    fi
+  fi
+  if [ "$RECORD_SYNC_WF" -eq 1 ]; then
+    FILES_JSON="$FILES_JSON  \".github/workflows/sheen-sync.yml\",\n"
+    COUNT=$((COUNT + 1))
+  fi
+fi
+
 FILES_JSON="$(printf '%b' "$FILES_JSON" | sed '$ s/,$//')"
 SYNCED="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 cat > "$MANIFEST" <<EOF
@@ -450,22 +475,5 @@ if [ "$GEN_AESTHETIC" = 'true' ]; then
     echo "sheen sync: generating AESTHETIC-DIRECTION.md (generate_aesthetic_direction=true; theme=${AESTHETIC_THEME})..."
     bash "$AESTHETIC_SH" --theme "$AESTHETIC_THEME" \
       || { echo "sheen sync: build-aesthetic-direction failed" >&2; exit 1; }
-  fi
-fi
-
-# ── Deploy sheen-sync.yml to consumer .github/workflows/ ─────────────────────
-# Provides the same auto-update experience as basecoat: a scheduled workflow
-# opens a PR whenever a new sheen version is available.
-SHEEN_SYNC_WF="$REPO_ROOT/.github/workflows/sheen-sync.yml"
-UPSTREAM_SYNC_WF="$WORK/templates/sheen-sync.yml"
-if [ -f "$UPSTREAM_SYNC_WF" ]; then
-  if [ ! -f "$SHEEN_SYNC_WF" ]; then
-    mkdir -p "$REPO_ROOT/.github/workflows"
-    cp "$UPSTREAM_SYNC_WF" "$SHEEN_SYNC_WF"
-    echo 'sheen sync: deployed .github/workflows/sheen-sync.yml (auto-update workflow)'
-  elif grep -Fq 'This file was synced into your repo by basecoat-sheen.' "$SHEEN_SYNC_WF" &&
-       grep -Fq 'source_repo: IBuySpy-Shared/basecoat-sheen' "$SHEEN_SYNC_WF"; then
-    cp "$UPSTREAM_SYNC_WF" "$SHEEN_SYNC_WF"
-    echo 'sheen sync: updated managed .github/workflows/sheen-sync.yml to public mirror source'
   fi
 fi

@@ -371,6 +371,31 @@ try {
         }
     }
 
+    # ── Deploy sheen-sync.yml to consumer .github/workflows/ ─────────────────
+    # Provides the same auto-update experience as basecoat: a scheduled workflow
+    # opens a PR whenever a new sheen version is available.
+    $sheenSyncWorkflow = Join-Path $repoRoot '.github' 'workflows' 'sheen-sync.yml'
+    $upstreamTemplate = Join-Path $work 'templates' 'sheen-sync.yml'
+    if (Test-Path -LiteralPath $upstreamTemplate) {
+        if (-not (Test-Path -LiteralPath $sheenSyncWorkflow)) {
+            $workflowsDir = Join-Path $repoRoot '.github' 'workflows'
+            New-Item -ItemType Directory -Force -Path $workflowsDir | Out-Null
+            Copy-Item -LiteralPath $upstreamTemplate -Destination $sheenSyncWorkflow -Force
+            Add-ManifestFile -ManifestFiles $manifest.files -RepoRoot $repoRoot -Path $sheenSyncWorkflow
+            Write-Host 'sheen sync: deployed .github/workflows/sheen-sync.yml (auto-update workflow)'
+        }
+        else {
+            $existingWorkflow = Get-Content -LiteralPath $sheenSyncWorkflow -Raw
+            if ($existingWorkflow.Contains('This file was synced into your repo by basecoat-sheen.')) {
+                Add-ManifestFile -ManifestFiles $manifest.files -RepoRoot $repoRoot -Path $sheenSyncWorkflow
+                if ($existingWorkflow.Contains('source_repo: IBuySpy-Shared/basecoat-sheen')) {
+                    Copy-Item -LiteralPath $upstreamTemplate -Destination $sheenSyncWorkflow -Force
+                    Write-Host 'sheen sync: updated managed .github/workflows/sheen-sync.yml to public mirror source'
+                }
+            }
+        }
+    }
+
     $manifestDir = Join-Path $repoRoot '.sheen'
     New-Item -ItemType Directory -Force -Path $manifestDir | Out-Null
     $manifestPath = Join-Path $manifestDir 'manifest.json'
@@ -457,29 +482,6 @@ try {
         }
     }
 
-    # ── Deploy sheen-sync.yml to consumer .github/workflows/ ─────────────────
-    # Provides the same auto-update experience as basecoat: a scheduled workflow
-    # opens a PR whenever a new sheen version is available.
-    $sheenSyncWorkflow = Join-Path $repoRoot '.github' 'workflows' 'sheen-sync.yml'
-    $upstreamTemplate = Join-Path $work 'templates' 'sheen-sync.yml'
-    if (Test-Path -LiteralPath $upstreamTemplate) {
-        if (-not (Test-Path -LiteralPath $sheenSyncWorkflow)) {
-            $workflowsDir = Join-Path $repoRoot '.github' 'workflows'
-            New-Item -ItemType Directory -Force -Path $workflowsDir | Out-Null
-            Copy-Item -LiteralPath $upstreamTemplate -Destination $sheenSyncWorkflow -Force
-            Add-ManifestFile -ManifestFiles $manifest.files -RepoRoot $repoRoot -Path $sheenSyncWorkflow
-            Write-Host 'sheen sync: deployed .github/workflows/sheen-sync.yml (auto-update workflow)'
-        }
-        else {
-            $existingWorkflow = Get-Content -LiteralPath $sheenSyncWorkflow -Raw
-            if ($existingWorkflow.Contains('This file was synced into your repo by basecoat-sheen.') -and
-                $existingWorkflow.Contains('source_repo: IBuySpy-Shared/basecoat-sheen')) {
-                Copy-Item -LiteralPath $upstreamTemplate -Destination $sheenSyncWorkflow -Force
-                Add-ManifestFile -ManifestFiles $manifest.files -RepoRoot $repoRoot -Path $sheenSyncWorkflow
-                Write-Host 'sheen sync: updated managed .github/workflows/sheen-sync.yml to public mirror source'
-            }
-        }
-    }
 }
 finally {
     if (Test-Path -LiteralPath $work) { Remove-Item -LiteralPath $work -Recurse -Force -ErrorAction SilentlyContinue }
