@@ -63,6 +63,66 @@ function Assert-MigratedConsumer([string]$Consumer) {
     }
 }
 
+function Get-CallableResolverScript([string]$WorkflowText) {
+    $match = [regex]::Match(
+        $WorkflowText,
+        '(?ms)^      - name: Resolve sync configuration.*?^        run: \|\r?\n(?<body>.*?)(?=^      - name: )'
+    )
+    if (-not $match.Success) { throw 'ASSERTION FAILED: could not find callable resolver run block' }
+    $lines = $match.Groups['body'].Value -split "`r?`n"
+    $script = ($lines | ForEach-Object {
+        if ($_.StartsWith('          ')) { $_.Substring(10) } else { $_ }
+    }) -join "`n"
+    $script = $script.Replace('${{ inputs.source_repo }}', '${INPUT_SOURCE_REPO:-}')
+    $script = $script.Replace('${{ inputs.source_ref }}', '${INPUT_SOURCE_REF:-}')
+    $script = $script.Replace('${{ inputs.pr_branch_prefix }}', '${INPUT_PR_BRANCH_PREFIX:-chore/sheen-update}')
+    return $script
+}
+
+function Invoke-CallableResolverFixture([string]$Root, [string]$ResolverScript, [string]$ConfigText) {
+    if ($IsWindows -or -not (Get-Command bash -ErrorAction SilentlyContinue)) {
+        Write-Host 'Skipping callable resolver behavior fixture because bash is unavailable or running on Windows.'
+        return $null
+    }
+
+    $fixture = Join-Path $Root ([Guid]::NewGuid().ToString('N'))
+    New-Item -ItemType Directory -Force -Path $fixture | Out-Null
+    Set-Content -LiteralPath (Join-Path $fixture '.sheen.yml') -Value $ConfigText -NoNewline
+    $scriptPath = Join-Path $fixture 'resolve.sh'
+    $outputPath = Join-Path $fixture 'github-output.txt'
+    Set-Content -LiteralPath $scriptPath -Value $ResolverScript -NoNewline
+    $oldOutput = $env:GITHUB_OUTPUT
+    $oldSourceRepo = $env:INPUT_SOURCE_REPO
+    $oldSourceRef = $env:INPUT_SOURCE_REF
+    $oldBranchPrefix = $env:INPUT_PR_BRANCH_PREFIX
+    $oldFetchToken = $env:SHEEN_FETCH_TOKEN
+    try {
+        $env:GITHUB_OUTPUT = $outputPath
+        $env:INPUT_SOURCE_REPO = ''
+        $env:INPUT_SOURCE_REF = ''
+        $env:INPUT_PR_BRANCH_PREFIX = 'chore/sheen-update'
+        $env:SHEEN_FETCH_TOKEN = ''
+        Push-Location $fixture
+        try { & bash $scriptPath }
+        finally { Pop-Location }
+        if ($LASTEXITCODE -ne 0) { throw "callable resolver fixture failed with exit $LASTEXITCODE" }
+    }
+    finally {
+        $env:GITHUB_OUTPUT = $oldOutput
+        $env:INPUT_SOURCE_REPO = $oldSourceRepo
+        $env:INPUT_SOURCE_REF = $oldSourceRef
+        $env:INPUT_PR_BRANCH_PREFIX = $oldBranchPrefix
+        $env:SHEEN_FETCH_TOKEN = $oldFetchToken
+    }
+
+    $result = @{}
+    foreach ($line in Get-Content -LiteralPath $outputPath) {
+        $parts = $line.Split('=', 2)
+        if ($parts.Count -eq 2) { $result[$parts[0]] = $parts[1] }
+    }
+    return $result
+}
+
 Write-Host '[1/6] standalone sync defaults use the public mirror'
 $syncSh = Read-RepoText 'sync.sh'
 $syncPs1 = Read-RepoText 'sync.ps1'
@@ -99,6 +159,8 @@ Assert-Contains $callable 'SHEEN_FETCH_TOKEN: ${{ secrets.fetch_token }}' 'calla
 Assert-Contains $callable 'NORMALIZED_SOURCE="${SOURCE#https://github.com/}"' 'callable must normalize URL-style .sheen.yml source values'
 Assert-Contains $callable 'if [[ "$NORMALIZED_SOURCE" == "IBuySpy-Shared/basecoat-sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then' 'callable must detect private source without fetch token'
 Assert-Contains $callable 'SOURCE="ivegamsft/sheen"' 'callable must fall back to public mirror for private source without fetch token'
+Assert-Contains $callable 'echo "source_url=$SOURCE_URL" >> "$GITHUB_OUTPUT"' 'callable must emit a clone-ready source URL'
+Assert-Contains $callable 'SHEEN_REPO: "${{ steps.config.outputs.source_url }}"' 'sync step must use the resolved clone URL directly'
 Assert-Contains $callable 'Using public Sheen mirror' 'callable must emit an actionable fallback notice'
 Assert-Contains $callable 'Missing Sheen fetch token' 'callable must warn when a non-default source has no fetch token'
 
@@ -163,6 +225,33 @@ try {
             $env:SHEEN_REF = $oldRef
         }
         Assert-MigratedConsumer -Consumer $consumerSh
+    }
+
+    $resolverScript = Get-CallableResolverScript -WorkflowText $callable
+    $nonGitHub = Invoke-CallableResolverFixture -Root $scratch -ResolverScript $resolverScript -ConfigText @'
+source: https://git.example.internal/platform/sheen.git
+ref: v9.9.9
+'@
+    if ($null -ne $nonGitHub) {
+        if ($nonGitHub['source_url'] -ne 'https://git.example.internal/platform/sheen.git') {
+            throw "ASSERTION FAILED: non-GitHub source_url must not be wrapped in github.com; got '$($nonGitHub['source_url'])'"
+        }
+        if ($nonGitHub['ref'] -ne 'v9.9.9') {
+            throw "ASSERTION FAILED: .sheen.yml ref must win before default; got '$($nonGitHub['ref'])'"
+        }
+    }
+
+    $privateDefault = Invoke-CallableResolverFixture -Root $scratch -ResolverScript $resolverScript -ConfigText @'
+source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+ref: main
+'@
+    if ($null -ne $privateDefault) {
+        if ($privateDefault['source'] -ne 'ivegamsft/sheen') {
+            throw "ASSERTION FAILED: canonical private source without token must fall back to public source; got '$($privateDefault['source'])'"
+        }
+        if ($privateDefault['source_url'] -ne 'https://github.com/ivegamsft/sheen.git') {
+            throw "ASSERTION FAILED: canonical private source fallback must emit public source_url; got '$($privateDefault['source_url'])'"
+        }
     }
 }
 finally {

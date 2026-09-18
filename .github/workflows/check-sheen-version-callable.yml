@@ -105,14 +105,24 @@ jobs:
           if [[ "$NORMALIZED_SOURCE" == "IBuySpy-Shared/basecoat-sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then
             echo "::notice title=Using public Sheen mirror::No SHEEN_FETCH_TOKEN was provided for IBuySpy-Shared/basecoat-sheen; using ivegamsft/sheen for asset sync. Provide fetch_token only for private-source overrides."
             SOURCE="ivegamsft/sheen"
+            SOURCE_URL="https://github.com/ivegamsft/sheen.git"
           else
-            SOURCE="$NORMALIZED_SOURCE"
-            if [[ "$SOURCE" != "ivegamsft/sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then
+            if [[ "$SOURCE" == https://github.com/* ]]; then
+              SOURCE="$NORMALIZED_SOURCE"
+              SOURCE_URL="https://github.com/${SOURCE}.git"
+            elif [[ "$SOURCE" == *://* ]]; then
+              SOURCE_URL="$SOURCE"
+            else
+              SOURCE="$NORMALIZED_SOURCE"
+              SOURCE_URL="https://github.com/${SOURCE}.git"
+            fi
+            if [[ "$NORMALIZED_SOURCE" != "ivegamsft/sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then
               echo "::warning title=Missing Sheen fetch token::source_repo is '${SOURCE}' and no fetch_token was provided. Public sources may still work anonymously; private/internal sources require SHEEN_FETCH_TOKEN or will fail during git clone."
             fi
           fi
 
           echo "source=$SOURCE" >> "$GITHUB_OUTPUT"
+          echo "source_url=$SOURCE_URL" >> "$GITHUB_OUTPUT"
           echo "ref=$REF" >> "$GITHUB_OUTPUT"
 
           # Determine branch name for the PR
@@ -136,7 +146,7 @@ jobs:
       - name: Run sheen sync
         shell: bash
         env:
-          SHEEN_REPO: "https://github.com/${{ steps.config.outputs.source }}.git"
+          SHEEN_REPO: "${{ steps.config.outputs.source_url }}"
           SHEEN_REF: "${{ steps.config.outputs.ref }}"
           SHEEN_FETCH_TOKEN: "${{ secrets.fetch_token }}"
           GIT_AUTHOR_NAME: "github-actions[bot]"

@@ -97,7 +97,7 @@ themes: [light, dark, high-contrast]
 
 ```bash
 # Configure Figma Tokens plugin to sync from git
-# Source: https://github.com/IBuySpy-Shared/basecoat-sheen (or internal mirror)
+# Source: https://github.com/ivegamsft/sheen (or internal mirror)
 # File: tokens/semantic/figma.json
 # Sync: Manual pull or GitHub Action webhook
 ```
