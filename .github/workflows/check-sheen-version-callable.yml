@@ -102,7 +102,8 @@ jobs:
 
           NORMALIZED_SOURCE="${SOURCE#https://github.com/}"
           NORMALIZED_SOURCE="${NORMALIZED_SOURCE%.git}"
-          if [[ "$NORMALIZED_SOURCE" == "IBuySpy-Shared/basecoat-sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then
+          NORMALIZED_SOURCE_LOWER="$(printf '%s' "$NORMALIZED_SOURCE" | tr '[:upper:]' '[:lower:]')"
+          if [[ "$NORMALIZED_SOURCE_LOWER" == "ibuyspy-shared/basecoat-sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then
             echo "::notice title=Using public Sheen mirror::No SHEEN_FETCH_TOKEN was provided for IBuySpy-Shared/basecoat-sheen; using ivegamsft/sheen for asset sync. Provide fetch_token only for private-source overrides."
             SOURCE="ivegamsft/sheen"
             SOURCE_URL="https://github.com/ivegamsft/sheen.git"
@@ -116,7 +117,7 @@ jobs:
               SOURCE="$NORMALIZED_SOURCE"
               SOURCE_URL="https://github.com/${SOURCE}.git"
             fi
-            if [[ "$NORMALIZED_SOURCE" != "ivegamsft/sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then
+            if [[ "$NORMALIZED_SOURCE_LOWER" != "ivegamsft/sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then
               echo "::warning title=Missing Sheen fetch token::source_repo is '${SOURCE}' and no fetch_token was provided. Public sources may still work anonymously; private/internal sources require SHEEN_FETCH_TOKEN or will fail during git clone."
             fi
           fi
@@ -154,9 +155,10 @@ jobs:
         run: |
           set -euo pipefail
 
-          # Inject token into clone URL if a fetch token is provided
-          if [[ -n "${SHEEN_FETCH_TOKEN}" ]]; then
-            SHEEN_REPO="https://x-access-token:${SHEEN_FETCH_TOKEN}@github.com/${{ steps.config.outputs.source }}.git"
+          # Inject GitHub token into GitHub clone URLs only. Non-GitHub mirrors
+          # keep their resolved URL and must rely on their host's auth setup.
+          if [[ -n "${SHEEN_FETCH_TOKEN}" && "$SHEEN_REPO" == https://github.com/* ]]; then
+            SHEEN_REPO="${SHEEN_REPO/https:\/\/github.com\//https:\/\/x-access-token:${SHEEN_FETCH_TOKEN}@github.com\/}"
           fi
 
           export SHEEN_REPO SHEEN_REF

@@ -41,7 +41,8 @@ jobs:
     uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@2060ffc487c2b8c52d7ef918d95657b8813c606c
     with:
       # source_repo and source_ref are read from .sheen.yml by default.
-      # Override here or via workflow_dispatch input to force a specific ref/source.
+      # Override source_repo here to force a source; source_ref can also be
+      # overridden via workflow_dispatch input.
       source_ref: ${{ inputs.source_ref || '' }}
       auto_merge: ${{ inputs.auto_merge || false }}
     secrets:

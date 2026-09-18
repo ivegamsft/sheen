@@ -389,7 +389,7 @@ try {
             if ($existingWorkflow.Contains('This file was synced into your repo by basecoat-sheen.')) {
                 Add-ManifestFile -ManifestFiles $manifest.files -RepoRoot $repoRoot -Path $sheenSyncWorkflow
                 $upstreamWorkflow = Get-Content -LiteralPath $upstreamTemplate -Raw
-                if ($existingWorkflow -ne $upstreamWorkflow) {
+                if (-not [string]::Equals($existingWorkflow, $upstreamWorkflow, [System.StringComparison]::Ordinal)) {
                     Copy-Item -LiteralPath $upstreamTemplate -Destination $sheenSyncWorkflow -Force
                     Write-Host 'sheen sync: updated managed .github/workflows/sheen-sync.yml from upstream template'
                 }

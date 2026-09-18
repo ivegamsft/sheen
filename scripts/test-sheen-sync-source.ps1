@@ -131,7 +131,7 @@ Assert-Contains $syncPs1 '$DefaultSource = ''https://github.com/ivegamsft/sheen.
 Assert-Contains $syncSh "grep -Fq 'This file was synced into your repo by basecoat-sheen.'" 'sync.sh must recognize marker-owned workflows for migration'
 Assert-Contains $syncSh 'cmp -s "$UPSTREAM_SYNC_WF" "$SHEEN_SYNC_WF"' 'sync.sh must refresh changed marker-owned workflows from the template'
 Assert-Contains $syncPs1 '$existingWorkflow.Contains(''This file was synced into your repo by basecoat-sheen.'')' 'sync.ps1 must recognize marker-owned workflows for migration'
-Assert-Contains $syncPs1 '$existingWorkflow -ne $upstreamWorkflow' 'sync.ps1 must refresh changed marker-owned workflows from the template'
+Assert-Contains $syncPs1 '[string]::Equals($existingWorkflow, $upstreamWorkflow, [System.StringComparison]::Ordinal)' 'sync.ps1 must use case-sensitive workflow template comparison'
 Assert-Before $syncSh 'SHEEN_SYNC_WF="$REPO_ROOT/.github/workflows/sheen-sync.yml"' 'cat > "$MANIFEST"' 'sync.sh must record managed workflow before manifest serialization'
 Assert-Before $syncPs1 '$sheenSyncWorkflow = Join-Path $repoRoot ''.github'' ''workflows'' ''sheen-sync.yml''' '($manifest | ConvertTo-Json -Depth 8)' 'sync.ps1 must record managed workflow before manifest serialization'
 
@@ -157,10 +157,12 @@ Assert-Contains $callable 'SOURCE="${SOURCE:-ivegamsft/sheen}"' 'callable source
 Assert-Contains $callable 'REF="${REF:-main}"' 'callable source_ref default must be main after .sheen.yml is evaluated'
 Assert-Contains $callable 'SHEEN_FETCH_TOKEN: ${{ secrets.fetch_token }}' 'callable must evaluate fetch token availability without logging token values'
 Assert-Contains $callable 'NORMALIZED_SOURCE="${SOURCE#https://github.com/}"' 'callable must normalize URL-style .sheen.yml source values'
-Assert-Contains $callable 'if [[ "$NORMALIZED_SOURCE" == "IBuySpy-Shared/basecoat-sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then' 'callable must detect private source without fetch token'
+Assert-Contains $callable 'NORMALIZED_SOURCE_LOWER="$(printf ''%s'' "$NORMALIZED_SOURCE" | tr ''[:upper:]'' ''[:lower:]'')"' 'callable must compare GitHub owner/repo case-insensitively'
+Assert-Contains $callable 'if [[ "$NORMALIZED_SOURCE_LOWER" == "ibuyspy-shared/basecoat-sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then' 'callable must detect private source without fetch token'
 Assert-Contains $callable 'SOURCE="ivegamsft/sheen"' 'callable must fall back to public mirror for private source without fetch token'
 Assert-Contains $callable 'echo "source_url=$SOURCE_URL" >> "$GITHUB_OUTPUT"' 'callable must emit a clone-ready source URL'
 Assert-Contains $callable 'SHEEN_REPO: "${{ steps.config.outputs.source_url }}"' 'sync step must use the resolved clone URL directly'
+Assert-Contains $callable 'if [[ -n "${SHEEN_FETCH_TOKEN}" && "$SHEEN_REPO" == https://github.com/* ]]; then' 'sync step must only inject tokens into GitHub clone URLs'
 Assert-Contains $callable 'Using public Sheen mirror' 'callable must emit an actionable fallback notice'
 Assert-Contains $callable 'Missing Sheen fetch token' 'callable must warn when a non-default source has no fetch token'
 
@@ -252,6 +254,14 @@ ref: main
         if ($privateDefault['source_url'] -ne 'https://github.com/ivegamsft/sheen.git') {
             throw "ASSERTION FAILED: canonical private source fallback must emit public source_url; got '$($privateDefault['source_url'])'"
         }
+    }
+
+    $privateLowercase = Invoke-CallableResolverFixture -Root $scratch -ResolverScript $resolverScript -ConfigText @'
+source: https://github.com/ibuyspy-shared/basecoat-sheen.git
+ref: main
+'@
+    if ($null -ne $privateLowercase -and $privateLowercase['source'] -ne 'ivegamsft/sheen') {
+        throw "ASSERTION FAILED: canonical private fallback must be case-insensitive; got '$($privateLowercase['source'])'"
     }
 }
 finally {
