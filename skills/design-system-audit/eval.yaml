@@ -6,7 +6,7 @@ scenarios:
     input: "Need help with token/component coherence checks for our product experience."
     expect_activation: true
   - id: "pos-2"
-    input: "Create a plan for design drift detection in an upcoming release."
+    input: "Create a plan to triage cross-component design-system drift across tokens, docs, and component guidance in an upcoming release."
     expect_activation: true
   - id: "pos-3"
     input: "Compare approaches for system-level consistency audits and recommend one."
@@ -16,4 +16,7 @@ scenarios:
     expect_activation: false
   - id: "neg-2"
     input: "Please focus exclusively on new system bootstrap."
+    expect_activation: false
+  - id: "neg-exact-dom-parity"
+    input: "Compare the live Button DOM and computed CSS against the accepted Button spec and produce a spec-vs-implementation parity report."
     expect_activation: false

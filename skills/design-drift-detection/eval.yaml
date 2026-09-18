@@ -20,3 +20,6 @@ scenarios:
   - id: "neg-2"
     input: "Produce a visual critique of the card component layout and typography choices"
     expect_activation: false
+  - id: "neg-system-health-audit"
+    input: "Audit the whole design system for token coherence, documentation freshness, adoption gaps, and cross-component drift triage."
+    expect_activation: false

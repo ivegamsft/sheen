@@ -29,3 +29,6 @@ scenarios:
   - id: "neg-responsive-framework-scan"
     input: "Scan the codebase to detect which CSS framework and responsive grid system is currently in use."
     expect_activation: false
+  - id: "neg-governed-design-review"
+    input: "Review this checkout mock against our design principles, severity-rank governance findings, and assign remediation owners."
+    expect_activation: false

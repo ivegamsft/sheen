@@ -14,6 +14,9 @@ scenarios:
   - id: "pos-coordinate-a11y-skills"
     input: "Coordinate accessibility-audit, color-contrast-check, and usability-mapping for a high-risk onboarding flow."
     expect_activation: true
+  - id: "pos-explicit-aaa-gap-assessment"
+    input: "Run a WCAG 2.2 AAA gap assessment for the documentation experience and report AA conformance separately from any AAA gaps."
+    expect_activation: true
   - id: "neg-brand-voice"
     input: "Create brand voice guidance and microcopy tone principles for lifecycle emails."
     expect_activation: false

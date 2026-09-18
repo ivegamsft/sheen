@@ -1,7 +1,7 @@
 ---
 name: design-drift-detection
 compatibility: [github-copilot-cli]
-description: "Use when auditing whether a live implementation matches its design spec or token definitions. USE FOR: compare rendered DOM against a component spec, detect token value drift between spec and CSS, flag missing ARIA attributes not in wireframe, generate a spec-vs-implementation parity report. DO NOT USE FOR: writing new component code, creating design specs, infrastructure monitoring."
+description: "Use when auditing whether a specific live implementation matches its accepted design spec or token definitions. USE FOR: compare rendered DOM against a component spec, detect token value drift between spec and CSS, flag missing ARIA attributes not in wireframe, generate a spec-vs-implementation parity report. DO NOT USE FOR: system-wide design-system health audits, writing new component code, creating design specs, infrastructure monitoring."
 category: lifecycle
 metadata:
   category: lifecycle
@@ -30,6 +30,8 @@ Compare live DOM/CSS with design intent for token, state, structure, and ARIA pa
 - Required ARIA violations override MAJOR missing-state ratings. Otherwise missing required focus/error/loading states: MAJOR, log issue. Within-range visual deviation: MINOR, log warning and track as issues. Undocumented variants: INFO, document.
 - Respect valid native semantics; optional/irrelevant ARIA is not required. N/A needs a reason; missing evidence is UNKNOWN, never a pass. Apply the reference's applicability and evidence rules.
 - Audit only: do not write new component code, create design specs, or perform infrastructure monitoring.
+- Do not replace `design-system-audit` for broad design-system health, adoption,
+  documentation, or cross-component coherence assessments.
 
 ## Output
 

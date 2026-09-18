@@ -11,8 +11,8 @@ scenarios:
   - id: "pos-single-flow-review"
     input: "Critique one proposed dashboard layout for policy, hierarchy, consistency, and approval risks."
     expect_activation: true
-  - id: "pos-craft-issue-id"
-    input: "Identify craft quality and design governance issues in this Figma-ready artifact without opening a multi-option debate."
+  - id: "pos-governed-craft-findings"
+    input: "Review this Figma-ready artifact against design governance rules and severity-rank any craft or policy issues without opening a multi-option debate."
     expect_activation: true
   - id: "pos-real-content-calibration"
     input: "Review this claims-intake form using real customer-representative data shapes, marking any invented sample content, and exercise the empty, error, and loading states."
@@ -34,4 +34,7 @@ scenarios:
     expect_activation: false
   - id: "neg-snapshot-baseline-setup"
     input: "Set up the initial Playwright snapshot baselines for our diagram renders before any design critique happens."
+    expect_activation: false
+  - id: "neg-craft-only-polish-pass"
+    input: "Run only a typography, spacing, refinement, and fit-and-finish polish pass with a craft checklist; no governance severity report is needed."
     expect_activation: false

@@ -141,17 +141,17 @@
         "category": "a11y",
         "pillar": "a11y",
         "maturity": "stable",
-        "description": "WCAG 2.2 AA accessibility conformance audit for UI surfaces. USE FOR: a11y issue discovery and triage, remediation planning, conformance statement drafting. DO NOT USE FOR: only checking color-pair contrast, non-accessibility style preference reviews.",
-        "hash": "c9b1c0a91f50d499bd20ca930fb53019a8bad0f36cc59f0bec0f63850309e0df",
+        "description": "WCAG 2.2 accessibility conformance audit for UI surfaces, with AA as the default target and AAA assessed only when explicitly requested or feasible. USE FOR: a11y issue discovery and triage, remediation planning, conformance statement drafting. DO NOT USE FOR: only checking color-pair contrast, non-accessibility style preference reviews.",
+        "hash": "3f3e4cc366ec3523b8f68fdce0aa149c29c16ffc26ca91e63510cdaf9daac272",
         "files": [
           {
             "path": "SKILL.md",
-            "hash": "c9b1c0a91f50d499bd20ca930fb53019a8bad0f36cc59f0bec0f63850309e0df",
+            "hash": "3f3e4cc366ec3523b8f68fdce0aa149c29c16ffc26ca91e63510cdaf9daac272",
             "hash_mode": "text-lf"
           },
           {
             "path": "eval.yaml",
-            "hash": "90b6a9a5b4a04d4482a8e9cbd57e843246417c6faf08a7823b918a1ccfe17df5",
+            "hash": "445605531f83a3c3223249572c179dc44e64d19e946d5a69d7728410bc51883c",
             "hash_mode": "text-lf"
           }
         ]
@@ -396,17 +396,17 @@
         "category": "governance",
         "pillar": "governance",
         "maturity": "stable",
-        "description": "Use when running a craft and polish pass to assess consistency, refinement, and visual quality. USE FOR: craft checklist passes, polish quality assessments, consistency refinements. DO NOT USE FOR: formal usability audits, framework detection scans.",
-        "hash": "9e67ff057b9b794c2db098a5f568399c3fe6cfe23b27b0e49c0594ef3d32f0be",
+        "description": "Use when running a craft and polish pass to assess consistency, refinement, typography, spacing, and visual fit-and-finish. USE FOR: craft checklist passes, polish quality assessments, consistency refinements. DO NOT USE FOR: governed design approval reports, formal usability audits, framework detection scans.",
+        "hash": "5dda19863740e056bcdf12ac819e5c33dfa63c56bd5815ab15b2aaa30d1dd8c4",
         "files": [
           {
             "path": "SKILL.md",
-            "hash": "9e67ff057b9b794c2db098a5f568399c3fe6cfe23b27b0e49c0594ef3d32f0be",
+            "hash": "5dda19863740e056bcdf12ac819e5c33dfa63c56bd5815ab15b2aaa30d1dd8c4",
             "hash_mode": "text-lf"
           },
           {
             "path": "eval.yaml",
-            "hash": "89c253d0b33422456d804167a063945926f8cbf1a19214f0142723233155afc2",
+            "hash": "1b6e955bf85dbab93d27bef0f4c5534bcc476eb0d1774dad65249b5c5cf582ea",
             "hash_mode": "text-lf"
           },
           {
@@ -607,17 +607,17 @@
         "category": "lifecycle",
         "pillar": "lifecycle",
         "maturity": "stable",
-        "description": "Use when auditing whether a live implementation matches its design spec or token definitions. USE FOR: compare rendered DOM against a component spec, detect token value drift between spec and CSS, flag missing ARIA attributes not in wireframe, generate a spec-vs-implementation parity report. DO NOT USE FOR: writing new component code, creating design specs, infrastructure monitoring.",
-        "hash": "8dc31ee2bbe13b510713e9f40f43ceadad1c25cba207b92eb30a047a130e9c81",
+        "description": "Use when auditing whether a specific live implementation matches its accepted design spec or token definitions. USE FOR: compare rendered DOM against a component spec, detect token value drift between spec and CSS, flag missing ARIA attributes not in wireframe, generate a spec-vs-implementation parity report. DO NOT USE FOR: system-wide design-system health audits, writing new component code, creating design specs, infrastructure monitoring.",
+        "hash": "c9debf57fa011c1327535197ead242d38e85c9c2212bc66612e2618f9673890a",
         "files": [
           {
             "path": "SKILL.md",
-            "hash": "8dc31ee2bbe13b510713e9f40f43ceadad1c25cba207b92eb30a047a130e9c81",
+            "hash": "c9debf57fa011c1327535197ead242d38e85c9c2212bc66612e2618f9673890a",
             "hash_mode": "text-lf"
           },
           {
             "path": "eval.yaml",
-            "hash": "82f9b378bc5c2927ffd02836be0d9f4aa72fd60975f7d99c29055a5441afcf5a",
+            "hash": "01ce578bc2568b565d41a2b13a260aa488caa7db5d8dfe0905b649a0d869d56c",
             "hash_mode": "text-lf"
           },
           {
@@ -683,17 +683,17 @@
         "category": "governance",
         "pillar": "governance",
         "maturity": "stable",
-        "description": "Use when critiquing a design artifact against principles, craft standards, or system guidelines. USE FOR: artifact critique, principle-based review, craft issue identification. DO NOT USE FOR: multi-option debate facilitation, full repo audits.",
-        "hash": "4c7fb81cf6db14d2244480bcf48090df30953417112c61c3aa19e1b0b8436586",
+        "description": "Use when reviewing a specific design artifact or flow against principles, policy, and system guidelines with severity-ranked findings. USE FOR: artifact governance critique, principle-based review, remediation-owner findings. DO NOT USE FOR: standalone craft polish passes, multi-option debate facilitation, full repo audits.",
+        "hash": "c1a0b8c1bb94901cd9b11e28ad4859c9e97e0385ea09d60d48b5d936b39b4acf",
         "files": [
           {
             "path": "SKILL.md",
-            "hash": "4c7fb81cf6db14d2244480bcf48090df30953417112c61c3aa19e1b0b8436586",
+            "hash": "c1a0b8c1bb94901cd9b11e28ad4859c9e97e0385ea09d60d48b5d936b39b4acf",
             "hash_mode": "text-lf"
           },
           {
             "path": "eval.yaml",
-            "hash": "c151482279db990cb53dae3b16ab9c44c03eb449482b57aed934fb8c54ecd54b",
+            "hash": "362785a4aa32531b39b76d528611fe704b67dd0b29395908a8d911dce01aa19d",
             "hash_mode": "text-lf"
           },
           {
@@ -759,17 +759,17 @@
         "category": "design",
         "pillar": "components",
         "maturity": "stable",
-        "description": "Use when auditing a design system for token coherence, component consistency, and system-level drift. USE FOR: token/component coherence checks, design drift detection, system-level consistency audits. DO NOT USE FOR: repo-wide UX debt triage, new system bootstrap.",
-        "hash": "547cc92ec6d8b96741b89553e86f7a2577daa856f7dc1db8eb668fa6ae11f059",
+        "description": "Use when auditing design-system health across tokens, components, documentation, and adoption patterns. USE FOR: token/component coherence checks, system-level consistency audits, cross-component drift triage. DO NOT USE FOR: exact live DOM/CSS parity reports, repo-wide UX debt triage, new system bootstrap.",
+        "hash": "58c93605753feead429b20f707b51d851d350f9dc439e799d3e3087f1964bc4c",
         "files": [
           {
             "path": "SKILL.md",
-            "hash": "547cc92ec6d8b96741b89553e86f7a2577daa856f7dc1db8eb668fa6ae11f059",
+            "hash": "58c93605753feead429b20f707b51d851d350f9dc439e799d3e3087f1964bc4c",
             "hash_mode": "text-lf"
           },
           {
             "path": "eval.yaml",
-            "hash": "b34d752ab57ea9e576da004030350769f626d9437ff0a3aefdf86e112b07a32b",
+            "hash": "aae749958d20b6703c870c204a1155a9a1eca29f359828d436feb86d0aad38bc",
             "hash_mode": "text-lf"
           }
         ]
@@ -1753,8 +1753,8 @@
         "path": "agents/accessibility-auditor.agent.md",
         "pillar": "a11y",
         "maturity": "draft",
-        "description": "WCAG conformance auditing, colour contrast checks, and accessibility risk triage for design and code surfaces. USE FOR: audit screens or components for WCAG 2.2 AA/AAA compliance, check foreground/background colour contrast ratios, triage keyboard navigation and ARIA implementation risks, create accessibility review reports, evaluate high-contrast theme coverage. DO NOT USE FOR: brand identity direction, token architecture, IA taxonomy, engineering backend implementation.",
-        "hash": "dc54046e1ff20ddcba93481f2e71708911484e2a2f3b6320e970e345cc629480"
+        "description": "WCAG conformance auditing, colour contrast checks, and accessibility risk triage for design and code surfaces. USE FOR: audit screens or components for WCAG 2.2 AA conformance, assess explicit AAA gaps without promoting AA evidence, check foreground/background colour contrast ratios, triage keyboard navigation and ARIA implementation risks, create accessibility review reports, evaluate high-contrast theme coverage. DO NOT USE FOR: brand identity direction, token architecture, IA taxonomy, engineering backend implementation.",
+        "hash": "95cc403d62e06ee088b9b8562e7376a4a9f03925784cc828fe284d8cfbe878e7"
       },
       {
         "name": "brand-steward",
