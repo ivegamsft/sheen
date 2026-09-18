@@ -9,6 +9,7 @@ param(
     [int]$BudgetBytes = 0,
     [string]$OverrideRationale,
     [string]$OverrideAuthorizer,
+    [ValidatePattern('^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$')][string]$Language = 'en',
     [switch]$Quiet
 )
 $ErrorActionPreference = 'Stop'
@@ -24,7 +25,8 @@ $result = New-StyleGuideHtml `
     -RepoRoot $RepoRoot `
     -BudgetBytes $BudgetBytes `
     -OverrideRationale $OverrideRationale `
-    -OverrideAuthorizer $OverrideAuthorizer
+    -OverrideAuthorizer $OverrideAuthorizer `
+    -Language $Language
 
 if (-not $Quiet) { $result | ConvertTo-Json -Depth 10 }
 if ($result.State -eq 'BLOCKED') { exit 1 } else { exit 0 }
