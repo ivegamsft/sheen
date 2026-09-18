@@ -18,6 +18,11 @@ function Assert-Throws {
     if ($ExpectedSubstring) { Assert-True ($errMsg -like "*$ExpectedSubstring*") "$Message (exception '$errMsg' did not contain '$ExpectedSubstring')" }
 }
 
+function Invoke-GuideHtmlCli {
+    param([Parameter(Mandatory)][string[]]$Arguments)
+    return & pwsh -NoProfile -File $cli @Arguments 2>$null
+}
+
 $scratch = Join-Path ([System.IO.Path]::GetTempPath()) ("sga-229-" + [Guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Path $scratch -Force | Out-Null
 try {
@@ -28,6 +33,10 @@ try {
 ## Orientation
 
 Approved scope and audience.
+> State: DRAFT
+Use `inline-code` in canonical outlines.
+1. First ordered checkpoint
+2. Second ordered checkpoint
 
 ## Visual foundations
 
@@ -61,10 +70,16 @@ Repeated heading fixture.
     Assert-True ($content -match 'data:image/png;base64,') 'Self-contained output must embed permitted assets'
     Assert-Equal (Get-Item -LiteralPath $html).Length $result.Bytes 'Self-contained budget must equal the emitted HTML file length'
     Assert-True ($content -match '<table>') 'Canonical guide Markdown tables must render as semantic HTML tables'
+    Assert-True ($content -match '<blockquote>State: DRAFT</blockquote>') 'Canonical guide Markdown blockquotes must render semantically'
+    Assert-True ($content -match '<code>inline-code</code>') 'Canonical guide Markdown inline code must render semantically'
+    Assert-True ($content -match '<ol>') 'Canonical guide Markdown ordered lists must render semantically'
     Assert-True ($content -match 'id="orientation-2"') 'Repeated headings must receive stable unique fragment IDs'
     $badOutline = Join-Path $scratch 'bad-outline.md'
     Set-Content -LiteralPath $badOutline -Value "## Starts too deep`n# Later title" -NoNewline
     Assert-Throws { New-StyleGuideHtml -MarkdownPath $badOutline -OutputPath (Join-Path $scratch 'bad-outline.html') -RepoRoot $scratch } 'Guide outlines must start with one H1' 'primary H1'
+    $nestedList = Join-Path $scratch 'nested-list.md'
+    Set-Content -LiteralPath $nestedList -Value "# Nested list`n- Parent`n  - Child" -NoNewline
+    Assert-Throws { New-StyleGuideHtml -MarkdownPath $nestedList -OutputPath (Join-Path $scratch 'nested-list.html') -RepoRoot $scratch } 'Unsupported nested lists must fail visibly instead of rendering as paragraphs' 'Nested lists'
 
     Write-Host '[2/8] exact budget passes and one byte over fails'
     $exact = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'exact.html') -AssetManifestPath $manifest -RepoRoot $scratch -BudgetBytes $result.Bytes -OverrideRationale 'Fixture exact limit' -OverrideAuthorizer 'test'
@@ -74,6 +89,21 @@ Repeated heading fixture.
     Assert-Equal 'BLOCKED' $over.State 'An artifact one byte over the effective limit must fail'
     Assert-True (-not (Test-Path -LiteralPath $overPath)) 'Over-budget output must not publish a normal-looking HTML file'
     Assert-True (Test-Path -LiteralPath "$overPath.blocked.html") 'Over-budget output may retain only a labeled diagnostic artifact'
+    $largeAsset = Join-Path $scratch 'large.png'
+    $stream = [System.IO.File]::Open($largeAsset, [System.IO.FileMode]::Create, [System.IO.FileAccess]::ReadWrite)
+    try {
+        $pngHeader = [byte[]](0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A)
+        $stream.Write($pngHeader, 0, $pngHeader.Length)
+        $stream.SetLength(6 * 1024 * 1024)
+    } finally {
+        $stream.Dispose()
+    }
+    $largeManifest = Join-Path $scratch 'large-assets.json'
+    @{ assets = @(@{ id = 'large'; path = 'large.png'; mediaType = 'image/png'; alt = 'Large'; permission = 'embed' }) } |
+        ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $largeManifest -NoNewline
+    $largeOver = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'large-over.html') -AssetManifestPath $largeManifest -RepoRoot $scratch -BudgetBytes 1 -OverrideRationale 'Fixture large preflight' -OverrideAuthorizer 'test'
+    Assert-Equal 'BLOCKED' $largeOver.State 'Over-budget large assets must block via preflight without normal publication'
+    Assert-True ($largeOver.Assets[0].contributionBytes -gt $largeOver.BudgetBytes) 'Large asset diagnostics must report estimated contribution bytes'
     $consumerDiagnostic = Join-Path $scratch 'consumer-diagnostic.html'
     Set-Content -LiteralPath "$consumerDiagnostic.blocked.html" -Value 'consumer-owned' -NoNewline
     Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath $consumerDiagnostic -AssetManifestPath $manifest -RepoRoot $scratch -BudgetBytes 1 -OverrideRationale 'Fixture diagnostic collision' -OverrideAuthorizer 'test' } 'Blocked diagnostics must not overwrite consumer-owned files' 'unmanaged HTML output'
@@ -198,12 +228,12 @@ Repeated heading fixture.
     Write-Host '[8/8] CLI emits JSON and returns nonzero for budget failure'
     $cli = Join-Path $repoRoot 'skills' -AdditionalChildPath 'style-guide-authoring', 'scripts', 'render-html-guide.ps1'
     $cliOut = Join-Path $scratch 'cli-over.html'
-    $json = & $cli -MarkdownPath $guide -OutputPath $cliOut -AssetManifestPath $manifest -RepoRoot $scratch -BudgetBytes 1 -OverrideRationale 'Fixture' -OverrideAuthorizer 'test' 2>$null
+    $json = Invoke-GuideHtmlCli -Arguments @('-MarkdownPath', $guide, '-OutputPath', $cliOut, '-AssetManifestPath', $manifest, '-RepoRoot', $scratch, '-BudgetBytes', '1', '-OverrideRationale', 'Fixture', '-OverrideAuthorizer', 'test')
     Assert-True ($LASTEXITCODE -ne 0) 'CLI must exit nonzero for a blocked over-budget artifact'
     $parsed = $json | ConvertFrom-Json
     Assert-Equal 'BLOCKED' $parsed.State 'CLI JSON must report BLOCKED for over-budget output'
     Assert-True (@($parsed.Assets).Count -gt 0) 'Blocked budget output must still report diagnostic asset inventory'
-    $cliProfileJson = & $cli -MarkdownPath $guide -OutputPath (Join-Path $scratch 'cli-quick.html') -RepoRoot $scratch -Profile quick-reference 2>$null
+    $cliProfileJson = Invoke-GuideHtmlCli -Arguments @('-MarkdownPath', $guide, '-OutputPath', (Join-Path $scratch 'cli-quick.html'), '-RepoRoot', $scratch, '-Profile', 'quick-reference')
     Assert-Equal 0 $LASTEXITCODE 'CLI must forward supported profile values to the helper'
     $cliProfile = $cliProfileJson | ConvertFrom-Json
     Assert-Equal 'quick-reference' $cliProfile.Profile 'CLI profile output must preserve the requested profile'
@@ -213,13 +243,19 @@ Repeated heading fixture.
     $bundleAgain = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'index.html') -Packaging local-bundle -AssetManifestPath $bundleManifest -RepoRoot $scratch
     Assert-Equal 'DRAFT' $bundleAgain.State 'Repeated local bundle generation should refresh managed assets only'
     Assert-True (Test-Path -LiteralPath $consumerAsset) 'Local bundle publication must not delete consumer-owned assets'
+    $bundleHtmlPath = Join-Path $scratch 'bundle' -AdditionalChildPath 'index.html'
+    $bundleHtmlBeforeFailure = Get-Content -LiteralPath $bundleHtmlPath -Raw
     [System.IO.File]::WriteAllBytes($managedAsset, [byte[]](1, 2, 3, 4))
-    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'index.html') -Packaging local-bundle -AssetManifestPath $bundleManifest -RepoRoot $scratch } 'Edited managed assets must block overwrite during refresh' 'edited outside'
+    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath $bundleHtmlPath -Packaging local-bundle -AssetManifestPath $bundleManifest -RepoRoot $scratch } 'Edited managed assets must block overwrite during refresh' 'edited outside'
+    Assert-Equal $bundleHtmlBeforeFailure (Get-Content -LiteralPath $bundleHtmlPath -Raw) 'Failed local-bundle refresh must preserve the previous HTML output'
+    Assert-True (Test-Path -LiteralPath $consumerAsset) 'Failed local-bundle refresh must preserve consumer-owned assets'
     Copy-Item -LiteralPath $asset -Destination $managedAsset -Force
     [System.IO.File]::WriteAllBytes($managedAsset, [byte[]](5, 6, 7, 8))
-    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'index.html') -Packaging local-bundle -RepoRoot $scratch } 'Edited stale managed assets must block deletion during refresh' 'edited outside'
+    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath $bundleHtmlPath -Packaging local-bundle -RepoRoot $scratch } 'Edited stale managed assets must block deletion during refresh' 'edited outside'
+    Assert-Equal $bundleHtmlBeforeFailure (Get-Content -LiteralPath $bundleHtmlPath -Raw) 'Failed stale-asset deletion must preserve the previous HTML output'
+    Assert-True (Test-Path -LiteralPath $consumerAsset) 'Failed stale-asset deletion must preserve consumer-owned assets'
     Copy-Item -LiteralPath $asset -Destination $managedAsset -Force
-    $bundleNoAssets = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'index.html') -Packaging local-bundle -RepoRoot $scratch
+    $bundleNoAssets = New-StyleGuideHtml -MarkdownPath $guide -OutputPath $bundleHtmlPath -Packaging local-bundle -RepoRoot $scratch
     Assert-Equal 'DRAFT' $bundleNoAssets.State 'Local bundle refresh with no assets should still reconcile managed assets'
     Assert-True (-not (Test-Path -LiteralPath $managedAsset)) 'Removed local bundle assets must be cleaned up when no longer managed'
     Assert-True (Test-Path -LiteralPath $consumerAsset) 'No-asset refresh must still preserve consumer-owned files'

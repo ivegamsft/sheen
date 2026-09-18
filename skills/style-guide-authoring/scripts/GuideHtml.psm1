@@ -18,6 +18,14 @@ function Get-BytesSha256 {
     finally { $sha.Dispose() }
 }
 
+function Get-FileSha256 {
+    param([Parameter(Mandatory)][string]$Path)
+    $sha = [System.Security.Cryptography.SHA256]::Create()
+    $stream = [System.IO.File]::OpenRead($Path)
+    try { return ([System.BitConverter]::ToString($sha.ComputeHash($stream)) -replace '-', '').ToLowerInvariant() }
+    finally { $stream.Dispose(); $sha.Dispose() }
+}
+
 function Get-TextSha256 {
     param([Parameter(Mandatory)][AllowEmptyString()][string]$Text)
     return Get-BytesSha256 -Bytes ([System.Text.Encoding]::UTF8.GetBytes($Text))
@@ -66,20 +74,33 @@ function Test-SafeGuideUrl {
     return $trimmed -match '^(?i)(https?|mailto):' -or $trimmed.StartsWith('#') -or ($trimmed -notmatch ':' -and -not $trimmed.StartsWith('//'))
 }
 
+function ConvertTo-SafeInlineTextHtml {
+    param([Parameter(Mandatory)][AllowEmptyString()][string]$Text)
+    $parts = [System.Collections.Generic.List[string]]::new()
+    $last = 0
+    foreach ($m in [regex]::Matches($Text, '`(?<code>[^`]+)`')) {
+        $parts.Add((ConvertTo-HtmlText $Text.Substring($last, $m.Index - $last)))
+        $parts.Add("<code>$(ConvertTo-HtmlText $m.Groups['code'].Value)</code>")
+        $last = $m.Index + $m.Length
+    }
+    $parts.Add((ConvertTo-HtmlText $Text.Substring($last)))
+    return ($parts -join '')
+}
+
 function ConvertTo-SafeInlineHtml {
     param([Parameter(Mandatory)][AllowEmptyString()][string]$Text)
     $pattern = '\[(?<label>[^\]]+)\]\((?<url>[^)]+)\)'
     $parts = [System.Collections.Generic.List[string]]::new()
     $last = 0
     foreach ($m in [regex]::Matches($Text, $pattern)) {
-        $parts.Add((ConvertTo-HtmlText $Text.Substring($last, $m.Index - $last)))
+        $parts.Add((ConvertTo-SafeInlineTextHtml $Text.Substring($last, $m.Index - $last)))
         $label = $m.Groups['label'].Value
         $url = $m.Groups['url'].Value.Trim()
         if (-not (Test-SafeGuideUrl -Url $url)) { throw "Unsupported URL scheme in guide content: $url" }
-        $parts.Add("<a href=`"$(ConvertTo-HtmlText $url)`">$(ConvertTo-HtmlText $label)</a>")
+        $parts.Add("<a href=`"$(ConvertTo-HtmlText $url)`">$(ConvertTo-SafeInlineTextHtml $label)</a>")
         $last = $m.Index + $m.Length
     }
-    $parts.Add((ConvertTo-HtmlText $Text.Substring($last)))
+    $parts.Add((ConvertTo-SafeInlineTextHtml $Text.Substring($last)))
     return ($parts -join '')
 }
 
@@ -168,6 +189,19 @@ function Get-DetectedImageMediaType {
     return 'unknown'
 }
 
+function Get-DetectedImageMediaTypeFromFile {
+    param([Parameter(Mandatory)][string]$Path)
+    $stream = [System.IO.File]::OpenRead($Path)
+    try {
+        $length = [Math]::Min(64, [int]$stream.Length)
+        $buffer = [byte[]]::new($length)
+        [void]$stream.Read($buffer, 0, $length)
+        return Get-DetectedImageMediaType -Bytes $buffer
+    } finally {
+        $stream.Dispose()
+    }
+}
+
 function Get-ImageExtensionForMediaType {
     param([Parameter(Mandatory)][string]$MediaType)
     switch ($MediaType) {
@@ -185,10 +219,12 @@ function Get-GuideHtmlAssetRecords {
         [Parameter(Mandatory)][string]$RepoRoot,
         [Parameter(Mandatory)][string]$Packaging,
         [Parameter(Mandatory)][string]$OutputDirectory,
-        [string]$BundleId
+        [string]$BundleId,
+        [int]$BudgetBytes = 0
     )
     $records = [System.Collections.Generic.List[object]]::new()
     $destinations = @{}
+    $contributionUsed = 0
     if (-not $AssetManifestPath) { return @($records) }
     $resolvedManifestPath = Resolve-GuideHtmlPath -RepoRoot $RepoRoot -Path $AssetManifestPath
     $manifest = Get-Content -LiteralPath $resolvedManifestPath -Raw | ConvertFrom-Json -AsHashtable
@@ -209,8 +245,8 @@ function Get-GuideHtmlAssetRecords {
         $resolved = Resolve-GuideHtmlPath -RepoRoot $RepoRoot -Path $path
         if (-not (Test-Path -LiteralPath $resolved -PathType Leaf)) { throw "Asset '$id' does not resolve to a local file: $path" }
         $extension = [System.IO.Path]::GetExtension($resolved).ToLowerInvariant()
-        $bytes = [System.IO.File]::ReadAllBytes($resolved)
-        $detectedMediaType = Get-DetectedImageMediaType -Bytes $bytes
+        $fileInfo = Get-Item -LiteralPath $resolved -Force
+        $detectedMediaType = Get-DetectedImageMediaTypeFromFile -Path $resolved
         if ($detectedMediaType -eq 'image/svg+xml') { throw "Asset '$id' contains SVG/XML bytes and requires an approved sanitizer." }
         if ($detectedMediaType -ne $mediaType) { throw "Asset '$id' byte signature '$detectedMediaType' does not match declared media type '$mediaType'." }
         if ($extension -eq '.svg' -or $mediaType -eq 'image/svg+xml') {
@@ -218,31 +254,58 @@ function Get-GuideHtmlAssetRecords {
         }
         if ($Packaging -eq 'self-contained') {
             if ($permission -ne 'embed') { throw "Asset '$id' requires local-bundle packaging; self-contained output cannot copy it silently." }
+            $estimatedContribution = [int64]([Math]::Ceiling($fileInfo.Length / 3.0) * 4)
+            if ($BudgetBytes -gt 0 -and ($contributionUsed + $estimatedContribution) -gt $BudgetBytes) {
+                $records.Add([ordered]@{
+                    Id = $id; Mode = 'embedded'; Bytes = $fileInfo.Length; MediaType = $mediaType; Alt = $alt
+                    ContributionBytes = $estimatedContribution; Html = ''; DeliveredPath = $null; RelativePath = $null
+                    Hash = $null; PreflightOnly = $true
+                })
+                $contributionUsed += $estimatedContribution
+                continue
+            }
+            $bytes = [System.IO.File]::ReadAllBytes($resolved)
+            $encoded = [Convert]::ToBase64String($bytes)
             $records.Add([ordered]@{
                 Id = $id; Mode = 'embedded'; Bytes = $bytes.Length; MediaType = $mediaType; Alt = $alt
-                ContributionBytes = (Get-Utf8ByteCount -Text ([Convert]::ToBase64String($bytes)))
-                Html = "<figure class=`"sga-asset`"><img src=`"data:$(ConvertTo-HtmlText $mediaType);base64,$([Convert]::ToBase64String($bytes))`" alt=`"$(ConvertTo-HtmlText $alt)`"><figcaption>$(ConvertTo-HtmlText $id)</figcaption></figure>"
+                ContributionBytes = (Get-Utf8ByteCount -Text $encoded)
+                Html = "<figure class=`"sga-asset`"><img src=`"data:$(ConvertTo-HtmlText $mediaType);base64,$encoded`" alt=`"$(ConvertTo-HtmlText $alt)`"><figcaption>$(ConvertTo-HtmlText $id)</figcaption></figure>"
                 DeliveredPath = $null
                 RelativePath = $null
+                Hash = $null
+                PreflightOnly = $false
             })
+            $contributionUsed += (Get-Utf8ByteCount -Text $encoded)
         } else {
             if ($permission -ne 'copy') { throw "Asset '$id' requires embed permission; local-bundle output cannot copy it silently." }
             $safeName = 'sga-' + (ConvertTo-GuideHtmlId -Text $id) + '-' + (Get-TextSha256 -Text $id).Substring(0, 8) + (Get-ImageExtensionForMediaType -MediaType $mediaType)
             if ($destinations.ContainsKey($safeName)) { throw "Asset '$id' normalizes to duplicate bundle destination '$safeName'." }
             $destinations[$safeName] = $true
+            $relativePath = if ($BundleId) { "assets/$BundleId/$safeName" } else { "assets/$safeName" }
+            if ($BudgetBytes -gt 0 -and ($contributionUsed + $fileInfo.Length) -gt $BudgetBytes) {
+                $records.Add([ordered]@{
+                    Id = $id; Mode = 'copied'; Bytes = $fileInfo.Length; MediaType = $mediaType; Alt = $alt
+                    ContributionBytes = $fileInfo.Length; Hash = $null; Html = ''; DeliveredPath = $null
+                    RelativePath = $relativePath; PreflightOnly = $true
+                })
+                $contributionUsed += $fileInfo.Length
+                continue
+            }
+            $bytes = [System.IO.File]::ReadAllBytes($resolved)
             $assetDir = Join-Path $OutputDirectory 'assets'
             New-Item -ItemType Directory -Path $assetDir -Force | Out-Null
             $destination = Join-Path $assetDir $safeName
             [System.IO.File]::WriteAllBytes($destination, $bytes)
-            $relativePath = if ($BundleId) { "assets/$BundleId/$safeName" } else { "assets/$safeName" }
             $records.Add([ordered]@{
                 Id = $id; Mode = 'copied'; Bytes = $bytes.Length; MediaType = $mediaType; Alt = $alt
                 ContributionBytes = $bytes.Length
-                Hash = Get-BytesSha256 -Bytes $bytes
+                Hash = Get-FileSha256 -Path $resolved
                 Html = "<figure class=`"sga-asset`"><img src=`"$relativePath`" alt=`"$(ConvertTo-HtmlText $alt)`"><figcaption>$(ConvertTo-HtmlText $id)</figcaption></figure>"
                 DeliveredPath = $destination
                 RelativePath = $relativePath
+                PreflightOnly = $false
             })
+            $contributionUsed += $bytes.Length
         }
     }
     return @($records)
@@ -252,7 +315,7 @@ function Convert-GuideMarkdownToHtmlBody {
     param([Parameter(Mandatory)][string]$Markdown)
     $nav = [System.Collections.Generic.List[object]]::new()
     $body = [System.Text.StringBuilder]::new()
-    $inList = $false
+    $inList = $null
     $usedIds = @{}
     $h1Count = 0
     $previousLevel = 0
@@ -260,7 +323,7 @@ function Convert-GuideMarkdownToHtmlBody {
     for ($i = 0; $i -lt $lines.Count; $i++) {
         $line = $lines[$i]
         if ($line.Trim().StartsWith('|') -and $i + 1 -lt $lines.Count -and $lines[$i + 1].Trim() -match '^\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?$') {
-            if ($inList) { [void]$body.AppendLine('</ul>'); $inList = $false }
+            if ($inList) { [void]$body.AppendLine("</$inList>"); $inList = $null }
             $headers = @($line.Trim().Trim('|') -split '\|' | ForEach-Object { $_.Trim() })
             [void]$body.AppendLine('<div class="sga-table-wrap"><table><thead><tr>')
             foreach ($header in $headers) { [void]$body.AppendLine("<th>$(ConvertTo-SafeInlineHtml $header)</th>") }
@@ -278,11 +341,17 @@ function Convert-GuideMarkdownToHtmlBody {
             continue
         }
         if ($line -match '^\s*<!--.*-->\s*$') {
-            if ($inList) { [void]$body.AppendLine('</ul>'); $inList = $false }
+            if ($inList) { [void]$body.AppendLine("</$inList>"); $inList = $null }
             continue
         }
+        if ($line -match '^\s*```') {
+            throw 'Fenced code blocks are not supported in portable HTML guides; use inline code or move examples to references.'
+        }
+        if ($line -match '^\s{2,}[-*]\s+' -or $line -match '^\s{2,}\d+[.)]\s+') {
+            throw 'Nested lists are not supported in portable HTML guides; flatten the list before packaging.'
+        }
         if ($line -match '^(?<hash>#{1,6})\s+(?<title>.+?)\s*$') {
-            if ($inList) { [void]$body.AppendLine('</ul>'); $inList = $false }
+            if ($inList) { [void]$body.AppendLine("</$inList>"); $inList = $null }
             $level = [Math]::Min($Matches.hash.Length, 6)
             if ($level -eq 1) { $h1Count++ }
             if ($previousLevel -eq 0 -and $level -ne 1) { throw "HTML guides must start with the primary H1 heading." }
@@ -304,17 +373,25 @@ function Convert-GuideMarkdownToHtmlBody {
             $usedIds[$id] = $true
             $nav.Add([ordered]@{ Id = $id; Title = $title; Level = $level })
             [void]$body.AppendLine("<h$level id=`"$id`">$(ConvertTo-HtmlText $title)</h$level>")
-        } elseif ($line -match '^\s*[-*]\s+(?<item>.+?)\s*$') {
-            if (-not $inList) { [void]$body.AppendLine('<ul>'); $inList = $true }
+        } elseif ($line -match '^[-*]\s+(?<item>.+?)\s*$') {
+            if ($inList -and $inList -ne 'ul') { [void]$body.AppendLine("</$inList>"); $inList = $null }
+            if (-not $inList) { [void]$body.AppendLine('<ul>'); $inList = 'ul' }
             [void]$body.AppendLine("<li>$(ConvertTo-SafeInlineHtml $Matches.item)</li>")
+        } elseif ($line -match '^\d+[.)]\s+(?<item>.+?)\s*$') {
+            if ($inList -and $inList -ne 'ol') { [void]$body.AppendLine("</$inList>"); $inList = $null }
+            if (-not $inList) { [void]$body.AppendLine('<ol>'); $inList = 'ol' }
+            [void]$body.AppendLine("<li>$(ConvertTo-SafeInlineHtml $Matches.item)</li>")
+        } elseif ($line -match '^>\s*(?<quote>.+?)\s*$') {
+            if ($inList) { [void]$body.AppendLine("</$inList>"); $inList = $null }
+            [void]$body.AppendLine("<blockquote>$(ConvertTo-SafeInlineHtml $Matches.quote)</blockquote>")
         } elseif ($line.Trim().Length -eq 0) {
-            if ($inList) { [void]$body.AppendLine('</ul>'); $inList = $false }
+            if ($inList) { [void]$body.AppendLine("</$inList>"); $inList = $null }
         } else {
-            if ($inList) { [void]$body.AppendLine('</ul>'); $inList = $false }
+            if ($inList) { [void]$body.AppendLine("</$inList>"); $inList = $null }
             [void]$body.AppendLine("<p>$(ConvertTo-SafeInlineHtml $line.Trim())</p>")
         }
     }
-    if ($inList) { [void]$body.AppendLine('</ul>') }
+    if ($inList) { [void]$body.AppendLine("</$inList>") }
     if ($h1Count -ne 1) { throw "HTML guides require exactly one primary H1 heading; found $h1Count." }
     return [ordered]@{ Body = $body.ToString(); Navigation = @($nav); Outline = 'PASS' }
 }
@@ -353,7 +430,7 @@ function New-StyleGuideHtml {
     $stagedOutput = Join-Path $stagingDirectory (Split-Path -Leaf $OutputPath)
     try {
     $converted = Convert-GuideMarkdownToHtmlBody -Markdown $markdown
-    $assets = @(Get-GuideHtmlAssetRecords -AssetManifestPath $AssetManifestPath -RepoRoot $RepoRoot -Packaging $Packaging -OutputDirectory $stagingDirectory -BundleId $bundleId)
+    $assets = @(Get-GuideHtmlAssetRecords -AssetManifestPath $AssetManifestPath -RepoRoot $RepoRoot -Packaging $Packaging -OutputDirectory $stagingDirectory -BundleId $bundleId -BudgetBytes $effectiveBudget)
     $assetHtml = ($assets | ForEach-Object { $_.Html }) -join "`n"
     $nav = ($converted.Navigation | ForEach-Object { "<a href=`"#$($_.Id)`">$(ConvertTo-HtmlText $_.Title)</a>" }) -join "`n"
     $title = if ($converted.Navigation.Count -gt 0) { $converted.Navigation[0].Title } else { 'Style guide' }
@@ -399,18 +476,27 @@ $assetHtml
     $htmlBytes = Get-Utf8ByteCount -Text $html
     $assetBytes = 0
     foreach ($asset in $assets) { $assetBytes += [int]$asset.Bytes }
-    $managedRecords = @($assets | Where-Object { $_.RelativePath } | ForEach-Object { [ordered]@{ path = $_.RelativePath; hash = $_.Hash } })
+    $preflightBlocked = @($assets | Where-Object { $_.PreflightOnly }).Count -gt 0
+    $managedRecords = @($assets | Where-Object { $_.RelativePath -and -not $_.PreflightOnly } | ForEach-Object { [ordered]@{ path = $_.RelativePath; hash = $_.Hash } })
     $managedManifestJson = if ($Packaging -eq 'local-bundle') { if ($managedRecords.Count -eq 0) { '[]' } else { ($managedRecords | ConvertTo-Json -Depth 4) } } else { '' }
     $managedManifestBytes = if ($Packaging -eq 'local-bundle') { Get-Utf8ByteCount -Text $managedManifestJson } else { 0 }
     $bundleBytes = if ($Packaging -eq 'self-contained') { $htmlBytes } else { $htmlBytes + $assetBytes + $managedManifestBytes }
-    $passed = $bundleBytes -le $effectiveBudget
+    $passed = (-not $preflightBlocked) -and $bundleBytes -le $effectiveBudget
     $publishedAssets = @()
     if ($passed) {
         New-Item -ItemType Directory -Path $outputDirectory -Force | Out-Null
         $stagedBytes = [System.IO.File]::ReadAllBytes($stagedOutput)
         Assert-OwnedHtmlOutput -Path $outputFullPath -DisplayPath $OutputPath -NewHtml $html
+        $hadOutput = Test-Path -LiteralPath $outputFullPath
+        $rollbackOutput = Join-Path $stagingDirectory 'rollback-output.html'
+        if ($hadOutput) { Copy-Item -LiteralPath $outputFullPath -Destination $rollbackOutput -Force }
+        $targetAssetsForRollback = $null
+        $rollbackAssetsDirectory = Join-Path $stagingDirectory 'rollback-assets'
+        try {
         if ($Packaging -eq 'local-bundle') {
             $targetAssets = Join-Path $outputDirectory -ChildPath 'assets' -AdditionalChildPath $bundleId
+            $targetAssetsForRollback = $targetAssets
+            if (Test-Path -LiteralPath $targetAssets) { Copy-Item -LiteralPath $targetAssets -Destination $rollbackAssetsDirectory -Recurse -Force }
             [void](Resolve-GuideHtmlPath -RepoRoot $RepoRoot -Path $targetAssets)
             New-Item -ItemType Directory -Path $targetAssets -Force | Out-Null
             $managedPath = Join-Path $targetAssets '.sga-html-assets.json'
@@ -462,6 +548,8 @@ $assetHtml
             }
         } else {
             $targetAssets = Join-Path $outputDirectory -ChildPath 'assets' -AdditionalChildPath $bundleId
+            $targetAssetsForRollback = $targetAssets
+            if (Test-Path -LiteralPath $targetAssets) { Copy-Item -LiteralPath $targetAssets -Destination $rollbackAssetsDirectory -Recurse -Force }
             $managedPath = Join-Path $targetAssets '.sga-html-assets.json'
             if (Test-Path -LiteralPath $managedPath) {
                 $oldManaged = @{}
@@ -487,6 +575,21 @@ $assetHtml
             $null = $true
         } else {
             Move-Item -LiteralPath $stagedOutput -Destination $outputFullPath -Force
+        }
+        } catch {
+            if ($targetAssetsForRollback) {
+                Remove-Item -LiteralPath $targetAssetsForRollback -Recurse -Force -ErrorAction SilentlyContinue
+                if (Test-Path -LiteralPath $rollbackAssetsDirectory) {
+                    New-Item -ItemType Directory -Path (Split-Path -Parent $targetAssetsForRollback) -Force | Out-Null
+                    Copy-Item -LiteralPath $rollbackAssetsDirectory -Destination $targetAssetsForRollback -Recurse -Force
+                }
+            }
+            if ($hadOutput) {
+                Copy-Item -LiteralPath $rollbackOutput -Destination $outputFullPath -Force
+            } else {
+                Remove-Item -LiteralPath $outputFullPath -Force -ErrorAction SilentlyContinue
+            }
+            throw
         }
         foreach ($asset in $assets) {
             $publishedAssets += [ordered]@{
