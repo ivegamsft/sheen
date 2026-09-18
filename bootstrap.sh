@@ -14,7 +14,7 @@
 
 set -euo pipefail
 
-SOURCE="${SHEEN_SOURCE:-https://github.com/IBuySpy-Shared/basecoat-sheen.git}"
+SOURCE="${SHEEN_SOURCE:-https://github.com/ivegamsft/sheen.git}"
 REF="${SHEEN_REF:-main}"
 PUBLIC_RAW="https://raw.githubusercontent.com/ivegamsft/sheen/main"
 

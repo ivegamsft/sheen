@@ -97,11 +97,11 @@ git log --oneline -1  # note current commit
 
 ### Step 2: Update .sheen.yml
 
-Change `ref: main` (or tag) to `ref: v0.5.0`:
+Change `ref: main` (or tag) to `ref: v0.12.1`:
 
 ```yaml
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
-ref: v0.5.0  # changed from main or v0.3.x
+source: https://github.com/ivegamsft/sheen.git
+ref: v0.12.1  # changed from main or older release tags
 ```
 
 Or upgrade step-by-step (v0.3 → v0.4 → v0.5):
@@ -148,9 +148,9 @@ Run one skill from each category:
 
 ### Step 6: Merge PR
 
-1. Create branch: `git checkout -b upgrade/v0.5.0`
-2. Commit: `git add .sheen.yml .sheen.manifest.json && git commit -m "Upgrade: basecoat-sheen v0.3 → v0.5.0"`
-3. Push: `git push origin upgrade/v0.5.0`
+1. Create branch: `git checkout -b upgrade/v0.12.1`
+2. Commit: `git add .sheen.yml .sheen/manifest.json && git commit -m "Upgrade: basecoat-sheen to v0.12.1"`
+3. Push: `git push origin upgrade/v0.12.1`
 4. PR: Request review from design + eng leads
 5. Merge: Once CI passes and team confirms tests work
 

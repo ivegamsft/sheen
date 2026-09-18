@@ -93,7 +93,7 @@ A: Fork the repo at team level, add your skill, and link to an issue in basecoat
 
 **Q: How often should we re-sync?**
 
-A: For `ref: main`, monthly is reasonable. For pinned releases (`ref: v0.5.0`), sync only for upgrades. Set a calendar reminder.
+A: For `ref: main`, monthly is reasonable. For pinned releases (`ref: v0.12.1`), sync only for upgrades. Set a calendar reminder.
 
 **Q: Can we bypass version pinning?**
 

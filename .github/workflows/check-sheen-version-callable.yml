@@ -10,11 +10,11 @@ name: "Sheen - Consumer Sync"
 #     sync:
 #       uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@<commit-sha>
 #       with:
-#         source_repo: IBuySpy-Shared/basecoat-sheen
-#         source_ref: main        # or pin to a tag
+#         source_repo: ivegamsft/sheen # optional; .sheen.yml source is used when omitted
+#         source_ref: main             # optional; .sheen.yml ref is used when omitted
 #       secrets:
 #         update_token: ${{ secrets.SHEEN_UPDATE_TOKEN }}
-#         fetch_token: ${{ secrets.SHEEN_FETCH_TOKEN }}
+#         fetch_token: ${{ secrets.SHEEN_FETCH_TOKEN }} # only for private/internal source overrides
 #
 # This workflow is hosted ONLY in the internal repo. The public ivegamsft/sheen
 # mirror serves docs and bootstrap assets and does not contain it, so a `uses:`
@@ -25,16 +25,17 @@ on:
     inputs:
       source_repo:
         description: >-
-          Source sheen repository (owner/repo). Defaults to the private source;
-          override if using a fork or mirror.
+          Source sheen repository (owner/repo). Defaults to the public mirror
+          after .sheen.yml is evaluated, so scheduled consumer sync does not
+          require private-source credentials.
         type: string
-        default: IBuySpy-Shared/basecoat-sheen
+        default: ""
       source_ref:
         description: >-
           Git ref to sync from (tag, branch, or SHA). Use 'main' for latest
           or pin to a release tag (e.g. 'v0.8.2') for stability.
         type: string
-        default: main
+        default: ""
       pr_branch_prefix:
         description: Prefix for the sync PR branch name.
         type: string
@@ -57,11 +58,8 @@ on:
         required: false
       fetch_token:
         description: >-
-          Read token for the source repo when it is private/internal.
-          Required whenever the consumer repo's GITHUB_TOKEN cannot read
-          source_repo -- notably when the consumer is in a different org,
-          which is the normal case. Without it the source clone is attempted
-          anonymously and fails with "could not read Username".
+          Read token for private/internal source_repo overrides. Not required
+          for the default public ivegamsft/sheen mirror.
         required: false
 
 jobs:
@@ -83,22 +81,56 @@ jobs:
       - name: Resolve sync configuration
         id: config
         shell: bash
+        env:
+          SHEEN_FETCH_TOKEN: ${{ secrets.fetch_token }}
         run: |
           set -euo pipefail
 
-          # Read .sheen.yml for source/ref overrides (workflow inputs take precedence)
+          # Resolve precedence: explicit workflow input -> .sheen.yml -> public default.
           SOURCE="${{ inputs.source_repo }}"
           REF="${{ inputs.source_ref }}"
 
           if [[ -f .sheen.yml ]]; then
-            YML_SOURCE="$(grep -E '^source:' .sheen.yml | head -1 | sed 's/^source:[[:space:]]*//' | tr -d "\"'")" || true
-            YML_REF="$(grep -E '^ref:' .sheen.yml | head -1 | sed 's/^ref:[[:space:]]*//' | tr -d "\"'")" || true
-            # .sheen.yml values fill gaps but workflow inputs win
+            YML_SOURCE="$(grep -E '^source:' .sheen.yml | head -1 | sed 's/^source:[[:space:]]*//' | sed 's/[[:space:]]#.*$//' | sed 's/[[:space:]]*$//' | tr -d "\"'")" || true
+            YML_REF="$(grep -E '^ref:' .sheen.yml | head -1 | sed 's/^ref:[[:space:]]*//' | sed 's/[[:space:]]#.*$//' | sed 's/[[:space:]]*$//' | tr -d "\"'")" || true
             [[ -z "$SOURCE" && -n "$YML_SOURCE" ]] && SOURCE="$YML_SOURCE"
-            [[ "$REF" == "main" && -n "$YML_REF" && "$YML_REF" != "main" ]] && REF="$YML_REF"
+            [[ -z "$REF" && -n "$YML_REF" ]] && REF="$YML_REF"
+          fi
+
+          SOURCE="${SOURCE:-ivegamsft/sheen}"
+          REF="${REF:-main}"
+
+          NORMALIZED_SOURCE="$(printf '%s' "$SOURCE" | sed -E 's#^[Hh][Tt][Tt][Pp][Ss]://[Gg][Ii][Tt][Hh][Uu][Bb][.][Cc][Oo][Mm]/##; s#[.][Gg][Ii][Tt]$##')"
+          NORMALIZED_SOURCE_LOWER="$(printf '%s' "$NORMALIZED_SOURCE" | tr '[:upper:]' '[:lower:]')"
+          if [[ "$NORMALIZED_SOURCE_LOWER" == "ibuyspy-shared/basecoat-sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then
+            if [[ "$REF" =~ ^[0-9a-fA-F]{7,40}$ ]]; then
+              echo "::error title=Missing Sheen fetch token::source_repo is IBuySpy-Shared/basecoat-sheen with SHA ref '${REF}'. SHA refs cannot be remapped safely to the public mirror; set SHEEN_FETCH_TOKEN or switch to a public tag/branch."
+              exit 1
+            fi
+            echo "::notice title=Using public Sheen mirror::No SHEEN_FETCH_TOKEN was provided for IBuySpy-Shared/basecoat-sheen; using ivegamsft/sheen for asset sync. Provide fetch_token only for private-source overrides."
+            SOURCE="ivegamsft/sheen"
+            SOURCE_URL="https://github.com/ivegamsft/sheen.git"
+          else
+            if [[ "$SOURCE" =~ ^[Hh][Tt][Tt][Pp][Ss]://[Gg][Ii][Tt][Hh][Uu][Bb][.][Cc][Oo][Mm]/.* ]]; then
+              SOURCE="$NORMALIZED_SOURCE"
+              SOURCE_URL="https://github.com/${SOURCE}.git"
+            elif [[ "$SOURCE" == *://* ]]; then
+              SOURCE_URL="$SOURCE"
+            else
+              SOURCE="$NORMALIZED_SOURCE"
+              SOURCE_URL="https://github.com/${SOURCE}.git"
+            fi
+            if [[ "$NORMALIZED_SOURCE_LOWER" != "ivegamsft/sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then
+              if [[ "$SOURCE_URL" == https://github.com/* ]]; then
+                echo "::warning title=Missing Sheen fetch token::source_repo is '${SOURCE}' and no fetch_token was provided. Public GitHub sources may still work anonymously; private/internal GitHub sources require SHEEN_FETCH_TOKEN or will fail during git clone."
+              else
+                echo "::warning title=Non-GitHub Sheen source authentication::source_repo is '${SOURCE_URL}' and no GitHub fetch_token will be injected. Configure this runner's Git credentials for that host, use a URL it can clone anonymously, or use ivegamsft/sheen."
+              fi
+            fi
           fi
 
           echo "source=$SOURCE" >> "$GITHUB_OUTPUT"
+          echo "source_url=$SOURCE_URL" >> "$GITHUB_OUTPUT"
           echo "ref=$REF" >> "$GITHUB_OUTPUT"
 
           # Determine branch name for the PR
@@ -122,7 +154,7 @@ jobs:
       - name: Run sheen sync
         shell: bash
         env:
-          SHEEN_REPO: "https://github.com/${{ steps.config.outputs.source }}.git"
+          SHEEN_REPO: "${{ steps.config.outputs.source_url }}"
           SHEEN_REF: "${{ steps.config.outputs.ref }}"
           SHEEN_FETCH_TOKEN: "${{ secrets.fetch_token }}"
           GIT_AUTHOR_NAME: "github-actions[bot]"
@@ -130,9 +162,10 @@ jobs:
         run: |
           set -euo pipefail
 
-          # Inject token into clone URL if a fetch token is provided
-          if [[ -n "${SHEEN_FETCH_TOKEN}" ]]; then
-            SHEEN_REPO="https://x-access-token:${SHEEN_FETCH_TOKEN}@github.com/${{ steps.config.outputs.source }}.git"
+          # Inject GitHub token into GitHub clone URLs only. Non-GitHub mirrors
+          # keep their resolved URL and must rely on their host's auth setup.
+          if [[ -n "${SHEEN_FETCH_TOKEN}" && "$SHEEN_REPO" == https://github.com/* ]]; then
+            SHEEN_REPO="${SHEEN_REPO/https:\/\/github.com\//https:\/\/x-access-token:${SHEEN_FETCH_TOKEN}@github.com\/}"
           fi
 
           export SHEEN_REPO SHEEN_REF
