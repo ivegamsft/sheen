@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-DEFAULT_SOURCE="https://github.com/IBuySpy-Shared/basecoat-sheen.git"
+DEFAULT_SOURCE="https://github.com/ivegamsft/sheen.git"
 DEFAULT_REF="main"
 
 TYPES="skills agents instructions prompts templates tokens"
@@ -279,6 +279,36 @@ for type in $TYPES; do
   fi
 done
 
+# ── Deploy sheen-sync.yml to consumer .github/workflows/ ─────────────────────
+# Provides the same auto-update experience as basecoat: a scheduled workflow
+# opens a PR whenever a new sheen version is available.
+SHEEN_SYNC_WF="$REPO_ROOT/.github/workflows/sheen-sync.yml"
+UPSTREAM_SYNC_WF="$WORK/templates/sheen-sync.yml"
+if [ -f "$UPSTREAM_SYNC_WF" ]; then
+  NORMALIZED_SYNC_WF="$WORK/templates/sheen-sync.normalized.yml"
+  sed \
+    -e 's#uses: ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@#uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@#g' \
+    -e '/^[[:space:]]*source_repo:[[:space:]]*ivegamsft\/sheen[[:space:]]*$/d' \
+    "$UPSTREAM_SYNC_WF" > "$NORMALIZED_SYNC_WF"
+  RECORD_SYNC_WF=0
+  if [ ! -f "$SHEEN_SYNC_WF" ]; then
+    mkdir -p "$REPO_ROOT/.github/workflows"
+    cp "$NORMALIZED_SYNC_WF" "$SHEEN_SYNC_WF"
+    echo 'sheen sync: deployed .github/workflows/sheen-sync.yml (auto-update workflow)'
+    RECORD_SYNC_WF=1
+  elif grep -Fq 'This file was synced into your repo by basecoat-sheen.' "$SHEEN_SYNC_WF"; then
+    RECORD_SYNC_WF=1
+    if ! cmp -s "$NORMALIZED_SYNC_WF" "$SHEEN_SYNC_WF"; then
+      cp "$NORMALIZED_SYNC_WF" "$SHEEN_SYNC_WF"
+      echo 'sheen sync: updated managed .github/workflows/sheen-sync.yml from upstream template'
+    fi
+  fi
+  if [ "$RECORD_SYNC_WF" -eq 1 ]; then
+    FILES_JSON="$FILES_JSON  \".github/workflows/sheen-sync.yml\",\n"
+    COUNT=$((COUNT + 1))
+  fi
+fi
+
 FILES_JSON="$(printf '%b' "$FILES_JSON" | sed '$ s/,$//')"
 SYNCED="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 cat > "$MANIFEST" <<EOF
@@ -450,18 +480,5 @@ if [ "$GEN_AESTHETIC" = 'true' ]; then
     echo "sheen sync: generating AESTHETIC-DIRECTION.md (generate_aesthetic_direction=true; theme=${AESTHETIC_THEME})..."
     bash "$AESTHETIC_SH" --theme "$AESTHETIC_THEME" \
       || { echo "sheen sync: build-aesthetic-direction failed" >&2; exit 1; }
-  fi
-fi
-
-# ── Deploy sheen-sync.yml to consumer .github/workflows/ ─────────────────────
-# Provides the same auto-update experience as basecoat: a scheduled workflow
-# opens a PR whenever a new sheen version is available.
-SHEEN_SYNC_WF="$REPO_ROOT/.github/workflows/sheen-sync.yml"
-if [ ! -f "$SHEEN_SYNC_WF" ]; then
-  UPSTREAM_SYNC_WF="$WORK/templates/sheen-sync.yml"
-  if [ -f "$UPSTREAM_SYNC_WF" ]; then
-    mkdir -p "$REPO_ROOT/.github/workflows"
-    cp "$UPSTREAM_SYNC_WF" "$SHEEN_SYNC_WF"
-    echo 'sheen sync: deployed .github/workflows/sheen-sync.yml (auto-update workflow)'
   fi
 fi

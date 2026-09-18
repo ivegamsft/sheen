@@ -82,7 +82,7 @@ Draft a `.sheen.yml` tailored to the repo:
 
 ```yaml
 # .sheen.yml — basecoat-sheen consumer configuration. Commit this file.
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: v0.7.0          # pin to a release tag for stability
 
 sync:

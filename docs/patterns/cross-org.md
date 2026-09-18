@@ -29,8 +29,8 @@ Enterprise monorepo, multiple product teams, shared design governance, org-wide 
 
 ```yaml
 # Cross-Org Mode — org-wide reference, maintained by platform team
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git  # or internal mirror
-ref: v0.5.0  # pin to release tag for production stability
+source: https://github.com/ivegamsft/sheen.git  # or internal mirror
+ref: v0.12.1  # pin to release tag for production stability
 
 # Platform team: all assets (full reference)
 skills: []
@@ -48,8 +48,8 @@ sync:
 
 ```yaml
 # Cross-Org Mode — product team variant (design-focused)
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
-ref: v0.5.0  # sync from central platform team version
+source: https://github.com/ivegamsft/sheen.git
+ref: v0.12.1  # sync from central platform team version
 
 # Design-focused skills only
 skills:
@@ -69,8 +69,8 @@ themes: [light, dark]
 
 ```yaml
 # Cross-Org Mode — product team variant (implementation-focused)
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
-ref: v0.5.0
+source: https://github.com/ivegamsft/sheen.git
+ref: v0.12.1
 
 # Implementation-focused skills
 skills:
@@ -91,7 +91,7 @@ themes: [light, dark]
 
 1. **Platform team** maintains `.sheen.yml` templates for each team type
 2. **CI/CD:** Central pipeline runs `diagnose-sheen.ps1` on all sync events
-3. **Version pin:** Org-wide policy uses single `ref` tag (e.g., v0.5.0)
+3. **Version pin:** Org-wide policy uses single `ref` tag (e.g., v0.12.1)
 4. **Audit trail:** Sync manifests archived in central repo for compliance
 
 ### Phase 2: Team onboarding
@@ -131,7 +131,7 @@ git mirror https://github.com/IBuySpy-Shared/basecoat-sheen.git \
 Update team configs to use internal mirror:
 ```yaml
 source: https://git.internal.company/mirrors/basecoat-sheen.git
-ref: v0.5.0
+ref: v0.12.1
 ```
 
 ### CI/CD governance
@@ -153,7 +153,7 @@ ref: v0.5.0
 
 - Sync manifest stored in `compliance-audit/` bucket
 - Diagnostic reports captured (which skills, which versions, which errors)
-- Query for: "which teams synced in last quarter?" or "when was v0.5.0 adopted?"
+- Query for: "which teams synced in last quarter?" or "when was v0.12.1 adopted?"
 
 ### Compliance + reporting
 
@@ -194,7 +194,7 @@ ref: v0.5.0
 
 **Q: How do teams stay in sync?**
 
-A: Central version pinning (`ref: v0.5.0`). Quarterly upgrade cycles with 30-day rollout window. CI gates enforce compliance.
+A: Central version pinning (`ref: v0.12.1`). Quarterly upgrade cycles with 30-day rollout window. CI gates enforce compliance.
 
 **Q: What if a team needs a custom skill?**
 

@@ -139,6 +139,7 @@ jobs:
             'scripts/test-release-reliability.py'
             'scripts/test-downstream-token-hygiene.ps1'
             'scripts/test-downstream-token-hygiene.py'
+            'scripts/test-sheen-sync-source.ps1'
             'scripts/audit-evals.ps1'
             'vendor/**'
           )
@@ -240,6 +241,9 @@ jobs:
                 s{raw\.githubusercontent\.com/IBuySpy-Shared/basecoat-sheen}{raw.githubusercontent.com/ivegamsft/sheen}g;
               ' -- "$f"
             done
+          fi
+          if [ -f templates/sheen-sync.yml ]; then
+            perl -0pi -e 's{uses:\s+ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@}{uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@}g' templates/sheen-sync.yml
             echo "Rewrote source-repo references in matched files."
           else
             echo "No source-repository references found."
@@ -263,6 +267,7 @@ jobs:
           UNEXPECTED_MATCHES=$(printf '%s\n' "$FORBIDDEN_MATCHES" \
             | grep -v '^$' \
             | grep -v '^LICENSE:' \
+            | grep -v '^templates/sheen-sync.yml:.*uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' \
             || true)
           if [ -n "$UNEXPECTED_MATCHES" ]; then
             echo "::error::Internal owner details remain in the public payload:"

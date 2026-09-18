@@ -13,8 +13,8 @@
 #   Remove-Item bootstrap.ps1   # optional — clean up
 
 param(
-    # Source repo URL (override if using a private mirror)
-    [string]$Source = 'https://github.com/IBuySpy-Shared/basecoat-sheen.git',
+    # Source repo URL (override if using a private/internal source)
+    [string]$Source = 'https://github.com/ivegamsft/sheen.git',
     # Ref to pin to (tag, branch, or SHA). 'main' for latest.
     [string]$Ref = 'main',
     # Skip the interactive .sheen.yml prompts and use minimal defaults
