@@ -23,7 +23,19 @@ function Get-FrontmatterLines([string]$path) {
 
 function Get-FMValue([string[]]$fm, [string]$key) {
     foreach ($line in $fm) {
-        if ($line -match "^\s*$([regex]::Escape($key)):\s*(.+?)\s*$") {
+        if ($line -match "^$([regex]::Escape($key)):\s*(.+?)\s*$") {
+            return $Matches[1].Trim().Trim("'`"")
+        }
+    }
+    return $null
+}
+
+function Get-MetadataValue([string[]]$fm, [string]$key) {
+    $inMetadata = $false
+    foreach ($line in $fm) {
+        if ($line -match '^metadata:\s*$') { $inMetadata = $true; continue }
+        if ($inMetadata -and $line -match '^[^\s]') { $inMetadata = $false }
+        if ($inMetadata -and $line -match "^\s{2}$([regex]::Escape($key)):\s*(.+?)\s*$") {
             return $Matches[1].Trim().Trim("'`"")
         }
     }
@@ -39,6 +51,8 @@ function Get-EvalCounts([string]$evalPath) {
 
 # --- skills ---
 $skillDirs = Get-ChildItem skills -Directory -ErrorAction SilentlyContinue
+$validCategories = @('design', 'foundation', 'brand', 'ia', 'usability', 'a11y', 'security', 'content', 'mapping', 'lifecycle', 'governance')
+$validPillars = @('foundations', 'brand', 'ia', 'components', 'usability', 'content', 'a11y', 'security', 'mapping', 'lifecycle', 'governance')
 foreach ($dir in $skillDirs) {
     $skillPath = Join-Path $dir.FullName 'SKILL.md'
     $evalPath = Join-Path $dir.FullName 'eval.yaml'
@@ -51,6 +65,17 @@ foreach ($dir in $skillDirs) {
     $name = Get-FMValue $fm 'name'
     if (-not $name) { Add-Err "skills/$($dir.Name)/SKILL.md: missing frontmatter name" }
     elseif ($name -ne $dir.Name) { Add-Err "skills/$($dir.Name)/SKILL.md: name '$name' must match folder '$($dir.Name)'" }
+
+    $category = Get-FMValue $fm 'category'
+    if (-not $category) { Add-Err "skills/$($dir.Name)/SKILL.md: missing category" }
+    elseif ($category -notin $validCategories) { Add-Err "skills/$($dir.Name)/SKILL.md: category '$category' must be one of: $($validCategories -join ', ')" }
+    $metadataCategory = Get-MetadataValue $fm 'category'
+    if (-not $metadataCategory) { Add-Err "skills/$($dir.Name)/SKILL.md: missing metadata.category" }
+    elseif ($metadataCategory -notin $validCategories) { Add-Err "skills/$($dir.Name)/SKILL.md: metadata.category '$metadataCategory' must be one of: $($validCategories -join ', ')" }
+    elseif ($category -and $metadataCategory -ne $category) { Add-Err "skills/$($dir.Name)/SKILL.md: metadata.category '$metadataCategory' must match category '$category'" }
+    $pillar = Get-MetadataValue $fm 'pillar'
+    if (-not $pillar) { Add-Err "skills/$($dir.Name)/SKILL.md: missing metadata.pillar" }
+    elseif ($pillar -notin $validPillars) { Add-Err "skills/$($dir.Name)/SKILL.md: metadata.pillar '$pillar' must be one of: $($validPillars -join ', ')" }
 
     $desc = Get-FMValue $fm 'description'
     if (-not $desc) { Add-Err "skills/$($dir.Name)/SKILL.md: missing description" }
