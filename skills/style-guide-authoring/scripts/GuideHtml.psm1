@@ -92,6 +92,12 @@ function Resolve-GuideHtmlOutputPath {
     }
     $parent = Split-Path -Parent $candidate
     if ($parent) { [void](Resolve-GuideHtmlPath -RepoRoot $rootNormalized -Path ([System.IO.Path]::GetRelativePath($rootNormalized, $parent))) }
+    if (Test-Path -LiteralPath $candidate) {
+        $item = Get-Item -LiteralPath $candidate -Force
+        $isLink = (($item.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0)
+        if ($item.PSObject.Properties['LinkType'] -and $item.LinkType) { $isLink = $true }
+        if ($isLink) { throw "Output path cannot be a symbolic link or reparse point: $Path" }
+    }
     return $candidate
 }
 
@@ -110,6 +116,17 @@ function Assert-SafeGuideMarkdown {
 function Test-SafeSvgContent {
     param([Parameter(Mandatory)][string]$Svg)
     return $false
+}
+
+function Get-DetectedImageMediaType {
+    param([Parameter(Mandatory)][byte[]]$Bytes)
+    $prefix = [System.Text.Encoding]::ASCII.GetString($Bytes, 0, [Math]::Min($Bytes.Length, 64))
+    if ($prefix -match '^\s*(<\?xml|<svg\b)') { return 'image/svg+xml' }
+    if ($Bytes.Length -ge 8 -and $Bytes[0] -eq 0x89 -and $Bytes[1] -eq 0x50 -and $Bytes[2] -eq 0x4E -and $Bytes[3] -eq 0x47) { return 'image/png' }
+    if ($Bytes.Length -ge 3 -and $Bytes[0] -eq 0xFF -and $Bytes[1] -eq 0xD8 -and $Bytes[2] -eq 0xFF) { return 'image/jpeg' }
+    if ($Bytes.Length -ge 6 -and $prefix.StartsWith('GIF8')) { return 'image/gif' }
+    if ($Bytes.Length -ge 12 -and $prefix.Substring(0, 4) -eq 'RIFF' -and $prefix.Substring(8, 4) -eq 'WEBP') { return 'image/webp' }
+    return 'unknown'
 }
 
 function Get-GuideHtmlAssetRecords {
@@ -137,6 +154,9 @@ function Get-GuideHtmlAssetRecords {
         if (-not (Test-Path -LiteralPath $resolved -PathType Leaf)) { throw "Asset '$id' does not resolve to a local file: $path" }
         $extension = [System.IO.Path]::GetExtension($resolved).ToLowerInvariant()
         $bytes = [System.IO.File]::ReadAllBytes($resolved)
+        $detectedMediaType = Get-DetectedImageMediaType -Bytes $bytes
+        if ($detectedMediaType -eq 'image/svg+xml') { throw "Asset '$id' contains SVG/XML bytes and requires an approved sanitizer." }
+        if ($detectedMediaType -ne $mediaType) { throw "Asset '$id' byte signature '$detectedMediaType' does not match declared media type '$mediaType'." }
         if ($extension -eq '.svg' -or $mediaType -eq 'image/svg+xml') {
             throw "Asset '$id' uses SVG, which requires an approved sanitizer before embedding or copying."
         }
@@ -147,6 +167,7 @@ function Get-GuideHtmlAssetRecords {
                 ContributionBytes = (Get-Utf8ByteCount -Text ([Convert]::ToBase64String($bytes)))
                 Html = "<figure class=`"sga-asset`"><img src=`"data:$(ConvertTo-HtmlText $mediaType);base64,$([Convert]::ToBase64String($bytes))`" alt=`"$(ConvertTo-HtmlText $alt)`"><figcaption>$(ConvertTo-HtmlText $id)</figcaption></figure>"
                 DeliveredPath = $null
+                RelativePath = $null
             })
         } else {
             if ($permission -ne 'copy') { throw "Asset '$id' requires embed permission; local-bundle output cannot copy it silently." }
@@ -162,6 +183,7 @@ function Get-GuideHtmlAssetRecords {
                 ContributionBytes = $bytes.Length
                 Html = "<figure class=`"sga-asset`"><img src=`"assets/$safeName`" alt=`"$(ConvertTo-HtmlText $alt)`"><figcaption>$(ConvertTo-HtmlText $id)</figcaption></figure>"
                 DeliveredPath = $destination
+                RelativePath = "assets/$safeName"
             })
         }
     }
@@ -302,33 +324,54 @@ $assetHtml
     $htmlBytes = Get-Utf8ByteCount -Text $html
     $assetBytes = 0
     foreach ($asset in $assets) { $assetBytes += [int]$asset.Bytes }
-    $bundleBytes = if ($Packaging -eq 'self-contained') { $htmlBytes } else { $htmlBytes + $assetBytes }
+    $managedAssetPaths = @($assets | Where-Object { $_.RelativePath } | ForEach-Object { $_.RelativePath })
+    $managedManifestJson = if ($Packaging -eq 'local-bundle') { if ($managedAssetPaths.Count -eq 0) { '[]' } else { ($managedAssetPaths | ConvertTo-Json) } } else { '' }
+    $managedManifestBytes = if ($Packaging -eq 'local-bundle') { Get-Utf8ByteCount -Text $managedManifestJson } else { 0 }
+    $bundleBytes = if ($Packaging -eq 'self-contained') { $htmlBytes } else { $htmlBytes + $assetBytes + $managedManifestBytes }
     $passed = $bundleBytes -le $effectiveBudget
     $publishedAssets = @()
     if ($passed) {
         New-Item -ItemType Directory -Path $outputDirectory -Force | Out-Null
-        Move-Item -LiteralPath $stagedOutput -Destination $outputFullPath -Force
-        if ($Packaging -eq 'local-bundle' -and (Test-Path -LiteralPath (Join-Path $stagingDirectory 'assets'))) {
+        if ($Packaging -eq 'local-bundle') {
             $targetAssets = Join-Path $outputDirectory 'assets'
+            [void](Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path $targetAssets)
             New-Item -ItemType Directory -Path $targetAssets -Force | Out-Null
             $managedPath = Join-Path $targetAssets '.sga-html-assets.json'
+            [void](Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path $managedPath)
             $oldManaged = @()
             if (Test-Path -LiteralPath $managedPath) { $oldManaged = @((Get-Content -LiteralPath $managedPath -Raw | ConvertFrom-Json)) }
             $newManaged = @()
             foreach ($asset in $assets) {
-                $relativeAsset = [System.IO.Path]::GetRelativePath($stagingDirectory, $asset.DeliveredPath)
-                $target = Join-Path $outputDirectory $relativeAsset
+                $relativeAsset = $asset.RelativePath
+                if ([System.IO.Path]::IsPathRooted($relativeAsset) -or $relativeAsset -match '(^|[\\/])\.\.([\\/]|$)') { throw "Managed asset path is unsafe: $relativeAsset" }
+                $target = Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path (Join-Path $outputDirectory $relativeAsset)
+                if (-not $target.StartsWith($targetAssets, [System.StringComparison]::OrdinalIgnoreCase)) { throw "Managed asset target escapes the bundle assets directory: $relativeAsset" }
                 if ((Test-Path -LiteralPath $target) -and $oldManaged -notcontains $relativeAsset) {
                     throw "Refusing to overwrite unmanaged bundle asset: $relativeAsset"
                 }
-                Copy-Item -LiteralPath $asset.DeliveredPath -Destination $target -Force
                 $newManaged += $relativeAsset
+            }
+            foreach ($old in $oldManaged) {
+                if ([System.IO.Path]::IsPathRooted([string]$old) -or [string]$old -match '(^|[\\/])\.\.([\\/]|$)') { throw "Managed asset marker contains unsafe path: $old" }
+                $oldTarget = Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path (Join-Path $outputDirectory ([string]$old))
+                if (-not $oldTarget.StartsWith($targetAssets, [System.StringComparison]::OrdinalIgnoreCase)) { throw "Managed asset marker escapes the bundle assets directory: $old" }
+            }
+            foreach ($asset in $assets) {
+                $relativeAsset = $asset.RelativePath
+                $target = Join-Path $outputDirectory $relativeAsset
+                Copy-Item -LiteralPath $asset.DeliveredPath -Destination $target -Force
             }
             foreach ($old in $oldManaged) {
                 if ($newManaged -contains $old) { continue }
                 Remove-Item -LiteralPath (Join-Path $outputDirectory $old) -Force -ErrorAction SilentlyContinue
             }
-            $newManaged | ConvertTo-Json | Set-Content -LiteralPath $managedPath -NoNewline
+            Set-Content -LiteralPath $managedPath -Value $managedManifestJson -NoNewline
+        }
+        $stagedBytes = [System.IO.File]::ReadAllBytes($stagedOutput)
+        if ((Test-Path -LiteralPath $outputFullPath) -and [System.Linq.Enumerable]::SequenceEqual([byte[]]([System.IO.File]::ReadAllBytes($outputFullPath)), [byte[]]$stagedBytes)) {
+            $null = $true
+        } else {
+            Move-Item -LiteralPath $stagedOutput -Destination $outputFullPath -Force
         }
         foreach ($asset in $assets) {
             $publishedAssets += [ordered]@{
@@ -340,7 +383,7 @@ $assetHtml
             }
         }
     } else {
-        $diagnosticPath = "$OutputPath.blocked.html"
+        $diagnosticPath = "$outputFullPath.blocked.html"
         New-Item -ItemType Directory -Path $outputDirectory -Force | Out-Null
         Set-Content -LiteralPath $diagnosticPath -Value "<!-- BLOCKED: over budget diagnostic artifact, not approved output -->`n$html" -NoNewline -Encoding utf8
     }

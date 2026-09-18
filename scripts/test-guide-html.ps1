@@ -158,6 +158,10 @@ Repeated heading fixture.
     $bundleAgain = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'index.html') -Packaging local-bundle -AssetManifestPath $bundleManifest -RepoRoot $scratch
     Assert-Equal 'DRAFT' $bundleAgain.State 'Repeated local bundle generation should refresh managed assets only'
     Assert-True (Test-Path -LiteralPath $consumerAsset) 'Local bundle publication must not delete consumer-owned assets'
+    $bundleNoAssets = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'index.html') -Packaging local-bundle -RepoRoot $scratch
+    Assert-Equal 'DRAFT' $bundleNoAssets.State 'Local bundle refresh with no assets should still reconcile managed assets'
+    Assert-True (-not (Test-Path -LiteralPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'assets', 'swatch-a.png'))) 'Removed local bundle assets must be cleaned up when no longer managed'
+    Assert-True (Test-Path -LiteralPath $consumerAsset) 'No-asset refresh must still preserve consumer-owned files'
 
     Write-Host 'All style-guide-authoring HTML packaging scenarios passed (8 scenarios).'
     exit 0
