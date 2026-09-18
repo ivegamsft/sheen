@@ -7,6 +7,18 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+No unreleased changes.
+
+## [0.13.0] — 2026-09-18
+
+| Field | Value |
+|---|---|
+| Version | v0.13.0 |
+| Range | v0.12.1..v0.13.0 |
+| Wave | wave:10, wave:11, wave:12, wave:13, wave:14 |
+| Sprint | N/A |
+| Release date | 2026-09-18 |
+
 ### Documentation
 
 - Refresh vendored BaseCoat from v4.1.0 (`daf8364`) to v4.5.0
@@ -41,6 +53,7 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
   `Missing Sheen fetch token` error when `.sheen.yml` points at the internal
   `IBuySpy-Shared/basecoat-sheen` source without `SHEEN_FETCH_TOKEN`, and
   document the private-source credential requirement for consumers (#256).
+- Prepare v0.13.0 release metadata and publish prerequisites (#259).
 - Prevent accidental downstream `git add -A` commits of the four materialized
   Sheen token outputs in both sync entry points. Append only missing exact ignore
   rules and preserve consumer byte formatting and explicit inclusions. Automatically

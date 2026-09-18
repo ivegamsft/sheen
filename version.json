@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.12.1",
-  "releaseDate": "2026-09-06",
-  "notes": "v0.12.1: Wave 9 skill-body hygiene, scenario-aware accessibility routing, complete skill payload metadata, and public metadata integrity."
+  "version": "0.13.0",
+  "releaseDate": "2026-09-18",
+  "notes": "v0.13.0: guide authoring HTML delivery, frontmatter governance hardening, host-aware model capability evidence, BaseCoat v4.5.0 refresh, and scheduled sync credential preflight."
 }
