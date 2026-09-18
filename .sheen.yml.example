@@ -16,8 +16,8 @@
 
 # source: the upstream basecoat-sheen repo to clone assets from.
 # Override when your org maintains a private fork.
-# Default: https://github.com/IBuySpy-Shared/basecoat-sheen.git
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+# Default: https://github.com/ivegamsft/sheen.git
+source: https://github.com/ivegamsft/sheen.git
 
 # ref: branch or tag to sync from.
 # Pin to a release tag (e.g. v0.1.0) for production stability.

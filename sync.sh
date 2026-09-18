@@ -457,11 +457,15 @@ fi
 # Provides the same auto-update experience as basecoat: a scheduled workflow
 # opens a PR whenever a new sheen version is available.
 SHEEN_SYNC_WF="$REPO_ROOT/.github/workflows/sheen-sync.yml"
-if [ ! -f "$SHEEN_SYNC_WF" ]; then
-  UPSTREAM_SYNC_WF="$WORK/templates/sheen-sync.yml"
-  if [ -f "$UPSTREAM_SYNC_WF" ]; then
+UPSTREAM_SYNC_WF="$WORK/templates/sheen-sync.yml"
+if [ -f "$UPSTREAM_SYNC_WF" ]; then
+  if [ ! -f "$SHEEN_SYNC_WF" ]; then
     mkdir -p "$REPO_ROOT/.github/workflows"
     cp "$UPSTREAM_SYNC_WF" "$SHEEN_SYNC_WF"
     echo 'sheen sync: deployed .github/workflows/sheen-sync.yml (auto-update workflow)'
+  elif grep -Fq 'This file was synced into your repo by basecoat-sheen.' "$SHEEN_SYNC_WF" &&
+       grep -Fq 'source_repo: IBuySpy-Shared/basecoat-sheen' "$SHEEN_SYNC_WF"; then
+    cp "$UPSTREAM_SYNC_WF" "$SHEEN_SYNC_WF"
+    echo 'sheen sync: updated managed .github/workflows/sheen-sync.yml to public mirror source'
   fi
 fi

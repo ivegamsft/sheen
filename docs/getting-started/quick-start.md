@@ -32,7 +32,7 @@ template below (or copy from `.sheen.yml.example` in this repo).
 ```yaml
 # .sheen.yml
 # Minimal starter for first-time onboarding
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: main
 
 # Optional allow-lists; uncomment as you narrow scope
