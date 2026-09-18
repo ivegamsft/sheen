@@ -62,6 +62,9 @@ Repeated heading fixture.
     Assert-Equal (Get-Item -LiteralPath $html).Length $result.Bytes 'Self-contained budget must equal the emitted HTML file length'
     Assert-True ($content -match '<table>') 'Canonical guide Markdown tables must render as semantic HTML tables'
     Assert-True ($content -match 'id="orientation-2"') 'Repeated headings must receive stable unique fragment IDs'
+    $badOutline = Join-Path $scratch 'bad-outline.md'
+    Set-Content -LiteralPath $badOutline -Value "## Starts too deep`n# Later title" -NoNewline
+    Assert-Throws { New-StyleGuideHtml -MarkdownPath $badOutline -OutputPath (Join-Path $scratch 'bad-outline.html') -RepoRoot $scratch } 'Guide outlines must start with one H1' 'primary H1'
 
     Write-Host '[2/8] exact budget passes and one byte over fails'
     $exact = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'exact.html') -AssetManifestPath $manifest -RepoRoot $scratch -BudgetBytes $result.Bytes -OverrideRationale 'Fixture exact limit' -OverrideAuthorizer 'test'
@@ -181,6 +184,9 @@ Repeated heading fixture.
     $managedAsset = Join-Path $scratch 'bundle' -AdditionalChildPath 'assets', 'swatch-a.png'
     [System.IO.File]::WriteAllBytes($managedAsset, [byte[]](1, 2, 3, 4))
     Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'index.html') -Packaging local-bundle -AssetManifestPath $bundleManifest -RepoRoot $scratch } 'Edited managed assets must block overwrite during refresh' 'edited outside'
+    Copy-Item -LiteralPath $asset -Destination $managedAsset -Force
+    [System.IO.File]::WriteAllBytes($managedAsset, [byte[]](5, 6, 7, 8))
+    Assert-Throws { New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'index.html') -Packaging local-bundle -RepoRoot $scratch } 'Edited stale managed assets must block deletion during refresh' 'edited outside'
     Copy-Item -LiteralPath $asset -Destination $managedAsset -Force
     $bundleNoAssets = New-StyleGuideHtml -MarkdownPath $guide -OutputPath (Join-Path $scratch 'bundle' -AdditionalChildPath 'index.html') -Packaging local-bundle -RepoRoot $scratch
     Assert-Equal 'DRAFT' $bundleNoAssets.State 'Local bundle refresh with no assets should still reconcile managed assets'

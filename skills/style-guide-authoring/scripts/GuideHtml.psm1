@@ -252,7 +252,8 @@ function Convert-GuideMarkdownToHtmlBody {
             if ($inList) { [void]$body.AppendLine('</ul>'); $inList = $false }
             $level = [Math]::Min($Matches.hash.Length, 6)
             if ($level -eq 1) { $h1Count++ }
-            if ($previousLevel -gt 0 -and $level -gt ($previousLevel + 1)) { throw "Heading level jumps from h$previousLevel to h$level." }
+            if ($previousLevel -eq 0 -and $level -ne 1) { throw "HTML guides must start with the primary H1 heading." }
+            if ($level -gt ($previousLevel + 1)) { throw "Heading level jumps from h$previousLevel to h$level." }
             $previousLevel = $level
             $title = $Matches.title.Trim()
             $baseId = ConvertTo-GuideHtmlId -Text $title
@@ -395,6 +396,10 @@ $assetHtml
                 if ([System.IO.Path]::IsPathRooted([string]$old) -or [string]$old -match '(^|[\\/])\.\.([\\/]|$)') { throw "Managed asset marker contains unsafe path: $old" }
                 $oldTarget = Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path (Join-Path $outputDirectory ([string]$old))
                 if (-not (Test-IsPathUnderDirectory -Path $oldTarget -Directory $targetAssetsFull)) { throw "Managed asset marker escapes the bundle assets directory: $old" }
+                if (Test-Path -LiteralPath $oldTarget) {
+                    $oldHash = Get-BytesSha256 -Bytes ([System.IO.File]::ReadAllBytes($oldTarget))
+                    if ($oldHash -ne $oldManaged[$old]) { throw "Managed bundle asset was edited outside the HTML helper: $old" }
+                }
             }
             foreach ($asset in $assets) {
                 $relativeAsset = $asset.RelativePath
@@ -426,7 +431,7 @@ $assetHtml
             }
         }
     } else {
-        $diagnosticPath = "$outputFullPath.blocked.html"
+        $diagnosticPath = Resolve-GuideHtmlOutputPath -RepoRoot $RepoRoot -Path "$outputFullPath.blocked.html"
         New-Item -ItemType Directory -Path $outputDirectory -Force | Out-Null
         Set-Content -LiteralPath $diagnosticPath -Value "<!-- BLOCKED: over budget diagnostic artifact, not approved output -->`n$html" -NoNewline -Encoding utf8
     }
