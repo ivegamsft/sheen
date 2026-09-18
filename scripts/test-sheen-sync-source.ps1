@@ -212,20 +212,18 @@ Assert-Contains $callable 'if [[ -n "${SHEEN_FETCH_TOKEN}" && "$SHEEN_REPO" == h
 Assert-Contains $callable 'Missing Sheen fetch token' 'callable must warn when a non-default source has no fetch token'
 Assert-Contains $callable 'Non-GitHub Sheen source authentication' 'callable must give host-auth guidance for non-GitHub sources'
 
-Write-Host '[5/6] production publication preserves the internal callable workflow host'
+Write-Host '[5/6] production publication rewrites the callable workflow host'
 $publish = Read-RepoText '.github/workflows/publish-to-production.yml'
-Assert-Contains $publish 'templates/sheen-sync.yml' 'publish workflow must explicitly handle the generated sync template'
-Assert-Contains $publish 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' 'publish workflow must restore the internal callable host after public mirror sanitization'
-Assert-Contains $publish 'grep -v ''^templates/sheen-sync.yml:.*uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@''' 'publish safety gate must allow-list only the generated callable host'
+Assert-Contains $publish '''.github/workflows/check-sheen-version-callable.yml''' 'publish workflow must keep the consumer-facing callable workflow in the public mirror'
+Assert-NotContains $publish 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' 'publish workflow must not restore the internal callable host after public mirror sanitization'
+Assert-NotContains $publish 'grep -v ''^templates/sheen-sync.yml:.*uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@''' 'publish safety gate must not allow-list the generated template to keep internal owner references'
 Assert-Contains $publish '''scripts/test-sheen-sync-source.ps1''' 'publish workflow must strip source-only internal sync source tests from the public mirror'
 $publicTemplate = $template -replace 'IBuySpy-Shared/basecoat-sheen', 'ivegamsft/sheen'
-$publicTemplate = [regex]::Replace($publicTemplate, 'uses:\s+ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@', 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@')
-Assert-Contains $publicTemplate 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' 'sanitized public template must still call the internal reusable workflow'
+Assert-Contains $publicTemplate 'uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@' 'sanitized public template must call the public reusable workflow'
 $forbidden = @()
 $publicLines = $publicTemplate -split "`r?`n"
 for ($i = 0; $i -lt $publicLines.Count; $i++) {
-    if ($publicLines[$i] -match 'IBuySpy-Shared|ibuyspy-shared\.github\.io' -and
-        $publicLines[$i] -notmatch 'uses:\s+IBuySpy-Shared/basecoat-sheen/\.github/workflows/check-sheen-version-callable\.yml@') {
+    if ($publicLines[$i] -match 'IBuySpy-Shared|ibuyspy-shared\.github\.io') {
         $forbidden += "templates/sheen-sync.yml:$($i + 1):$($publicLines[$i])"
     }
 }

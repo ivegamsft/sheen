@@ -16,9 +16,9 @@ name: "Sheen - Consumer Sync"
 #         update_token: ${{ secrets.SHEEN_UPDATE_TOKEN }}
 #         fetch_token: ${{ secrets.SHEEN_FETCH_TOKEN }} # required for private/internal source repos
 #
-# This workflow is hosted ONLY in the internal repo. The public ivegamsft/sheen
-# mirror serves docs and bootstrap assets and does not contain it, so a `uses:`
-# pointing at the mirror cannot resolve and the run fails with zero jobs.
+# This workflow is mirrored to the public ivegamsft/sheen repository during
+# production publish so public consumers can call the same pinned workflow
+# without access to the internal source repository.
 
 on:
   workflow_call:

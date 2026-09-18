@@ -143,8 +143,9 @@ jobs:
             'scripts/audit-evals.ps1'
             'vendor/**'
           )
-          # Only docs.yml stays; all other workflows are internal
+          # Keep consumer-facing public workflows; all other workflows are internal.
           PUBLIC_WORKFLOWS=(
+            '.github/workflows/check-sheen-version-callable.yml'
             '.github/workflows/docs.yml'
           )
 
@@ -221,6 +222,8 @@ jobs:
             -e 'IBuySpy-Shared/basecoat' \
             -e 'IBuySpy-Shared/' \
             -e 'IBuySpy-Shared' \
+            -e 'ibuyspy-shared/basecoat-sheen' \
+            -e 'ibuyspy-shared/basecoat' \
             -e 'ibuyspy-shared\.github\.io/basecoat-sheen' \
             -e 'ibuyspy-shared\.github\.io' \
             -- . 2>/dev/null || true)
@@ -235,6 +238,8 @@ jobs:
                 s{IBuySpy-Shared/basecoat(?!-sheen)}{upstream-basecoat}g;
                 s{IBuySpy-Shared/}{ivegamsft/}g;
                 s{IBuySpy-Shared}{ivegamsft}g;
+                s{ibuyspy-shared/basecoat-sheen}{ivegamsft/sheen}g;
+                s{ibuyspy-shared/basecoat(?!-sheen)}{upstream-basecoat}g;
                 s{ibuyspy-shared\.github\.io/basecoat-sheen}{ivegamsft.github.io/sheen}g;
                 s{ibuyspy-shared\.github\.io/basecoat}{ivegamsft.github.io/sheen}g;
                 s{ibuyspy-shared\.github\.io}{ivegamsft.github.io}g;
@@ -242,8 +247,7 @@ jobs:
               ' -- "$f"
             done
           fi
-          if [ -f templates/sheen-sync.yml ]; then
-            perl -0pi -e 's{uses:\s+ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@}{uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@}g' templates/sheen-sync.yml
+          if [ -n "$TARGETS" ]; then
             echo "Rewrote source-repo references in matched files."
           else
             echo "No source-repository references found."
@@ -267,7 +271,6 @@ jobs:
           UNEXPECTED_MATCHES=$(printf '%s\n' "$FORBIDDEN_MATCHES" \
             | grep -v '^$' \
             | grep -v '^LICENSE:' \
-            | grep -v '^templates/sheen-sync.yml:.*uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' \
             || true)
           if [ -n "$UNEXPECTED_MATCHES" ]; then
             echo "::error::Internal owner details remain in the public payload:"

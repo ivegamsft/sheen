@@ -9,6 +9,22 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 No unreleased changes.
 
+## [0.13.1] — 2026-09-18
+
+| Field | Value |
+|---|---|
+| Version | v0.13.1 |
+| Range | v0.13.0..v0.13.1 |
+| Wave | wave:14 |
+| Sprint | N/A |
+| Release date | 2026-09-18 |
+
+### Fixed
+
+- Keep the consumer sync callable workflow in the public mirror and stop
+  rewriting the published `templates/sheen-sync.yml` back to the internal source
+  repository, restoring the BaseCoat-style downstream onboarding path (#262).
+
 ## [0.13.0] — 2026-09-18
 
 | Field | Value |

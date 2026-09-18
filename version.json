@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "releaseDate": "2026-09-18",
-  "notes": "v0.13.0: guide authoring HTML delivery, frontmatter governance hardening, host-aware model capability evidence, BaseCoat v4.5.0 refresh, and scheduled sync credential preflight."
+  "notes": "v0.13.1: publish the consumer sync callable workflow and keep public Sheen sync templates pointed at ivegamsft/sheen for downstream onboarding."
 }

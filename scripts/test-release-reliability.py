@@ -365,8 +365,15 @@ class ProvenanceTests(unittest.TestCase):
             shutil.copyfile(ROOT / "scripts" / name, self.repo / "scripts" / name)
         workflows = self.repo / ".github" / "workflows"
         workflows.mkdir(parents=True)
-        for name in ("release.yml", "publish-to-production.yml", "docs.yml"):
+        for name in ("release.yml", "publish-to-production.yml", "docs.yml",
+                     "check-sheen-version-callable.yml"):
             shutil.copyfile(ROOT / ".github" / "workflows" / name, workflows / name)
+        template = self.repo / "templates" / "sheen-sync.yml"
+        template.parent.mkdir()
+        template.write_text(
+            "uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/"
+            "check-sheen-version-callable.yml@abc123\n",
+            encoding="utf-8", newline="\n")
         self.git("add", ".")
         self.git("commit", "--quiet", "-m", "Current-tag internal tooling")
         retained = self.root / "retained"
@@ -381,10 +388,18 @@ class ProvenanceTests(unittest.TestCase):
         for name in ("sheen-build-metadata.ps1", "sheen-publish-release.py"):
             self.assertTrue((retained / name).is_file())
             self.assertNotIn(name, tracked)
-        self.assertEqual(sorted(path.name for path in workflows.iterdir()), ["docs.yml"])
+        self.assertEqual(sorted(path.name for path in workflows.iterdir()),
+                         ["check-sheen-version-callable.yml", "docs.yml"])
         for name in ("sync.ps1", "sync.sh", "rollback.ps1", "rollback.sh"):
             self.assertTrue((self.repo / name).is_file())
             self.assertIn(name, tracked)
+        self.run_step("", override=steps["Sanitize internal identifiers for production"][1])
+        self.assertIn(
+            "uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@abc123",
+            template.read_text(encoding="utf-8"))
+        self.assertNotIn(
+            "IBuySpy-Shared/basecoat-sheen",
+            template.read_text(encoding="utf-8"))
         self.run_step("", override=steps["Remove retained release completion helper"][1])
         self.assertFalse((retained / "sheen-publish-release.py").exists())
 
@@ -628,6 +643,9 @@ class WiringTests(unittest.TestCase):
         sanitize = steps["Sanitize internal identifiers for production"][1]
         self.assertLess(sanitize.index("perl -pi"), sanitize.index("pwsh -NoProfile"))
         self.assertLess(sanitize.index(" -Check"), sanitize.index("FORBIDDEN_MATCHES="))
+        self.assertIn("'.github/workflows/check-sheen-version-callable.yml'", steps[strip][1])
+        self.assertNotIn("IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml",
+                         sanitize)
         self.assertIn("scripts/test-release-reliability.ps1",
                       (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8"))
 
