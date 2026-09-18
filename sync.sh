@@ -293,9 +293,9 @@ if [ -f "$UPSTREAM_SYNC_WF" ]; then
     RECORD_SYNC_WF=1
   elif grep -Fq 'This file was synced into your repo by basecoat-sheen.' "$SHEEN_SYNC_WF"; then
     RECORD_SYNC_WF=1
-    if grep -Fq 'source_repo: IBuySpy-Shared/basecoat-sheen' "$SHEEN_SYNC_WF"; then
+    if ! cmp -s "$UPSTREAM_SYNC_WF" "$SHEEN_SYNC_WF"; then
       cp "$UPSTREAM_SYNC_WF" "$SHEEN_SYNC_WF"
-      echo 'sheen sync: updated managed .github/workflows/sheen-sync.yml to public mirror source'
+      echo 'sheen sync: updated managed .github/workflows/sheen-sync.yml from upstream template'
     fi
   fi
   if [ "$RECORD_SYNC_WF" -eq 1 ]; then

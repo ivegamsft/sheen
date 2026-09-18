@@ -30,7 +30,7 @@ Place this at your design system repo root.
 
 ```yaml
 # Token-Only Mode — pure design system governance, no AI agents
-source: https://github.com/IBuySpy-Shared/basecoat-sheen.git
+source: https://github.com/ivegamsft/sheen.git
 ref: v0.5.0
 
 # Exclude all skills/agents (tokens only)

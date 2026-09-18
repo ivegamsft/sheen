@@ -388,9 +388,10 @@ try {
             $existingWorkflow = Get-Content -LiteralPath $sheenSyncWorkflow -Raw
             if ($existingWorkflow.Contains('This file was synced into your repo by basecoat-sheen.')) {
                 Add-ManifestFile -ManifestFiles $manifest.files -RepoRoot $repoRoot -Path $sheenSyncWorkflow
-                if ($existingWorkflow.Contains('source_repo: IBuySpy-Shared/basecoat-sheen')) {
+                $upstreamWorkflow = Get-Content -LiteralPath $upstreamTemplate -Raw
+                if ($existingWorkflow -ne $upstreamWorkflow) {
                     Copy-Item -LiteralPath $upstreamTemplate -Destination $sheenSyncWorkflow -Force
-                    Write-Host 'sheen sync: updated managed .github/workflows/sheen-sync.yml to public mirror source'
+                    Write-Host 'sheen sync: updated managed .github/workflows/sheen-sync.yml from upstream template'
                 }
             }
         }

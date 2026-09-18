@@ -121,7 +121,7 @@ if [[ -z "$REF" ]]; then
   REF="$(sed -n 's/^ref:[[:space:]]*//p' "$CONFIG" | head -1 | sed "s/['\"]//g" | sed 's/[[:space:]]*$//' || true)"
 fi
 
-SOURCE="${SOURCE:-https://github.com/IBuySpy-Shared/basecoat-sheen.git}"
+SOURCE="${SOURCE:-https://github.com/ivegamsft/sheen.git}"
 REF="${REF:-main}"
 
 ok "Upgrade target: $SOURCE @ $REF"

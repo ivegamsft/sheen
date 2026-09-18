@@ -104,6 +104,9 @@ jobs:
             SOURCE="ivegamsft/sheen"
           else
             SOURCE="$NORMALIZED_SOURCE"
+            if [[ "$SOURCE" != "ivegamsft/sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then
+              echo "::warning title=Missing Sheen fetch token::source_repo is '${SOURCE}' and no fetch_token was provided. Public sources may still work anonymously; private/internal sources require SHEEN_FETCH_TOKEN or will fail during git clone."
+            fi
           fi
 
           echo "source=$SOURCE" >> "$GITHUB_OUTPUT"
