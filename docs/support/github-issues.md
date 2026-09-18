@@ -4,9 +4,9 @@ Use these links when the docs site does not answer the question.
 
 ## Useful places to start
 
-- [Open issues for basecoat-sheen](https://github.com/IBuySpy-Shared/basecoat-sheen/issues)
-- [Issue #19: 10-minute quick-start](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/19)
-- [Issue #22: Improving docs site UX, search, & discoverability](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/22)
+- [Open issues for basecoat-sheen](https://github.com/ivegamsft/sheen/issues)
+- [Issue #19: 10-minute quick-start](https://github.com/ivegamsft/sheen/issues/19)
+- [Issue #22: Improving docs site UX, search, & discoverability](https://github.com/ivegamsft/sheen/issues/22)
 
 ## When to open a new issue
 

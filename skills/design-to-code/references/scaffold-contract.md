@@ -80,6 +80,6 @@ token_bindings:
 ## Build tooling
 
 `build-tokens.ps1` refers to sheen's
-[token builder](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/scripts/build-tokens.ps1).
+[token builder](https://github.com/ivegamsft/sheen/blob/main/scripts/build-tokens.ps1).
 Run the builder from a sheen source checkout or use the downstream's supplied
 token build pipeline; a synced skill folder alone does not bundle that script.

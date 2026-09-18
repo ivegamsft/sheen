@@ -287,7 +287,7 @@ UPSTREAM_SYNC_WF="$WORK/templates/sheen-sync.yml"
 if [ -f "$UPSTREAM_SYNC_WF" ]; then
   NORMALIZED_SYNC_WF="$WORK/templates/sheen-sync.normalized.yml"
   sed \
-    -e 's#uses: ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@#uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@#g' \
+    -e 's#uses: ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@#uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@#g' \
     -e '/^[[:space:]]*source_repo:[[:space:]]*ivegamsft\/sheen[[:space:]]*$/d' \
     "$UPSTREAM_SYNC_WF" > "$NORMALIZED_SYNC_WF"
   RECORD_SYNC_WF=0

@@ -1,6 +1,6 @@
 # Vocabulary
 
-The canonical vocabulary lives in [`.lexicon.md`](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/.lexicon.md).
+The canonical vocabulary lives in [`.lexicon.md`](https://github.com/ivegamsft/sheen/blob/main/.lexicon.md).
 This page gives you the terms you will see most often in the docs site.
 
 | Term | Meaning |

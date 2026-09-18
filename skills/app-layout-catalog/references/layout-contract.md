@@ -26,7 +26,7 @@ inputs, not bundled skill files.
    applicability, region model, component-role constraints, styling
    abstractions, data needs, responsive behavior, accessibility structure,
    and selection rationale (see the source repository's
-   [spec 12](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/specs/12-app-layout-catalog.spec.md)).
+   [spec 12](https://github.com/ivegamsft/sheen/blob/main/specs/12-app-layout-catalog.spec.md)).
 6. Add the accepted layout to the app-specific gallery with its reuse/
    extend/create rationale, rejected alternatives, and evidence.
 
