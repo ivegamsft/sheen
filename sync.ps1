@@ -378,7 +378,7 @@ try {
     $upstreamTemplate = Join-Path $work 'templates' 'sheen-sync.yml'
     if (Test-Path -LiteralPath $upstreamTemplate) {
         $normalizedWorkflow = Get-Content -LiteralPath $upstreamTemplate -Raw
-        $normalizedWorkflow = $normalizedWorkflow -replace 'uses:\s+ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@', 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@'
+        $normalizedWorkflow = $normalizedWorkflow -replace 'uses:\s+ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@', 'uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@'
         $normalizedWorkflow = [regex]::Replace($normalizedWorkflow, '(?m)^[ \t]*source_repo:[ \t]*ivegamsft/sheen[ \t]*\r?\n', '')
         if (-not (Test-Path -LiteralPath $sheenSyncWorkflow)) {
             $workflowsDir = Join-Path $repoRoot '.github' 'workflows'

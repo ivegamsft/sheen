@@ -205,7 +205,7 @@
           },
           {
             "path": "references/catalog-contract.md",
-            "hash": "5b9b845820d0795f9d4b78b309c5e7f7594a82098fde9a63bd816e094e38e20c",
+            "hash": "47fe12809b2ff6dc16d6bcc52e8f445204896c32d6eb270c00e5728b870df7ca",
             "hash_mode": "text-lf"
           }
         ]
@@ -232,7 +232,7 @@
           },
           {
             "path": "references/layout-contract.md",
-            "hash": "9092845aae14c868b644c0583d7af8ac2aa3b3ce6692c7403a5eac6388f4a2f4",
+            "hash": "65007fccb75719fb2260c9b02e07fa26f95915947231c63797913fc5e4c445af",
             "hash_mode": "text-lf"
           },
           {
@@ -551,7 +551,7 @@
           },
           {
             "path": "references/diagram-audit.md",
-            "hash": "aca24c32014cb5028cd5603478f1527e49c4fcf54649fefc96f6d96472a31305",
+            "hash": "8b646aa0b6882099c91a97a698038b31e157e685daf4c99065db8660ee079eae",
             "hash_mode": "text-lf"
           }
         ]
@@ -823,7 +823,7 @@
           },
           {
             "path": "references/scaffold-contract.md",
-            "hash": "3de2771a7af1e68badc4f4f70542e8aa52922bcfecce2f6faec3acf1cf3153f8",
+            "hash": "36bdf2d99f051d09ca4256635e96938dcdd7233bc24bed2b1fcd78e8457b5487",
             "hash_mode": "text-lf"
           }
         ]
@@ -894,7 +894,7 @@
           },
           {
             "path": "references/renderer-contract.md",
-            "hash": "5c0ec8a826f805d7249349d0d37fb5bde17b0400558070ddc507c6d57bbb3941",
+            "hash": "f8f1df477cf8370807448f5357de5d5bee1a2932380de49761bce1780ac83a32",
             "hash_mode": "text-lf"
           },
           {
@@ -1028,7 +1028,7 @@
           },
           {
             "path": "references/orchestration-contract.md",
-            "hash": "4bde1e7fc7e91da3d8b8eca742a509e262e080711bf267fc661cd6e01ae4f7a7",
+            "hash": "72509017ab2acc25e8194ff580f643891776d0e29a244379ff807d5f7d890eaf",
             "hash_mode": "text-lf"
           }
         ]
@@ -1697,7 +1697,7 @@
           },
           {
             "path": "references/pixel-diff-pipeline.md",
-            "hash": "d286116ce01e3e06ed4d19c0b4ab5ad0686ce1a77311ab392bc7a2481d1852f7",
+            "hash": "e70e44f150b91cc237bc93eedabb710d37a9978b137ce14760aa93d5a2f8f1e3",
             "hash_mode": "text-lf"
           }
         ]

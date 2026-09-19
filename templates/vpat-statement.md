@@ -125,4 +125,4 @@ For accessibility support or to report an issue: [accessibility@yourorg.example]
 
 ---
 
-*This statement was prepared using the [basecoat-sheen accessibility-auditor agent](https://github.com/IBuySpy-Shared/basecoat-sheen) and the VPAT® template. VPAT® is a registered trademark of the Information Technology Industry Council (ITI).*
+*This statement was prepared using the [basecoat-sheen accessibility-auditor agent](https://github.com/ivegamsft/sheen) and the VPAT® template. VPAT® is a registered trademark of the Information Technology Industry Council (ITI).*

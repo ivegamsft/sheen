@@ -1,7 +1,7 @@
 # Component Catalog Audit and Selection Contract
 
 Read for both modes. Implements
-[spec 11](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/specs/11-app-component-catalog.spec.md)
+[spec 11](https://github.com/ivegamsft/sheen/blob/main/specs/11-app-component-catalog.spec.md)
 (ADR-011). The downstream
 design system is authoritative; the neutral seed vocabulary only detects
 gaps — rename, merge, or drop families to fit the app. Never copy another
@@ -11,8 +11,8 @@ library's components, code, or visuals.
 
 Actions, input/selection, navigation, feedback/status, disclosure/overlays,
 content/media, data display, structure, task composition. See
-[role table](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/docs/components/app-component-catalog.md)
-and [component entry template](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/templates/app-component-catalog/component-entry.md)
+[role table](https://github.com/ivegamsft/sheen/blob/main/docs/components/app-component-catalog.md)
+and [component entry template](https://github.com/ivegamsft/sheen/blob/main/templates/app-component-catalog/component-entry.md)
 in the sheen source repository for the full role table and logical metadata.
 These shared resources are not paths inside a synced skill folder.
 

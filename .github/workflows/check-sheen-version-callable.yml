@@ -8,7 +8,7 @@ name: "Sheen - Consumer Sync"
 #
 #   jobs:
 #     sync:
-#       uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@<commit-sha>
+#       uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@<commit-sha>
 #       with:
 #         source_repo: ivegamsft/sheen # optional; .sheen.yml source is used when omitted
 #         source_ref: main             # optional; .sheen.yml ref is used when omitted
@@ -102,8 +102,8 @@ jobs:
 
           NORMALIZED_SOURCE="$(printf '%s' "$SOURCE" | sed -E 's#^[Hh][Tt][Tt][Pp][Ss]://[Gg][Ii][Tt][Hh][Uu][Bb][.][Cc][Oo][Mm]/##; s#[.][Gg][Ii][Tt]$##')"
           NORMALIZED_SOURCE_LOWER="$(printf '%s' "$NORMALIZED_SOURCE" | tr '[:upper:]' '[:lower:]')"
-          if [[ "$NORMALIZED_SOURCE_LOWER" == "ibuyspy-shared/basecoat-sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then
-            echo "::error title=Missing Sheen fetch token::source_repo resolves to IBuySpy-Shared/basecoat-sheen, which is private/internal to consumers. The consumer repo GITHUB_TOKEN cannot clone another repository. Configure a repository or organization secret named SHEEN_FETCH_TOKEN with read access to IBuySpy-Shared/basecoat-sheen, pass it as fetch_token, or change .sheen.yml source to the public mirror https://github.com/ivegamsft/sheen.git."
+          if [[ "$NORMALIZED_SOURCE_LOWER" == "ivegamsft/sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then
+            echo "::error title=Missing Sheen fetch token::source_repo resolves to ivegamsft/sheen, which is private/internal to consumers. The consumer repo GITHUB_TOKEN cannot clone another repository. Configure a repository or organization secret named SHEEN_FETCH_TOKEN with read access to ivegamsft/sheen, pass it as fetch_token, or change .sheen.yml source to the public mirror https://github.com/ivegamsft/sheen.git."
             exit 1
           else
             if [[ "$SOURCE" =~ ^[Hh][Tt][Tt][Pp][Ss]://[Gg][Ii][Tt][Hh][Uu][Bb][.][Cc][Oo][Mm]/.* ]]; then

@@ -5,13 +5,13 @@ by a real, CI-enforced pixel-diff pipeline, not only governance prose.
 Commands and paths below are relative to a sheen source checkout, not a
 standalone synced skill folder; obtain the source assets via these links:
 
-- [Batch renderer](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/scripts/render-all-diagram-samples.ps1)
-  and [diagram renderer](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/scripts/render-diagram.ps1)
-- [Samples](https://github.com/IBuySpy-Shared/basecoat-sheen/tree/main/skills/documentation-diagram/samples)
-- [Playwright test](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/tests/visual-regression/diagrams.spec.js),
-  [baselines](https://github.com/IBuySpy-Shared/basecoat-sheen/tree/main/tests/visual-regression/diagrams.spec.js-snapshots),
-  [config](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/playwright.config.js),
-  and [CI](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/.github/workflows/ci.yml)
+- [Batch renderer](https://github.com/ivegamsft/sheen/blob/main/scripts/render-all-diagram-samples.ps1)
+  and [diagram renderer](https://github.com/ivegamsft/sheen/blob/main/scripts/render-diagram.ps1)
+- [Samples](https://github.com/ivegamsft/sheen/tree/main/skills/documentation-diagram/samples)
+- [Playwright test](https://github.com/ivegamsft/sheen/blob/main/tests/visual-regression/diagrams.spec.js),
+  [baselines](https://github.com/ivegamsft/sheen/tree/main/tests/visual-regression/diagrams.spec.js-snapshots),
+  [config](https://github.com/ivegamsft/sheen/blob/main/playwright.config.js),
+  and [CI](https://github.com/ivegamsft/sheen/blob/main/.github/workflows/ci.yml)
 
 ## Render, compare, and prove detection
 

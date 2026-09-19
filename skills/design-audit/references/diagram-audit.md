@@ -7,8 +7,8 @@ Every violation is reported with its rule ID so it drops directly into the
 audit backlog as a single, unambiguous finding — never a vague "polish" note.
 
 Run commands from a sheen source checkout, not from the synced skill folder.
-Source tools: [slop audit](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/scripts/audit-diagram-slop.ps1)
-and [geometry lint](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/scripts/lint-diagram-geometry.ps1).
+Source tools: [slop audit](https://github.com/ivegamsft/sheen/blob/main/scripts/audit-diagram-slop.ps1)
+and [geometry lint](https://github.com/ivegamsft/sheen/blob/main/scripts/lint-diagram-geometry.ps1).
 `dist/diagram-skins/<theme>.json` is generated there, not bundled here.
 
 | Rule ID | Checks | Auto-fail threshold |
@@ -22,7 +22,7 @@ and [geometry lint](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/s
 | `SLANT`, `SHARED-ATTACH`, `OVERLAP-PATH`, `LABEL-UNMASKED`, `CLIPPED-LABEL`, `TRANSIT-BEHIND` | The six connector rules | Auto-fail — delegated to `scripts/lint-diagram-geometry.ps1` (#118) |
 
 Source fixtures
-[`clean-sample.svg`](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/tests/fixtures/diagrams/clean-sample.svg)
-and [`broken-sample.svg`](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/tests/fixtures/diagrams/broken-sample.svg)
+[`clean-sample.svg`](https://github.com/ivegamsft/sheen/blob/main/tests/fixtures/diagrams/clean-sample.svg)
+and [`broken-sample.svg`](https://github.com/ivegamsft/sheen/blob/main/tests/fixtures/diagrams/broken-sample.svg)
 are asserted in CI to pass and fail (respectively) so the audit's own
 effectiveness stays verified alongside its presence.
