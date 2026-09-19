@@ -34,11 +34,12 @@ permissions:
 jobs:
   sheen-sync:
     name: Sync sheen assets
-    # Pinned to a commit SHA, matching the basecoat consumer-update convention.
+    # Pinned to the released tag so the callable workflow matches the installed
+    # Sheen version. The release workflow fails if this ref does not resolve to
+    # the release tag commit.
     # Production publish rewrites this source-repo reference to ivegamsft/sheen
     # so public consumers can use the same BaseCoat-style onboarding flow.
-    # SHA below includes explicit missing-token preflight and source normalization fixes.
-    uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@a91cfa003551814f064a829a121c1c60e770e6cd
+    uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@v0.13.1
     with:
       # source_repo and source_ref are read from .sheen.yml by default.
       # Override source_repo here to force a source; source_ref can also be

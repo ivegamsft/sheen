@@ -108,6 +108,11 @@ class ProvenanceTests(unittest.TestCase):
         (self.repo / "version.json").write_text(json.dumps({"version": version}), encoding="utf-8")
         (self.repo / "CHANGELOG.md").write_text(
             f"## [{version}]\n\n{marker}-CHANGELOG\n", encoding="utf-8", newline="\n")
+        (self.repo / "templates").mkdir(exist_ok=True)
+        (self.repo / "templates" / "sheen-sync.yml").write_text(
+            f"    uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/"
+            f"check-sheen-version-callable.yml@v{version}\n",
+            encoding="utf-8", newline="\n")
         for name in ("sync.ps1", "sync.sh", "rollback.ps1", "rollback.sh"):
             (self.repo / name).write_text(f"{marker}-{name}\n", encoding="utf-8", newline="\n")
 
@@ -125,9 +130,10 @@ class ProvenanceTests(unittest.TestCase):
         return result
 
     def payload_steps(self):
-        for title in ("Validate version.json matches tag", "Validate sync scripts present",
-                      "Wave/sprint label coverage gate", "Build repository zip artifact",
-                      "Generate release notes", "Create or update GitHub release"):
+        for title in ("Validate version.json matches tag", "Validate sync template release ref",
+                      "Validate sync scripts present", "Wave/sprint label coverage gate",
+                      "Build repository zip artifact", "Generate release notes",
+                      "Create or update GitHub release"):
             self.run_step(title)
 
     def assert_tag_payload(self):
@@ -149,6 +155,9 @@ class ProvenanceTests(unittest.TestCase):
             self.assertIn(b"TAG-CHANGELOG", archive.read("CHANGELOG.md"))
             self.assertIn(b"TAG-GENERATOR", archive.read("scripts/generate-release-notes.sh"))
             self.assertEqual(json.loads(archive.read("version.json"))["version"], "1.2.3")
+            self.assertIn(
+                b"IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@v1.2.3",
+                archive.read("templates/sheen-sync.yml"))
 
     def test_dispatch_selects_tag_for_all_payloads_and_rerun_updates(self):
         self.assertNotEqual(self.dispatch_sha, self.tag_sha)
@@ -238,17 +247,36 @@ class ProvenanceTests(unittest.TestCase):
                 self.run_step("Validate version.json matches tag", expected=1)
                 self.assertEqual(list(self.capture.iterdir()), [])
 
-    def test_old_dispatch_wiring_reproduces_original_mixed_payload(self):
+    def test_sync_template_ref_must_match_release(self):
+        self.run_step("Resolve and check out release tag")
+        self.run_step("Validate sync template release ref")
+        self.git("checkout", "--quiet", "dispatch")
+        for contents in (
+            "uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/"
+            "check-sheen-version-callable.yml@v1.2.2\n",
+            "uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/"
+            "check-sheen-version-callable.yml@main\n",
+            "uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@v1.2.3\n",
+            "",
+        ):
+            with self.subTest(contents=contents):
+                (self.repo / "templates" / "sheen-sync.yml").write_text(
+                    contents, encoding="utf-8", newline="\n")
+                self.git("add", ".")
+                self.git("commit", "--quiet", "-m", "bad template ref")
+                self.git("tag", "-f", TAG)
+                self.run_step("Resolve and check out release tag")
+                self.run_step("Validate sync template release ref", expected=1)
+                self.git("checkout", "--quiet", "dispatch")
+
+    def test_sync_template_gate_blocks_original_mixed_payload(self):
         body = self.steps["Resolve and check out release tag"][1].replace(
             'git checkout --detach "refs/tags/$tag"', ": # original did not check out the tag")
         self.run_step("Resolve and check out release tag", override=body)
         self.run_step("Validate version.json matches tag", expected=1)
         (self.repo / "version.json").write_text('{"version":"1.2.3"}', encoding="utf-8")
-        self.payload_steps()
-        self.assertIn("DISPATCH", (self.capture / "sync.sh").read_text())
-        self.assertIn("DISPATCH", (self.capture / "release-notes.md").read_text())
-        with zipfile.ZipFile(self.capture / f"basecoat-sheen-{TAG}.zip") as archive:
-            self.assertIn(b"TAG-sync.sh", archive.read("sync.sh"))
+        self.run_step("Validate sync template release ref", expected=1)
+        self.assertEqual(list(self.capture.iterdir()), [])
 
     def test_history_fallback_uses_tag_not_dispatch_sha(self):
         self.git("checkout", "--quiet", "--detach", f"refs/tags/{TAG}")
@@ -369,7 +397,7 @@ class ProvenanceTests(unittest.TestCase):
                      "check-sheen-version-callable.yml"):
             shutil.copyfile(ROOT / ".github" / "workflows" / name, workflows / name)
         template = self.repo / "templates" / "sheen-sync.yml"
-        template.parent.mkdir()
+        template.parent.mkdir(exist_ok=True)
         template.write_text(
             "uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/"
             "check-sheen-version-callable.yml@abc123\n",

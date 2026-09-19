@@ -188,6 +188,7 @@ foreach ($example in Get-ChildItem -LiteralPath (Join-Path $repoRoot 'docs' 'exa
 Write-Host '[3/6] scheduled sync template uses internal callable and .sheen.yml source precedence'
 $template = Read-RepoText 'templates/sheen-sync.yml'
 Assert-Contains $template 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' 'scheduled sync must keep using the internal callable workflow host'
+Assert-Contains $template 'The release workflow fails if this ref does not resolve to' 'scheduled sync must document release-ref pin validation'
 Assert-NotContains $template 'source_repo: ivegamsft/sheen' 'scheduled sync template must not override .sheen.yml source'
 Assert-NotContains $template 'source_repo: IBuySpy-Shared/basecoat-sheen' 'scheduled sync template must not clone the private source by default'
 Assert-Contains $template 'Not required for the default public ivegamsft/sheen mirror.' 'template must document that fetch_token is optional for the default source'

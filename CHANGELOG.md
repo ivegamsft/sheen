@@ -7,7 +7,11 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
-No unreleased changes.
+### Fixed
+
+- Pin the scheduled Sheen sync template to the installed release tag and fail
+  release validation when the callable workflow ref does not match or resolve to
+  the release commit (#264).
 
 ## [0.13.1] — 2026-09-18
 

@@ -97,6 +97,42 @@ jobs:
           fi
           echo "✓ version.json ($actual) matches tag ${{ steps.tag.outputs.tag }}"
 
+      - name: Validate sync template release ref
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${{ steps.tag.outputs.tag }}"
+          template="templates/sheen-sync.yml"
+          if [[ ! -f "$template" ]]; then
+            echo "::error::${template} is required in release payload"
+            exit 1
+          fi
+          matches="$(grep -E '^[[:space:]]*uses:[[:space:]]+IBuySpy-Shared/basecoat-sheen/\.github/workflows/check-sheen-version-callable\.yml@' "$template" || true)"
+          count="$(printf '%s\n' "$matches" | grep -c . || true)"
+          if [[ "$count" -ne 1 ]]; then
+            echo "::error::${template} must contain exactly one internal check-sheen-version-callable.yml uses ref"
+            exit 1
+          fi
+          ref="${matches##*@}"
+          if [[ -z "$ref" ]]; then
+            echo "::error::${template} callable workflow ref is empty"
+            exit 1
+          fi
+          tag_commit="$(git rev-parse "refs/tags/${tag}^{commit}")"
+          if [[ "$ref" == "$tag" ]]; then
+            echo "✓ ${template} callable ref uses release tag ${tag}"
+            exit 0
+          fi
+          if git rev-parse --verify --quiet "${ref}^{commit}" >/dev/null; then
+            ref_commit="$(git rev-parse "${ref}^{commit}")"
+            if [[ "$ref_commit" == "$tag_commit" ]]; then
+              echo "✓ ${template} callable ref ${ref} resolves to release commit ${tag_commit}"
+              exit 0
+            fi
+          fi
+          echo "::error::${template} callable ref '${ref}' must be '${tag}' or resolve to release commit ${tag_commit}"
+          exit 1
+
       - name: Validate sync scripts present
         shell: bash
         run: |
