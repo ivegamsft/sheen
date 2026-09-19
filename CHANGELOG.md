@@ -7,6 +7,16 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.13.2] — 2026-09-19
+
+| Field | Value |
+|---|---|
+| Version | v0.13.2 |
+| Range | v0.13.1..v0.13.2 |
+| Wave | wave:14 |
+| Sprint | N/A |
+| Release date | 2026-09-19 |
+
 ### Fixed
 
 - Pin the scheduled Sheen sync template to the installed release tag and fail
