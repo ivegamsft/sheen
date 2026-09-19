@@ -39,7 +39,7 @@ jobs:
     # the release tag commit.
     # Production publish rewrites this source-repo reference to ivegamsft/sheen
     # so public consumers can use the same BaseCoat-style onboarding flow.
-    uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@v0.13.1
+    uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@v0.13.2
     with:
       # source_repo and source_ref are read from .sheen.yml by default.
       # Override source_repo here to force a source; source_ref can also be
