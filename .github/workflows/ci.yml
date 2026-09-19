@@ -137,6 +137,9 @@ jobs:
       - name: Validate - sheen sync source/token fallback (#248)
         run: pwsh -NonInteractive -File scripts/test-sheen-sync-source.ps1
 
+      - name: Validate - vendored BaseCoat sync overlay guard (#265)
+        run: pwsh -NonInteractive -File scripts/test-vendor-basecoat-sync.ps1
+
       - name: Validate - explicit source external delegates
         run: pwsh -NonInteractive -File scripts/test-external-delegates.ps1
 

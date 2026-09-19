@@ -12,6 +12,10 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 - Pin the scheduled Sheen sync template to the installed release tag and fail
   release validation when the callable workflow ref does not match or resolve to
   the release commit (#264).
+- Re-vendor BaseCoat `sync.ps1` and `sync.sh` from the post-#3415 upstream fix
+  so shared Copilot overlay paths are updated per-file instead of wholesale
+  wiped, and add a CI guard to prevent stale vendored sync scripts from
+  reintroducing the destructive pattern (#265).
 
 ## [0.13.1] — 2026-09-18
 
