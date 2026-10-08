@@ -596,7 +596,7 @@ Please:
 #### Step 1 — Review the changelog
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/IBuySpy-Shared/basecoat-sheen/<TARGET-VERSION>/CHANGELOG.md
+curl -fsSL https://raw.githubusercontent.com/ivegamsft/sheen/<TARGET-VERSION>/CHANGELOG.md
 ```
 
 Look for `### Breaking` or renamed assets before running sync.

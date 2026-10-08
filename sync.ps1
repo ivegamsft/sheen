@@ -447,8 +447,8 @@ try {
     $upstreamTemplate = Join-Path $work 'templates' 'sheen-sync.yml'
     if (Test-Path -LiteralPath $upstreamTemplate) {
         $normalizedWorkflow = Get-Content -LiteralPath $upstreamTemplate -Raw
-        $normalizedWorkflow = $normalizedWorkflow -replace 'uses:\s+ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@', 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@'
-        $normalizedWorkflow = [regex]::Replace($normalizedWorkflow, '(?m)(uses:\s+IBuySpy-Shared/basecoat-sheen/\.github/workflows/check-sheen-version-callable\.yml@)[^\s]+', ('${1}' + [string]$manifest.commit))
+        $normalizedWorkflow = $normalizedWorkflow -replace 'uses:\s+ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@', 'uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@'
+        $normalizedWorkflow = [regex]::Replace($normalizedWorkflow, '(?m)(uses:\s+ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@)[^\s]+', ('${1}' + [string]$manifest.commit))
         $normalizedWorkflow = $normalizedWorkflow -replace 'Pinned to the released tag', 'Pinned to the immutable source commit'
         $normalizedWorkflow = [regex]::Replace($normalizedWorkflow, '(?m)^[ \t]*source_repo:[ \t]*ivegamsft/sheen[ \t]*\r?\n', '')
         if (-not (Test-Path -LiteralPath $sheenSyncWorkflow)) {
