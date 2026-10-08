@@ -9,10 +9,10 @@ provides the engineering-SDLC foundation that basecoat-sheen (the design/UX
 | Field | Value |
 |---|---|
 | Source | <https://github.com/IBuySpy-Shared/basecoat> |
-| Ref | `v4.5.0` |
-| Commit | `6573f38529d846facb0c4a1f9cd500a1a6a3d2e8` |
-| Commit date | 2026-09-18 |
-| Vendored on | 2026-09-18 |
+| Ref | `v4.6.3` |
+| Commit | `a6e4302bf23c8cad75f7add541222fb516be583d` |
+| Commit date | 2026-10-08 |
+| Vendored on | 2026-10-08 |
 | License | See [`LICENSE`](LICENSE) |
 
 ## What is included
@@ -40,8 +40,8 @@ Heavy, generated, or repo-specific content not needed for the asset library:
 - Treat this tree as **read-only**. Do not hand-edit vendored files; changes belong
   upstream in basecoat.
 - Downstream security mitigations must be tracked upstream and update vendored
-  manifest hashes; this snapshot redacts reusable-workflow secret diagnostics
-  pending IBuySpy-Shared/basecoat#3420.
+  manifest hashes. The reusable-workflow secret diagnostics redaction
+  (IBuySpy-Shared/basecoat#3420) is closed upstream and included in this snapshot.
 - Refresh by re-cloning at a new pinned commit and replacing this directory, then
   bumping the Provenance table above and noting it in the repo `CHANGELOG.md`.
 - sheen assets live at the repo root (`../../skills`, `../../agents`, etc.) and MUST

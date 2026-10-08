@@ -8,6 +8,8 @@ param(
 
   [string]$TargetRepo = $env:GITHUB_REPOSITORY,
 
+  [switch]$AllowCrossRepository,
+
   [string]$SpecRef = "",
 
   [ValidateSet("low", "medium", "high", "critical")]
@@ -22,6 +24,30 @@ param(
 
   [switch]$DryRun,
 
+  [string]$SourceIssueNumber = "",
+
+  [string]$SourceIssueUrl = "",
+
+  [string]$SourceScope = "",
+
+  [bool]$FeatureOrigin = $false,
+
+  [string]$RawDirective = "",
+
+  [string]$DirectiveSource = "",
+
+  [string]$DirectiveActor = "",
+
+  [string]$DirectiveEvidenceUrl = "",
+
+  [string]$DirectiveTimestamp = "",
+
+  [string]$ApprovalCommentId = "",
+
+  [string]$ApprovalReceiptBase64 = $env:APPROVAL_RECEIPT_BASE64,
+
+  [string]$Requester = $env:GITHUB_ACTOR,
+
   [string]$OutputPath = "test-results\ship-it\summary.json"
 )
 
@@ -30,6 +56,12 @@ $ErrorActionPreference = "Stop"
 if ([string]::IsNullOrWhiteSpace($TargetRepo) -or $TargetRepo -notmatch "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$") {
   throw "TargetRepo must be in owner/repo format."
 }
+
+$targetRepositoryValidator = Join-Path $PSScriptRoot "validate-target-repository.ps1"
+if (-not (Test-Path $targetRepositoryValidator)) {
+  throw "Missing target repository validator: $targetRepositoryValidator"
+}
+& $targetRepositoryValidator -TargetRepo $TargetRepo -AllowCrossRepository:$AllowCrossRepository | Out-Null
 
 $trimmedGoal = $Goal.Trim()
 if ([string]::IsNullOrWhiteSpace($trimmedGoal)) {
@@ -40,7 +72,139 @@ if ($ProjectNumber -gt 0 -and [string]::IsNullOrWhiteSpace($ProjectOwner)) {
   throw "ProjectOwner is required when ProjectNumber is provided."
 }
 
-$timestamp = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+$normalizedSourceIssueNumber = $SourceIssueNumber.Trim()
+if (-not [string]::IsNullOrWhiteSpace($normalizedSourceIssueNumber) -and
+  $normalizedSourceIssueNumber -notmatch "^\d+$") {
+  throw "SourceIssueNumber must be a positive issue number."
+}
+
+$preApprovalMode = -not [string]::IsNullOrEmpty($ApprovalCommentId) -or
+  -not [string]::IsNullOrEmpty($ApprovalReceiptBase64)
+$approvalHelper = Join-Path $PSScriptRoot "preapproval-evidence.cjs"
+if (-not (Test-Path $approvalHelper)) {
+  $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..\..")
+  $approvalHelper = Join-Path $repoRoot ".github\base-coat\scripts\ship-it\preapproval-evidence.cjs"
+}
+$approvalReceipt = $null
+
+function Invoke-PreApprovalHelper {
+  param(
+    [Parameter(Mandatory)]
+    [ValidateSet("resolve", "revalidate", "encode")]
+    [string]$Operation,
+    [string]$RequestJson = "",
+    [string]$ReceiptBase64 = "",
+    [string]$ReceiptJson = ""
+  )
+
+  $node = Get-Command node -ErrorAction SilentlyContinue
+  if (-not $node) {
+    throw "Node.js is required to validate live pre-approval evidence."
+  }
+
+  $previousRequest = $env:BASECOAT_PREAPPROVAL_REQUEST_JSON
+  $previousReceipt = $env:BASECOAT_APPROVAL_RECEIPT_BASE64
+  $previousReceiptJson = $env:BASECOAT_PREAPPROVAL_RECEIPT_JSON
+  try {
+    $env:BASECOAT_PREAPPROVAL_REQUEST_JSON = $RequestJson
+    $env:BASECOAT_APPROVAL_RECEIPT_BASE64 = $ReceiptBase64
+    $env:BASECOAT_PREAPPROVAL_RECEIPT_JSON = $ReceiptJson
+    $output = & $node.Source $approvalHelper $Operation 2>&1
+    $exitCode = $LASTEXITCODE
+    $text = ($output -join "`n").Trim()
+    if ($exitCode -ne 0) {
+      throw "Live pre-approval validation failed: $text"
+    }
+    if ($Operation -eq "encode") {
+      return $text
+    }
+    return $text | ConvertFrom-Json
+  } finally {
+    $env:BASECOAT_PREAPPROVAL_REQUEST_JSON = $previousRequest
+    $env:BASECOAT_APPROVAL_RECEIPT_BASE64 = $previousReceipt
+    $env:BASECOAT_PREAPPROVAL_RECEIPT_JSON = $previousReceiptJson
+  }
+}
+
+if ($preApprovalMode) {
+  if ([string]::IsNullOrWhiteSpace($SourceIssueNumber) -or [string]::IsNullOrWhiteSpace($ApprovalCommentId)) {
+    throw "Pre-approval requires both SourceIssueNumber and ApprovalCommentId."
+  }
+  if ($ProjectNumber -gt 0 -or -not [string]::IsNullOrWhiteSpace($ProjectOwner)) {
+    throw "Pre-approval does not authorize project synchronization; omit ProjectOwner and ProjectNumber."
+  }
+  if (-not (Test-Path $approvalHelper)) {
+    throw "Missing shared pre-approval evidence resolver: $approvalHelper"
+  }
+
+  if ([string]::IsNullOrWhiteSpace($ApprovalReceiptBase64)) {
+    $requestJson = [ordered]@{
+      sourceIssueNumber = $SourceIssueNumber
+      approvalCommentId = $ApprovalCommentId
+      targetRepo = $TargetRepo
+      intent = $Intent
+      goal = $trimmedGoal
+      specRef = $SpecRef.Trim()
+      riskBand = $RiskBand
+      profile = $Profile
+      selectedPolicy = "$Profile/$RiskBand"
+    } | ConvertTo-Json -Compress
+    $approvalReceipt = Invoke-PreApprovalHelper -Operation "resolve" -RequestJson $requestJson
+    $ApprovalReceiptBase64 = Invoke-PreApprovalHelper `
+      -Operation "encode" `
+      -ReceiptJson ($approvalReceipt | ConvertTo-Json -Depth 10 -Compress)
+  } else {
+    $approvalReceipt = Invoke-PreApprovalHelper `
+      -Operation "revalidate" `
+      -ReceiptBase64 $ApprovalReceiptBase64
+  }
+
+  $expectedReceiptInputs = @{
+    source_issue_number = $SourceIssueNumber
+    approval_comment_id = $ApprovalCommentId
+    target_repo = $TargetRepo
+    intent = $Intent
+    goal = $trimmedGoal
+    spec_ref = $SpecRef.Trim()
+    risk_band = $RiskBand
+    profile = $Profile
+  }
+  foreach ($field in $expectedReceiptInputs.Keys) {
+    $receiptField = if ($field -eq "source_issue_number") { "source_issue_number" } elseif ($field -eq "approval_comment_id") { "approval_comment_id" } else { $field }
+    $expectedValue = [string]$expectedReceiptInputs[$field]
+    $actualValue = [string]$approvalReceipt.$receiptField
+    if ($field -in @("target_repo", "risk_band", "profile")) {
+      $matches = $actualValue -ieq $expectedValue
+    } else {
+      $matches = $actualValue -ceq $expectedValue
+    }
+    if (-not $matches) {
+      throw "Pre-approval receipt does not match dispatch input '$field'."
+    }
+  }
+  if ([string]::IsNullOrWhiteSpace($Requester)) {
+    $Requester = [string]$approvalReceipt.execution_principal
+  }
+  $timestamp = [datetime]::Parse(
+    [string]$approvalReceipt.run_started_at,
+    [System.Globalization.CultureInfo]::InvariantCulture,
+    [System.Globalization.DateTimeStyles]::AdjustToUniversal
+  ).ToString("yyyy-MM-ddTHH:mm:ssZ")
+} else {
+  $timestamp = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+}
+
+function Assert-PreApprovalCurrent {
+  if (-not $preApprovalMode) {
+    return
+  }
+  $liveReceipt = Invoke-PreApprovalHelper `
+    -Operation "revalidate" `
+    -ReceiptBase64 $ApprovalReceiptBase64
+  if ($liveReceipt.receipt_hash -ne $approvalReceipt.receipt_hash) {
+    throw "Live pre-approval receipt changed during dispatch; no further side effects are allowed."
+  }
+}
 $repoName = $TargetRepo.Split("/")[1]
 $commonLabels = @("intent-control-plane", $Intent, "risk-$RiskBand")
 
@@ -631,7 +795,10 @@ function Find-ExistingIssueByMarker {
 $sprints = Get-IntentPhases -IntentName $Intent
 $desiredStateDiff = Get-DesiredStateDiff -IntentName $Intent -ProfileName $Profile
 $releaseGateContract = Get-ReleaseGateContract
-$runKey = "$Intent|$TargetRepo|$trimmedGoal|$Profile"
+$runKey = "$Intent|$TargetRepo|$trimmedGoal|$Profile|$normalizedSourceIssueNumber"
+if ($preApprovalMode) {
+  $runKey += "|preapproval:$($approvalReceipt.scope_sha256)"
+}
 $runKeyHash = Get-ContentHash -InputText $runKey
 $parentMarker = "<!-- basecoat-intent-parent:$runKeyHash -->"
 
@@ -660,6 +827,7 @@ function Ensure-Label {
     [string]$Description
   )
 
+  Assert-PreApprovalCurrent
   Invoke-Gh -Arguments @(
     "label", "create",
     "--repo", $Repo,
@@ -680,17 +848,52 @@ if (-not $DryRun) {
 
 $parentTitle = "[Intent][$Intent][$repoName] $trimmedGoal"
 $specLine = if ([string]::IsNullOrWhiteSpace($SpecRef)) { "_Not provided_" } else { $SpecRef.Trim() }
+$approvedIntentContract = ""
+$approvalProvenance = ""
+if ($preApprovalMode) {
+  $approvedIntentContract = @"
+## Intent Contract
+
+- Intent: ``$($approvalReceipt.intent)``
+- Goal: $($approvalReceipt.goal)
+- Scope: $($approvalReceipt.scope)
+- Repository: $($approvalReceipt.target_repo)
+- Risk band: ``$($approvalReceipt.risk_band)``
+- Profile: ``$($approvalReceipt.profile)``
+- Spec reference: $($approvalReceipt.spec_ref)
+"@
+  $approvalProvenance = @"
+## Source Approval Receipt
+
+- Source issue: $($approvalReceipt.source_issue_url)
+- Exact approval comment: $($approvalReceipt.approval_comment_url)
+- Human approver: @$($approvalReceipt.approver_login)
+- Effective approval time: ``$($approvalReceipt.effective_approval_at)``
+- Initial run: ``$($approvalReceipt.run_id)`` at ``$($approvalReceipt.run_started_at)``
+- Execution principal: @$($approvalReceipt.execution_principal)
+- Selected policy: ``$($approvalReceipt.selected_policy)``
+- Approved scope SHA-256: ``$($approvalReceipt.scope_sha256)``
+- Issue-body SHA-256: ``$($approvalReceipt.issue_body_sha256)``
+- Approval-body SHA-256: ``$($approvalReceipt.approval_body_sha256)``
+- Receipt SHA-256: ``$($approvalReceipt.receipt_hash)``
+
+<!-- basecoat-preapproval-receipt:v1 $ApprovalReceiptBase64 -->
+"@
+}
 
 $parentBody = @"
 ## Intent Contract
 
 - Intent: ``$Intent``
 - Goal: $trimmedGoal
+- Scope: $trimmedGoal
 - Repository: $TargetRepo
 - Risk band: ``$RiskBand``
 - Profile: ``$Profile``
 - Spec reference: $specLine
 - Started: $timestamp
+
+$approvalProvenance
 
 ## Governance Checklist
 
@@ -707,6 +910,18 @@ $parentBody = @"
 
 This issue is the control-plane parent for a governed multi-sprint execution loop.
 Child sprint issues are generated automatically and must remain linked.
+
+## Directive Provenance
+
+- Source issue: $SourceIssueUrl (#$normalizedSourceIssueNumber)
+- Feature-origin handoff: ``$FeatureOrigin``
+- Approved source scope: $SourceScope
+- Normalized intent: ``$Intent``
+- Raw directive: $RawDirective
+- Directive source: ``$DirectiveSource``
+- Original actor: $DirectiveActor
+- Evidence: $DirectiveEvidenceUrl
+- Evidence time: $DirectiveTimestamp
 
 ## Desired-State Diff
 
@@ -735,7 +950,21 @@ $summary = [ordered]@{
   target_repo = $TargetRepo
   risk_band = $RiskBand
   profile = $Profile
+  requester = $Requester
   spec_ref = $SpecRef
+  source_issue_number = $normalizedSourceIssueNumber
+  source_issue_url = $SourceIssueUrl
+  feature_origin = $FeatureOrigin
+  source_scope = $SourceScope
+  directive_provenance = [ordered]@{
+    raw_directive = $RawDirective
+    normalized_intent = $Intent
+    source = $DirectiveSource
+    original_actor = $DirectiveActor
+    evidence_url = $DirectiveEvidenceUrl
+    evidence_timestamp = $DirectiveTimestamp
+    source_scope = $SourceScope
+  }
   started_at = $timestamp
   dry_run = [bool]$DryRun
   run_key = $runKey
@@ -753,6 +982,8 @@ $summary = [ordered]@{
   parent_issue_number = ""
   parent_issue_reused = $false
   child_issues = @()
+  source_approval_receipt = if ($preApprovalMode) { $approvalReceipt } else { $null }
+  source_approval_receipt_base64 = if ($preApprovalMode) { $ApprovalReceiptBase64 } else { "" }
 }
 
 if ($DryRun) {
@@ -808,6 +1039,7 @@ if ($DryRun) {
   if ($null -ne $existingParent) {
     $summary.parent_issue_reused = $true
     $parentUrl = [string]$existingParent.url
+    Assert-PreApprovalCurrent
     Invoke-Gh -Arguments @(
       "issue", "edit", [string]$existingParent.number,
       "--repo", $TargetRepo,
@@ -816,6 +1048,7 @@ if ($DryRun) {
       "--add-label", ($commonLabels -join ",")
     ) | Out-Null
   } else {
+    Assert-PreApprovalCurrent
     $createParentArgs = @(
       "issue", "create",
       "--repo", $TargetRepo,
@@ -945,6 +1178,10 @@ $(($mergeSequencingChecklist -join "`n"))
 - [ ] Post-merge cleanup audit reviewed
 
 $phaseMarker
+
+$approvedIntentContract
+
+$approvalProvenance
 "@
 
     $sprintBodyPath = Join-Path $tempRoot "ship-it-sprint-$index-$([Guid]::NewGuid().ToString()).md"
@@ -953,6 +1190,7 @@ $phaseMarker
     $existingChild = Find-ExistingIssueByMarker -Issues $existingIssues -Marker $phaseMarker
     if ($null -ne $existingChild) {
       $sprintUrl = [string]$existingChild.url
+      Assert-PreApprovalCurrent
       Invoke-Gh -Arguments @(
         "issue", "edit", [string]$existingChild.number,
         "--repo", $TargetRepo,
@@ -961,6 +1199,7 @@ $phaseMarker
         "--add-label", (($commonLabels + "sprint") -join ",")
       ) | Out-Null
     } else {
+      Assert-PreApprovalCurrent
       $createSprintArgs = @(
         "issue", "create",
         "--repo", $TargetRepo,
@@ -998,6 +1237,7 @@ $phaseMarker
   Remove-Item -Path $bodyPath -Force
 
   if ($ProjectNumber -gt 0) {
+    Assert-PreApprovalCurrent
     Invoke-Gh -Arguments @(
       "project", "item-add", $ProjectNumber.ToString(),
       "--owner", $ProjectOwner,
@@ -1005,6 +1245,7 @@ $phaseMarker
     ) | Out-Null
 
     foreach ($child in $summary.child_issues) {
+      Assert-PreApprovalCurrent
       Invoke-Gh -Arguments @(
         "project", "item-add", $ProjectNumber.ToString(),
         "--owner", $ProjectOwner,
@@ -1030,6 +1271,14 @@ $markdown = @"
 - Repository: $($summary.target_repo)
 - Risk band: ``$($summary.risk_band)``
 - Profile: ``$($summary.profile)``
+- Source issue: $($summary.source_issue_url) (#$($summary.source_issue_number))
+- Feature-origin handoff: ``$($summary.feature_origin)``
+- Approved source scope: $($summary.source_scope)
+- Original directive: $($summary.directive_provenance.raw_directive)
+- Directive source: ``$($summary.directive_provenance.source)``
+- Original actor: $($summary.directive_provenance.original_actor)
+- Directive evidence: $($summary.directive_provenance.evidence_url)
+- Directive time: $($summary.directive_provenance.evidence_timestamp)
 - Dry run: ``$($summary.dry_run)``
 - Parent issue: $($summary.parent_issue_url)
 - Parent issue reused: ``$($summary.parent_issue_reused)``

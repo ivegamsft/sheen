@@ -3,6 +3,7 @@ param(
     [string]$RootDir = (Get-Location).Path,
     [ValidateSet('Auto', 'Source', 'Installed', 'Consumer')]
     [string]$WorkflowValidationMode = 'Auto',
+    [string]$ConsumerRoot = '',
     [switch]$Strict,
     [switch]$FailOnWarning
 )
@@ -33,12 +34,23 @@ foreach ($item in $required) {
 }
 
 Write-Host 'Validating immutable workflow action pins...'
-& (Join-Path $PSScriptRoot 'validate-workflow-action-pins.ps1') -RootDir $resolvedRoot -Mode $effectiveWorkflowValidationMode
+$workflowValidationRoot = $resolvedRoot
+if ($effectiveWorkflowValidationMode -eq 'Consumer') {
+    if (-not $ConsumerRoot) {
+        throw "Consumer workflow validation requires -ConsumerRoot to identify the consumer repository."
+    }
+    $workflowValidationRoot = (Resolve-Path -LiteralPath $ConsumerRoot).Path
+}
+& (Join-Path $PSScriptRoot 'validate-workflow-action-pins.ps1') `
+    -RootDir $workflowValidationRoot `
+    -Mode $effectiveWorkflowValidationMode
 
 Write-Host 'Validating skill visibility values...'
 & (Join-Path $PSScriptRoot 'validate-skill-visibility.ps1') -RootDir $resolvedRoot
 Write-Host 'Validating asset distribution classification...'
 & (Join-Path $PSScriptRoot 'validate-asset-distribution.ps1') -RootDir $resolvedRoot
+Write-Host 'Validating model policy selectors...'
+& (Join-Path $PSScriptRoot 'validate-model-policy.ps1') -RootDir $resolvedRoot
 
 # INVENTORY.md may be at root or in docs/reference/ (accepts lowercase after Phase 3+4 rename)
 $inventoryPath = if (Test-Path 'INVENTORY.md') { 'INVENTORY.md' } elseif (Test-Path 'docs/reference/INVENTORY.md') { 'docs/reference/INVENTORY.md' } elseif (Test-Path 'docs/reference/inventory.md') { 'docs/reference/inventory.md' } else { $null }
@@ -562,6 +574,17 @@ if ($effectiveWorkflowValidationMode -eq 'Source') {
     Test-LogFirstGate
     Test-ConfigSecretExamples
     Test-DocsHomepageAssetCounts
+
+    $dogfoodCheckScript = Join-Path $PSScriptRoot 'dogfood-install.ps1'
+    if (Test-Path -LiteralPath $dogfoodCheckScript -PathType Leaf) {
+        $dogfoodCheckOutput = & pwsh -NoProfile -File $dogfoodCheckScript -Check -RootDir $resolvedRoot 2>&1 | Out-String
+        $dogfoodCheckExitCode = $LASTEXITCODE
+        $global:LASTEXITCODE = 0
+        if ($dogfoodCheckExitCode -ne 0) {
+            Write-Host "WARNING: Local Copilot dogfood projection is missing or stale. Run 'pwsh scripts/dev-setup.ps1' to refresh it. $($dogfoodCheckOutput.Trim())" -ForegroundColor Yellow
+            $warnings++
+        }
+    }
 }
 
 if ($errors -gt 0) {

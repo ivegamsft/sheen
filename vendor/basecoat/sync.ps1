@@ -101,7 +101,14 @@ function Protect-SyncSensitiveText {
 function Invoke-SyncGit {
     param([Parameter(Mandatory)][string[]]$Arguments)
 
-    $output = & git @Arguments 2>&1
+    # Windows PowerShell treats redirected native stderr as an ErrorRecord.
+    # Git progress is not a failure; decide using its exit code after capture.
+    $savedPreference = $ErrorActionPreference
+    try {
+        $ErrorActionPreference = 'Continue'
+        $output = & git @Arguments 2>&1
+    }
+    finally { $ErrorActionPreference = $savedPreference }
     $exitCode = $LASTEXITCODE
     $safeArguments = @($Arguments | ForEach-Object { Protect-SyncSensitiveText $_ })
     $safeOutput = @($output | ForEach-Object { Protect-SyncSensitiveText $_ })
@@ -314,7 +321,7 @@ function Assert-MinimalDocsScope {
 
     $topLevelEntries = Get-ChildItem -Path $DocsPath -Force
     $unexpectedTopLevel = $topLevelEntries | Where-Object { $_.Name -notin $allowedDocsTopLevelEntries }
-    if ($unexpectedTopLevel.Count -gt 0) {
+    if (@($unexpectedTopLevel).Count -gt 0) {
         $names = ($unexpectedTopLevel | ForEach-Object { $_.Name } | Sort-Object) -join ', '
         throw "Docs scope validation failed: unexpected docs entries synced: $names"
     }
@@ -324,7 +331,7 @@ function Assert-MinimalDocsScope {
         $unexpectedAgentDocs = Get-ChildItem -Path $agentsDocsPath -Force | Where-Object {
             $_.PSIsContainer -or $_.Name -ne 'AGENTS.md'
         }
-        if ($unexpectedAgentDocs.Count -gt 0) {
+        if (@($unexpectedAgentDocs).Count -gt 0) {
             $names = ($unexpectedAgentDocs | ForEach-Object { $_.Name } | Sort-Object) -join ', '
             throw "Docs scope validation failed: docs/agents must only contain AGENTS.md, found: $names"
         }
@@ -446,9 +453,12 @@ function Get-CanonicalRealPath {
         $accumulated = Join-Path $accumulated $segment
         if (Test-Path -LiteralPath $accumulated) {
             $item = Get-Item -LiteralPath $accumulated -Force
-            $linkTarget = $item.ResolveLinkTarget($true)
-            if ($null -ne $linkTarget) {
-                $accumulated = $linkTarget.FullName
+            if (($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+                if (-not $item.PSObject.Methods['ResolveLinkTarget']) {
+                    throw "Refusing a linked overlay ancestor on Windows PowerShell 5.1: $accumulated"
+                }
+                $linkTarget = $item.ResolveLinkTarget($true)
+                if ($null -ne $linkTarget) { $accumulated = $linkTarget.FullName }
             }
         }
     }
@@ -473,7 +483,7 @@ function Test-PathWithinBoundary {
         [System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar
     )
     $boundaryWithSeparator = $canonicalBoundary + [System.IO.Path]::DirectorySeparatorChar
-    $comparison = if ($IsWindows) { [System.StringComparison]::OrdinalIgnoreCase } else { [System.StringComparison]::Ordinal }
+    $comparison = if ([IO.Path]::DirectorySeparatorChar -eq '\') { [System.StringComparison]::OrdinalIgnoreCase } else { [System.StringComparison]::Ordinal }
     return $canonicalPath.Equals($canonicalBoundary, $comparison) -or $canonicalPath.StartsWith($boundaryWithSeparator, $comparison)
 }
 
@@ -517,7 +527,7 @@ function Copy-ManagedOverlayTree {
         }
         if (Test-Path -LiteralPath $destFile) {
             $existingLeaf = Get-Item -LiteralPath $destFile -Force
-            if ($null -ne $existingLeaf.ResolveLinkTarget($false)) {
+            if (($existingLeaf.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
                 Write-Warning "Refusing to overwrite a symlinked overlay destination file: $destFile"
                 return
             }
@@ -546,6 +556,8 @@ function Remove-EmptyOverlayParents {
 $sourcePathOverride = $env:BASECOAT_TEST_SOURCE_PATH
 $tempRoot = $null
 $sourcePath = $null
+$guidanceStage = $null
+$guidanceLeasePath = $null
 
 try {
     if ($sourcePathOverride) {
@@ -574,13 +586,29 @@ try {
     if ($env:BASECOAT_EXPECTED_SHA -and $sourceCommit -ne $env:BASECOAT_EXPECTED_SHA) {
         throw "BaseCoat source provenance check failed: expected commit '$($env:BASECOAT_EXPECTED_SHA)' but fetched '$sourceCommit'."
     }
+    $projectionHelper = Join-Path $sourcePath 'scripts/dogfood-projection.ps1'
+    if (-not (Test-Path -LiteralPath $projectionHelper -PathType Leaf)) {
+        $projectionHelper = Join-Path $PSScriptRoot 'scripts/dogfood-projection.ps1'
+    }
+    if (-not (Test-Path -LiteralPath $projectionHelper -PathType Leaf)) {
+        throw 'This sync script requires scripts/dogfood-projection.ps1 beside the BaseCoat source checkout.'
+    }
+    . $projectionHelper
 
+    $distributionHelper = @(
+        (Join-Path $sourcePath 'scripts/distribution-filter.ps1'),
+        (Join-Path $PSScriptRoot 'scripts/distribution-filter.ps1'),
+        (Join-Path $repoRoot '.github/base-coat/scripts/distribution-filter.ps1')
+    ) | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } | Select-Object -First 1
+    if (-not $distributionHelper) { throw 'Missing scripts/distribution-filter.ps1 distribution helper.' }
+    . $distributionHelper
+    $distributionExcludedPaths = @(Get-BaseCoatDistributionExclusions -Root $sourcePath)
     $fullTargetDir = Join-Path $repoRoot $targetDir
     New-Item -ItemType Directory -Force -Path $fullTargetDir | Out-Null
 
     # Capture the PREVIOUS release's asset-manifest.json before it is
     # overwritten below. If this repo has never run the #3415-fixed sync
-    # before (no .overlay-managed-files state yet), this lets that first
+    # before (no guidance lock or legacy tracker yet), this lets that first
     # sync still identify and prune shared-overlay files the OLD
     # wholesale-wipe sync previously installed but this new release retires
     # — otherwise they would linger in the overlay forever.
@@ -595,7 +623,7 @@ try {
         }
     }
 
-    foreach ($item in @('README.md', 'CHANGELOG.md', 'version.json', 'asset-manifest.json', 'instructions', 'skills', 'prompts', 'agents', 'templates')) {
+    foreach ($item in @('README.md', 'CHANGELOG.md', 'version.json', 'asset-manifest.json', 'instructions', 'skills', 'prompts', 'agents', 'templates', 'schemas')) {
         $destination = Join-Path $fullTargetDir $item
         if (Test-Path $destination) {
             Remove-Item -Path $destination -Recurse -Force
@@ -606,8 +634,10 @@ try {
         }
     }
 
+    Remove-BaseCoatDistributionExcluded -Root $fullTargetDir
+
     # Copy workflows from .github/base-coat/workflows/
-    $workflowsSource = Join-Path $sourcePath '.github' 'base-coat' 'workflows'
+    $workflowsSource = Join-Path $sourcePath '.github/base-coat/workflows'
     $workflowsDest = Join-Path $fullTargetDir 'workflows'
     if (Test-Path $workflowsSource) {
         Assert-SafeWorkflowDirectory -WorkflowsPath $workflowsSource
@@ -618,7 +648,7 @@ try {
     }
 
     # Copy runtime scripts and installed-payload validators.
-    $runtimeScriptsSource = Join-Path $sourcePath '.github' 'base-coat' 'scripts'
+    $runtimeScriptsSource = Join-Path $sourcePath '.github/base-coat/scripts'
     $runtimeScriptsDest = Join-Path $fullTargetDir 'scripts'
     if (Test-Path $runtimeScriptsDest) {
         Remove-Item -Path $runtimeScriptsDest -Recurse -Force
@@ -632,15 +662,37 @@ try {
             'validate-basecoat.sh',
             'validate-skill-visibility.ps1',
             'validate-asset-distribution.ps1',
+            'validate-model-policy.ps1',
+            'model-policy-contract.ps1',
+            'model-fallback-policy.ps1',
             'validate-workflow-action-pins.ps1',
             'validate-workflow-action-pins.py',
+            'configure-downstream-workflows.ps1',
             'workflow-ownership.ps1',
-            'retire-downstream-workflows.ps1'
+            'distribution-filter.ps1',
+            'distribution-filter.sh',
+            'retire-downstream-workflows.ps1',
+            'guidance-lock.ps1',
+            'guidance-lock.sh'
         )) {
         $validatorSource = Join-Path $sourcePath "scripts/$validator"
         if (Test-Path $validatorSource -PathType Leaf) {
             Copy-Item -Path $validatorSource -Destination (Join-Path $runtimeScriptsDest $validator) -Force
         }
+    }
+    $canonicalContractRoot = Join-Path $repoRoot '.github/base-coat'
+    New-Item -ItemType Directory -Path (Join-Path $canonicalContractRoot 'scripts') -Force | Out-Null
+    New-Item -ItemType Directory -Path (Join-Path $canonicalContractRoot 'schemas') -Force | Out-Null
+    foreach ($helperName in @('guidance-lock.ps1', 'guidance-lock.sh')) {
+        $helperSource = Join-Path $sourcePath "scripts/$helperName"
+        if (Test-Path -LiteralPath $helperSource -PathType Leaf) {
+            Copy-Item -LiteralPath $helperSource -Destination (Join-Path $canonicalContractRoot "scripts/$helperName") -Force
+        }
+    }
+    $guidanceSchemaSource = Join-Path $sourcePath 'schemas/guidance-lock-v1.schema.json'
+    if (Test-Path -LiteralPath $guidanceSchemaSource -PathType Leaf) {
+        Copy-Item -LiteralPath $guidanceSchemaSource `
+            -Destination (Join-Path $canonicalContractRoot 'schemas/guidance-lock-v1.schema.json') -Force
     }
 
     [ordered]@{
@@ -700,46 +752,29 @@ try {
         $agentEvalFiles | Remove-Item -Force
     }
 
-    # Copy Copilot-discoverable directories to their standard paths.
-    # Only copy flat agent/instruction/prompt/skill files — not taxonomy subdirs.
-    #
-    # These shared paths (.github/instructions, .github/prompts, .github/skills,
-    # .github/agents, .github/agents/references, .agents/skills) can also be
-    # written to by other overlays (e.g. basecoat-sheen, basecoat-adhesion), so
-    # BaseCoat must never wipe the destination directory wholesale — that would
-    # silently delete co-located files it does not own (#3415). Instead, copy
-    # files individually (never deleting anything first) and track every path
-    # BaseCoat writes in $overlayManagedFiles. After all copies, prune only the
-    # files BaseCoat itself previously placed (per the prior sync's tracked
-    # list) that are no longer part of this sync — every other file, whether
-    # foreign or simply untracked, is left untouched.
-    # This state file uses the same plain-text, newline-separated, sorted
-    # format and filename as sync.sh's overlay tracking so a consumer repo
-    # that alternates between sync.ps1 (e.g. local Windows dev) and sync.sh
-    # (e.g. Linux CI) shares one consistent ownership record instead of each
-    # script only ever seeing its own history.
-    $overlayStatePath = Join-Path $fullTargetDir '.overlay-managed-files'
-    $overlayStateExisted = Test-Path -LiteralPath $overlayStatePath
-    $prevOverlayFiles = @()
-    if ($overlayStateExisted) {
-        try {
-            $prevOverlayFiles = @(
-                Get-Content -LiteralPath $overlayStatePath |
-                    ForEach-Object { $_.TrimEnd("`r") } |
-                    Where-Object { $_ -ne '' }
-            )
-        }
-        catch {
-            Write-Warning "Ignoring unreadable overlay state file '$overlayStatePath': $($_.Exception.Message)"
-        }
+    # Shared physical destinations use one cross-product ownership source.
+    # Build and preflight the complete plan before changing any shared file.
+    $guidanceHelper = @(
+        (Join-Path $sourcePath 'scripts/guidance-lock.ps1'),
+        (Join-Path $PSScriptRoot 'scripts/guidance-lock.ps1'),
+        (Join-Path $repoRoot '.github/base-coat/scripts/guidance-lock.ps1')
+    ) | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } | Select-Object -First 1
+    if (-not $guidanceHelper) {
+        throw "GUIDANCE_LOCK_INVALID reason='source payload is missing scripts/guidance-lock.ps1'"
     }
-    elseif ($previousAssetManifest -and $previousAssetManifest.assets) {
-        # First sync after upgrading to the #3415 fix: there is no tracked
-        # ownership history yet, but the OLD wholesale-wipe sync logic may
-        # have installed files this new release retires. Reconstruct where
-        # each previously-distributed asset would have landed and, if it
-        # still exists on disk, treat it as BaseCoat-managed so it can be
-        # correctly identified as stale below instead of lingering forever.
+    . $guidanceHelper
+
+    $legacyOverlayStatePath = Join-Path $fullTargetDir '.overlay-managed-files'
+    $legacyOverlayFiles = @()
+    if (Test-Path -LiteralPath $legacyOverlayStatePath -PathType Leaf) {
+        $legacyOverlayFiles = @(
+            Get-Content -LiteralPath $legacyOverlayStatePath |
+                ForEach-Object { $_.TrimEnd("`r") } |
+                Where-Object { $_ -ne '' }
+        )
+    }
+    elseif ($previousAssetManifest -and $previousAssetManifest.assets -and
+        -not (Test-Path -LiteralPath (Get-GuidanceLockPath -RepoRoot $repoRoot) -PathType Leaf)) {
         $seeded = [System.Collections.Generic.List[string]]::new()
         foreach ($asset in $previousAssetManifest.assets) {
             if (-not $asset.path) { continue }
@@ -763,120 +798,181 @@ try {
             }
             foreach ($candidate in $candidateDests) {
                 if (Test-Path -LiteralPath (Join-Path $repoRoot $candidate) -PathType Leaf) {
+                    if ($distributionExcludedPaths -contains $assetPath -and $asset.sha) {
+                        $actualBlob = (& git hash-object -- (Join-Path $repoRoot $candidate)).Trim()
+                        if ($actualBlob -ne $asset.sha) {
+                            Write-Warning "Preserving modified legacy instruction: $candidate"
+                            continue
+                        }
+                    }
                     $seeded.Add($candidate)
                 }
             }
         }
-        if ($seeded.Count -gt 0) {
-            Write-Host "Seeding overlay ownership from $($seeded.Count) previously-distributed file(s) for first sync after #3415 fix."
-            $prevOverlayFiles = @($seeded | Sort-Object -Unique)
+        $legacyOverlayFiles = @($seeded | Sort-Object -Unique)
+    }
+
+    $sourceVersion = [string](Get-Content -LiteralPath (Join-Path $fullTargetDir 'version.json') -Raw | ConvertFrom-Json).version
+    $guidanceStage = Join-Path $fullTargetDir ".guidance-overlay-stage-$([guid]::NewGuid().ToString('N'))"
+    New-Item -ItemType Directory -Path $guidanceStage -Force | Out-Null
+    $guidancePlan = [System.Collections.Generic.List[object]]::new()
+    $plannedPaths = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
+
+    $agentIndex = 0
+    foreach ($projection in Get-BaseCoatProjectionPlan -SourceRoot $fullTargetDir -Mode Consumer) {
+        $plannedSource = $projection.SourcePath
+        if ($projection.Kind -eq 'agent') {
+            $agentIndex++
+            $stagedAgent = Join-Path $guidanceStage "$agentIndex-$([System.IO.Path]::GetFileName($projection.SourcePath))"
+            $sanitized = Convert-AgentToCliCompatibleContent -Content (Get-Content -LiteralPath $projection.SourcePath -Raw)
+            Set-Content -LiteralPath $stagedAgent -Value $sanitized -Encoding UTF8
+            $plannedSource = $stagedAgent
+        }
+
+        $destination = Normalize-GuidancePath -Path $projection.DestinationPath -RepoRoot $repoRoot
+        if (-not $plannedPaths.Add($destination)) {
+            throw "GUIDANCE_LOCK_INVALID path='$destination' reason='duplicate path in BaseCoat write plan'"
+        }
+        $guidancePlan.Add([pscustomobject]@{
+            path = $destination
+            source = $plannedSource
+            entry = New-GuidanceLockEntry -RepoRoot $repoRoot -Path $destination -Owner 'basecoat' `
+                -GuidanceUnit $projection.GuidanceUnit -SourceVersion $sourceVersion `
+                -Sha256 (Get-GuidanceContentHash -Path $plannedSource)
+        })
+    }
+
+    $guidanceLockPath = Get-GuidanceLockPath -RepoRoot $repoRoot
+    $guidanceLeasePath = Enter-GuidanceLockLease -RepoRoot $repoRoot
+    $guidanceLock = Read-GuidanceLock -RepoRoot $repoRoot -LockPath $guidanceLockPath
+    $lockEntries = [System.Collections.Generic.List[object]]::new()
+    foreach ($entry in @($guidanceLock.entries)) { $lockEntries.Add($entry) }
+
+    if (-not (Test-Path -LiteralPath $guidanceLockPath -PathType Leaf)) {
+        foreach ($legacyPath in $legacyOverlayFiles) {
+            $normalizedLegacyPath = Normalize-GuidancePath -Path $legacyPath -RepoRoot $repoRoot
+            $legacyFullPath = Join-Path $repoRoot $normalizedLegacyPath
+            if (Test-Path -LiteralPath $legacyFullPath -PathType Leaf) {
+                $legacyAssetPath = $normalizedLegacyPath -replace '^\.github/', ''
+                if ($distributionExcludedPaths -contains $legacyAssetPath) {
+                    $previousAsset = $null
+                    if ($previousAssetManifest) {
+                        $previousAsset = @($previousAssetManifest.assets | Where-Object { $_.path -eq $legacyAssetPath }) | Select-Object -First 1
+                    }
+                    if (-not $previousAsset -or -not $previousAsset.sha -or
+                        (& git hash-object -- $legacyFullPath).Trim() -ne $previousAsset.sha) {
+                        Write-Warning "Preserving unverified or modified legacy instruction: $normalizedLegacyPath"
+                        continue
+                    }
+                }
+                $lockEntries.Add((New-GuidanceLockEntry -RepoRoot $repoRoot -Path $normalizedLegacyPath `
+                    -Owner 'basecoat' -GuidanceUnit 'legacy-overlay-migration' -SourceVersion $sourceVersion `
+                    -Sha256 (Get-GuidanceContentHash -Path $legacyFullPath)))
+            }
+        }
+        if ($legacyOverlayFiles.Count -gt 0) {
+            Write-Host "Migrating $($legacyOverlayFiles.Count) legacy overlay ownership record(s) to guidance-lock/v1."
         }
     }
-    $overlayManagedFiles = [System.Collections.Generic.List[string]]::new()
 
-    $githubDir = Join-Path $repoRoot '.github'
-    New-Item -ItemType Directory -Force -Path $githubDir | Out-Null
-    foreach ($copilotDir in @('instructions', 'prompts', 'skills')) {
-        $source = Join-Path $fullTargetDir $copilotDir
-        $dest = Join-Path $githubDir $copilotDir
-        Copy-ManagedOverlayTree -SourceDir $source -DestDir $dest -RepoRoot $repoRoot -TrackedPaths $overlayManagedFiles
+    $lockByPath = @{}
+    foreach ($entry in $lockEntries) {
+        if ($lockByPath.ContainsKey($entry.path)) {
+            throw "GUIDANCE_LOCK_INVALID path='$($entry.path)' reason='duplicate path entry after migration'"
+        }
+        $lockByPath[$entry.path] = $entry
     }
 
-    # Also copy skills to .agents/skills/ for cross-client interop (Agent Skills spec)
-    $skillsSource = Join-Path $fullTargetDir 'skills'
-    $agentSkillsDest = Join-Path $repoRoot '.agents' 'skills'
-    Copy-ManagedOverlayTree -SourceDir $skillsSource -DestDir $agentSkillsDest -RepoRoot $repoRoot -TrackedPaths $overlayManagedFiles
-
-    # Agents: copy only *.agent.md files (skip taxonomy subdirs like models/, tasks/, types/)
-    $agentSource = Join-Path $fullTargetDir 'agents'
-    $agentDest = Join-Path $githubDir 'agents'
-    if (Test-Path $agentSource) {
-        New-Item -ItemType Directory -Force -Path $agentDest | Out-Null
-        $githubDirCanonical = Get-CanonicalRealPath -Path $githubDir
-        Get-ChildItem -Path $agentSource -Filter '*.agent.md' | ForEach-Object {
-            $destFile = Join-Path $agentDest $_.Name
-            if (-not (Test-PathWithinBoundary -Path $agentDest -BoundaryRoot $githubDirCanonical)) {
-                Write-Warning "Refusing to write through a symlinked overlay path outside '$githubDir': $destFile"
-                return
+    $repoRootCanonical = Get-CanonicalRealPath -Path $repoRoot
+    foreach ($planned in $guidancePlan) {
+        $destination = Join-Path $repoRoot $planned.path
+        if (-not (Test-PathWithinBoundary -Path (Split-Path -Parent $destination) -BoundaryRoot $repoRootCanonical)) {
+            throw "GUIDANCE_LOCK_INVALID path='$($planned.path)' reason='destination resolves outside the repository root'"
+        }
+        if (Test-Path -LiteralPath $destination) {
+            $leaf = Get-Item -LiteralPath $destination -Force
+            if (($leaf.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+                throw "GUIDANCE_PATH_COLLISION path='$($planned.path)' owner='symlink' claimant='basecoat'"
             }
-            if (Test-Path -LiteralPath $destFile) {
-                $existingLeaf = Get-Item -LiteralPath $destFile -Force
-                if ($null -ne $existingLeaf.ResolveLinkTarget($false)) {
-                    Write-Warning "Refusing to overwrite a symlinked overlay destination file: $destFile"
-                    return
+            if (-not $leaf.PSIsContainer -and -not (Test-Path -LiteralPath $destination -PathType Leaf)) {
+                throw "GUIDANCE_PATH_COLLISION path='$($planned.path)' owner='invalid-destination' claimant='basecoat'"
+            }
+            if ($leaf.PSIsContainer) {
+                throw "GUIDANCE_PATH_COLLISION path='$($planned.path)' owner='directory' claimant='basecoat'"
+            }
+        }
+        $existingEntry = $lockByPath[$planned.path]
+        if ($existingEntry) {
+            if ($existingEntry.owner -ne 'basecoat') {
+                throw "GUIDANCE_PATH_COLLISION path='$($planned.path)' owner='$($existingEntry.owner)' claimant='basecoat'"
+            }
+            if (Test-Path -LiteralPath $destination -PathType Leaf) {
+                $actualHash = Get-GuidanceContentHash -Path $destination
+                if ($actualHash -ne $existingEntry.sha256) {
+                    if ($actualHash -ne $planned.entry.sha256) {
+                        throw "GUIDANCE_CONTENT_MODIFIED path='$($planned.path)' owner='basecoat' expected='$($existingEntry.sha256)' actual='$actualHash'"
+                    }
+                    Write-Host "Migrating canonical guidance hash for unchanged BaseCoat content: $($planned.path)"
                 }
             }
-            $raw = Get-Content -Path $_.FullName -Raw
-            $sanitized = Convert-AgentToCliCompatibleContent -Content $raw
-            Set-Content -Path $destFile -Value $sanitized -Encoding UTF8
-            $overlayManagedFiles.Add((Get-RepoRelativePath -Path $destFile -RepoRoot $repoRoot))
+        }
+        elseif (Test-Path -LiteralPath $destination) {
+            throw "GUIDANCE_PATH_COLLISION path='$($planned.path)' owner='unmanaged' claimant='basecoat'"
         }
     }
 
-    # Agent references: agent files may link to agents/references/<name>-detail.md
-    # for overflow content moved out to satisfy the token budget. Copy the whole
-    # subtree so those relative links resolve for installed agents.
-    $agentReferencesSource = Join-Path $agentSource 'references'
-    $agentReferencesDest = Join-Path $agentDest 'references'
-    Copy-ManagedOverlayTree -SourceDir $agentReferencesSource -DestDir $agentReferencesDest -RepoRoot $repoRoot -TrackedPaths $overlayManagedFiles
-
-    # Prune only files BaseCoat previously placed in the shared overlay
-    # directories that are no longer part of the current sync. Anything not
-    # in $prevOverlayFiles (foreign files, or files never tracked) is left
-    # alone, regardless of whether it happens to sit in one of these dirs.
     $overlayStopDirs = @(
-        (Join-Path $githubDir 'instructions'),
-        (Join-Path $githubDir 'prompts'),
-        (Join-Path $githubDir 'skills'),
-        (Join-Path $githubDir 'agents'),
-        $agentSkillsDest
+        (Join-Path $repoRoot '.github/instructions'),
+        (Join-Path $repoRoot '.github/prompts'),
+        (Join-Path $repoRoot '.github/skills'),
+        (Join-Path $repoRoot '.github/agents'),
+        (Join-Path $repoRoot '.agents/skills')
     )
-    # Deletion candidates come from a state file (or, for the first sync,
-    # the reconstructed previous manifest) that could in principle contain a
-    # corrupted or maliciously crafted entry (e.g. '../victim' or a path
-    # under .github/workflows). Reject anything that is not a relative path
-    # confined to one of the exact managed overlay prefixes before it is
-    # even joined to $repoRoot, then re-verify containment against the
-    # canonical (symlink-resolved) boundary right before deleting.
-    $allowedOverlayPrefixes = @(
-        '.github/instructions/', '.github/prompts/', '.github/skills/',
-        '.github/agents/', '.agents/skills/'
-    )
-    $repoRootCanonical = Get-CanonicalRealPath -Path $repoRoot
-    $staleOverlayFiles = $prevOverlayFiles | Where-Object { $overlayManagedFiles -notcontains $_ }
-    foreach ($staleRel in $staleOverlayFiles) {
-        $normalizedStaleRel = ($staleRel -replace '\\', '/')
-        $isRooted = $normalizedStaleRel.StartsWith('/') -or [System.IO.Path]::IsPathRooted($normalizedStaleRel)
-        $hasTraversal = $normalizedStaleRel -match '(^|/)\.\.(/|$)'
-        $hasAllowedPrefix = $false
-        foreach ($prefix in $allowedOverlayPrefixes) {
-            if ($normalizedStaleRel.StartsWith($prefix, [System.StringComparison]::Ordinal)) {
-                $hasAllowedPrefix = $true
-                break
-            }
-        }
-        if ($isRooted -or $hasTraversal -or -not $hasAllowedPrefix) {
-            Write-Warning "Skipping stale overlay entry outside the managed overlay prefixes: $staleRel"
-            continue
-        }
-
-        $staleFull = Join-Path $repoRoot $normalizedStaleRel
+    $staleBasecoatEntries = @($lockEntries | Where-Object {
+        $_.owner -eq 'basecoat' -and -not $plannedPaths.Contains($_.path)
+    })
+    foreach ($staleEntry in $staleBasecoatEntries) {
+        $staleFull = Join-Path $repoRoot $staleEntry.path
         if (Test-Path -LiteralPath $staleFull -PathType Leaf) {
             if (-not (Test-PathWithinBoundary -Path $staleFull -BoundaryRoot $repoRootCanonical)) {
-                Write-Warning "Refusing to delete a stale overlay entry that resolves outside the repository: $staleRel"
-                continue
+                throw "GUIDANCE_LOCK_INVALID path='$($staleEntry.path)' reason='stale destination resolves outside the repository root'"
             }
-            Remove-Item -LiteralPath $staleFull -Force
-            Remove-EmptyOverlayParents -Path $staleFull -StopAt $overlayStopDirs
-            Write-Host "Removed stale BaseCoat-managed overlay file: $staleRel"
+            $actualHash = Get-GuidanceContentHash -Path $staleFull
+            if ($actualHash -ne $staleEntry.sha256) {
+                throw "GUIDANCE_CONTENT_MODIFIED path='$($staleEntry.path)' owner='basecoat' expected='$($staleEntry.sha256)' actual='$actualHash'"
+            }
         }
     }
 
-    # Force LF line endings (not the platform default) so this file stays
-    # byte-compatible with sync.sh's plain `comm`/`sort`-based reader.
-    $sortedOverlayFiles = @($overlayManagedFiles | Sort-Object -Unique)
-    $overlayStateContent = if ($sortedOverlayFiles.Count -gt 0) { ($sortedOverlayFiles -join "`n") + "`n" } else { '' }
-    [System.IO.File]::WriteAllText($overlayStatePath, $overlayStateContent, [System.Text.UTF8Encoding]::new($false))
+    foreach ($planned in $guidancePlan) {
+        $destination = Join-Path $repoRoot $planned.path
+        New-Item -ItemType Directory -Path (Split-Path -Parent $destination) -Force | Out-Null
+        Copy-Item -LiteralPath $planned.source -Destination $destination -Force
+    }
+    foreach ($staleEntry in $staleBasecoatEntries) {
+        $staleFull = Join-Path $repoRoot $staleEntry.path
+        if (Test-Path -LiteralPath $staleFull -PathType Leaf) {
+            Remove-Item -LiteralPath $staleFull -Force
+            Remove-EmptyOverlayParents -Path $staleFull -StopAt $overlayStopDirs
+            Write-Host "Removed stale BaseCoat-managed guidance file: $($staleEntry.path)"
+        }
+    }
+
+    $nextEntries = @(
+        $lockEntries | Where-Object { $_.owner -ne 'basecoat' }
+        $guidancePlan | ForEach-Object { $_.entry }
+    )
+    Write-GuidanceLock -RepoRoot $repoRoot -LockPath $guidanceLockPath -Entries $nextEntries
+    @(
+        $legacyOverlayStatePath,
+        (Join-Path $repoRoot '.github/base-coat/.overlay-managed-files')
+    ) | Sort-Object -Unique | ForEach-Object {
+        Remove-Item -LiteralPath $_ -Force -ErrorAction SilentlyContinue
+    }
+
+    Remove-Item -LiteralPath $guidanceStage -Recurse -Force -ErrorAction SilentlyContinue
+    Exit-GuidanceLockLease -LeasePath $guidanceLeasePath
+    $guidanceLeasePath = $null
 
     # Seed release-notes template into downstream-customizable location.
     # Never overwrite local customizations.
@@ -930,6 +1026,12 @@ try {
     Write-Host "Base Coat synced into $targetDir"
 }
 finally {
+    if ($guidanceLeasePath) {
+        Exit-GuidanceLockLease -LeasePath $guidanceLeasePath
+    }
+    if ($guidanceStage -and (Test-Path -LiteralPath $guidanceStage)) {
+        Remove-Item -LiteralPath $guidanceStage -Recurse -Force -ErrorAction SilentlyContinue
+    }
     if ($tempRoot -and (Test-Path -LiteralPath $tempRoot)) {
         try {
             Remove-PathWithRetry -Path $tempRoot

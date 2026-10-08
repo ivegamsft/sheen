@@ -14,17 +14,21 @@ fi
 DIST_DIR="$ROOT_DIR/dist"
 STAGE_DIR="$DIST_DIR/stage/base-coat"
 ARCHIVE_BASE="base-coat-$VERSION"
+source "$ROOT_DIR/scripts/distribution-filter.sh"
+basecoat_validate_distribution "$ROOT_DIR"
 
 rm -rf "$DIST_DIR"
 mkdir -p "$STAGE_DIR"
 
-for item in README.md CHANGELOG.md INVENTORY.md version.json asset-manifest.json sync.sh sync.ps1 instructions skills prompts agents scripts templates .githooks docs examples .github; do
+for item in README.md CHANGELOG.md INVENTORY.md version.json asset-manifest.json sync.sh sync.ps1 instructions skills prompts agents scripts schemas templates .githooks docs examples .github; do
   if [[ -e "$item" ]]; then
     cp -R "$item" "$STAGE_DIR/$item"
   fi
 done
 
 distributed_workflows="$STAGE_DIR/.github/base-coat/workflows"
+basecoat_filter_distribution "$STAGE_DIR"
+
 if [[ ! -d "$distributed_workflows" ]]; then
   echo "Package validation failed: missing distributed workflows '$distributed_workflows'" >&2
   exit 1
@@ -37,6 +41,8 @@ validation_scripts=(
   scripts/validate-workflow-action-pins.ps1
   scripts/validate-workflow-action-pins.py
   scripts/validate-reusable-workflow-contracts.py
+  scripts/guidance-lock.ps1
+  scripts/guidance-lock.sh
 )
 for relative_path in "${validation_scripts[@]}"; do
   if [[ ! -f "$STAGE_DIR/$relative_path" ]]; then
@@ -49,7 +55,7 @@ import json
 import sys
 
 manifest_path, *required_paths = sys.argv[1:]
-with open(manifest_path, encoding="utf-8") as handle:
+with open(manifest_path, encoding="utf-8-sig") as handle:
     manifest_paths = {asset["path"] for asset in json.load(handle)["assets"]}
 missing = [path for path in required_paths if path not in manifest_paths]
 if missing:
@@ -57,6 +63,11 @@ if missing:
         "Package validation failed: asset-manifest.json is missing " + ", ".join(missing)
     )
 PY
+
+if [[ ! -f "$STAGE_DIR/schemas/guidance-lock-v1.schema.json" ]]; then
+  echo "Package validation failed: missing shared guidance lock schema" >&2
+  exit 1
+fi
 
 packaged_callers=()
 while IFS= read -r packaged_caller; do

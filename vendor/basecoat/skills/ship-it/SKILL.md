@@ -16,60 +16,47 @@ allowed-tools: [git, gh, powershell, bash]
 
 Turn a delivery goal into a governed execution bundle.
 
-## Shortcut Phrases
-
-- ship it / spec to prod
-
-## Inputs
-
-1. `intent`: `ship-it`, `spec-2-prod`, or `onboarding-conductor`
-2. `goal`, `target_repo` (`owner/repo`), `spec_ref` (optional)
-3. `risk_band`: `low|medium|high|critical`
-4. `profile` (optional, onboarding-conductor): `solo-dev|team-dev|regulated-team|pilot-luxesite`
-5. `dry_run` (default `true`); `max_cycles` (default `10`); `max_retries` (default `2`)
-
 ## Workflow
 
-1. Validate the intent contract.
-2. Preflight: confirm `ship-it-intent-dispatch.yml`, `ship-it-build-guard.yml`,
-   and `ship-it-release-gate.yml` exist under `.github/workflows/`. If any is
-   missing, stop and report it — never substitute `/approve` (full fail-closed
-   contract in References).
-3. Dispatch `ship-it-intent-dispatch.yml`; record its run ID.
-4. Generate parent/child issues with governance checklists.
-5. Label for risk, intent, and control-plane tracking.
-6. Run build-break guard (`ship-it-build-guard.yml`) for failure classification and recovery.
-7. Run release gate (`ship-it-release-gate.yml`) for risk-band gates and promotion.
-8. Report success only with observable run IDs and state transitions.
+1. Accept canonical `ship-it`, `spec-2-prod`, and `onboarding-conductor`.
+   Standalone `ship-it:` / `spec-2-prod:` normalize to those delivery intents;
+   retain raw directive and provenance. Reject malformed, quoted, fenced,
+   bulleted, embedded, deferred, or contradictory directives.
+2. Unattended pre-approval requires both `source_issue_number` and
+   `approval_comment_id`; one alone fails, neither means ordinary dispatch.
+   Never accept caller-supplied identity, permission, time, or approval status.
+   Validate live evidence and scope per [output-contract.md](references/output-contract.md).
+3. Validate the target with `pwsh scripts/ship-it/validate-target-repository.ps1
+   -TargetRepo <owner/repo>`; cross-repository execution requires explicit
+   authorization and `-AllowCrossRepository`.
+4. Require dispatch, build-guard, and release-gate workflows; if any is missing,
+   stop and report. Validate source issue, approved scope/spec, authority, and
+   plan confirmation. Issue approval is not delivery consent: never substitute
+   `/approve`, create approval labels, or assign an agent.
+5. Dispatch via `ship-it-intent-dispatch.yml`; record run ID and provenance.
+   Revalidate the same receipt at each phase, merge, and release; changed,
+   revoked, or unqualified evidence blocks continuation. Pass it to the local
+   resolver or release gate's `promotion_context`; never switch approvals.
 
-## Persistent Loop Operation
+Apply the [delivery-intent contract](references/delivery-intent-contract.md)
+to feature-origin handoffs and their independent merge boundary. `feature:`
+and `pr-lifecycle=full` never imply merge or deployment consent.
 
-Operate as bounded cycles with state carry-forward:
-
-1. Record `cycle_id`, `phase`, `objective`, `stop_condition`, `max_cycles`.
-2. Emit a per-cycle summary (full structure in References).
-3. Continue only while the stop condition is unmet and convergence is viable.
-4. Stop and escalate when blocked or `max_cycles` is reached.
-
-Stop conditions: unresolved dependency/policy gate; in-scope PRs merged/closed with checks green; manual stop.
-
-Retry policy: retry only transient failures; escalate after `max_retries`; in `dry_run`, output planned actions.
+Use bounded cycles with state carry-forward. Track phase, objective, stop
+condition, and limit; summarize actions, evidence, blockers, and next action.
+Stop on completion, blocker, manual stop, or limit; retry transient failures
+within budget. In `dry_run`, report planned actions.
 
 ## Governance Rules
 
-1. Never bypass required checks for high/critical goals.
-2. Require evidence links for spec, tests, rollout, rollback.
-3. Use serialized merges for release work.
-4. Record state transitions and blockers in issues.
-5. Do not complete with required checks pending.
-
-## Output
-
-Emits issue URLs, dispatch/build-break summaries, a promotion-evidence bundle,
-pilot artifacts, a completeness scorecard, spec-drift findings, and per-cycle summaries.
+Keep required checks and spec/test/rollout/rollback evidence; serialize release
+merges and record blockers. Do not report success with checks pending.
+Pre-approval does not satisfy PR review, XXL, release, or production gates,
+expand scope, or transfer to generated issues; revalidate live authority.
 
 ## References
 
 | File | Contents |
 |---|---|
 | [`references/output-contract.md`](references/output-contract.md) | Output contract: per-producer output schemas, evidence-bundle fields, scorecard and spec-drift shapes, per-cycle summary structure |
+| [`references/repository-boundary.md`](references/repository-boundary.md) | Fail-closed current-repository validation and explicit cross-repository authorization |

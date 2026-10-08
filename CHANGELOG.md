@@ -7,6 +7,10 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+### Changed
+
+- Re-vendored `vendor/basecoat` from BaseCoat v4.5.0 to v4.6.3 (`a6e4302`). Closes #273.
+
 ## [0.13.3] — 2026-10-08
 
 | Field | Value |

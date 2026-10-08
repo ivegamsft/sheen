@@ -49,9 +49,16 @@ function Get-AssetType {
             'scripts/validate-basecoat.sh',
             'scripts/validate-skill-visibility.ps1',
             'scripts/validate-asset-distribution.ps1',
+            'scripts/validate-model-policy.ps1',
+            'scripts/model-policy-contract.ps1',
+            'scripts/model-fallback-policy.ps1',
             'scripts/validate-workflow-action-pins.ps1',
             'scripts/validate-workflow-action-pins.py',
-            'scripts/validate-reusable-workflow-contracts.py'
+            'scripts/validate-reusable-workflow-contracts.py',
+            'scripts/guidance-lock.ps1',
+            'scripts/guidance-lock.sh',
+            'scripts/distribution-filter.ps1',
+            'scripts/distribution-filter.sh'
         )) { return 'script' }
     return $null
 }
@@ -75,9 +82,16 @@ $candidates += @(
     'scripts/validate-basecoat.sh',
     'scripts/validate-skill-visibility.ps1',
     'scripts/validate-asset-distribution.ps1',
+    'scripts/validate-model-policy.ps1',
+    'scripts/model-policy-contract.ps1',
+    'scripts/model-fallback-policy.ps1',
     'scripts/validate-workflow-action-pins.ps1',
     'scripts/validate-workflow-action-pins.py',
-    'scripts/validate-reusable-workflow-contracts.py'
+    'scripts/validate-reusable-workflow-contracts.py',
+    'scripts/guidance-lock.ps1',
+    'scripts/guidance-lock.sh',
+    'scripts/distribution-filter.ps1',
+    'scripts/distribution-filter.sh'
 ) | ForEach-Object { (Resolve-Path $_).Path }
 
 $assets = foreach ($full in $candidates | Sort-Object) {
