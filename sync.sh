@@ -148,11 +148,29 @@ WORK="$(mktemp -d "${TMPDIR:-/tmp}/sheen-sync-XXXXXX")"
 cleanup() { rm -rf "$WORK"; }
 trap cleanup EXIT
 
-if ! git clone --quiet --depth 1 --branch "$REF" "$SOURCE" "$WORK" 2>/dev/null; then
-  git clone --quiet "$SOURCE" "$WORK"
-  git -C "$WORK" checkout --quiet "$REF"
+if ! git -c core.longpaths=true clone --quiet --depth 1 --branch "$REF" "$SOURCE" "$WORK" 2>/dev/null; then
+  rm -rf "$WORK"
+  git -c core.longpaths=true clone --quiet "$SOURCE" "$WORK" || {
+    echo "sheen sync: clone failed for $DISPLAY_SOURCE; confirm the source/ref and use a writable short TMPDIR if checkout paths are too long" >&2
+    exit 1
+  }
+  git -C "$WORK" checkout --quiet "$REF" || {
+    echo "sheen sync: checkout failed for ref '$REF' from $DISPLAY_SOURCE in '$WORK'" >&2
+    exit 1
+  }
 fi
-COMMIT="$(git -C "$WORK" rev-parse HEAD)"
+if [ ! -e "$WORK/.git" ]; then
+  echo "sheen sync: clone did not create a complete Git checkout at '$WORK'; use a writable short TMPDIR and retry" >&2
+  exit 1
+fi
+COMMIT="$(git -C "$WORK" rev-parse HEAD)" || {
+  echo "sheen sync: could not resolve a complete source commit from '$WORK'; use a writable short TMPDIR and retry" >&2
+  exit 1
+}
+[[ "$COMMIT" =~ ^[0-9a-fA-F]{40}$ ]] || {
+  echo "sheen sync: source checkout at '$WORK' returned an invalid commit id; use a writable short TMPDIR and retry" >&2
+  exit 1
+}
 
 mkdir -p "$REPO_ROOT/.sheen"
 MANIFEST="$REPO_ROOT/.sheen/manifest.json"
@@ -300,8 +318,11 @@ SHEEN_SYNC_WF="$REPO_ROOT/.github/workflows/sheen-sync.yml"
 UPSTREAM_SYNC_WF="$WORK/templates/sheen-sync.yml"
 if [ -f "$UPSTREAM_SYNC_WF" ]; then
   NORMALIZED_SYNC_WF="$WORK/templates/sheen-sync.normalized.yml"
-  sed \
+  sed -E \
     -e 's#uses: ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@#uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@#g' \
+    -e 's#(uses: IBuySpy-Shared/basecoat-sheen/\.github/workflows/check-sheen-version-callable\.yml@)[^[:space:]]+#\1__SHEEN_COMMIT_SHA__#g' \
+    -e "s/__SHEEN_COMMIT_SHA__/$COMMIT/g" \
+    -e 's/Pinned to the released tag/Pinned to the immutable source commit/g' \
     -e '/^[[:space:]]*source_repo:[[:space:]]*ivegamsft\/sheen[[:space:]]*$/d' \
     "$UPSTREAM_SYNC_WF" > "$NORMALIZED_SYNC_WF"
   RECORD_SYNC_WF=0

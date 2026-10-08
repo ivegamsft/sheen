@@ -7,6 +7,11 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+### Fixed
+
+- Pin generated consumer callable workflows to the resolved source commit SHA
+  and stage Windows sync checkouts under a short, configurable path (#271, #272).
+
 ### Changed
 
 - Re-vendored `vendor/basecoat` from BaseCoat v4.5.0 to v4.6.3 (`a6e4302`). Closes #273.

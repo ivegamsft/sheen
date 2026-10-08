@@ -55,9 +55,14 @@ function New-SyncConsumerFixture([string]$Root, [string]$OldWorkflow) {
 function Assert-MigratedConsumer([string]$Consumer) {
     $workflow = Get-Content -LiteralPath (Join-Path $Consumer '.github' 'workflows' 'sheen-sync.yml') -Raw
     Assert-Contains $workflow 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' 'managed workflow migration must restore the internal callable host'
+    $workflowPin = [regex]::Match($workflow, '(?m)^\s+uses:\s+IBuySpy-Shared/basecoat-sheen/\.github/workflows/check-sheen-version-callable\.yml@(?<sha>[0-9a-f]{40})\s*$')
+    if (-not $workflowPin.Success) { throw 'ASSERTION FAILED: generated workflow must pin the callable to an immutable 40-character commit SHA' }
     Assert-NotContains $workflow 'uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@' 'managed workflow migration must remove the public callable host'
     Assert-NotContains $workflow 'source_repo: ivegamsft/sheen' 'managed workflow migration must leave asset source precedence to .sheen.yml'
     $manifest = Get-Content -LiteralPath (Join-Path $Consumer '.sheen' 'manifest.json') -Raw | ConvertFrom-Json
+    if ($workflowPin.Groups['sha'].Value -ne $manifest.commit) {
+        throw "ASSERTION FAILED: generated workflow commit pin must match source metadata; workflow='$($workflowPin.Groups['sha'].Value)' manifest='$($manifest.commit)'"
+    }
     if (@($manifest.files) -notcontains '.github/workflows/sheen-sync.yml') {
         throw 'ASSERTION FAILED: migrated managed workflow must be recorded in .sheen/manifest.json'
     }
@@ -197,6 +202,12 @@ Assert-Contains $syncSh "grep -Fq 'This file was synced into your repo by baseco
 Assert-Contains $syncSh 'cmp -s "$NORMALIZED_SYNC_WF" "$SHEEN_SYNC_WF"' 'sync.sh must refresh changed marker-owned workflows from the normalized template'
 Assert-Contains $syncPs1 '$existingWorkflow.Contains(''This file was synced into your repo by basecoat-sheen.'')' 'sync.ps1 must recognize marker-owned workflows for migration'
 Assert-Contains $syncPs1 '[string]::Equals($existingWorkflow, $normalizedWorkflow, [System.StringComparison]::Ordinal)' 'sync.ps1 must use case-sensitive normalized workflow template comparison'
+Assert-Contains $syncPs1 'SHEEN_SYNC_TEMP_ROOT' 'sync.ps1 must allow an explicit short Windows staging root'
+Assert-Contains $syncPs1 'Join-Path $env:SystemDrive ''_sheen-sync''' 'sync.ps1 must default to a short Windows staging root'
+Assert-Contains $syncPs1 'core.longpaths=true' 'sync.ps1 must enable Git long-path checkout for its clone'
+Assert-Contains $syncPs1 'clone did not create a complete Git checkout' 'sync.ps1 must report an actionable incomplete-clone error'
+Assert-Contains $syncSh 'core.longpaths=true' 'sync.sh must enable Git long-path checkout for its clone'
+Assert-Contains $syncSh '__SHEEN_COMMIT_SHA__' 'sync.sh must substitute the resolved source commit into generated callable pins'
 Assert-Before $syncSh 'SHEEN_SYNC_WF="$REPO_ROOT/.github/workflows/sheen-sync.yml"' 'cat > "$CANDIDATE_MANIFEST"' 'sync.sh must record managed workflow before manifest serialization'
 Assert-Before $syncPs1 '$sheenSyncWorkflow = Join-Path $repoRoot ''.github'' ''workflows'' ''sheen-sync.yml''' '($manifest | ConvertTo-Json -Depth 8)' 'sync.ps1 must record managed workflow before manifest serialization'
 

@@ -313,7 +313,21 @@ if (Test-Path -LiteralPath $previousManifest) {
     } catch { }
 }
 
-$work = Join-Path ([System.IO.Path]::GetTempPath()) ("sheen-sync-" + [guid]::NewGuid().ToString('N'))
+$stagingRoot = $env:SHEEN_SYNC_TEMP_ROOT
+if (-not $stagingRoot) {
+    if ([System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Win32NT) {
+        if (-not $env:SystemDrive) { throw 'Cannot determine a short Windows staging root; set SHEEN_SYNC_TEMP_ROOT to a writable short path.' }
+        $stagingRoot = Join-Path $env:SystemDrive '_sheen-sync'
+    } else {
+        $stagingRoot = [System.IO.Path]::GetTempPath()
+    }
+}
+try {
+    New-Item -ItemType Directory -Force -Path $stagingRoot | Out-Null
+} catch {
+    throw "Cannot create Sheen sync staging root '$stagingRoot'. Set SHEEN_SYNC_TEMP_ROOT to a writable short path. $($_.Exception.Message)"
+}
+$work = Join-Path $stagingRoot ("s-" + [guid]::NewGuid().ToString('N'))
 $manifest = [ordered]@{
     schema  = 'sheen-manifest/v1'
     source  = $displaySource
@@ -324,13 +338,21 @@ $manifest = [ordered]@{
 }
 
 try {
-    git clone --quiet --depth 1 --branch $ref $source $work 2>$null
+    git -c core.longpaths=true clone --quiet --depth 1 --branch $ref $source $work 2>$null
     if ($LASTEXITCODE -ne 0) {
-        git clone --quiet $source $work
-        if ($LASTEXITCODE -ne 0) { throw "clone failed: $displaySource" }
+        if (Test-Path -LiteralPath $work) { Remove-Item -LiteralPath $work -Recurse -Force }
+        git -c core.longpaths=true clone --quiet $source $work
+        if ($LASTEXITCODE -ne 0) { throw "clone failed: $displaySource. Confirm the source/ref and set SHEEN_SYNC_TEMP_ROOT to a writable short path if checkout paths are too long." }
         git -C $work checkout --quiet $ref
+        if ($LASTEXITCODE -ne 0) { throw "checkout failed for ref '$ref' from $displaySource in '$work'." }
+    }
+    if (-not (Test-Path -LiteralPath (Join-Path $work '.git'))) {
+        throw "clone did not create a complete Git checkout at '$work'. Set SHEEN_SYNC_TEMP_ROOT to a writable short path and retry."
     }
     $manifest.commit = (git -C $work rev-parse HEAD).Trim()
+    if ($LASTEXITCODE -ne 0 -or $manifest.commit -notmatch '^[0-9a-fA-F]{40}$') {
+        throw "could not resolve a complete source commit from '$work'. Set SHEEN_SYNC_TEMP_ROOT to a writable short path and retry."
+    }
 
     foreach ($type in $TargetMap.Keys) {
         $sourceCandidates = if ($SourceMap.Contains($type)) { @($SourceMap[$type]) } else { @($type) }
@@ -426,6 +448,8 @@ try {
     if (Test-Path -LiteralPath $upstreamTemplate) {
         $normalizedWorkflow = Get-Content -LiteralPath $upstreamTemplate -Raw
         $normalizedWorkflow = $normalizedWorkflow -replace 'uses:\s+ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@', 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@'
+        $normalizedWorkflow = [regex]::Replace($normalizedWorkflow, '(?m)(uses:\s+IBuySpy-Shared/basecoat-sheen/\.github/workflows/check-sheen-version-callable\.yml@)[^\s]+', ('${1}' + [string]$manifest.commit))
+        $normalizedWorkflow = $normalizedWorkflow -replace 'Pinned to the released tag', 'Pinned to the immutable source commit'
         $normalizedWorkflow = [regex]::Replace($normalizedWorkflow, '(?m)^[ \t]*source_repo:[ \t]*ivegamsft/sheen[ \t]*\r?\n', '')
         if (-not (Test-Path -LiteralPath $sheenSyncWorkflow)) {
             $workflowsDir = Join-Path $repoRoot '.github' 'workflows'

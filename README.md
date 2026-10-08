@@ -81,6 +81,11 @@ After the sync completes:
    bash sync.sh
    ```
 
+On Windows, `sync.ps1` stages its source checkout under
+`%SystemDrive%\_sheen-sync` to avoid deep user-temp paths. If that location is not
+writable, set `$env:SHEEN_SYNC_TEMP_ROOT` to another writable short path before
+running the script.
+
 Sync is **idempotent** and records a manifest so [`rollback.ps1`](rollback.ps1) /
 [`rollback.sh`](rollback.sh) can revert precisely.
 
