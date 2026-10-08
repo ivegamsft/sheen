@@ -158,6 +158,8 @@ mkdir -p "$REPO_ROOT/.sheen"
 MANIFEST="$REPO_ROOT/.sheen/manifest.json"
 PREV_MANIFEST="$REPO_ROOT/.sheen/manifest.json"
 PREV_FILES=""
+PREV_HASHES="$WORK/previous-file-hashes"
+: > "$PREV_HASHES"
 if [ -f "$PREV_MANIFEST" ]; then
   PREV_FILES="$(awk '
     /"files"[[:space:]]*:/ { infiles=1; next }
@@ -167,6 +169,14 @@ if [ -f "$PREV_MANIFEST" ]; then
       if (line != "") print line
     }
   ' "$PREV_MANIFEST" || true)"
+  while IFS= read -r rel; do
+    [ -n "$rel" ] || continue
+    if [ -f "$REPO_ROOT/$rel" ]; then
+      printf '%s  %s\n' "$(git hash-object --no-filters "$REPO_ROOT/$rel")" "$rel" >> "$PREV_HASHES"
+    else
+      printf '%s  %s\n' "__MISSING__" "$rel" >> "$PREV_HASHES"
+    fi
+  done <<< "$PREV_FILES"
 fi
 
 is_managed_path() {
@@ -178,6 +188,8 @@ is_managed_path() {
 }
 
 FILES_JSON=""
+FILES_LIST="$WORK/manifest-files"
+: > "$FILES_LIST"
 COUNT=0
 
 for type in $TYPES; do
@@ -255,6 +267,7 @@ for type in $TYPES; do
           rel="${file#$REPO_ROOT/}"
           rel="${rel//\\//}"
           FILES_JSON="$FILES_JSON  \"$rel\",\n"
+          printf '%s\n' "$rel" >> "$FILES_LIST"
           COUNT=$((COUNT + 1))
         done < <(find "$dest" -type f | sort)
       else
@@ -262,6 +275,7 @@ for type in $TYPES; do
         rel="${dest#$REPO_ROOT/}"
         rel="${rel//\\//}"
         FILES_JSON="$FILES_JSON  \"$rel\",\n"
+        printf '%s\n' "$rel" >> "$FILES_LIST"
         COUNT=$((COUNT + 1))
       fi
     done
@@ -305,13 +319,15 @@ if [ -f "$UPSTREAM_SYNC_WF" ]; then
   fi
   if [ "$RECORD_SYNC_WF" -eq 1 ]; then
     FILES_JSON="$FILES_JSON  \".github/workflows/sheen-sync.yml\",\n"
+    printf '%s\n' ".github/workflows/sheen-sync.yml" >> "$FILES_LIST"
     COUNT=$((COUNT + 1))
   fi
 fi
 
 FILES_JSON="$(printf '%b' "$FILES_JSON" | sed '$ s/,$//')"
 SYNCED="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-cat > "$MANIFEST" <<EOF
+CANDIDATE_MANIFEST="$WORK/manifest.json"
+cat > "$CANDIDATE_MANIFEST" <<EOF
 {
   "schema": "sheen-manifest/v1",
   "source": "$DISPLAY_SOURCE",
@@ -324,7 +340,34 @@ $FILES_JSON
 }
 EOF
 
-echo "sheen sync: wrote ${COUNT} file(s); manifest at .sheen/manifest.json"
+CURRENT_HASHES="$WORK/current-file-hashes"
+: > "$CURRENT_HASHES"
+while IFS= read -r rel; do
+  [ -n "$rel" ] || continue
+  if [ -f "$REPO_ROOT/$rel" ]; then
+    printf '%s  %s\n' "$(git hash-object --no-filters "$REPO_ROOT/$rel")" "$rel" >> "$CURRENT_HASHES"
+  else
+    printf '%s  %s\n' "__MISSING__" "$rel" >> "$CURRENT_HASHES"
+  fi
+done < "$FILES_LIST"
+
+PREV_STABLE="$WORK/previous-manifest-stable.json"
+CANDIDATE_STABLE="$WORK/candidate-manifest-stable.json"
+if [ -f "$MANIFEST" ]; then
+  sed '/^[[:space:]]*"synced"[[:space:]]*:/d' "$MANIFEST" > "$PREV_STABLE"
+else
+  : > "$PREV_STABLE"
+fi
+sed '/^[[:space:]]*"synced"[[:space:]]*:/d' "$CANDIDATE_MANIFEST" > "$CANDIDATE_STABLE"
+
+if [ -f "$MANIFEST" ] \
+  && cmp -s "$PREV_STABLE" "$CANDIDATE_STABLE" \
+  && cmp -s "$PREV_HASHES" "$CURRENT_HASHES"; then
+  echo "sheen sync: no changes to ${COUNT} installed file(s); preserved .sheen/manifest.json"
+else
+  cp "$CANDIDATE_MANIFEST" "$MANIFEST"
+  echo "sheen sync: wrote ${COUNT} file(s); manifest at .sheen/manifest.json"
+fi
 
 protect_generated_tokens() {
   local name path tracked entry flags status match header expected newline=$'\n' first='' separator=''

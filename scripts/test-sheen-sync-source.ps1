@@ -63,6 +63,34 @@ function Assert-MigratedConsumer([string]$Consumer) {
     }
 }
 
+function Assert-RepeatSyncNoOp {
+    param(
+        [Parameter(Mandatory)][string]$Consumer,
+        [Parameter(Mandatory)][scriptblock]$Sync
+    )
+    & $Sync
+    Invoke-CheckedGit -C $Consumer add -A
+    Invoke-CheckedGit -C $Consumer commit -m 'commit sync pass one'
+    $manifestPath = Join-Path $Consumer '.sheen' 'manifest.json'
+    [byte[]]$passOneManifest = [System.IO.File]::ReadAllBytes($manifestPath)
+
+    Start-Sleep -Milliseconds 1100
+    & $Sync
+
+    [byte[]]$passTwoManifest = [System.IO.File]::ReadAllBytes($manifestPath)
+    if ($passOneManifest.Length -ne $passTwoManifest.Length -or
+        -not [System.Linq.Enumerable]::SequenceEqual[byte]($passOneManifest, $passTwoManifest)) {
+        throw 'ASSERTION FAILED: repeated exact-tag sync must preserve .sheen/manifest.json byte-for-byte'
+    }
+    $status = & git -C $Consumer status --porcelain=v1
+    if ($LASTEXITCODE -ne 0) { throw 'ASSERTION FAILED: git status failed after repeated exact-tag sync' }
+    if ($status) { throw "ASSERTION FAILED: repeated exact-tag sync must leave zero git status; got: $($status -join '; ')" }
+    & git -C $Consumer diff --quiet
+    if ($LASTEXITCODE -ne 0) { throw 'ASSERTION FAILED: repeated exact-tag sync must leave zero unstaged diff' }
+    & git -C $Consumer diff --cached --quiet
+    if ($LASTEXITCODE -ne 0) { throw 'ASSERTION FAILED: repeated exact-tag sync must leave zero staged diff' }
+}
+
 function Get-CallableResolverScript([string]$WorkflowText) {
     $match = [regex]::Match(
         $WorkflowText,
@@ -160,7 +188,7 @@ function Invoke-CallableResolverFailureFixture([string]$Root, [string]$ResolverS
     }
 }
 
-Write-Host '[1/6] standalone sync defaults use the public mirror'
+Write-Host '[1/7] standalone sync defaults use the public mirror'
 $syncSh = Read-RepoText 'sync.sh'
 $syncPs1 = Read-RepoText 'sync.ps1'
 Assert-Contains $syncSh 'DEFAULT_SOURCE="https://github.com/ivegamsft/sheen.git"' 'sync.sh must not require private source credentials by default'
@@ -169,10 +197,10 @@ Assert-Contains $syncSh "grep -Fq 'This file was synced into your repo by baseco
 Assert-Contains $syncSh 'cmp -s "$NORMALIZED_SYNC_WF" "$SHEEN_SYNC_WF"' 'sync.sh must refresh changed marker-owned workflows from the normalized template'
 Assert-Contains $syncPs1 '$existingWorkflow.Contains(''This file was synced into your repo by basecoat-sheen.'')' 'sync.ps1 must recognize marker-owned workflows for migration'
 Assert-Contains $syncPs1 '[string]::Equals($existingWorkflow, $normalizedWorkflow, [System.StringComparison]::Ordinal)' 'sync.ps1 must use case-sensitive normalized workflow template comparison'
-Assert-Before $syncSh 'SHEEN_SYNC_WF="$REPO_ROOT/.github/workflows/sheen-sync.yml"' 'cat > "$MANIFEST"' 'sync.sh must record managed workflow before manifest serialization'
+Assert-Before $syncSh 'SHEEN_SYNC_WF="$REPO_ROOT/.github/workflows/sheen-sync.yml"' 'cat > "$CANDIDATE_MANIFEST"' 'sync.sh must record managed workflow before manifest serialization'
 Assert-Before $syncPs1 '$sheenSyncWorkflow = Join-Path $repoRoot ''.github'' ''workflows'' ''sheen-sync.yml''' '($manifest | ConvertTo-Json -Depth 8)' 'sync.ps1 must record managed workflow before manifest serialization'
 
-Write-Host '[2/6] bootstrap-generated .sheen.yml defaults use the public mirror'
+Write-Host '[2/7] bootstrap-generated .sheen.yml defaults use the public mirror'
 $bootstrapSh = Read-RepoText 'bootstrap.sh'
 $bootstrapPs1 = Read-RepoText 'bootstrap.ps1'
 Assert-Contains $bootstrapSh 'SOURCE="${SHEEN_SOURCE:-https://github.com/ivegamsft/sheen.git}"' 'bootstrap.sh must generate public mirror source by default'
@@ -185,7 +213,7 @@ foreach ($example in Get-ChildItem -LiteralPath (Join-Path $repoRoot 'docs' 'exa
     Assert-NotContains $exampleText 'ref: v0.5.0' "copyable example $($example.Name) must not pin a nonexistent public mirror tag"
 }
 
-Write-Host '[3/6] scheduled sync template uses internal callable and .sheen.yml source precedence'
+Write-Host '[3/7] scheduled sync template uses internal callable and .sheen.yml source precedence'
 $template = Read-RepoText 'templates/sheen-sync.yml'
 Assert-Contains $template 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' 'scheduled sync must keep using the internal callable workflow host'
 Assert-Contains $template 'The release workflow fails if this ref does not resolve to' 'scheduled sync must document release-ref pin validation'
@@ -194,7 +222,7 @@ Assert-NotContains $template 'source_repo: IBuySpy-Shared/basecoat-sheen' 'sched
 Assert-Contains $template 'Not required for the default public ivegamsft/sheen mirror.' 'template must document that fetch_token is optional for the default source'
 Assert-Contains $template 'Required when .sheen.yml source is IBuySpy-Shared/basecoat-sheen.' 'template must document internal source fetch-token requirement'
 
-Write-Host '[4/6] callable workflow preflights private source fetch credentials'
+Write-Host '[4/7] callable workflow preflights private source fetch credentials'
 $callable = Read-RepoText '.github/workflows/check-sheen-version-callable.yml'
 Assert-Contains $callable 'default: ""' 'callable source/ref inputs must be empty so .sheen.yml can fill them'
 Assert-Contains $callable 'SOURCE="${SOURCE:-ivegamsft/sheen}"' 'callable source_repo default must be public after .sheen.yml is evaluated'
@@ -213,7 +241,7 @@ Assert-Contains $callable 'if [[ -n "${SHEEN_FETCH_TOKEN}" && "$SHEEN_REPO" == h
 Assert-Contains $callable 'Missing Sheen fetch token' 'callable must warn when a non-default source has no fetch token'
 Assert-Contains $callable 'Non-GitHub Sheen source authentication' 'callable must give host-auth guidance for non-GitHub sources'
 
-Write-Host '[5/6] production publication rewrites the callable workflow host'
+Write-Host '[5/7] production publication rewrites the callable workflow host'
 $publish = Read-RepoText '.github/workflows/publish-to-production.yml'
 Assert-Contains $publish '''.github/workflows/check-sheen-version-callable.yml''' 'publish workflow must keep the consumer-facing callable workflow in the public mirror'
 Assert-NotContains $publish 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' 'publish workflow must not restore the internal callable host after public mirror sanitization'
@@ -230,7 +258,7 @@ for ($i = 0; $i -lt $publicLines.Count; $i++) {
 }
 if ($forbidden.Count -gt 0) { throw "ASSERTION FAILED: sanitized public template leaves unexpected internal owner references: $($forbidden -join '; ')" }
 
-Write-Host '[6/6] marker-owned public-host workflows are migrated and recorded'
+Write-Host '[6/7] marker-owned public-host workflows are migrated and recorded'
 $scratch = Join-Path ([System.IO.Path]::GetTempPath()) ("sheen-sync-source-" + [Guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Force -Path $scratch | Out-Null
 try {
@@ -240,6 +268,7 @@ try {
     )
     $oldWorkflow = $oldWorkflow -replace 'with:\r?\n', "with:`n      source_repo: ivegamsft/sheen`n"
     $source = New-SyncSourceFixture -Root $scratch -Template $oldWorkflow
+    Invoke-CheckedGit -C $source tag v0.13.2
 
     $consumerPs = New-SyncConsumerFixture -Root (Join-Path $scratch 'ps') -OldWorkflow $oldWorkflow
     $oldRepo = $env:SHEEN_REPO
@@ -256,6 +285,25 @@ try {
         $env:SHEEN_REF = $oldRef
     }
     Assert-MigratedConsumer -Consumer $consumerPs
+
+    Write-Host '[7/7] repeated exact-tag sync preserves manifest bytes and leaves zero diff'
+    $noOpConsumerPs = New-SyncConsumerFixture -Root (Join-Path $scratch 'noop-ps') -OldWorkflow $oldWorkflow
+    $runPowerShellSync = {
+        $oldRepo = $env:SHEEN_REPO
+        $oldRef = $env:SHEEN_REF
+        try {
+            $env:SHEEN_REPO = $source
+            $env:SHEEN_REF = 'v0.13.2'
+            Push-Location $noOpConsumerPs
+            try { & (Join-Path $repoRoot 'sync.ps1') }
+            finally { Pop-Location }
+        }
+        finally {
+            $env:SHEEN_REPO = $oldRepo
+            $env:SHEEN_REF = $oldRef
+        }
+    }
+    Assert-RepeatSyncNoOp -Consumer $noOpConsumerPs -Sync $runPowerShellSync
 
     if (-not $IsWindows -and (Get-Command bash -ErrorAction SilentlyContinue)) {
         $consumerSh = New-SyncConsumerFixture -Root (Join-Path $scratch 'sh') -OldWorkflow $oldWorkflow
@@ -274,6 +322,27 @@ try {
             $env:SHEEN_REF = $oldRef
         }
         Assert-MigratedConsumer -Consumer $consumerSh
+
+        $noOpConsumerSh = New-SyncConsumerFixture -Root (Join-Path $scratch 'noop-sh') -OldWorkflow $oldWorkflow
+        $runShellSync = {
+            $oldRepo = $env:SHEEN_REPO
+            $oldRef = $env:SHEEN_REF
+            try {
+                $env:SHEEN_REPO = $source
+                $env:SHEEN_REF = 'v0.13.2'
+                Push-Location $noOpConsumerSh
+                try {
+                    & bash (Join-Path $repoRoot 'sync.sh')
+                    if ($LASTEXITCODE -ne 0) { throw "sync.sh no-op fixture failed with exit $LASTEXITCODE" }
+                }
+                finally { Pop-Location }
+            }
+            finally {
+                $env:SHEEN_REPO = $oldRepo
+                $env:SHEEN_REF = $oldRef
+            }
+        }
+        Assert-RepeatSyncNoOp -Consumer $noOpConsumerSh -Sync $runShellSync
     }
 
     $resolverScript = Get-CallableResolverScript -WorkflowText $callable

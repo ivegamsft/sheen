@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.13.2",
-  "releaseDate": "2026-09-19",
-  "notes": "v0.13.2: pin scheduled sync templates to the installed release and re-vendor safe per-file BaseCoat overlay synchronization."
+  "version": "0.13.3",
+  "releaseDate": "2026-10-08",
+  "notes": "v0.13.3: preserve the Sheen manifest byte-for-byte when a repeated sync is a true no-op."
 }

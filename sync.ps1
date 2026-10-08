@@ -161,6 +161,50 @@ function Add-ManifestFile {
     if (-not $ManifestFiles.Contains($rel)) { [void]$ManifestFiles.Add($rel) }
 }
 
+function Get-InstalledFileHashes {
+    param(
+        [Parameter(Mandatory)][string]$RepoRoot,
+        [object[]]$Files
+    )
+    $hashes = [ordered]@{}
+    foreach ($file in @($Files)) {
+        $relativePath = [string]$file
+        $path = Join-Path $RepoRoot $relativePath
+        if (Test-Path -LiteralPath $path -PathType Leaf) {
+            $hashes[$relativePath] = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash
+        }
+        else {
+            $hashes[$relativePath] = $null
+        }
+    }
+    return $hashes
+}
+
+function Test-SequenceEqual {
+    param([object[]]$Left, [object[]]$Right)
+    $leftItems = @($Left)
+    $rightItems = @($Right)
+    if ($leftItems.Count -ne $rightItems.Count) { return $false }
+    for ($i = 0; $i -lt $leftItems.Count; $i++) {
+        if (-not [string]::Equals([string]$leftItems[$i], [string]$rightItems[$i], [System.StringComparison]::Ordinal)) {
+            return $false
+        }
+    }
+    return $true
+}
+
+function Test-HashMapsEqual {
+    param($Left, $Right)
+    if ($Left.Count -ne $Right.Count) { return $false }
+    foreach ($key in $Left.Keys) {
+        if (-not $Right.Contains($key)) { return $false }
+        if (-not [string]::Equals([string]$Left[$key], [string]$Right[$key], [System.StringComparison]::Ordinal)) {
+            return $false
+        }
+    }
+    return $true
+}
+
 function Protect-GeneratedTokens {
     $ignorePath = Join-Path $repoRoot '.gitignore'
     $rules = New-Object System.Collections.Generic.List[string]
@@ -259,10 +303,13 @@ $excludePatterns = if ($excludeSpec.Present) { @($excludeSpec.Items) } else { @(
 
 $previousManaged = New-Object System.Collections.Generic.HashSet[string]([System.StringComparer]::OrdinalIgnoreCase)
 $previousManifest = Join-Path $repoRoot '.sheen/manifest.json'
+$previousManifestData = $null
+$previousInstalledHashes = [ordered]@{}
 if (Test-Path -LiteralPath $previousManifest) {
     try {
-        $prev = Get-Content -LiteralPath $previousManifest -Raw | ConvertFrom-Json
-        foreach ($item in @($prev.files)) { [void]$previousManaged.Add([string]$item) }
+        $previousManifestData = Get-Content -LiteralPath $previousManifest -Raw | ConvertFrom-Json
+        foreach ($item in @($previousManifestData.files)) { [void]$previousManaged.Add([string]$item) }
+        $previousInstalledHashes = Get-InstalledFileHashes -RepoRoot $repoRoot -Files @($previousManifestData.files)
     } catch { }
 }
 
@@ -402,8 +449,21 @@ try {
     $manifestDir = Join-Path $repoRoot '.sheen'
     New-Item -ItemType Directory -Force -Path $manifestDir | Out-Null
     $manifestPath = Join-Path $manifestDir 'manifest.json'
-    ($manifest | ConvertTo-Json -Depth 8) | Set-Content -LiteralPath $manifestPath -Encoding utf8
-    Write-Host ("sheen sync: wrote {0} file(s); manifest at .sheen/manifest.json" -f $manifest.files.Count)
+    $currentInstalledHashes = Get-InstalledFileHashes -RepoRoot $repoRoot -Files @($manifest.files)
+    $preserveManifest = $null -ne $previousManifestData `
+        -and [string]::Equals([string]$previousManifestData.schema, [string]$manifest.schema, [System.StringComparison]::Ordinal) `
+        -and [string]::Equals([string]$previousManifestData.source, [string]$manifest.source, [System.StringComparison]::Ordinal) `
+        -and [string]::Equals([string]$previousManifestData.ref, [string]$manifest.ref, [System.StringComparison]::Ordinal) `
+        -and [string]::Equals([string]$previousManifestData.commit, [string]$manifest.commit, [System.StringComparison]::Ordinal) `
+        -and (Test-SequenceEqual -Left @($previousManifestData.files) -Right @($manifest.files)) `
+        -and (Test-HashMapsEqual -Left $previousInstalledHashes -Right $currentInstalledHashes)
+    if ($preserveManifest) {
+        Write-Host ("sheen sync: no changes to {0} installed file(s); preserved .sheen/manifest.json" -f $manifest.files.Count)
+    }
+    else {
+        ($manifest | ConvertTo-Json -Depth 8) | Set-Content -LiteralPath $manifestPath -Encoding utf8
+        Write-Host ("sheen sync: wrote {0} file(s); manifest at .sheen/manifest.json" -f $manifest.files.Count)
+    }
 
     $materialize = Get-ConfigScalar -Key 'materialize_tokens'
     if ($materialize -and $materialize -notin @('false', 'no', '0')) {

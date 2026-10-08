@@ -7,6 +7,23 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.13.3] — 2026-10-08
+
+| Field | Value |
+|---|---|
+| Version | v0.13.3 |
+| Range | v0.13.2..v0.13.3 |
+| Wave | wave:8 |
+| Sprint | N/A |
+| Release date | 2026-10-08 |
+
+### Fixed
+
+- Preserve `.sheen/manifest.json` byte-for-byte when a repeated exact-source sync
+  resolves the same ref and commit, selects the same assets, and leaves installed
+  bytes unchanged. Both sync entry points now avoid timestamp-only drift while
+  retaining collision ownership and the release-pinned consumer workflow (#275).
+
 ## [0.13.2] — 2026-09-19
 
 | Field | Value |
