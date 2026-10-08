@@ -7,6 +7,16 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [0.13.4] — 2026-10-08
+
+| Field | Value |
+|---|---|
+| Version | v0.13.4 |
+| Range | v0.13.3..v0.13.4 |
+| Wave | wave:15 |
+| Sprint | N/A |
+| Release date | 2026-10-08 |
+
 ### Fixed
 
 - Pin generated consumer callable workflows to the resolved source commit SHA
