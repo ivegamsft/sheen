@@ -6,8 +6,8 @@ exact rules.
 
 ## Read first
 
-- [SPEC.md](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/SPEC.md)
-- [`specs/`](https://github.com/IBuySpy-Shared/basecoat-sheen/tree/main/specs)
+- [SPEC.md](https://github.com/ivegamsft/sheen/blob/main/SPEC.md)
+- [`specs/`](https://github.com/ivegamsft/sheen/tree/main/specs)
 
 ## Use this page for
 
@@ -21,20 +21,20 @@ If a docs page conflicts with the spec, the spec wins.
 
 ## Implemented theme lifecycle contracts
 
-[Spec 13: App-Specific Theme Lifecycle](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/specs/13-theme-lifecycle.spec.md)
+[Spec 13: App-Specific Theme Lifecycle](https://github.com/ivegamsft/sheen/blob/main/specs/13-theme-lifecycle.spec.md)
 defines comparable previews, scoped selection records, readiness/impact
 review, and custom-theme reuse and revision. It extends existing skills
 without prescribing downstream tooling or shipping a preset collection.
 The existing theming skill implements the shared records and decision rules;
 [downstream guidance](../guides/theme-lifecycle.md) explains supported and blocked
 paths and the illustrative T01-T14 checks. Review/closeout is tracked by
-[epic #190](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/190).
+[epic #190](https://github.com/ivegamsft/sheen/issues/190).
 This is agent-contract capability, not a product deployment or proof of
 downstream rendered visual quality.
 
 ## Guide authoring and HTML delivery
 
-[Spec 14: Guide Authoring and HTML Delivery](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/specs/14-html-brand-guide.spec.md)
+[Spec 14: Guide Authoring and HTML Delivery](https://github.com/ivegamsft/sheen/blob/main/specs/14-html-brand-guide.spec.md)
 extends the existing `style-guide-authoring` skill, not a new skill. It retains
 Markdown and governance-only requests while adding approved-input HTML authoring,
 bounded offline packaging, safe refresh and read-only freshness assessment. It
