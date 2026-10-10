@@ -17,6 +17,15 @@ scenarios:
   - id: "pos-experience-handoff"
     input: "Produce a source-linked experience handoff package covering brand, voice, IA, layouts, pages, wireframes, and flows for engineering implementation."
     expect_activation: true
+  - id: "pos-wireframe-intake"
+    input: "Integrate this sheen-wireframes/v1 model into our experience blueprint, preserve page/screen/flow IDs and map simulated states and steps without replacing accepted layouts or themes."
+    expect_activation: true
+  - id: "pos-audit-prototype-boundary"
+    input: "Audit the experience index against our sheen-wireframes/v1 prototype; separate observed app behavior from proposed mock states and record missing state coverage before handoff."
+    expect_activation: true
+  - id: "neg-mock-runtime-code"
+    input: "Copy this prototype's mock controls and CSS into production React components and implement actual save and authentication API behavior."
+    expect_activation: false
   - id: "neg-brand-only"
     input: "Define our brand identity principles, approved color and imagery direction, and logo usage rules for the new microsite."
     expect_activation: false

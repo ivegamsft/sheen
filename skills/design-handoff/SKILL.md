@@ -1,7 +1,7 @@
 ---
 name: design-handoff
 compatibility: [github-copilot-cli]
-description: "Use when packaging and preparing design artifacts for engineering handoff, including redlines, annotations, and token exports. USE FOR: engineering handoff packaging, redline and annotation bundling, token/spec export preparation. DO NOT USE FOR: authoring core component specs, backend implementation."
+description: "Use when packaging and preparing design artifacts for engineering handoff, including redlines, annotations, and token exports. USE FOR: engineering handoff packaging, redline and annotation bundling, token/spec export preparation, validated sheen-wireframes/v1 implementation mapping with simulated-state limitations. DO NOT USE FOR: authoring core component specs, backend implementation, treating mock controls as production code."
 category: lifecycle
 metadata:
   category: lifecycle
@@ -24,12 +24,16 @@ Package design artifacts for engineering execution.
 6. For theme changes, carry `theming`'s exact revision, scoped decision,
    readiness evidence, separate change authorization, affected catalog entries,
    and recovery intent. Missing rights produce a bounded handoff, not application.
+7. For `sheen-wireframes/v1`, read the [wireframe contract](references/wireframe-contract.md).
+   Reuse `wireframing` validation; preserve IDs, map screens/controls/flows,
+   and separate structural checks from visual/task review and production approval.
 
 ## Guardrails
 - Do not make directional claims without evidence collection.
 - Do not present exploratory artifacts as final sign-off.
 - Do not omit risk/dependency notes for downstream execution.
 - Do not duplicate ownership of neighboring lifecycle skills without handoff.
+- Mock controls/states are simulations, not production code, persistence or authentication.
 
 ## Output
 - Lifecycle artifact set (analysis, decisions, and actions).
@@ -39,3 +43,6 @@ Package design artifacts for engineering execution.
 - component-spec
 - design-tokens
 - theming
+- experience-blueprint
+- wireframing
+- design-to-code

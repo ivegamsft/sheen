@@ -1,0 +1,140 @@
+{
+  "mode": "generate",
+  "layouts": [{"id": "layout-workspace"}],
+  "pages": [
+    {
+      "id": "views", "layout": "layout-workspace", "responsive": true,
+      "breakpoints": ["mobile: single reading column", "desktop: approved workspace layout pending review"],
+      "states": {
+        "default": "saved-view list", "empty": "no saved views", "loading": "load saved views",
+        "error": "list fetch retry", "success": "view saved", "permission": "access denied",
+        "partial": "some views unavailable"
+      }
+    },
+    {
+      "id": "editor", "layout": "layout-workspace", "responsive": true,
+      "breakpoints": ["mobile: stacked fields", "desktop: approved editor layout pending review"],
+      "states": {
+        "default": "name view", "empty": "not-applicable", "loading": "save pending",
+        "error": "save failed", "success": "not-applicable", "permission": "edit denied"
+      }
+    }
+  ],
+  "flows": [
+    {"id": "create-view", "steps": [{"page": "views"}, {"page": "editor"}, {"page": "views"}, {"page": "views"}], "cancellation": "return to views"},
+    {"id": "recover-save", "steps": [{"page": "editor"}, {"page": "editor"}, {"page": "editor"}, {"page": "views"}], "recovery": "review and retry"}
+  ],
+  "summary": {"sources": ["brief-saved-views", "wf-saved-views"]},
+  "wireframes": [{
+    "id": "wf-saved-views",
+    "source": "brief-saved-views: proposed low-fidelity task exploration, not observed behavior",
+    "baseline": {
+      "revision": "sha256:ac4b2706d5ab23e35e61611a716e77d763657d22c38b4c0e47674c2982cae028",
+      "approvalEvidence": ["example: synthetic approval record for this bundled demonstration only; not actual product approval"],
+      "digest": "sha256:ac4b2706d5ab23e35e61611a716e77d763657d22c38b4c0e47674c2982cae028"
+    },
+    "model": {
+      "schema": "sheen-wireframes/v1",
+      "title": "Saved-view task exploration",
+      "start": "list-empty",
+      "pages": ["views", "editor"],
+      "screens": [
+        {
+          "id": "list-empty", "page": "views", "title": "No saved views", "state": "empty",
+          "annotations": ["Primary task: create a saved view.", "Regions stack on mobile and desktop; no real data is stored."],
+          "regions": [{"label": "Workspace", "blocks": [
+            {"kind": "text", "label": "Save a filter combination to reuse later."},
+            {"kind": "placeholder", "label": "Empty-state illustration"},
+            {"kind": "action", "label": "Create view", "target": "edit"}
+          ]}]
+        },
+        {
+          "id": "edit", "page": "editor", "title": "Name the view", "state": "default",
+          "annotations": ["Input is simulated and optional.", "Error is reachable explicitly; no invented server validation."],
+          "regions": [{"label": "View details", "blocks": [
+            {"kind": "input", "label": "View name (sample only)"},
+            {"kind": "action", "label": "Save sample view", "target": "saved"},
+            {"kind": "action", "label": "Preview save error", "target": "save-error"},
+            {"kind": "action", "label": "Cancel", "target": "list-empty"}
+          ]}]
+        },
+        {
+          "id": "save-error", "page": "editor", "title": "Save error example", "state": "error",
+          "annotations": ["Simulated error; no network request.", "Loading omitted because no asynchronous work is modeled."],
+          "regions": [{"label": "Recovery", "blocks": [
+            {"kind": "text", "label": "The sample view was not saved. Review the details and try again."},
+            {"kind": "action", "label": "Review details", "target": "edit"}
+          ]}]
+        },
+        {
+          "id": "saved", "page": "views", "title": "View saved", "state": "success",
+          "annotations": ["Success example only; no persistence.", "Selected layout needs product-specific visual/task review."],
+          "regions": [{"label": "Confirmation", "blocks": [
+            {"kind": "text", "label": "Your sample view is ready."},
+            {"kind": "action", "label": "Return to workspace", "target": "list-empty"}
+          ]}]
+        }
+      ],
+      "flows": [
+        {"id": "create-view", "steps": ["list-empty", "edit", "saved", "list-empty"]},
+        {"id": "recover-save", "steps": ["edit", "save-error", "edit", "saved"]}
+      ]
+    },
+    "screens": [
+      {
+        "id": "list-empty", "target": "page views / empty state",
+        "components": ["proposed: empty-state spec", "proposed: primary-action spec"],
+        "controls": [
+          {"region": 0, "block": 2, "behavior": "Open authorized editor route", "dependencies": ["accepted navigation spec", "role policy"], "limitations": "Prototype navigation does not check authorization"}
+        ]
+      },
+      {
+        "id": "edit", "target": "page editor / default state",
+        "components": ["proposed: labeled-field spec", "proposed: form-actions spec"],
+        "controls": [
+          {"region": 0, "block": 0, "behavior": "Capture and validate view name", "dependencies": ["name constraints", "accessible error copy"], "limitations": "Mock input is optional and never validated"},
+          {"region": 0, "block": 1, "behavior": "Save view and show confirmed result", "dependencies": ["save API contract", "permission policy", "pending/error states"], "limitations": "Mock success has no persistence or side effects"},
+          {"region": 0, "block": 2, "behavior": "Show failure only after a real save error", "dependencies": ["error response contract", "retry policy"], "limitations": "Preview control is review-only, not a production action"},
+          {"region": 0, "block": 3, "behavior": "Cancel edits and return to views", "dependencies": ["unsaved changes policy"], "limitations": "Prototype has no real edits to discard"}
+        ]
+      },
+      {
+        "id": "save-error", "target": "page editor / error state",
+        "components": ["proposed: error-summary spec", "proposed: recovery-action spec"],
+        "controls": [
+          {"region": 0, "block": 1, "behavior": "Return focus to editable details", "dependencies": ["focus/error contract"], "limitations": "Mock route is not a real retry or server error"}
+        ]
+      },
+      {
+        "id": "saved", "target": "page views / success state",
+        "components": ["proposed: confirmation spec"],
+        "controls": [
+          {"region": 0, "block": 1, "behavior": "Return to refreshed saved-view list", "dependencies": ["list API contract"], "limitations": "Prototype returns to empty, not persisted list data"}
+        ]
+      }
+    ],
+    "flows": [
+      {"id": "create-view", "steps": [0, 1, 2, 3], "target": "saved-view creation journey", "limitations": "Happy path and return only; cancel action exists but is not in this sequence"},
+      {"id": "recover-save", "steps": [0, 1, 2, 3], "target": "save failure recovery journey", "limitations": "Explicit simulated failure only; no network, timeout or retry semantics"}
+    ],
+    "states": {
+      "views": {
+        "default": "Populated list not modeled", "loading": "No asynchronous list fetch",
+        "error": "List fetch failure not modeled", "permission": "No authentication or role checks",
+        "partial": "Partial data not modeled"
+      },
+      "editor": {
+        "empty": "Not applicable per page contract", "loading": "No asynchronous save",
+        "success": "Success belongs to views", "permission": "No authorization checks"
+      }
+    },
+    "simulated": true,
+    "limitations": {
+      "simulation": "Mock controls have no real validation, persistence, authentication, payment, network or business side effects",
+      "responsive": "Stacked sketch only; accepted workspace/editor layout and breakpoint QA pending",
+      "accessibility": "Keyboard, visual/task review and WCAG assessment pending; model validity is not certification",
+      "scope": "Proposed create/recover exploration only; no complete journey or production readiness claim"
+    },
+    "review": {"status": "pending", "evidence": []}
+  }]
+}

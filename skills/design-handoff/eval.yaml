@@ -11,6 +11,18 @@ scenarios:
   - id: "pos-3"
     input: "Compare approaches for token/spec export preparation and recommend one."
     expect_activation: true
+  - id: "pos-wireframe-package"
+    input: "Package a validated sheen-wireframes/v1 engineering handoff with unchanged page/screen/flow IDs, implementation mappings and explicit simulated-state limitations."
+    expect_activation: true
+  - id: "pos-pending-review"
+    input: "Prepare a bounded draft handoff for our prototype: model validation passed but visual/task review is pending, and mock save controls have no real persistence or authorization."
+    expect_activation: true
+  - id: "neg-production-mock-controls"
+    input: "Implement production form controls and save API logic by copying this low-fidelity prototype's JavaScript."
+    expect_activation: false
+  - id: "neg-render-only"
+    input: "Render an offline SVG wireframe storyboard only, with no engineering handoff or implementation mappings."
+    expect_activation: false
   - id: "neg-1"
     input: "This request is only about authoring core component specs."
     expect_activation: false

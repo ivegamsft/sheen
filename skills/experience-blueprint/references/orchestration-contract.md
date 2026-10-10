@@ -27,6 +27,9 @@ not relative paths inside a synced skill folder.
    representation.
    Reference the selected theme revision, decision/readiness evidence and affected
    catalog entries from `theming`; do not reproduce its catalog or infer write rights.
+8. For `sheen-wireframes/v1`, apply [wireframe intake](wireframe-intake.md)
+   in either mode; delegate mappings and simulation/review boundaries to
+   `design-handoff`, not runtime code generation.
 
 ## Guardrails
 - Do not reimplement brand, IA, accessibility, component, or frontend

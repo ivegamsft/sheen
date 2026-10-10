@@ -191,6 +191,59 @@ Each wireframe specification MUST:
 The agent MAY use any downstream-supported representation. It MUST preserve
 the annotations and relationships needed for review and revision.
 
+#### 6.7.1 Portable prototype intake and implementation handoff
+
+Both modes MUST accept `sheen-wireframes/v1` as an optional source artifact
+under Spec 15, not as runtime UI code or a replacement blueprint schema.
+Validate the original model using the wireframing validator before relating it
+to the index. Attached handoffs MUST supply a separately approved original model
+baseline; missing baselines block validation. Compare the complete decoded model
+to that baseline before mapping checks, so coordinated edits to the model,
+blueprint and mappings cannot silently rename original IDs or change source
+behavior. An embedded digest is not independent approval evidence. The caller
+MUST obtain baselines from a trusted immutable revision outside the editable
+handoff and record its approval/provenance; the checker cannot authenticate
+caller approval. Revisions require separately approved updated baselines.
+Each attachment MUST record structured baseline provenance: an immutable
+content/commit revision, nonempty approval evidence references and a SHA-256
+digest verified against the independently supplied original. Digest bytes are
+the ASCII encoding of decoded JSON serialized with sorted object keys,
+`ensure_ascii=true`, compact comma/colon separators and no trailing newline;
+array order and string values remain unchanged. JSON whitespace, source line
+endings and key order therefore do not affect the digest. This record provides
+traceability, not independent trust or authenticated approval.
+Preserve its page, screen and flow IDs verbatim; each screen
+remains a state of exactly one indexed page. Existing layouts, themes, component
+contracts and observed/proposed distinctions remain authoritative.
+Screen IDs are scoped to their model/attachment and MAY equal a page ID or
+recur in another attachment. Only attachment artifact IDs enter the blueprint's
+global artifact namespace; same-kind duplicates within each model remain invalid.
+
+The handoff MUST link source/provenance and provide:
+
+- one implementation destination and component/spec references per screen;
+- an explicit production behavior/dependency mapping for every input/action,
+  addressed by screen ID and zero-based region/block position (v1 has no control IDs);
+- a mapping from each prototype flow step to an ordered blueprint flow step
+  under the same flow ID, preserving screen-to-page relationships;
+- reasons for omitted page states, including permission and partial when applicable,
+  and limits of flow coverage, responsive behavior and accessibility evidence;
+- an explicit simulation boundary: no real validation, data persistence,
+  authentication, payment, network or business side effects;
+- separate structural validation and visual/task review status/evidence.
+
+Missing references, renamed IDs, mismatched states/steps or incomplete mappings
+MUST block a validated handoff. Pending review MAY be packaged as a bounded
+draft, never as accepted implementation readiness. Mock inputs, actions and
+success/error screens MUST NOT be promoted to production controls, data behavior
+or compliance evidence. `design-handoff` packages these contracts;
+`design-to-code` consumes accepted component/spec mappings for scaffolding only.
+
+An illustrative JSON attachment to the existing reference blueprint and a
+read-only skill-local checker MAY demonstrate these relationships. It MUST NOT
+introduce a second wireframe schema or mandate JSON for downstream blueprints.
+Consumers syncing the checker MUST also sync `wireframing` for shared validation.
+
 ### 6.8 Flows
 
 Each flow specification MUST define:
@@ -325,6 +378,9 @@ Before completing the task, the agent MUST check:
 - required page states are present or explicitly `not-applicable`;
 - audit findings reference valid evidence and artifact IDs;
 - generated or rendered summaries identify their authoritative sources.
+- optional portable wireframe attachments pass model validation and the
+  identity, state, flow, implementation-mapping and simulation checks in §6.7.1;
+  structural success does not substitute for visual/task review.
 
 The agent SHOULD also check:
 

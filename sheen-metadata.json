@@ -671,17 +671,32 @@
         "category": "lifecycle",
         "pillar": "lifecycle",
         "maturity": "stable",
-        "description": "Use when packaging and preparing design artifacts for engineering handoff, including redlines, annotations, and token exports. USE FOR: engineering handoff packaging, redline and annotation bundling, token/spec export preparation. DO NOT USE FOR: authoring core component specs, backend implementation.",
-        "hash": "596ebdc61d97a130cb919298b348ecc2adeade87b787eb344b0c9fef8b2bd962",
+        "description": "Use when packaging and preparing design artifacts for engineering handoff, including redlines, annotations, and token exports. USE FOR: engineering handoff packaging, redline and annotation bundling, token/spec export preparation, validated sheen-wireframes/v1 implementation mapping with simulated-state limitations. DO NOT USE FOR: authoring core component specs, backend implementation, treating mock controls as production code.",
+        "hash": "26b69d19840a7727be494b18dc1456f834b3c6186026dba9d7966b26a2635201",
         "files": [
           {
             "path": "SKILL.md",
-            "hash": "596ebdc61d97a130cb919298b348ecc2adeade87b787eb344b0c9fef8b2bd962",
+            "hash": "26b69d19840a7727be494b18dc1456f834b3c6186026dba9d7966b26a2635201",
             "hash_mode": "text-lf"
           },
           {
             "path": "eval.yaml",
-            "hash": "926da466cdb3ae5f681cb796ef223fff1727e14b3057a52ea2d2e42dd9b112de",
+            "hash": "66f57d9e9c21fa27e9b7a6b26f010ed01bf14e37f789ef2cdf8075a77d5e9988",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/wireframe-contract.md",
+            "hash": "e864aa55f57f77b04f9a7b4ed2054915eb7f1aef668ba954758656104c294c1f",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "scripts/validate-wireframe-handoff.py",
+            "hash": "2301bab082b0b958fc906da7812d0716204dacf937a49d0457f58281c8bb3812",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "templates/wireframe-blueprint.json",
+            "hash": "27a9b249c260ab7c5021ddaa9630b8c293d1bab020075f29fcd8f94bbeb2db5f",
             "hash_mode": "text-lf"
           }
         ]
@@ -1023,22 +1038,27 @@
         "category": "lifecycle",
         "pillar": "lifecycle",
         "maturity": "draft",
-        "description": "Implementation-neutral orchestrator for a product's end-to-end UI/UX contract. USE FOR: audit an existing application's full experience and produce evidence-backed findings, generate a new experience from a product brief and archetype, coordinate brand/voice/IA/layout/page/flow specialists into one coherent contract, validate cross-artifact relationships and state coverage, produce a source-linked handoff for implementation. DO NOT USE FOR: brand-only identity work (brand-identity), IA-only sitemap/taxonomy work (information-architecture), single-component specification (component-spec), app-specific component or layout gallery maintenance alone (app-component-catalog, app-layout-catalog), writing runtime UI code (design-to-code, frontend-dev).",
-        "hash": "96aa22c684d7fd7092d177697a58f2a6d17ad81b8efff59bc9570a0ffb687e3d",
+        "description": "Implementation-neutral orchestrator for a product's end-to-end UI/UX contract. USE FOR: audit an existing application's full experience and produce evidence-backed findings, generate a new experience from a product brief and archetype, coordinate brand/voice/IA/layout/page/flow specialists into one coherent contract, validate cross-artifact relationships and state coverage, integrate sheen-wireframes/v1 preserving IDs and simulated-state limitations, produce a source-linked handoff for implementation. DO NOT USE FOR: brand-only identity work (brand-identity), IA-only sitemap/taxonomy work (information-architecture), single-component specification (component-spec), app-specific component or layout gallery maintenance alone (app-component-catalog, app-layout-catalog), writing runtime UI code (design-to-code, frontend-dev).",
+        "hash": "e42e1edcf3c285a8ab72cbb72bc6e0e0ad4ddd28efdd1a77b948942166d513b9",
         "files": [
           {
             "path": "SKILL.md",
-            "hash": "96aa22c684d7fd7092d177697a58f2a6d17ad81b8efff59bc9570a0ffb687e3d",
+            "hash": "e42e1edcf3c285a8ab72cbb72bc6e0e0ad4ddd28efdd1a77b948942166d513b9",
             "hash_mode": "text-lf"
           },
           {
             "path": "eval.yaml",
-            "hash": "5c7fb6d0eaae4eccadd115c8fdfbf707022b06e5ce2df3b115494ad0d5642493",
+            "hash": "9d7bc738209266700c8ffa609b13fead95ebee48ce5e603e16140613a1a2ce84",
             "hash_mode": "text-lf"
           },
           {
             "path": "references/orchestration-contract.md",
-            "hash": "4bde1e7fc7e91da3d8b8eca742a509e262e080711bf267fc661cd6e01ae4f7a7",
+            "hash": "6883f482761f89fa5c485418d2e210595f4bdb271586e14ad8c7db6da96fc56c",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/wireframe-intake.md",
+            "hash": "c9b629882db65fdd68691577b6a75c515d54de7c3aeb7c5ff1367ca4a2b75fbe",
             "hash_mode": "text-lf"
           }
         ]

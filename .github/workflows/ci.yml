@@ -144,7 +144,9 @@ jobs:
           python scripts/test-agent-distribution.py
 
       - name: Validate - wireframe formats, references and owned refresh (#287)
-        run: python scripts/test-wireframes.py
+        run: |
+          python scripts/test-wireframes.py
+          python scripts/test-wireframe-handoff.py
 
       - name: Validate - agency discovery evidence contracts (#292)
         run: python scripts/test-discovery-contract.py

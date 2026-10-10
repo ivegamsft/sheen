@@ -65,6 +65,12 @@ Record cross-references so validation (spec §12) can resolve them:
 | `wf-*` | shows | `page-*` |
 | `archetype moment` | represented by | `page-*` / `flow-*` |
 
+Portable `sheen-wireframes/v1` sources retain their own page/screen/flow IDs,
+not the suggested prefixes above. Index each screen as one page/state; record
+flow-step and positional input/action implementation mappings in `handoff.md`.
+The original model is prototype evidence, not a substitute for accepted
+layout/theme/component contracts or production behavior.
+
 ---
 
 ## 4. Sources, decisions, assumptions, and open questions

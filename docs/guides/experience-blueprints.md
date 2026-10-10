@@ -172,6 +172,67 @@ a mandated schema — see `tests/fixtures/experience-blueprints/README.md`.
 Represent the same concepts and relationships in whatever format your
 project already uses, and adapt the checks accordingly.
 
+### Portable wireframe intake
+
+Both modes accept `sheen-wireframes/v1` models as optional prototype evidence.
+Keep page/screen/flow IDs unchanged; a screen is a state of one indexed page.
+Existing layout, theme and component decisions remain authoritative.
+`design-handoff` carries implementation/spec destinations, positional mappings
+for each mock input/action, ordered blueprint flow-step mappings, omitted-state
+reasons and explicit simulation limits. Audit simulations remain proposed,
+not observed production behavior.
+
+The complete portable example is
+`skills/design-handoff/templates/wireframe-blueprint.json`; detailed semantics
+live in that skill's `references/wireframe-contract.md`. It illustrates an
+optional attachment to the existing reference JSON, not a new mandatory schema.
+The read-only helper reuses `wireframing`'s model validator:
+
+```powershell
+python .\skills\design-handoff\scripts\validate-wireframe-handoff.py --input .\skills\design-handoff\templates\wireframe-blueprint.json --original-model .\skills\wireframing\templates\task-flow.json
+```
+
+**SOURCE CHECKOUT ONLY:** blueprint-wide audit and regression commands below
+are separate from distributed skill usage. The regression script is stripped
+from production publication and is not available in synced consumer skills.
+
+```powershell
+pwsh .\scripts\audit-experience-blueprint.ps1 -Path .\skills\design-handoff\templates\wireframe-blueprint.json -OriginalModelPath .\skills\wireframing\templates\task-flow.json
+python -B .\scripts\test-wireframe-handoff.py
+```
+
+Consumers sync sibling `design-handoff` and `wireframing` skills for the optional
+Python helper; no source-repository tools or packages are needed for its checks.
+The source blueprint auditor invokes the portable checker only when attachments
+are present (Python 3 required then); legacy audits need no Python.
+Attached handoffs require separately supplied approved original model baselines;
+missing baselines or changed decoded model content block before mapping checks.
+Callers must obtain baselines from trusted immutable revisions and record their
+approval/provenance, not extract them from editable handoffs or trust embedded
+digests. The checker verifies content, not approval authenticity.
+Each attachment records `baseline` revision, approval evidence references and a
+canonical digest checked against the independent original. JSON key order and
+source LF/CRLF whitespace do not change that digest; the skill-local contract
+defines its fixed ASCII/compact/sorted-key normalization. Sample approval
+evidence is synthetic/example only. Missing provenance blocks validation.
+Repeat
+`--original-model` per attachment or pass an array to `-OriginalModelPath`.
+Use `python3` on Linux/macOS; the auditor selects the platform interpreter.
+Successful attached-model checks remain structural-only: the auditor records a
+non-failing `wireframe-handoff-boundary` warning carrying review status and no
+production approval/write authorization. Console output includes the checker
+limitations; `-Json` emits the same findings with structured `structuralOnly`,
+`noProductionApproval`, `noWriteAuthorization` and per-artifact review details.
+`-Json` takes precedence over `-Quiet`. Valid structure still exits zero; legacy
+blueprints without attachments acquire no new boundary warning.
+Blueprint-wide checks remain separate. A structural pass never proves external
+spec acceptance, user-task success, WCAG conformance or production readiness.
+The sample intentionally has pending review and proposed component references.
+Mock controls/CSS/JS and success/error labels are not production validation,
+persistence, authentication, payment, network or business side effects.
+Accepted specs go to `design-to-code` for scaffolding; integrations need their
+own contracts/tests and `frontend-dev`. No handoff implies write authorization.
+
 ## End-to-end scenarios
 
 - **Audit scenario** — `tests/fixtures/experience-blueprints/valid-sample.json`

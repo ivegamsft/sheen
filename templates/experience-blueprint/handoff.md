@@ -60,3 +60,66 @@ build it:
       assumptions and unresolved questions.
 - [ ] Every archetype-required moment is represented by a page or flow.
 - [ ] This summary's sections are source-linked (§2).
+
+## 5. Optional portable wireframe intake
+
+For `sheen-wireframes/v1`, retain the original model and page/screen/flow IDs.
+Validate with `wireframing` and apply `design-handoff`'s skill-local
+`references/wireframe-contract.md` and portable sample/checker.
+This extends the handoff, not the downstream blueprint's representation.
+
+Supply approved original model baselines separately from this editable handoff.
+Missing baselines or any decoded model changes block validation before mappings.
+The caller must verify approval at a trusted immutable revision; an embedded
+digest does not establish independent trust.
+
+| Source artifact ID | Original model baseline location | Immutable revision / approval evidence | Canonical baseline SHA-256 |
+|---|---|---|---|
+| | | | |
+
+Carry these fields in the attachment's structured `baseline` record. Verify its
+canonical digest against the independent original using the skill-local
+contract's fixed JSON normalization (source LF/CRLF whitespace is irrelevant).
+Approval reference presence and digest equality do not authenticate approval.
+
+| Source artifact / provenance | Model validation | Visual/task review status and evidence |
+|---|---|---|
+| | | Pending / Reviewed (not production acceptance) |
+
+| Screen ID | Page / state | Implementation destination | Component/spec references |
+|---|---|---|---|
+| | | | |
+
+| Screen ID / region / block (zero-based) | Intended production behavior | Dependencies | Simulation limitation |
+|---|---|---|---|
+| | | | |
+
+| Original flow ID | Screen steps → blueprint step indices | Implementation destination | Coverage gaps |
+|---|---|---|---|
+| | | | |
+
+Record one row per omitted page state, including permission and partial when
+applicable. Cite the page-state contract even when it declares `not-applicable`.
+
+| Page ID | Omitted state | Omission reason | Source page-state contract |
+|---|---|---|---|
+| | | | |
+
+Record responsive and accessibility limitations separately from structural
+validation. Missing visual/task evidence remains pending, not a conformance claim.
+
+| Source artifact / screen IDs | Dimension | Limitation / unresolved behavior | Review status and evidence | Follow-up owner / validation task |
+|---|---|---|---|---|
+| | Responsive | Breakpoint reflow, ordering and preview fidelity limits | Pending / Reviewed: | |
+| | Accessibility | Keyboard, focus, assistive technology and conformance limits | Pending / Reviewed: | |
+
+- [ ] Every mock input/action has a mapping; review-only controls stay review-only.
+- [ ] Every omitted page state has a reason, including permission/partial as applicable.
+- [ ] Responsive and accessibility limits are recorded; stacked previews are not layout/WCAG proof.
+- [ ] Simulated controls/states are not real validation, persistence, authentication,
+      payment, network or business effects. Do not copy prototype controls/CSS/JS
+      as production implementation.
+- [ ] Source/model/mapping revisions agree; positional controls are revalidated after changes.
+- [ ] Blueprint-wide validation is separate; pending visual/task review stays a bounded draft.
+- [ ] Accepted component/spec mappings go to `design-to-code`; integrations/logic
+      go to `frontend-dev`. No handoff grants application write/deploy rights.

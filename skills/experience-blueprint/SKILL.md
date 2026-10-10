@@ -1,7 +1,7 @@
 ---
 name: experience-blueprint
 compatibility: [github-copilot-cli]
-description: "Implementation-neutral orchestrator for a product's end-to-end UI/UX contract. USE FOR: audit an existing application's full experience and produce evidence-backed findings, generate a new experience from a product brief and archetype, coordinate brand/voice/IA/layout/page/flow specialists into one coherent contract, validate cross-artifact relationships and state coverage, produce a source-linked handoff for implementation. DO NOT USE FOR: brand-only identity work (brand-identity), IA-only sitemap/taxonomy work (information-architecture), single-component specification (component-spec), app-specific component or layout gallery maintenance alone (app-component-catalog, app-layout-catalog), writing runtime UI code (design-to-code, frontend-dev)."
+description: "Implementation-neutral orchestrator for a product's end-to-end UI/UX contract. USE FOR: audit an existing application's full experience and produce evidence-backed findings, generate a new experience from a product brief and archetype, coordinate brand/voice/IA/layout/page/flow specialists into one coherent contract, validate cross-artifact relationships and state coverage, integrate sheen-wireframes/v1 preserving IDs and simulated-state limitations, produce a source-linked handoff for implementation. DO NOT USE FOR: brand-only identity work (brand-identity), IA-only sitemap/taxonomy work (information-architecture), single-component specification (component-spec), app-specific component or layout gallery maintenance alone (app-component-catalog, app-layout-catalog), writing runtime UI code (design-to-code, frontend-dev)."
 category: lifecycle
 metadata:
   category: lifecycle
@@ -21,6 +21,7 @@ Audit or generate one traceable, implementation-neutral brand/voice/IA/layout/pa
 4. For material generation uncertainty, create ≥2 IA/layout candidates and resolve via `design-debate`.
 5. Validate references, states, responsive coverage, and archetype moments. Audit dimensions 0–4 with evidence/confidence and severity-ranked findings.
 6. Hand off source-linked output; reference `theming`'s selected revision, decision/readiness evidence, and affected catalog entries.
+7. Accept `sheen-wireframes/v1` via the [wireframe intake contract](references/wireframe-intake.md): preserve IDs, validate mappings, and carry simulation/review limits.
 
 ## Guardrails
 - Index specialist outputs; never duplicate their expertise or the theme catalog.

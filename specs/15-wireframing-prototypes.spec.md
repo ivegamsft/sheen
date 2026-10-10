@@ -86,3 +86,20 @@ existing catalog registration and update directly related handoff docs.
 Prototype readiness requires model validation AND recorded visual/task review.
 Passing renderer/browser tests is not accessibility certification or user validation.
 Rollback uses a governed revert and restores only verified owned artifact revisions.
+
+## 6. Blueprint and production handoff
+
+`experience-blueprint` and `design-handoff` MUST accept the original v1 model
+without renaming page/screen/flow IDs or changing renderer behavior. The model
+remains prototype evidence, not a production component contract. Spec 10 §6.7.1
+governs screen/component destinations, positional input/action mappings,
+ordered flow-step relationships, omitted-state reasons and simulation limits.
+Reuse the existing model validator; keep the illustrative attachment, sample
+and read-only relationship checker local to the handoff skill. Its shared
+validator dependency is `wireframing`, not source-checkout scripts.
+Require separately supplied approved original model baselines and exact decoded
+model comparison before mapping checks; never trust caller-editable embedded
+digests as independent identity evidence. Missing baselines block attached
+handoffs; unattached legacy blueprints remain unaffected.
+Blueprint-wide validation remains separate. A structural pass MUST NOT approve
+mock behavior, authorize application writes, or replace visual/task review.

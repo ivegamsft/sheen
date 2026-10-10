@@ -7,16 +7,19 @@
 # The spec is implementation-neutral: a downstream MAY represent its blueprint
 # in any format that preserves the same concepts and relationships; this
 # script's JSON shape is a reference example, not a mandated schema.
+# Optional wireframes use the portable design-handoff checker (Python 3).
 #
 # Usage:
-#   pwsh scripts/audit-experience-blueprint.ps1 -Path <file.json> [-Quiet]
+#   pwsh scripts/audit-experience-blueprint.ps1 -Path <file.json> [-OriginalModelPath <original.json[]>] [-Quiet] [-Json]
 #
 # Exit code: 0 if no error-severity findings, 1 otherwise. Warnings never
 # fail the run on their own.
 
 param(
     [Parameter(Mandatory)][string]$Path,
-    [switch]$Quiet
+    [string[]]$OriginalModelPath = @(),
+    [switch]$Quiet,
+    [switch]$Json
 )
 
 $ErrorActionPreference = 'Stop'
@@ -39,9 +42,12 @@ function Add-Finding {
     param(
         [Parameter(Mandatory)][ValidateSet('error', 'warning')][string]$Severity,
         [Parameter(Mandatory)][string]$Rule,
-        [Parameter(Mandatory)][string]$Message
+        [Parameter(Mandatory)][string]$Message,
+        $Details = $null
     )
-    $findings.Add([pscustomobject]@{ severity = $Severity; rule = $Rule; message = $Message })
+    $finding = [pscustomobject]@{ severity = $Severity; rule = $Rule; message = $Message }
+    if ($null -ne $Details) { $finding | Add-Member -NotePropertyName details -NotePropertyValue $Details }
+    $findings.Add($finding)
 }
 
 # Required moments per archetype (spec 10 §7). Used only to check that every
@@ -160,6 +166,38 @@ foreach ($p in $pages) {
     }
 }
 
+# --- Optional portable wireframe handoff -------------------------------------
+# Validate attachments before making their artifact IDs available to findings.
+# Legacy blueprints do not acquire a Python dependency.
+if ($null -ne $doc.PSObject.Properties['wireframes']) {
+    $pythonName = if ($IsWindows) { 'python' } else { 'python3' }
+    $python = Get-Command $pythonName -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
+    if (-not $python) {
+        Add-Finding -Severity error -Rule 'wireframe-handoff' -Message 'Python 3 is required to validate attached wireframes; no handoff approval without validation'
+    } else {
+        $checker = Join-Path (Split-Path $PSScriptRoot) 'skills\design-handoff\scripts\validate-wireframe-handoff.py'
+        $checkerArgs = @($checker, '--input', [System.IO.Path]::GetFullPath($Path))
+        foreach ($original in $OriginalModelPath) {
+            $checkerArgs += @('--original-model', [System.IO.Path]::GetFullPath($original))
+        }
+        $result = & $python.Source @checkerArgs 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            Add-Finding -Severity error -Rule 'wireframe-handoff' -Message ($result -join "`n")
+        } else {
+            foreach ($attachment in $doc.wireframes) { Register-Id $attachment.id 'wireframe' }
+            $reviews = @($doc.wireframes | ForEach-Object {
+                [pscustomobject]@{ artifactId = $_.id; visualTaskReview = $_.review.status }
+            })
+            Add-Finding -Severity warning -Rule 'wireframe-handoff-boundary' -Message ($result -join "`n") -Details ([pscustomobject]@{
+                structuralOnly = $true
+                noProductionApproval = $true
+                noWriteAuthorization = $true
+                reviews = $reviews
+            })
+        }
+    }
+}
+
 # --- 6. Audit findings reference valid evidence and artifact IDs -----------
 if ($mode -eq 'audit') {
     foreach ($fi in $findingsIn) {
@@ -232,7 +270,13 @@ foreach ($p in $pages) {
 $errorCount = @($findings | Where-Object { $_.severity -eq 'error' }).Count
 $warningCount = @($findings | Where-Object { $_.severity -eq 'warning' }).Count
 
-if (-not $Quiet) {
+if ($Json) {
+    [pscustomobject]@{
+        errorCount = $errorCount
+        warningCount = $warningCount
+        findings = @($findings.ToArray())
+    } | ConvertTo-Json -Depth 8
+} elseif (-not $Quiet) {
     if ($findings.Count -eq 0) {
         Write-Host "audit-experience-blueprint: no findings for '$Path'"
     } else {
