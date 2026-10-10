@@ -85,3 +85,12 @@ in `Missing or proposed items`.
 | Reference isolation | {{PASS|FAIL|UNKNOWN|N/A}} | {{scope}} | {{evidence}} |
 | Accessibility evidence | {{PASS|FAIL|UNKNOWN|N/A}} | {{scope}} | {{evidence}} |
 | HTML profile checks | {{PASS|FAIL|UNKNOWN|N/A}} | {{scope}} | {{evidence}} |
+| Offline/no JavaScript | {{PASS|FAIL|UNKNOWN|N/A}} | {{artifact_digest_and_packaging}} | {{network_capture_and_decoded_resources}} |
+| Keyboard/navigation/focus | {{PASS|FAIL|UNKNOWN|N/A}} | {{browser_version_and_platform}} | {{tab_enter_reverse_tab_destinations_and_visible_focus}} |
+| 320px and 200% text reflow | {{PASS|FAIL|UNKNOWN|N/A}} | {{css_viewport_and_zoom_method}} | {{overflow_and_complete_content_measurements}} |
+| A4 and Letter complete-content print | {{PASS|FAIL|UNKNOWN|N/A}} | {{pdf_digests_and_paper_sizes}} | {{text_image_bounds_and_visual_preview_inspection}} |
+
+For HTML, apply `references/browser-print-evidence.md`: record actual delivered
+HTML/resource digests and evidence digests, with limitations and specialist
+review still required. Unexecuted checks are UNKNOWN; source regression PASS
+does not approve this guide. For Markdown, HTML-only rows are N/A with rationale.

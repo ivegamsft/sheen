@@ -36,6 +36,11 @@ Audit and check modes return reports only. A successful audit or CURRENT freshne
 
 HTML output must remain readable from a local file without JavaScript, include navigation/main landmarks and print styles, and reject executable markup, unsafe URL schemes, unsafe SVG and paths outside the authorized repository root.
 
+For HTML review, read `browser-print-evidence.md`. Required browser/print checks
+must measure the exact delivered artifact, not merely inspect CSS or reuse a
+source fixture's PASS. Missing, failed or stale evidence cannot support READY.
+The packaging helper deliberately returns DRAFT even after successful rendering.
+
 ## State precedence
 
 Use BLOCKED first for unsafe content, source leakage, ownership conflicts or contradictory approved rules. Template mode is TEMPLATE. Otherwise unresolved inputs, proposals, stale evidence or unknown required checks produce DRAFT. READY requires approved complete included modules, required review evidence and no blocking findings.

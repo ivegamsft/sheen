@@ -367,7 +367,7 @@ jobs:
       - name: Install PowerShell
         run: |
           apt-get update -qq
-          apt-get install -y -qq wget apt-transport-https software-properties-common
+          apt-get install -y -qq wget apt-transport-https software-properties-common python3-pip
           wget -q https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb
           dpkg -i /tmp/packages-microsoft-prod.deb
           apt-get update -qq
@@ -375,6 +375,9 @@ jobs:
 
       - name: Install - node dependencies (Playwright)
         run: npm ci
+
+      - name: Install - source-only PDF evidence inspection (#294)
+        run: python3 -m pip install -r tests/visual-regression/requirements.txt
 
       - name: Build - tokens, diagram skins, icons (prerequisites, #113/#116/#111)
         run: |
@@ -387,6 +390,14 @@ jobs:
 
       - name: Test - visual regression (Playwright screenshot diff, #129)
         run: npx playwright test
+
+      - name: Upload - portable UI browser and print evidence (#294)
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: portable-ui-readiness-evidence
+          path: test-results/
+          retention-days: 7
 
       - name: Verify - visual regression catches a real pixel change (#129)
         run: |

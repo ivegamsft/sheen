@@ -64,7 +64,7 @@ Repeated heading fixture.
     Assert-Equal 'DRAFT' $result.State 'Default self-contained output must pass under the default budget without implying READY'
     $content = Get-Content -LiteralPath $html -Raw
     Assert-True ($content -match '<nav aria-label="Guide sections">') 'Generated HTML must include navigation landmark'
-    Assert-True ($content -match '<main id="sga-main">') 'Generated HTML must include main content landmark'
+    Assert-True ($content -match '<main id="sga-main" tabindex="-1">') 'Generated HTML must include a focusable skip-link destination without an extra Tab stop'
     Assert-True ($content -match '@media print') 'Generated HTML must include print styles'
     Assert-True ($content -notmatch '<script\b') 'Generated HTML must not require JavaScript'
     Assert-True ($content -match 'data:image/png;base64,') 'Self-contained output must embed permitted assets'

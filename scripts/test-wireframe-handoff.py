@@ -3,6 +3,7 @@
 import copy
 import importlib.util
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -381,9 +382,32 @@ class HandoffTests(unittest.TestCase):
             "run: |\n          python scripts/test-wireframes.py\n          python scripts/test-wireframe-handoff.py",
             ci)
         publication = (ROOT / ".github" / "workflows" / "publish-to-production.yml").read_text(encoding="utf-8")
-        self.assertIn(
-            "'scripts/test-wireframes.py'\n            'scripts/test-wireframe-handoff.py'",
-            publication)
+        required = {
+            "scripts/test-wireframes.py", "scripts/test-wireframe-handoff.py",
+            "tests/visual-regression/requirements.txt",
+            "tests/visual-regression/style-guide-evidence.js",
+            "tests/visual-regression/style-guide-html.spec.js",
+            "tests/visual-regression/style-guide-print.py",
+        }
+
+        def assert_exclusions(document):
+            arrays = re.findall(r"(?ms)^\s*INTERNAL_PATTERNS=\(\s*\n(.*?)^\s*\)", document)
+            self.assertEqual(len(arrays), 1, "Expected one publication INTERNAL_PATTERNS array")
+            entries = set(re.findall(r"(?m)^\s*'([^']+)'\s*$", arrays[0]))
+            self.assertTrue(required <= entries, f"Missing source-only exclusions: {required - entries}")
+
+        assert_exclusions(publication)
+        additional = publication.replace(
+            "'scripts/test-wireframes.py'",
+            "'scripts/test-wireframes.py'\n            'scripts/test-guide-source-only.py'", 1)
+        assert_exclusions(additional)
+        for entry in required:
+            with self.subTest(missing=entry):
+                missing = additional.replace(f"'{entry}'", "'scripts/unrelated-source-only.py'")
+                # An occurrence outside the strip array must not mask absence.
+                missing += f"\n# '{entry}'\n"
+                with self.assertRaises(AssertionError):
+                    assert_exclusions(missing)
 
 
 if __name__ == "__main__":

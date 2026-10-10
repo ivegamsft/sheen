@@ -37,6 +37,7 @@ try {
         'SKILL.md',
         'eval.yaml',
         'references/guide-contract.md',
+        'references/browser-print-evidence.md',
         'references/input-provenance.md',
         'references/module-recipes.md',
         'scripts/GuideHtml.psm1',
@@ -109,7 +110,7 @@ try {
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $consumer '.github' -AdditionalChildPath 'skills', 'brand-guide-html'))) 'Consumer sync must not deliver a duplicate brand-guide-html skill'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $consumer 'scripts' -AdditionalChildPath 'build-design-md.ps1'))) 'Copied skill folder must not require source-only top-level DESIGN.md generator scripts'
     $manifest = Get-Content -LiteralPath (Join-Path $consumer '.sheen' -AdditionalChildPath 'manifest.json') -Raw | ConvertFrom-Json
-    foreach ($relative in @('SKILL.md', 'references/guide-contract.md', 'scripts/render-html-guide.ps1', 'scripts/check-guide-freshness.ps1', 'templates/guide-outline.md')) {
+    foreach ($relative in @('SKILL.md', 'references/guide-contract.md', 'references/browser-print-evidence.md', 'scripts/render-html-guide.ps1', 'scripts/check-guide-freshness.ps1', 'templates/guide-outline.md')) {
         $manifestPath = ".github/skills/style-guide-authoring/$relative"
         Assert-True (@($manifest.files) -contains $manifestPath) "Consumer manifest must record $manifestPath"
     }

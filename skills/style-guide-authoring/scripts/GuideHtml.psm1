@@ -447,21 +447,21 @@ function New-StyleGuideHtml {
 *{box-sizing:border-box}body{margin:0;background:var(--sga-bg);color:var(--sga-fg);font:16px/1.55 system-ui,sans-serif}
 .sga-skip{position:absolute;left:-999px}.sga-skip:focus{left:1rem;top:1rem;background:#fff;padding:.5rem;border:2px solid var(--sga-accent)}
 .sga-shell{display:grid;grid-template-columns:minmax(12rem,18rem) 1fr;gap:2rem;max-width:72rem;margin:auto;padding:1rem}
-nav{position:sticky;top:0;align-self:start}nav a{display:block;padding:.35rem;color:var(--sga-accent)}nav a:focus{outline:3px solid var(--sga-accent)}
+nav{position:sticky;top:0;align-self:start;min-width:0;overflow-wrap:anywhere}nav a{display:block;padding:.35rem;color:var(--sga-accent)}a:focus,main:focus{outline:3px solid var(--sga-accent);outline-offset:2px}
 main{min-width:0;overflow-wrap:anywhere;word-break:break-word}section,.sga-card{border:1px solid var(--sga-border);border-radius:.5rem;padding:1rem;margin:1rem 0}.sga-asset img{max-width:100%;height:auto}
 .sga-table-wrap{max-width:100%;overflow-x:auto}table{border-collapse:collapse;width:100%;margin:1rem 0}th,td{border:1px solid var(--sga-border);padding:.4rem;text-align:left;vertical-align:top}
 .sga-profile-reference-manual main{max-width:52rem}
 .sga-profile-presentation-inspired main{max-width:60rem}.sga-profile-presentation-inspired h2{font-size:2rem;margin-top:2.5rem}.sga-profile-presentation-inspired .sga-card{font-size:1.125rem}
 .sga-profile-quick-reference main{max-width:44rem}.sga-profile-quick-reference p,.sga-profile-quick-reference li{line-height:1.35}.sga-profile-quick-reference .sga-card{padding:.65rem;margin:.65rem 0}
 @media (max-width:40rem){.sga-shell{display:block}nav{position:static}}
-@media print{@page{size:auto;margin:12mm}nav,.sga-skip{display:none}body{font-size:11pt}.sga-shell{display:block;max-width:none}h1,h2,h3{break-after:avoid}section,.sga-card{break-inside:avoid}}
+@media print{@page{size:auto;margin:12mm}nav,.sga-skip{display:none}body{font-size:11pt}.sga-shell{display:block;max-width:none}h1,h2,h3,h4,h5,h6{break-after:avoid}section,.sga-card{break-inside:avoid}}
 </style>
 </head>
 <body>
 <a class="sga-skip" href="#sga-main">Skip to guide content</a>
 <div class="sga-shell sga-profile-$Profile">
 <nav aria-label="Guide sections">$nav</nav>
-<main id="sga-main">
+<main id="sga-main" tabindex="-1">
 <p class="sga-card"><strong>Profile:</strong> $(ConvertTo-HtmlText $Profile). <strong>Packaging:</strong> $(ConvertTo-HtmlText $Packaging). JavaScript is not required.</p>
 $($converted.Body)
 $assetHtml

@@ -1,9 +1,12 @@
 # Spec 14 - Guide Authoring and HTML Delivery
 
-> Status: **Proposed extension; the existing skill does not implement this contract.**
+> Status: **Portable authoring, HTML packaging and freshness implemented; Wave 18
+> (#294, parent #291) measured Chromium browser/print regression implemented.
+> Downstream readiness
+> remains artifact-specific and requires separate review.**
 > Original specification: #223. Reuse correction: #226; implementation epic: #225.
 > Existing skill: `style-guide-authoring`. Proposed orchestration: `design-reviewer`.
-> Implementation requires separate authorization; no new skill or renderer is added.
+> No new skill or renderer is introduced by this evidence work.
 
 ## 1. Purpose and design decision
 
@@ -30,7 +33,7 @@ separate authorization.
 
 The original comparison omitted the closest existing authoring skill and templates.
 HTML publication through a docs platform already exists as guidance; portable
-offline generation with the contracts below is the proposed enhancement.
+offline generation with the contracts below extends the same authoring skill.
 
 | Existing asset | Reuse and correction |
 |---|---|
@@ -106,13 +109,12 @@ defaults do not constitute an approved downstream identity.
 
 ## 4. Activation and ownership
 
-### 4.1 Proposed extension to the existing discovery contract
+### 4.1 Extension to the existing discovery contract
 
 The updated skill MUST conform to [Spec 02](02-skill-contract.spec.md), including
 an entry body below the unchanged W03 ceiling with mandatory local references.
-The following frontmatter is proposed replacement wording, not a live update.
-Preserving the existing stable maturity label does not claim the HTML profile is
-available before implementation:
+The following frontmatter documents the implemented skill's discovery contract.
+Preserving the stable maturity label does not confer downstream readiness:
 
 ```yaml
 ---
@@ -427,6 +429,86 @@ Select checks by format and scope: an HTML-only check on Markdown is N/A with a
 rationale, not a pass and not an unexplained UNKNOWN. Existing governance reports
 remain reports; a successful audit alone does not produce or publish a READY guide.
 
+### 8.1 Reproducible browser/print evidence (#294)
+
+The existing skill-local portable HTML helper remains the renderer. Source
+regression uses `@playwright/test` Chromium against synthetic representative
+guides in both packaging modes, with JavaScript disabled and network capture.
+Record browser version, platform, execution time, checks and SHA-256 inventory
+of the exact HTML and delivered bundle resources. Retain screenshots, A4/Letter
+PDFs and their digests with the report. A changed or missing artifact/resource,
+failed check or absent required measurement invalidates a PASS claim.
+
+H09 must exercise Tab/Shift+Tab, skip-link activation, every navigation fragment,
+focus visibility and escape from navigation. Measure viewport overflow at 320 CSS
+pixels and at 200% text enlargement; check content is not clipped or lost.
+H10 must inspect the generated PDFs, not just print CSS or successful PDF creation:
+verify each essential text block/table cell/status/restriction, multi-page output,
+page dimensions and content bounds for both paper sizes. Missing PDF inspection
+tooling is UNKNOWN/failure, never a pass. Retain raster previews for visual review.
+
+PDF content comparison must consume complete normalized extraction-line ranges
+for each expected DOM block, preserving boundaries, order and multiplicity.
+Matching starts at the current extraction cursor, never searches past arbitrary
+text, and must consume every extracted line exactly once; leftover middle or
+trailing lines fail. One leading Chromium unordered-list bullet is normalized
+only for recorded DOM unordered-list item blocks when the literal extracted text
+does not already match. Preserve literal bullets in headings, paragraphs, table
+cells and list content. Repeated semantic table headers are an
+explicit pagination exception: record DOM header block indices and table end,
+consume the exact entire header sequence only at a new-page extraction boundary
+while still within that table, and enumerate repetitions in evidence. Same-page
+duplicated headers, arbitrary cells and injected text remain failures; there is
+no generic text whitelist or skipping.
+Raw substring counts cannot establish completeness: a missing short table cell
+must not borrow text from a longer heading or reuse another occurrence.
+Carry DOM heading IDs, levels and block indices into print expectations; do not
+infer headings from font size. Every heading requires following non-heading
+content on the same page, below its bounds and within the printable area.
+Negative regressions cover removed repeated/short paragraphs and table cells,
+and orphaned h3 output from the actual portable renderer.
+
+Extraction and reflow cover every supported heading level h1-h6; lower-level
+omission and orphan tests use actual portable renderer output. Printed specimen
+validation consumes a multiset of expected decoded RGB pixel SHA-256 identities
+and dimensions, not a set or reusable dimension match. Two distinct same-size
+embedded specimens must reject duplicate-A/missing-B output, while two intentionally
+identical specimens pass only with the expected multiplicity. These exact-pixel
+checks are scoped to the synthetic raster fixtures and tested Chromium pipeline,
+not a guarantee for arbitrary color-managed or transformed consumer imagery.
+
+Offline verification runs again after reflow and both print checks. A late
+automatic remote request must mark the offline check FAIL in the persisted report.
+Any failed operation outside a named check also makes the overall run FAIL;
+previous PASS measurements must never mask a failed run.
+
+Finalization closes the browser before report attachment. A failed close or
+attachment records `runFailure`, recomputes and persists canonical FAIL before
+rethrowing. Attachment snapshots must not preannounce PASS while the attachment
+operation can still fail. The canonical completed report and its exact artifact
+inventory remain the final result; pending snapshots are UNKNOWN or FAIL.
+Injected close and attachment-copy-then-throw regressions inspect the actual
+persisted JSON, not only the thrown exception.
+If initial checking and cleanup both fail, retain every cause in the report and
+thrown AggregateError instead of replacing the initial failure.
+
+The 2026-10-10 Windows/Chromium source rerun passed fifteen browser tests, eight
+packaging scenarios and six
+copied-consumer delivery scenarios, including the local browser/print evidence
+reference in required payload and consumer manifest checks. Both representative
+packaging modes retained 188 expected text blocks, one decoded/printed image and
+nine pages on each paper size. The renderer's h1–h6 keep-with-content rule changed
+HTML bytes; updated exact digests are recorded in the consumer guide and per-run
+artifact inventories. Positive actual-renderer h4–h6 A4/Letter boundary fixtures
+verify the rule, with same-position disabled-rule controls failing orphan checks.
+These are source synthetic regression results, never downstream READY.
+
+Source regression evidence is scoped to its synthetic fixture and tested Chromium,
+not to a consumer guide. Consumers repeat the same checks on their actual artifact,
+record limitations and obtain applicable specialist/owner review. Packaging
+continues to return DRAFT; browser PASS alone never produces READY, WCAG
+certification, publication permission or automatic downstream approval.
+
 ## 9. Evaluation and acceptance
 
 Routing scenarios MUST meet Spec 02's existing schema and specificity threshold.
@@ -485,8 +567,10 @@ evaluation. Do not claim the proposed extension is implemented from spec-only ch
 
 ## 10. Planned implementation and integration
 
-The implementation should be split into the following bounded tasks. This
-specification does not authorize executing them.
+The original implementation split is retained below for traceability. The
+existing portable implementation is now supplemented by #294 source regression
+and copied consumer evidence guidance; none of these results approves a downstream
+guide or certifies WCAG conformance.
 
 | Work item | Deliverable and dependency |
 |---|---|

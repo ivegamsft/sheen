@@ -1495,8 +1495,13 @@
             "hash_mode": "text-lf"
           },
           {
+            "path": "references/browser-print-evidence.md",
+            "hash": "110fe9d63d25b17af604e0947236f3d62c74ab1278cc5ed6bae5c2d36a1cf2b6",
+            "hash_mode": "text-lf"
+          },
+          {
             "path": "references/guide-contract.md",
-            "hash": "409d938ad86e67ba2c12697ce1ab7b5460af5aa9e947221170ce9e92483dd1f2",
+            "hash": "3c6d77189958dcb499eecd3363208148080f59acc42efa950b5dbea940a28fa3",
             "hash_mode": "text-lf"
           },
           {
@@ -1511,7 +1516,7 @@
           },
           {
             "path": "scripts/GuideHtml.psm1",
-            "hash": "93ac372d3ea5110a51771831204693d67a4d3bc44ecc30ab7c14220855f6d76e",
+            "hash": "f49a293fb272afcb23381d0657ec4ea0069cca3f807e9656ebdfda500b89bab3",
             "hash_mode": "text-lf"
           },
           {
@@ -1536,7 +1541,7 @@
           },
           {
             "path": "templates/guide-outline.md",
-            "hash": "66c53623457854e6ed2fa9d1ce531641f03d8f2d0de0ffc5b1118959d931ea5f",
+            "hash": "4ab4e312c7b772e8b88f19346fbae6809a3d677835739c40285d5f7d7aae6f75",
             "hash_mode": "text-lf"
           }
         ]
