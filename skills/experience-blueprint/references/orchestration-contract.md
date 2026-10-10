@@ -1,17 +1,17 @@
 # Experience Orchestration and Handoff Contract
 
 Read for both audit and generation. Implements the source repository's
-[spec 10](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/specs/10-experience-blueprint.spec.md).
+[spec 10](https://github.com/ivegamsft/sheen/blob/main/specs/10-experience-blueprint.spec.md).
 The shared templates/tools linked below live in that repository; they are
 not relative paths inside a synced skill folder.
 
 ## Workflow
 1. Select mode. **Audit:** inventory routes, screens, navigation, content,
    styles, copy, analytics, and existing docs; record each source in an
-   evidence register ([audit workflow](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/templates/experience-blueprint/audit-workflow.md)).
+   evidence register ([audit workflow](https://github.com/ivegamsft/sheen/blob/main/templates/experience-blueprint/audit-workflow.md)).
    **Generate:** capture the brief, audiences, constraints, and select a
-   primary + supporting archetype ([archetypes](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/templates/experience-blueprint/archetypes.md)).
-2. Populate the [experience index](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/templates/experience-blueprint/experience-index.md):
+   primary + supporting archetype ([archetypes](https://github.com/ivegamsft/sheen/blob/main/templates/experience-blueprint/archetypes.md)).
+2. Populate the [experience index](https://github.com/ivegamsft/sheen/blob/main/templates/experience-blueprint/experience-index.md):
    stable IDs, relationships, sources, decisions, and open questions.
 3. Delegate each domain artifact to its owning specialist skill (see
    Delegates in [SKILL.md](../SKILL.md)) instead of authoring it inline.
@@ -19,11 +19,11 @@ not relative paths inside a synced skill folder.
    material uncertainty exists and resolve them with `design-debate`.
 5. Validate cross-references, required states, responsive coverage, and
    archetype-required moments (source-checkout tool:
-   [audit-experience-blueprint.ps1](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/scripts/audit-experience-blueprint.ps1)).
+   [audit-experience-blueprint.ps1](https://github.com/ivegamsft/sheen/blob/main/scripts/audit-experience-blueprint.ps1)).
 6. For audits, score each dimension 0-4 with evidence and confidence, and log
    findings with severity, affected artifact IDs, and a recommendation.
 7. Produce a source-linked summary and handoff
-   ([handoff](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/templates/experience-blueprint/handoff.md)) in the downstream's chosen
+   ([handoff](https://github.com/ivegamsft/sheen/blob/main/templates/experience-blueprint/handoff.md)) in the downstream's chosen
    representation.
    Reference the selected theme revision, decision/readiness evidence and affected
    catalog entries from `theming`; do not reproduce its catalog or infer write rights.
