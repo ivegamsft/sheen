@@ -52,4 +52,10 @@ Assert-Contains $syncSh 'BaseCoat must never wipe the destination directory whol
 Assert-NoLineMatches $syncPs1 'Remove-Item\s+.*-Recurse\s+.*-Force\s+.*\.(github|agents)[\\/]' 'vendored sync.ps1 must not wholesale-delete shared Copilot overlay paths'
 Assert-NoLineMatches $syncSh 'rm\s+-rf\s+"\$REPO_ROOT/\.(github|agents)(/|")' 'vendored sync.sh must not wholesale-delete shared Copilot overlay paths'
 
+$preflightPath = Join-Path $repoRoot 'vendor/basecoat/scripts/validate-pr-intake-preflight.cjs'
+$evaluatorPath = Join-Path $repoRoot 'vendor/basecoat/.github/base-coat/scripts/pr-decomposition-evaluator.cjs'
+if ((Test-Path -LiteralPath $preflightPath) -or (Test-Path -LiteralPath $evaluatorPath)) {
+    throw 'ASSERTION FAILED: upstream-only PR control-plane entrypoint and evaluator must remain excluded together'
+}
+
 Write-Host 'Vendored BaseCoat sync overlay guard passed.'

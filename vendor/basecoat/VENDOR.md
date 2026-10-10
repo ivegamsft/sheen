@@ -35,6 +35,12 @@ Heavy, generated, or repo-specific content not needed for the asset library:
 `.github/` (basecoat's own CI), `tests/`, `mcp/`, `plugins/`, `sdks/`, `infra/`,
 `extensions/`.
 
+`scripts/validate-pr-intake-preflight.cjs` is also excluded: it is an upstream
+repository-specific PR control-plane entrypoint that requires an evaluator in
+the excluded `.github/` runtime. Sheen does not invoke it. Keep both outside this
+asset-library snapshot rather than shipping a broken entrypoint or importing
+the upstream control plane. Included upstream files remain byte-identical.
+
 ## Update policy
 
 - Treat this tree as **read-only**. Do not hand-edit vendored files; changes belong
