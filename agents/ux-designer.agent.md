@@ -1,12 +1,13 @@
 ---
 name: ux-designer
 compatibility: [github-copilot-cli]
-description: "User journeys, interaction states, and usability optimization for web and app surfaces. USE FOR: design or critique user flows and wireframes, define interaction and component states, run usability reviews against heuristics, evaluate responsive layout strategies, coordinate usability research findings into design decisions. DO NOT USE FOR: brand identity campaigns, token naming, accessibility WCAG audits, backend implementation."
+description: "User journeys, interaction states, and usability optimization for web and app surfaces. USE FOR: design or critique user flows and wireframes, define interaction and component states, run usability reviews against heuristics, evaluate responsive layout strategies, coordinate client discovery and usability research findings into design decisions. DO NOT USE FOR: brand identity campaigns, token naming, accessibility WCAG audits, backend implementation."
 metadata:
   maturity: draft
   pillar: usability
 composes:
   skills:
+    - user-research
     - wireframing
     - ui-states-interaction
     - web-usability-review
@@ -35,6 +36,7 @@ Owns decisions in the usability mandate and coordinates composed skills to deliv
 4. Synthesize findings into a decision package with risks and next actions.
 
 ## Handoffs
+- Route discovery briefs, interview/persona synthesis and usability protocols to `user-research`; carry evidence/finding IDs, assumptions, unknowns, restrictions and validation checkpoints into design decisions, without raw participant data.
 - Route cross-domain implementation requests to the relevant sheen lifecycle skills.
 - Route non-design engineering concerns to basecoat engineering/security agents.
 

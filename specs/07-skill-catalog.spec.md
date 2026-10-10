@@ -343,9 +343,10 @@ prioritized backlog. · Pairs: all mapping + audit skills; agent `design-reviewe
 scratch; top-level entry point.
 · Use for: greenfield design system, initial tokens/brand/IA scaffold · Not for:
 evolving an existing system (`design-update`)
-· Workflow: capture brand/values → generate core+semantic tokens → seed themes →
+· Workflow: apply discovery intake (spec 16) → capture brand/values →
+generate core+semantic tokens → seed themes →
 starter components/IA. · Output: initial `tokens/**` + starter specs. · Pairs:
-`design-tokens`, `theming`, `brand-identity`.
+`design-tokens`, `theming`, `brand-identity`, `user-research`.
 
 **`design-update`** *(lifecycle · beta)* — evolve/modernize an existing design
 system.
@@ -374,8 +375,10 @@ recommendation. · Output: decision record. · Pairs: `craft-quality`; agent
 concepts.
 · Use for: ideate concepts, divergent directions, moodboard-to-direction · Not
 for: evaluating options (`design-debate`)
-· Workflow: gather intent → diverge concepts → converge to directions. · Output:
-concept directions. · Pairs: `design-debate`, `brand-identity`.
+· Workflow: apply discovery intake (spec 16) → gather intent → diverge concepts →
+creative calibration → converge to directions. · Output: concept directions
+with finding IDs, hypotheses and validation gaps. · Pairs: `design-debate`,
+`brand-identity`, `user-research`.
 
 **`design-handoff`** *(lifecycle · stable)* — package design for engineering.
 · Use for: bundle tokens + component specs + redlines for devs · Not for: writing
@@ -433,10 +436,15 @@ set.
 
 **`user-research`** *(governance · beta)* — plan/synthesize research (personas,
 interviews, usability testing).
-· Use for: personas, interview guides, usability-test plans, synthesis · Not for:
-heuristic review (`web-usability-review`)
-· Workflow: define question → method → protocol → synthesize insights. · Output:
-research artifacts. · Pairs: `information-architecture`, `web-usability-review`.
+· Use for: client discovery briefs, personas, interview guides, usability-test
+plans, authorized evidence synthesis, assumptions/unknowns · Not for:
+heuristic review (`web-usability-review`), token schema or backend implementation.
+· Workflow: local discovery contract (spec 16) → question/scope/permission →
+method/protocol → evidence-linked synthesis → governance findings and decision
+log. · Output: portable brief, evidence/findings register, research artifacts
+and restricted handoff; no evidence means plan only.
+· Pairs: `information-architecture`, `web-usability-review`, `design-bootstrap`,
+`design-exploration`, `experience-blueprint`, `wireframing`; agent `ux-designer`.
 
 **`visual-regression`** *(governance · beta)* — design QA via snapshot/visual
 diffing.

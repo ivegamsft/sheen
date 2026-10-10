@@ -142,7 +142,7 @@ listed in the table beneath the chart — node labels are abbreviated to fit).
 |---|---|---|
 | 🎨 Tokens & System | @design-system-architect | 5 |
 | 🖼️ Brand | @brand-steward | 4 |
-| 📐 Usability | @ux-designer | 5 |
+| 📐 Usability | @ux-designer | 6 |
 | ♿ Accessibility | @accessibility-auditor | 3 |
 | 🗂️ Information Architecture | @information-architect | 4 |
 | 🧭 Experience | @experience-architect | 4 |

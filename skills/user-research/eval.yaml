@@ -3,17 +3,32 @@ description: "Routing evaluation — validates trigger activation for user-resea
 skill: "skills/user-research/SKILL.md"
 scenarios:
   - id: "pos-1"
-    input: "Need help with research planning for our product experience."
+    input: "Prepare research planning for our patient portal with recruitment constraints, neutral interview questions, consent gates and named follow-up owners."
     expect_activation: true
   - id: "pos-2"
-    input: "Create a plan for interview/persona synthesis in an upcoming release."
+    input: "Synthesize authorized interview notes into evidence-backed personas for our booking flow, linking source locators and distinguishing assumptions from observed barriers."
     expect_activation: true
   - id: "pos-3"
-    input: "Compare approaches for usability test protocol design and recommend one."
+    input: "Design a usability test protocol for invoice approval with starting conditions, task success criteria, observation methods and participant stop conditions."
     expect_activation: true
   - id: "neg-1"
-    input: "This request is only about heuristic-only reviews."
+    input: "Evaluate this checkout screen against usability heuristics only, without participant research or interview synthesis."
     expect_activation: false
   - id: "neg-2"
-    input: "Please focus exclusively on token schema authoring."
+    input: "Author a DTCG token schema for spacing and color aliases without preparing any research artifacts."
+    expect_activation: false
+  - id: "pos-client-discovery"
+    input: "Draft a portable client interview/discovery brief for a museum ticketing redesign, with scope, unknowns, permission gaps and a handoff to the greenfield design owner."
+    expect_activation: true
+  - id: "pos-evidence-conflict"
+    input: "Review our supplied research findings register for conflicting interview evidence, withdrawn consent and inaccessible sources; mark unsupported claims unresolved with validation checkpoints."
+    expect_activation: true
+  - id: "pos-no-evidence"
+    input: "Create a client discovery plan without interview evidence yet; record assumptions and unknowns rather than claiming a completed study."
+    expect_activation: true
+  - id: "neg-concepts-only"
+    input: "Generate divergent onboarding concept directions from the approved brief; do not prepare interviews or synthesize user research."
+    expect_activation: false
+  - id: "neg-backend"
+    input: "Implement invoice approval API handlers and database migrations with transaction retries."
     expect_activation: false

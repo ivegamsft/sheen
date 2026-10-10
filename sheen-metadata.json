@@ -563,17 +563,22 @@
         "category": "lifecycle",
         "pillar": "lifecycle",
         "maturity": "stable",
-        "description": "Greenfield design-system bootstrap entry point. USE FOR: starting a design system from scratch, seeding initial tokens and themes, defining first-pass IA/component foundations. DO NOT USE FOR: auditing an established system, isolated one-off component tweaks.",
-        "hash": "618786d7fbf567a28af2173011fac1925fedd05e86a4fcc1b55cb27546090b10",
+        "description": "Greenfield design-system bootstrap entry point. USE FOR: starting a design system from scratch, seeding initial tokens and themes, defining first-pass IA/component foundations, discovery brief to greenfield foundations. DO NOT USE FOR: auditing an established system, isolated one-off component tweaks, interview planning or research synthesis only.",
+        "hash": "39935149949830da97d0f505951cfe6e7883c73e05eb359144a4d644f5ae912c",
         "files": [
           {
             "path": "SKILL.md",
-            "hash": "618786d7fbf567a28af2173011fac1925fedd05e86a4fcc1b55cb27546090b10",
+            "hash": "39935149949830da97d0f505951cfe6e7883c73e05eb359144a4d644f5ae912c",
             "hash_mode": "text-lf"
           },
           {
             "path": "eval.yaml",
-            "hash": "f7c89ae3551b542480c09b3812e3ee546222b05bac951eab9a442d2ef8facf21",
+            "hash": "183ee9c69e2fdb866926d0e2c010481511e60595fb1218d3e66cdff4c5f1258a",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/discovery-intake.md",
+            "hash": "447e0ed0a91ab6717b073989ef240736231055124d2c970ca1ebee107a40122c",
             "hash_mode": "text-lf"
           }
         ]
@@ -634,22 +639,27 @@
         "category": "lifecycle",
         "pillar": "lifecycle",
         "maturity": "beta",
-        "description": "Use when generating new design directions, concepts, or exploring problem spaces before committing to a single path. USE FOR: concept generation, divergent direction exploration, idea synthesis. DO NOT USE FOR: final decision arbitration, wcag audit reporting.",
-        "hash": "a753fe363ca5f2028d5c5bb0890710205803116e1b35fe3a55655dc89b39d8f8",
+        "description": "Use when generating new design directions, concepts, or exploring problem spaces before committing to a single path. USE FOR: concept generation, divergent direction exploration, idea synthesis, discovery evidence to provisional concept directions. DO NOT USE FOR: final decision arbitration, wcag audit reporting, interview planning or research synthesis only.",
+        "hash": "2174cc2f39ff87401e9aa0df0a36a0dd6bc3ed42f11c5e691d28799fafb7fdf6",
         "files": [
           {
             "path": "SKILL.md",
-            "hash": "a753fe363ca5f2028d5c5bb0890710205803116e1b35fe3a55655dc89b39d8f8",
+            "hash": "2174cc2f39ff87401e9aa0df0a36a0dd6bc3ed42f11c5e691d28799fafb7fdf6",
             "hash_mode": "text-lf"
           },
           {
             "path": "eval.yaml",
-            "hash": "b70710d30209eeb29021b5f1254e9d48be205ade2c52b0d157cf28aff329099b",
+            "hash": "216929491bbfb4209176b743b949feaea779ecd84bae8e5cedc7252af94ba8fc",
             "hash_mode": "text-lf"
           },
           {
             "path": "references/creative-calibration.md",
             "hash": "b431adfd8c12fdd77bbada827e358fd45b05a6807abda7d10e91f39a25084e8d",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/discovery-intake.md",
+            "hash": "0dbacba63fb543283df288d9bc1655f8bfaaa74a40573d6646d2e2a92c0af1ce",
             "hash_mode": "text-lf"
           }
         ]
@@ -1638,17 +1648,32 @@
         "category": "governance",
         "pillar": "governance",
         "maturity": "beta",
-        "description": "Use when planning user research, synthesizing interview findings, or designing usability test protocols. USE FOR: research planning, interview/persona synthesis, usability test protocol design. DO NOT USE FOR: heuristic-only reviews, token schema authoring.",
-        "hash": "0c3338b59fb95ec81455df9b1e47775e7e601458fce5a7ac9f07778bced64087",
+        "description": "Use when preparing client discovery or planning and synthesizing authorized user research. USE FOR: client interview/discovery brief, research planning, evidence-backed interview/persona synthesis, usability test protocol design, assumptions and unknowns register. DO NOT USE FOR: heuristic-only reviews, token schema authoring, backend implementation.",
+        "hash": "f67b6dbd5c31fdf9ddc373452434f92b8b74c92ce508da98fc0c35aaafa9bcad",
         "files": [
           {
             "path": "SKILL.md",
-            "hash": "0c3338b59fb95ec81455df9b1e47775e7e601458fce5a7ac9f07778bced64087",
+            "hash": "f67b6dbd5c31fdf9ddc373452434f92b8b74c92ce508da98fc0c35aaafa9bcad",
             "hash_mode": "text-lf"
           },
           {
             "path": "eval.yaml",
-            "hash": "90921ec7349ddddf6cc7a4854c9c0918f13f80d9733f5219e596725c6683586b",
+            "hash": "c4af3b8617df1fada293237282590436d4636e445e170226e86f46a5b26f13d5",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/discovery-contract.md",
+            "hash": "98797cc15db683d599b2483532753412425842a6dc513ab3932a3baba1f278e6",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "templates/discovery-brief.md",
+            "hash": "591d3bf0b85f59d39e97a070413695deaa4235865bb57dc6f68b4ffb6f400df0",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "templates/evidence-findings.md",
+            "hash": "1a43dca2ead9223f2ac6d9bd86759915a5f285c77ddc3e0703b376e13ec2e655",
             "hash_mode": "text-lf"
           }
         ]
@@ -1816,8 +1841,8 @@
         "path": "agents/ux-designer.agent.md",
         "pillar": "usability",
         "maturity": "draft",
-        "description": "User journeys, interaction states, and usability optimization for web and app surfaces. USE FOR: design or critique user flows and wireframes, define interaction and component states, run usability reviews against heuristics, evaluate responsive layout strategies, coordinate usability research findings into design decisions. DO NOT USE FOR: brand identity campaigns, token naming, accessibility WCAG audits, backend implementation.",
-        "hash": "96ea7db6948055c47370e4e78a8e12738df2c4cf17e7bacfb5ad15c83bfb2b72"
+        "description": "User journeys, interaction states, and usability optimization for web and app surfaces. USE FOR: design or critique user flows and wireframes, define interaction and component states, run usability reviews against heuristics, evaluate responsive layout strategies, coordinate client discovery and usability research findings into design decisions. DO NOT USE FOR: brand identity campaigns, token naming, accessibility WCAG audits, backend implementation.",
+        "hash": "fed089c5e467b1f42bb9e81f0347170ba608d3d52b9c38ff1ca2aa75d9b86d2b"
       }
     ],
     "instructions": [

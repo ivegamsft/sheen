@@ -20,6 +20,15 @@ scenarios:
   - id: "pos-anti-template-check"
     input: "Compare our proposed onboarding concept against an unrelated fitness-app brief and revise any generic, interchangeable layout or copy choices it still shares."
     expect_activation: true
+  - id: "pos-evidence-directions"
+    input: "Explore divergent booking concepts from this authorized discovery brief, linking finding IDs and preserving unknowns, conflicting evidence and next validation checkpoints."
+    expect_activation: true
+  - id: "pos-hypothesis-directions"
+    input: "Generate provisional concept directions for an unresearched new product, label assumptions as hypotheses and record evidence gaps before design debate."
+    expect_activation: true
+  - id: "neg-research-only"
+    input: "Prepare a client interview/discovery brief and evidence register only, without generating concept directions."
+    expect_activation: false
   - id: "neg-final-arbitration"
     input: "Facilitate the final design debate and select the approved option with a decision log."
     expect_activation: false

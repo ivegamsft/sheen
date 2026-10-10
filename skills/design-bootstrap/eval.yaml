@@ -17,4 +17,12 @@ scenarios:
   - id: "neg-2"
     input: "Write a detailed spec for only one button component."
     expect_activation: false
-
+  - id: "pos-discovery-foundations"
+    input: "Bootstrap greenfield tokens, themes and IA from this client discovery brief, preserving evidence IDs and labeling unsupported foundation choices provisional."
+    expect_activation: true
+  - id: "neg-discovery-only"
+    input: "Prepare only a client interview guide and research permission plan; do not seed tokens, themes or design foundations."
+    expect_activation: false
+  - id: "neg-backend"
+    input: "Implement API request handlers and database indexes for ticket booking."
+    expect_activation: false
