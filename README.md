@@ -104,6 +104,18 @@ verified previous manifest-owned copies and blocks on modified/unverifiable file
 workflow is preserved without updates. To disable its schedule, delete it and
 keep opt-in off; later syncs will not recreate it.
 
+**Source access:** the public `ivegamsft/sheen` mirror needs no fetch token.
+<!-- sheen-internal-only:start -->
+`IBuySpy-Shared` consumers of the internal source inherit the centrally managed
+organization `SHEEN_FETCH_TOKEN` (basecoat-sheen **Contents: Read only**); bootstrap
+does not prompt for or provision a repository secret. Do not shadow it with a
+consumer credential. See [central ownership and rotation](docs/guides/upgrading-sheen.md#central-ownership-and-rotation-maintainers-only).
+<!-- sheen-internal-only:end -->
+Missing access and changes to Sheen-managed assets, docs, workflows, or bootstrap
+must be requested through [issues here](https://github.com/IBuySpy-Shared/basecoat-sheen/issues)
+and implemented in this source repository, not by editing managed consumer files.
+Consumer-owned `.sheen.yml` settings remain configurable.
+
 Source release publication opens a governed central-channel PR and records
 pinned provenance/hashes. Automation requires `SHEEN_ORG_AGENTS_TOKEN`, scoped
 to Contents and Pull requests read/write on the central repository only; it

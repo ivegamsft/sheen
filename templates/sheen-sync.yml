@@ -6,7 +6,8 @@ name: "Sheen - Sync Assets"
 #
 # This file was synced into your repo by basecoat-sheen.
 # Do not edit directly — changes will be overwritten on the next sync.
-# To customise, override inputs below.
+# Request managed workflow changes through issues in IBuySpy-Shared/basecoat-sheen.
+# Configure consumer-owned source/ref pins and allow-lists in .sheen.yml.
 
 on:
   # Run weekly on Monday morning
@@ -51,7 +52,11 @@ jobs:
       # Defaults to GITHUB_TOKEN if not provided. Set this secret if you need
       # to trigger further workflows on the resulting PR.
       update_token: ${{ secrets.SHEEN_UPDATE_TOKEN || '' }}
-      # fetch_token: read token for private/internal source repositories.
-      # Required when .sheen.yml source is IBuySpy-Shared/basecoat-sheen.
-      # Not required for the default public ivegamsft/sheen mirror.
+      # Public ivegamsft/sheen mirror: no fetch token required.
+      # sheen-internal-only:start
+      # fetch_token: centrally managed organization SHEEN_FETCH_TOKEN inherited
+      # by IBuySpy-Shared consumers; no per-repo setup or credential provisioning.
+      # Scope: IBuySpy-Shared/basecoat-sheen Contents: Read only.
+      # Missing access: file an issue in IBuySpy-Shared/basecoat-sheen.
       fetch_token: ${{ secrets.SHEEN_FETCH_TOKEN || '' }}
+      # sheen-internal-only:end

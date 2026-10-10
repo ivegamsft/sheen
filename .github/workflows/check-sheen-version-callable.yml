@@ -14,7 +14,15 @@ name: "Sheen - Consumer Sync"
 #         source_ref: main             # optional; .sheen.yml ref is used when omitted
 #       secrets:
 #         update_token: ${{ secrets.SHEEN_UPDATE_TOKEN }}
-#         fetch_token: ${{ secrets.SHEEN_FETCH_TOKEN }} # required for private/internal source repos
+# sheen-internal-only:start
+#         fetch_token: ${{ secrets.SHEEN_FETCH_TOKEN }} # inherited organization secret for internal source
+#
+# IBuySpy-Shared consumers inherit the centrally managed organization secret;
+# no per-repo setup or credential provisioning. Scope: basecoat-sheen Contents:
+# Read only. Public ivegamsft/sheen sources need no fetch token. Missing access
+# or managed workflow changes: file an issue in IBuySpy-Shared/basecoat-sheen.
+# sheen-internal-only:end
+# Public ivegamsft/sheen sources need no fetch token.
 #
 # This workflow is mirrored to the public ivegamsft/sheen repository during
 # production publish so public consumers can call the same pinned workflow
@@ -57,9 +65,13 @@ on:
           on the consumer repo. Defaults to the workflow GITHUB_TOKEN.
         required: false
       fetch_token:
+        # sheen-internal-only:start
+        # IBuySpy-Shared consumers pass the inherited organization
+        # SHEEN_FETCH_TOKEN; no per-repo setup.
+        # sheen-internal-only:end
         description: >-
-          Read token for private/internal source_repo values. Not required for
-          the default public ivegamsft/sheen mirror.
+          Read token for private/internal source_repo values.
+          Not required for the public ivegamsft/sheen mirror.
         required: false
 
 jobs:
@@ -102,25 +114,26 @@ jobs:
 
           NORMALIZED_SOURCE="$(printf '%s' "$SOURCE" | sed -E 's#^[Hh][Tt][Tt][Pp][Ss]://[Gg][Ii][Tt][Hh][Uu][Bb][.][Cc][Oo][Mm]/##; s#[.][Gg][Ii][Tt]$##')"
           NORMALIZED_SOURCE_LOWER="$(printf '%s' "$NORMALIZED_SOURCE" | tr '[:upper:]' '[:lower:]')"
+          # sheen-internal-only:start
           if [[ "$NORMALIZED_SOURCE_LOWER" == "ibuyspy-shared/basecoat-sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then
-            echo "::error title=Missing Sheen fetch token::source_repo resolves to IBuySpy-Shared/basecoat-sheen, which is private/internal to consumers. The consumer repo GITHUB_TOKEN cannot clone another repository. Configure a repository or organization secret named SHEEN_FETCH_TOKEN with read access to IBuySpy-Shared/basecoat-sheen, pass it as fetch_token, or change .sheen.yml source to the public mirror https://github.com/ivegamsft/sheen.git."
+            echo "::error title=Missing Sheen fetch token::source_repo resolves to IBuySpy-Shared/basecoat-sheen, which is private/internal to consumers. The consumer repo GITHUB_TOKEN cannot clone another repository. IBuySpy-Shared consumers inherit the centrally managed organization SHEEN_FETCH_TOKEN (basecoat-sheen Contents: Read only), passed as fetch_token by the managed workflow. Do not create a repository secret or provision your own credential. File an issue in https://github.com/IBuySpy-Shared/basecoat-sheen/issues for maintainers to resolve central availability or workflow wiring, or change .sheen.yml source to the public mirror https://github.com/ivegamsft/sheen.git (no fetch token)."
             exit 1
+          fi
+          # sheen-internal-only:end
+          if [[ "$SOURCE" =~ ^[Hh][Tt][Tt][Pp][Ss]://[Gg][Ii][Tt][Hh][Uu][Bb][.][Cc][Oo][Mm]/.* ]]; then
+            SOURCE="$NORMALIZED_SOURCE"
+            SOURCE_URL="https://github.com/${SOURCE}.git"
+          elif [[ "$SOURCE" == *://* ]]; then
+            SOURCE_URL="$SOURCE"
           else
-            if [[ "$SOURCE" =~ ^[Hh][Tt][Tt][Pp][Ss]://[Gg][Ii][Tt][Hh][Uu][Bb][.][Cc][Oo][Mm]/.* ]]; then
-              SOURCE="$NORMALIZED_SOURCE"
-              SOURCE_URL="https://github.com/${SOURCE}.git"
-            elif [[ "$SOURCE" == *://* ]]; then
-              SOURCE_URL="$SOURCE"
+            SOURCE="$NORMALIZED_SOURCE"
+            SOURCE_URL="https://github.com/${SOURCE}.git"
+          fi
+          if [[ "$NORMALIZED_SOURCE_LOWER" != "ivegamsft/sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then
+            if [[ "$SOURCE_URL" == https://github.com/* ]]; then
+              echo "::warning title=Missing Sheen fetch token::source_repo is '${SOURCE}' and no fetch_token was provided. Public GitHub sources may still work anonymously; private/internal GitHub sources require SHEEN_FETCH_TOKEN and should fail before git clone if they are known internal sources."
             else
-              SOURCE="$NORMALIZED_SOURCE"
-              SOURCE_URL="https://github.com/${SOURCE}.git"
-            fi
-            if [[ "$NORMALIZED_SOURCE_LOWER" != "ivegamsft/sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then
-              if [[ "$SOURCE_URL" == https://github.com/* ]]; then
-                echo "::warning title=Missing Sheen fetch token::source_repo is '${SOURCE}' and no fetch_token was provided. Public GitHub sources may still work anonymously; private/internal GitHub sources require SHEEN_FETCH_TOKEN and should fail before git clone if they are known internal sources."
-              else
-                echo "::warning title=Non-GitHub Sheen source authentication::source_repo is '${SOURCE_URL}' and no GitHub fetch_token will be injected. Configure this runner's Git credentials for that host, use a URL it can clone anonymously, or use ivegamsft/sheen."
-              fi
+              echo "::warning title=Non-GitHub Sheen source authentication::source_repo is '${SOURCE_URL}' and no GitHub fetch_token will be injected. Configure this runner's Git credentials for that host, use a URL it can clone anonymously, or use ivegamsft/sheen."
             fi
           fi
 

@@ -7,6 +7,13 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+### Changed
+
+- Align internal-source guidance with the centrally managed organization
+  `SHEEN_FETCH_TOKEN`: no consumer secret provisioning, read-only source scope,
+  maintainer ownership/rotation, and source-issue-only managed-content changes;
+  preserve the public mirror's no-token path (#306).
+
 ## [1.2.0] — 2026-10-10
 
 | Field | Value |

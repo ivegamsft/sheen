@@ -217,6 +217,13 @@ $bootstrapSh = Read-RepoText 'bootstrap.sh'
 $bootstrapPs1 = Read-RepoText 'bootstrap.ps1'
 Assert-Contains $bootstrapSh 'SOURCE="${SHEEN_SOURCE:-https://github.com/ivegamsft/sheen.git}"' 'bootstrap.sh must generate public mirror source by default'
 Assert-Contains $bootstrapPs1 '[string]$Source = ''https://github.com/ivegamsft/sheen.git''' 'bootstrap.ps1 must generate public mirror source by default'
+foreach ($bootstrap in @($bootstrapSh, $bootstrapPs1)) {
+    Assert-Contains $bootstrap 'centrally managed organization SHEEN_FETCH_TOKEN; no per-repo setup.' 'bootstrap must explain inherited organization access'
+    Assert-Contains $bootstrap 'Never provision a consumer secret.' 'bootstrap must not ask consumers to provision a secret'
+    Assert-NotContains $bootstrap 'gh secret set' 'bootstrap must not provision repository secrets'
+    Assert-NotContains $bootstrap 'Read-Host' 'bootstrap must not prompt for credentials'
+    Assert-NotContains $bootstrap 'read -' 'bootstrap must not prompt for credentials'
+}
 Assert-Contains (Read-RepoText '.sheen.yml.example') 'source: https://github.com/ivegamsft/sheen.git' '.sheen.yml.example must scaffold the public mirror source'
 Assert-Contains (Read-RepoText 'docs/getting-started/quick-start.md') 'source: https://github.com/ivegamsft/sheen.git' 'quick-start guide must scaffold the public mirror source'
 foreach ($example in Get-ChildItem -LiteralPath (Join-Path $repoRoot 'docs' 'examples') -Force -File -Filter '.sheen.yml*') {
@@ -231,8 +238,10 @@ Assert-Contains $template 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows
 Assert-Contains $template 'The release workflow fails if this ref does not resolve to' 'scheduled sync must document release-ref pin validation'
 Assert-NotContains $template 'source_repo: ivegamsft/sheen' 'scheduled sync template must not override .sheen.yml source'
 Assert-NotContains $template 'source_repo: IBuySpy-Shared/basecoat-sheen' 'scheduled sync template must not clone the private source by default'
-Assert-Contains $template 'Not required for the default public ivegamsft/sheen mirror.' 'template must document that fetch_token is optional for the default source'
-Assert-Contains $template 'Required when .sheen.yml source is IBuySpy-Shared/basecoat-sheen.' 'template must document internal source fetch-token requirement'
+Assert-Contains $template 'Public ivegamsft/sheen mirror: no fetch token required.' 'template must document that fetch_token is optional for the default source'
+Assert-Contains $template 'by IBuySpy-Shared consumers; no per-repo setup or credential provisioning.' 'template must document inherited organization fetch access'
+Assert-Contains $template 'Scope: IBuySpy-Shared/basecoat-sheen Contents: Read only.' 'template must limit fetch access to read-only source contents'
+Assert-Contains $template 'Missing access: file an issue in IBuySpy-Shared/basecoat-sheen.' 'template must direct access issues to source maintainers'
 
 Write-Host '[4/7] callable workflow preflights private source fetch credentials'
 $callable = Read-RepoText '.github/workflows/check-sheen-version-callable.yml'
@@ -245,7 +254,10 @@ Assert-Contains $callable 'sed -E ''s#^[Hh][Tt][Tt][Pp][Ss]://[Gg][Ii][Tt][Hh][U
 Assert-Contains $callable 'NORMALIZED_SOURCE_LOWER="$(printf ''%s'' "$NORMALIZED_SOURCE" | tr ''[:upper:]'' ''[:lower:]'')"' 'callable must compare GitHub owner/repo case-insensitively'
 Assert-Contains $callable 'if [[ "$NORMALIZED_SOURCE_LOWER" == "ibuyspy-shared/basecoat-sheen" && -z "${SHEEN_FETCH_TOKEN:-}" ]]; then' 'callable must detect private source without fetch token'
 Assert-Contains $callable 'The consumer repo GITHUB_TOKEN cannot clone another repository.' 'callable must explain why GITHUB_TOKEN cannot fetch the internal source'
-Assert-Contains $callable 'Configure a repository or organization secret named SHEEN_FETCH_TOKEN' 'callable must name the required fetch secret'
+Assert-Contains $callable 'inherit the centrally managed organization SHEEN_FETCH_TOKEN' 'callable must explain inherited fetch access'
+Assert-Contains $callable 'Do not create a repository secret or provision your own credential.' 'callable must prohibit consumer provisioning'
+Assert-Contains $callable 'File an issue in https://github.com/IBuySpy-Shared/basecoat-sheen/issues' 'callable must direct missing access to source maintainers'
+Assert-NotContains $callable 'Configure a repository or organization secret named SHEEN_FETCH_TOKEN' 'callable must not prescribe consumer secret setup'
 Assert-Contains $callable 'change .sheen.yml source to the public mirror https://github.com/ivegamsft/sheen.git' 'callable must offer the public mirror alternative'
 Assert-Contains $callable 'echo "source_url=$SOURCE_URL" >> "$GITHUB_OUTPUT"' 'callable must emit a clone-ready source URL'
 Assert-Contains $callable 'SHEEN_REPO: "${{ steps.config.outputs.source_url }}"' 'sync step must use the resolved clone URL directly'
@@ -253,25 +265,38 @@ Assert-Contains $callable 'if [[ -n "${SHEEN_FETCH_TOKEN}" && "$SHEEN_REPO" == h
 Assert-Contains $callable 'Missing Sheen fetch token' 'callable must warn when a non-default source has no fetch token'
 Assert-Contains $callable 'Non-GitHub Sheen source authentication' 'callable must give host-auth guidance for non-GitHub sources'
 
+$generator = Read-RepoText '.github/workflows/generate-design-md-callable.yml'
+Assert-Contains $generator 'FETCH_TOKEN: ${{ secrets.token || github.token }}' 'generator must preserve the existing credential path'
+Assert-Contains $generator 'Missing Sheen fetch token' 'generator must explain missing source access'
+Assert-Contains $generator 'https://github.com/IBuySpy-Shared/basecoat-sheen/issues for maintainers to' 'generator must route source-access changes to maintainers'
+Assert-Contains $generator 'resolve central access or workflow wiring. Do not create a repository secret' 'generator must not prescribe consumer secret setup'
+Assert-Contains $generator 'public ivegamsft/sheen mirror needs no fetch token.' 'generator must document no-token public source'
+Assert-NotContains $generator 'must supply `secrets.token` with read access' 'generator must not ask consumers to provision source credentials'
+
+$guide = Read-RepoText 'docs/guides/upgrading-sheen.md'
+Assert-Contains $guide 'Contents: Read only' 'guide must document read-only source scope'
+Assert-Contains $guide 'organization secret administrators own' 'guide must name role-based central ownership'
+Assert-Contains $guide 'revokes the previous credential' 'guide must document rotation completion'
+Assert-Contains $guide 'they do not edit' 'guide must prohibit managed-content edits in consumers'
+Assert-Contains $guide 'regardless of consumer organization.' 'guide must preserve public access for outside consumers'
+foreach ($guidance in @((Read-RepoText 'README.md'), (Read-RepoText '.sheen.yml.example'))) {
+    Assert-Contains $guidance 'centrally managed' 'entry guidance must describe central fetch ownership'
+    Assert-Contains $guidance 'Contents: Read only' 'entry guidance must describe least-privilege fetch scope'
+}
+
 Write-Host '[5/7] production publication rewrites the callable workflow host'
 $publish = Read-RepoText '.github/workflows/publish-to-production.yml'
 Assert-Contains $publish '''.github/workflows/check-sheen-version-callable.yml''' 'publish workflow must keep the consumer-facing callable workflow in the public mirror'
 Assert-NotContains $publish 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' 'publish workflow must not restore the internal callable host after public mirror sanitization'
 Assert-NotContains $publish 'grep -v ''^templates/sheen-sync.yml:.*uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@''' 'publish safety gate must not allow-list the generated template to keep internal owner references'
 Assert-Contains $publish '''scripts/test-sheen-sync-source.ps1''' 'publish workflow must strip source-only internal sync source tests from the public mirror'
-$publicTemplate = $template -replace 'IBuySpy-Shared/basecoat-sheen', 'ivegamsft/sheen'
-Assert-Contains $publicTemplate 'uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@' 'sanitized public template must call the public reusable workflow'
-$forbidden = @()
-$publicLines = $publicTemplate -split "`r?`n"
-for ($i = 0; $i -lt $publicLines.Count; $i++) {
-    if ($publicLines[$i] -match 'IBuySpy-Shared|ibuyspy-shared\.github\.io') {
-        $forbidden += "templates/sheen-sync.yml:$($i + 1):$($publicLines[$i])"
-    }
-}
-if ($forbidden.Count -gt 0) { throw "ASSERTION FAILED: sanitized public template leaves unexpected internal owner references: $($forbidden -join '; ')" }
+Assert-Before $publish 'python scripts/prepare-public-guidance.py --root .' '- name: Remove internal-only content before publish' 'publisher must strip internal guidance before removal and global rewrites'
+Assert-Contains $publish '''scripts/prepare-public-guidance.py''' 'publisher must remove its source-only preparation helper'
+& python (Join-Path $repoRoot 'scripts' 'test-public-guidance.py')
+if ($LASTEXITCODE -ne 0) { throw "public guidance regression failed with exit $LASTEXITCODE" }
 
 Write-Host '[6/7] marker-owned public-host workflows are migrated and recorded'
-$scratch = Join-Path ([System.IO.Path]::GetTempPath()) ("sheen-sync-source-" + [Guid]::NewGuid().ToString('N'))
+$scratch = Join-Path $repoRoot (".sheen-sync-source-" + [Guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Force -Path $scratch | Out-Null
 try {
     $oldWorkflow = $template.Replace(

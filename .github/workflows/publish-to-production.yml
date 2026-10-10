@@ -95,6 +95,9 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Prepare public guidance before identifier rewrites
+        run: python scripts/prepare-public-guidance.py --root .
+
       - name: Remove internal-only content before publish
         env:
           TAG: ${{ steps.resolve_tag.outputs.tag }}
@@ -150,6 +153,8 @@ jobs:
             'scripts/test-downstream-token-hygiene.ps1'
             'scripts/test-downstream-token-hygiene.py'
             'scripts/test-sheen-sync-source.ps1'
+            'scripts/prepare-public-guidance.py'
+            'scripts/test-public-guidance.py'
             'scripts/audit-evals.ps1'
             'vendor/**'
           )
