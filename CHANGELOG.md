@@ -7,24 +7,43 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [1.3.0] — 2026-10-10
+
+| Field | Value |
+|---|---|
+| Version | v1.3.0 |
+| Range | v1.2.0..v1.3.0 |
+| Wave | wave:19 |
+| Sprint | N/A |
+| Release date | 2026-10-10 |
+
 ### Added
 
 - Token-free pinned `sync-assets` action and two-phase public-release pin discovery;
   installed workflows use consumer-rendered source SHAs while preserving the
-  reusable callable clone path for custom sources (#304).
+  reusable callable clone path for custom sources (#304; #310).
 
 ### Changed
 
 - Align internal-source guidance with the centrally managed organization
   `SHEEN_FETCH_TOKEN`: no consumer secret provisioning, read-only source scope,
   maintainer ownership/rotation, and source-issue-only managed-content changes;
-  preserve the public mirror's no-token path (#306).
+  preserve the public mirror's no-token path (#306; #307).
 
 ### Fixed
 
 - Run the reusable callable sync engine from the exact resolved Sheen source
   checkout, never from a colliding consumer-root `sync.sh` or drifting public
-  `main` script (#309).
+  `main` script (#309; #310).
+
+### Upgrade notes
+
+- Managed workflows use the immutable v1.3.0 shared-action pins after the
+  governed pin update; private GitHub action consumers do not need
+  `SHEEN_FETCH_TOKEN`. Custom and non-Git sources can continue using the
+  reusable callable clone path.
+- Roll back by restoring the v1.2.0 workflow/source pins in a governed PR.
+  Published version tags are immutable.
 
 ## [1.2.0] — 2026-10-10
 
@@ -1001,7 +1020,8 @@ sheen was **pull-only** (manual `sync.ps1`). This release closes that gap.
 - The upstream `basecoat` framework remains vendored read-only under
   `vendor/basecoat/` and is not modified by sheen.
 
-[Unreleased]: https://github.com/IBuySpy-Shared/basecoat-sheen/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/IBuySpy-Shared/basecoat-sheen/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v1.3.0
 [1.2.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v1.2.0
 [0.4.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.4.0
 [0.3.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.3.0

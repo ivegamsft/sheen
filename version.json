@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "releaseDate": "2026-10-10",
-  "notes": "v1.2.0: evidence-backed discovery, validated wireframe handoff, portable guide browser/print evidence and BaseCoat v4.6.4."
+  "notes": "v1.3.0: token-free pinned shared-action sync, immutable release discovery and mixed BaseCoat/Sheen collision fix."
 }

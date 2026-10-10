@@ -55,7 +55,7 @@ jobs:
         id: discovery
         # The sync scripts replace both action refs with this checked-out
         # source's commit SHA when installing the managed workflow.
-        uses: IBuySpy-Shared/basecoat-sheen/.github/actions/discover-release@v1.2.0
+        uses: IBuySpy-Shared/basecoat-sheen/.github/actions/discover-release@v1.3.0
         with:
           desired_tag: ${{ inputs.source_ref || '' }}
 
@@ -108,9 +108,9 @@ jobs:
           token: ${{ secrets.SHEEN_UPDATE_TOKEN || github.token }}
 
       - name: Sync assets from immutable Sheen action
-        uses: IBuySpy-Shared/basecoat-sheen/.github/actions/sync-assets@v1.2.0
+        uses: IBuySpy-Shared/basecoat-sheen/.github/actions/sync-assets@v1.3.0
         with:
-          source_commit: v1.2.0
+          source_commit: v1.3.0
 
       - name: Check for changes
         id: changes

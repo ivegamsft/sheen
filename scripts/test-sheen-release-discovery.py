@@ -152,7 +152,7 @@ class TwoPhaseWorkflowTests(unittest.TestCase):
         template = (ROOT / "templates/sheen-sync.yml").read_text(encoding="utf-8")
         self.assertIn("Open release pin-bump PR", template)
         self.assertIn("Assets apply on a later workflow run", template)
-        self.assertIn("uses: IBuySpy-Shared/basecoat-sheen/.github/actions/sync-assets@v1.2.0", template)
+        self.assertIn("uses: IBuySpy-Shared/basecoat-sheen/.github/actions/sync-assets@v1.3.0", template)
         self.assertNotIn(
             "uses: IBuySpy-Shared/basecoat-sheen/.github/actions/sync-assets@${{",
             template,

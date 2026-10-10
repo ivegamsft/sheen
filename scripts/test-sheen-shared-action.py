@@ -53,9 +53,9 @@ class SharedActionTests(unittest.TestCase):
 
     def test_default_template_separates_release_discovery_from_asset_application(self):
         template = (ROOT / "templates/sheen-sync.yml").read_text(encoding="utf-8")
-        self.assertIn("uses: IBuySpy-Shared/basecoat-sheen/.github/actions/discover-release@v1.2.0", template)
-        self.assertIn("uses: IBuySpy-Shared/basecoat-sheen/.github/actions/sync-assets@v1.2.0", template)
-        self.assertIn("source_commit: v1.2.0", template)
+        self.assertIn("uses: IBuySpy-Shared/basecoat-sheen/.github/actions/discover-release@v1.3.0", template)
+        self.assertIn("uses: IBuySpy-Shared/basecoat-sheen/.github/actions/sync-assets@v1.3.0", template)
+        self.assertIn("source_commit: v1.3.0", template)
         self.assertIn("source_ref", template)
         self.assertIn("this run still uses the installed SHA", template)
         self.assertIn("Open release pin-bump PR", template)
