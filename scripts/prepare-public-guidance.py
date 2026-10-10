@@ -13,6 +13,7 @@ FILES = (
     "README.md",
     ".sheen.yml.example",
     "templates/sheen-sync.yml",
+    "docs/guides/shared-action-sync.md",
     "bootstrap.ps1",
     "bootstrap.sh",
     "docs/guides/upgrading-sheen.md",

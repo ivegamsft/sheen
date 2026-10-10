@@ -7,12 +7,24 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+### Added
+
+- Token-free pinned `sync-assets` action and two-phase public-release pin discovery;
+  installed workflows use consumer-rendered source SHAs while preserving the
+  reusable callable clone path for custom sources (#304).
+
 ### Changed
 
 - Align internal-source guidance with the centrally managed organization
   `SHEEN_FETCH_TOKEN`: no consumer secret provisioning, read-only source scope,
   maintainer ownership/rotation, and source-issue-only managed-content changes;
   preserve the public mirror's no-token path (#306).
+
+### Fixed
+
+- Run the reusable callable sync engine from the exact resolved Sheen source
+  checkout, never from a colliding consumer-root `sync.sh` or drifting public
+  `main` script (#309).
 
 ## [1.2.0] — 2026-10-10
 

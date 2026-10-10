@@ -146,29 +146,83 @@ jobs:
           TIMESTAMP="$(date +%Y%m%d%H%M)"
           echo "branch=${{ inputs.pr_branch_prefix }}-${SAFE_REF}-${TIMESTAMP}" >> "$GITHUB_OUTPUT"
 
-      - name: Download sheen sync script
-        shell: bash
-        run: |
-          set -euo pipefail
-          # Use existing sync.sh if present, otherwise download from public mirror
-          if [[ ! -f sync.sh ]]; then
-            curl -fsSL https://raw.githubusercontent.com/ivegamsft/sheen/main/sync.sh -o sync.sh
-            chmod +x sync.sh
-            echo "Downloaded sync.sh from ivegamsft/sheen"
-          else
-            echo "Using existing sync.sh"
-          fi
-
-      - name: Run sheen sync
+      - name: Stage sync engine from the resolved Sheen source revision
+        id: source
         shell: bash
         env:
           SHEEN_REPO: "${{ steps.config.outputs.source_url }}"
           SHEEN_REF: "${{ steps.config.outputs.ref }}"
           SHEEN_FETCH_TOKEN: "${{ secrets.fetch_token }}"
+        run: |
+          set -euo pipefail
+          SOURCE_PATH="$GITHUB_WORKSPACE/.git/sheen-callable-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          ASKPASS_PATH=""
+          if [[ -z "$SHEEN_REF" || "$SHEEN_REF" == -* ]]; then
+            echo "::error::Resolved Sheen source ref is empty or option-like"
+            exit 1
+          fi
+          cleanup() {
+            status=$?
+            trap - EXIT
+            if [[ -n "$ASKPASS_PATH" ]]; then
+              rm -f "$ASKPASS_PATH"
+            fi
+            if (( status != 0 )); then
+              rm -rf "$SOURCE_PATH"
+            fi
+            exit "$status"
+          }
+          trap cleanup EXIT
+          rm -rf "$SOURCE_PATH"
+
+          CLONE_URL="$SHEEN_REPO"
+          if [[ -n "$SHEEN_FETCH_TOKEN" && "$SHEEN_REPO" == https://github.com/* ]]; then
+            ASKPASS_PATH="$GITHUB_WORKSPACE/.git/sheen-askpass-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.sh"
+            cat > "$ASKPASS_PATH" <<'ASKPASS'
+          #!/usr/bin/env bash
+          case "$1" in
+            *Username*) printf '%s\n' 'x-access-token' ;;
+            *Password*) printf '%s\n' "${SHEEN_FETCH_TOKEN:?}" ;;
+            *) exit 1 ;;
+          esac
+          ASKPASS
+            chmod 700 "$ASKPASS_PATH"
+            export GIT_ASKPASS="$ASKPASS_PATH"
+          fi
+          export GIT_TERMINAL_PROMPT=0
+          git -c core.longpaths=true clone --no-checkout -- "$CLONE_URL" "$SOURCE_PATH"
+          git -C "$SOURCE_PATH" checkout --detach "$SHEEN_REF"
+          SOURCE_COMMIT="$(git -C "$SOURCE_PATH" rev-parse --verify 'HEAD^{commit}')"
+          if [[ ! "$SOURCE_COMMIT" =~ ^[0-9a-f]{40}$ ]] \
+            || ! git -C "$SOURCE_PATH" cat-file -e "${SOURCE_COMMIT}:sync.sh" \
+            || [[ ! -f "$SOURCE_PATH/sync.sh" || -L "$SOURCE_PATH/sync.sh" ]] \
+            || ! grep -Fqx '# sync.sh --- basecoat-sheen consumer sync (POSIX shell)' "$SOURCE_PATH/sync.sh"; then
+            echo "::error::Resolved source revision does not contain the Sheen-owned root sync.sh"
+            exit 1
+          fi
+          echo "source_path=$SOURCE_PATH" >> "$GITHUB_OUTPUT"
+          echo "source_commit=$SOURCE_COMMIT" >> "$GITHUB_OUTPUT"
+
+      - name: Run sheen sync
+        shell: bash
+        env:
+          SHEEN_REPO: "${{ steps.config.outputs.source_url }}"
+          SHEEN_REF: "${{ steps.source.outputs.source_commit }}"
+          SHEEN_SOURCE_PATH: "${{ steps.source.outputs.source_path }}"
+          SHEEN_SOURCE_COMMIT: "${{ steps.source.outputs.source_commit }}"
+          SHEEN_SYNC_TEMP_ROOT: "${{ github.workspace }}/.git/sheen-sync-staging"
+          SHEEN_FETCH_TOKEN: "${{ secrets.fetch_token }}"
           GIT_AUTHOR_NAME: "github-actions[bot]"
           GIT_AUTHOR_EMAIL: "github-actions[bot]@users.noreply.github.com"
         run: |
           set -euo pipefail
+          cleanup() {
+            status=$?
+            trap - EXIT
+            rm -rf "$SHEEN_SOURCE_PATH"
+            exit "$status"
+          }
+          trap cleanup EXIT
 
           # Inject GitHub token into GitHub clone URLs only. Non-GitHub mirrors
           # keep their resolved URL and must rely on their host's auth setup.
@@ -177,7 +231,9 @@ jobs:
           fi
 
           export SHEEN_REPO SHEEN_REF
-          bash sync.sh
+          # Never dispatch through the consumer root: another installer may
+          # own that file. The staged script and asset clone share one commit.
+          bash "$SHEEN_SOURCE_PATH/sync.sh"
 
       - name: Check for changes
         id: changes

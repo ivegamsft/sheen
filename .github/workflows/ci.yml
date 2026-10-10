@@ -138,6 +138,12 @@ jobs:
       - name: Validate - sheen sync source/token fallback (#248)
         run: pwsh -NonInteractive -File scripts/test-sheen-sync-source.ps1
 
+      - name: Validate - token-free shared action and two-phase release pins (#304)
+        run: |
+          python scripts/test-sheen-shared-action.py
+          python scripts/test-sheen-release-discovery.py
+          pwsh -NonInteractive -File scripts/test-sheen-action-sync.ps1
+
       - name: Validate - agent channels, migration and workflow opt-in (#283)
         run: |
           python scripts/test-publish-org-agents.py

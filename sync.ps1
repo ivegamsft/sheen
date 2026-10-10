@@ -293,6 +293,23 @@ $source = if ($env:SHEEN_REPO) { $env:SHEEN_REPO } else { Get-ConfigScalar -Key 
 if (-not $source) { $source = $DefaultSource }
 $ref = if ($env:SHEEN_REF) { $env:SHEEN_REF } else { Get-ConfigScalar -Key 'ref' }
 if (-not $ref) { $ref = $DefaultRef }
+$sourcePath = [string]$env:SHEEN_SOURCE_PATH
+$sourceCommit = [string]$env:SHEEN_SOURCE_COMMIT
+$hasSourcePath = -not [string]::IsNullOrWhiteSpace($sourcePath)
+$hasSourceCommit = -not [string]::IsNullOrWhiteSpace($sourceCommit)
+if ($hasSourcePath -ne $hasSourceCommit) {
+    throw 'SHEEN_SOURCE_PATH and SHEEN_SOURCE_COMMIT must be provided together'
+}
+if ($hasSourceCommit -and $sourceCommit -notmatch '^[0-9a-fA-F]{40}$') {
+    throw 'SHEEN_SOURCE_COMMIT must be a full 40-character commit SHA'
+}
+if ($hasSourcePath) {
+    if (-not (Test-Path -LiteralPath $sourcePath -PathType Container)) {
+        throw "Local source payload directory does not exist: $sourcePath"
+    }
+    $sourcePath = (Resolve-Path -LiteralPath $sourcePath).Path
+}
+$localSource = $hasSourcePath
 $agentDistribution = Get-ConfigScalar -Key 'agent_distribution'
 if (-not $agentDistribution) { $agentDistribution = 'organization' }
 if ($agentDistribution -cnotin @('organization', 'repository')) {
@@ -346,22 +363,45 @@ $manifest = [ordered]@{
     agent_distribution = $agentDistribution
     files   = New-Object System.Collections.Generic.List[string]
 }
+$sourceGit = $work
 
 try {
-    git -c core.longpaths=true clone --quiet --depth 1 --branch $ref $source $work 2>$null
-    if ($LASTEXITCODE -ne 0) {
-        if (Test-Path -LiteralPath $work) { Remove-Item -LiteralPath $work -Recurse -Force }
-        git -c core.longpaths=true clone --quiet $source $work
-        if ($LASTEXITCODE -ne 0) { throw "clone failed: $displaySource. Confirm the source/ref and set SHEEN_SYNC_TEMP_ROOT to a writable short path if checkout paths are too long." }
-        git -C $work checkout --quiet $ref
-        if ($LASTEXITCODE -ne 0) { throw "checkout failed for ref '$ref' from $displaySource in '$work'." }
+    if ($localSource) {
+        Get-ChildItem -LiteralPath $sourcePath -Force | ForEach-Object {
+            Copy-Item -LiteralPath $_.FullName -Destination $work -Recurse -Force
+        }
+        foreach ($required in @('sync.sh', 'sync.ps1', 'templates/sheen-sync.yml')) {
+            if (-not (Test-Path -LiteralPath (Join-Path $work $required) -PathType Leaf)) {
+                throw "Local source payload is missing required file '$required'"
+            }
+        }
+        $payloadDirectories = @('.github/skills', '.github/agents', '.github/instructions', '.github/prompts', 'templates', 'tokens')
+        if (-not (@($payloadDirectories | Where-Object { Test-Path -LiteralPath (Join-Path $work $_) -PathType Container }).Count -gt 0)) {
+            throw 'Local source payload contains no supported asset directory'
+        }
+        $sourcePrefix = git -C $sourcePath rev-parse --show-prefix 2>$null
+        if ($LASTEXITCODE -eq 0 -and [string]::IsNullOrEmpty($sourcePrefix)) {
+            $sourceGit = $sourcePath
+        }
+        $manifest.commit = $sourceCommit.ToLowerInvariant()
+        Write-Host "sheen sync: using staged local payload at immutable source commit $($manifest.commit)"
     }
-    if (-not (Test-Path -LiteralPath (Join-Path $work '.git'))) {
-        throw "clone did not create a complete Git checkout at '$work'. Set SHEEN_SYNC_TEMP_ROOT to a writable short path and retry."
-    }
-    $manifest.commit = (git -C $work rev-parse HEAD).Trim()
-    if ($LASTEXITCODE -ne 0 -or $manifest.commit -notmatch '^[0-9a-fA-F]{40}$') {
-        throw "could not resolve a complete source commit from '$work'. Set SHEEN_SYNC_TEMP_ROOT to a writable short path and retry."
+    else {
+        git -c core.longpaths=true clone --quiet --depth 1 --branch $ref $source $work 2>$null
+        if ($LASTEXITCODE -ne 0) {
+            if (Test-Path -LiteralPath $work) { Remove-Item -LiteralPath $work -Recurse -Force }
+            git -c core.longpaths=true clone --quiet $source $work
+            if ($LASTEXITCODE -ne 0) { throw "clone failed: $displaySource. Confirm the source/ref and set SHEEN_SYNC_TEMP_ROOT to a writable short path if checkout paths are too long." }
+            git -C $work checkout --quiet $ref
+            if ($LASTEXITCODE -ne 0) { throw "checkout failed for ref '$ref' from $displaySource in '$work'." }
+        }
+        if (-not (Test-Path -LiteralPath (Join-Path $work '.git'))) {
+            throw "clone did not create a complete Git checkout at '$work'. Set SHEEN_SYNC_TEMP_ROOT to a writable short path and retry."
+        }
+        $manifest.commit = (git -C $work rev-parse HEAD).Trim()
+        if ($LASTEXITCODE -ne 0 -or $manifest.commit -notmatch '^[0-9a-fA-F]{40}$') {
+            throw "could not resolve a complete source commit from '$work'. Set SHEEN_SYNC_TEMP_ROOT to a writable short path and retry."
+        }
     }
 
     if ($agentDistribution -eq 'organization') {
@@ -373,6 +413,9 @@ try {
             }
             $path = Join-Path $repoRoot $relative
             if (-not (Test-Path -LiteralPath $path)) { continue }
+            if ($localSource -and $sourceGit -eq $work) {
+                throw "Cannot verify legacy agent ownership for $relative from an action archive without Git history; use the documented callable clone path for this one-time migration"
+            }
             $item = Get-Item -LiteralPath $path -Force
             if ($item.PSIsContainer) { throw "Non-regular legacy managed agent: $relative" }
             $parent = Get-Item -LiteralPath $item.DirectoryName -Force
@@ -384,17 +427,17 @@ try {
                 throw "Cannot verify legacy agent ownership for $relative; restore the previous source before migrating"
             }
             $previousCommit = [string]$previousManifestData.commit
-            git -C $work cat-file -e "$previousCommit^{commit}" 2>$null
+            git -C $sourceGit cat-file -e "$previousCommit^{commit}" 2>$null
             if ($LASTEXITCODE -ne 0) {
-                git -C $work fetch --quiet origin $previousCommit
-                if ($LASTEXITCODE -ne 0) { throw "Cannot fetch previous source commit to verify $relative" }
+                git -C $sourceGit fetch --quiet origin $previousCommit
+                if ($LASTEXITCODE -ne 0) { throw "Cannot fetch previous source commit $previousCommit to verify $relative from '$sourceGit'" }
             }
             $expected = $null
             foreach ($directory in $SourceMap.agents) {
                 $blob = "${previousCommit}:$directory/$($item.Name)"
-                git -C $work cat-file -e $blob 2>$null
+                git -C $sourceGit cat-file -e $blob 2>$null
                 if ($LASTEXITCODE -eq 0) {
-                    $expected = @(git -C $work show $blob) -join "`n"
+                    $expected = @(git -C $sourceGit show $blob) -join "`n"
                     if ($LASTEXITCODE -ne 0) { throw "Cannot read previous source agent: $relative" }
                     break
                 }
@@ -514,6 +557,8 @@ try {
         $normalizedWorkflow = Get-Content -LiteralPath $upstreamTemplate -Raw
         $normalizedWorkflow = $normalizedWorkflow -replace 'uses:\s+ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@', 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@'
         $normalizedWorkflow = [regex]::Replace($normalizedWorkflow, '(?m)(uses:\s+IBuySpy-Shared/basecoat-sheen/\.github/workflows/check-sheen-version-callable\.yml@)[^\s]+', ('${1}' + [string]$manifest.commit))
+        $normalizedWorkflow = [regex]::Replace($normalizedWorkflow, '(?m)(uses:\s+(?:IBuySpy-Shared/basecoat-sheen|ivegamsft/sheen)/\.github/actions/(?:sync-assets|discover-release)@)[^\s#]+', ('${1}' + [string]$manifest.commit))
+        $normalizedWorkflow = [regex]::Replace($normalizedWorkflow, '(?m)^([ \t]*source_commit:[ \t]*)[^\s#]+', ('${1}' + [string]$manifest.commit))
         $normalizedWorkflow = $normalizedWorkflow -replace 'Pinned to the released tag', 'Pinned to the immutable source commit'
         $normalizedWorkflow = [regex]::Replace($normalizedWorkflow, '(?m)^[ \t]*source_repo:[ \t]*ivegamsft/sheen[ \t]*\r?\n', '')
         if (-not (Test-Path -LiteralPath $sheenSyncWorkflow)) {

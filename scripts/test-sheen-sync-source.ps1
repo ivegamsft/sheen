@@ -55,15 +55,17 @@ function New-SyncConsumerFixture([string]$Root, [string]$OldWorkflow) {
 
 function Assert-MigratedConsumer([string]$Consumer) {
     $workflow = Get-Content -LiteralPath (Join-Path $Consumer '.github' 'workflows' 'sheen-sync.yml') -Raw
-    Assert-Contains $workflow 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' 'managed workflow migration must restore the internal callable host'
-    $workflowPin = [regex]::Match($workflow, '(?m)^\s+uses:\s+IBuySpy-Shared/basecoat-sheen/\.github/workflows/check-sheen-version-callable\.yml@(?<sha>[0-9a-f]{40})\s*$')
-    if (-not $workflowPin.Success) { throw 'ASSERTION FAILED: generated workflow must pin the callable to an immutable 40-character commit SHA' }
-    Assert-NotContains $workflow 'uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@' 'managed workflow migration must remove the public callable host'
+    Assert-Contains $workflow 'uses: IBuySpy-Shared/basecoat-sheen/.github/actions/sync-assets@' 'managed workflow migration must install the internal shared action'
+    Assert-Contains $workflow 'uses: IBuySpy-Shared/basecoat-sheen/.github/actions/discover-release@' 'managed workflow migration must install pinned release discovery'
+    $workflowPin = [regex]::Match($workflow, '(?m)^\s+uses:\s+IBuySpy-Shared/basecoat-sheen/\.github/actions/sync-assets@(?<sha>[0-9a-f]{40})\s*$')
+    if (-not $workflowPin.Success) { throw 'ASSERTION FAILED: generated workflow must pin the shared action to an immutable 40-character commit SHA' }
+    Assert-NotContains $workflow 'uses: ivegamsft/sheen/.github/actions/sync-assets@' 'managed workflow migration must preserve the configured public action owner'
     Assert-NotContains $workflow 'source_repo: ivegamsft/sheen' 'managed workflow migration must leave asset source precedence to .sheen.yml'
     $manifest = Get-Content -LiteralPath (Join-Path $Consumer '.sheen' 'manifest.json') -Raw | ConvertFrom-Json
     if ($workflowPin.Groups['sha'].Value -ne $manifest.commit) {
-        throw "ASSERTION FAILED: generated workflow commit pin must match source metadata; workflow='$($workflowPin.Groups['sha'].Value)' manifest='$($manifest.commit)'"
+        throw "ASSERTION FAILED: generated action commit pin must match source metadata; workflow='$($workflowPin.Groups['sha'].Value)' manifest='$($manifest.commit)'"
     }
+    Assert-Contains $workflow "source_commit: $($manifest.commit)" 'generated action input must use the same immutable source commit'
     if (@($manifest.files) -notcontains '.github/workflows/sheen-sync.yml') {
         throw 'ASSERTION FAILED: migrated managed workflow must be recorded in .sheen/manifest.json'
     }
@@ -208,7 +210,17 @@ Assert-Contains $syncPs1 'Join-Path $env:SystemDrive ''_sheen-sync''' 'sync.ps1 
 Assert-Contains $syncPs1 'core.longpaths=true' 'sync.ps1 must enable Git long-path checkout for its clone'
 Assert-Contains $syncPs1 'clone did not create a complete Git checkout' 'sync.ps1 must report an actionable incomplete-clone error'
 Assert-Contains $syncSh 'core.longpaths=true' 'sync.sh must enable Git long-path checkout for its clone'
-Assert-Contains $syncSh '__SHEEN_COMMIT_SHA__' 'sync.sh must substitute the resolved source commit into generated callable pins'
+Assert-Contains $syncSh '__SHEEN_COMMIT_SHA__' 'sync.sh must substitute the resolved source commit into generated workflow pins'
+Assert-Contains $syncSh 'SHEEN_SOURCE_PATH and SHEEN_SOURCE_COMMIT must be provided together' 'sync.sh must validate paired action archive inputs'
+Assert-Contains $syncSh 'SHEEN_SOURCE_COMMIT must be a full 40-character commit SHA' 'sync.sh must validate the action source hash'
+Assert-Contains $syncSh 'using staged local payload at immutable source commit' 'sync.sh must use the local pinned payload without cloning'
+Assert-Contains $syncSh 'Cannot verify legacy agent ownership for $rel from an action archive without Git history' 'sync.sh must retain legacy agent provenance checks'
+Assert-Contains $syncSh 'source_commit:[[:space:]]*' 'sync.sh must render the action input commit from the same source SHA'
+Assert-Contains $syncPs1 'SHEEN_SOURCE_PATH and SHEEN_SOURCE_COMMIT must be provided together' 'sync.ps1 must validate paired action archive inputs'
+Assert-Contains $syncPs1 'SHEEN_SOURCE_COMMIT must be a full 40-character commit SHA' 'sync.ps1 must validate the action source hash'
+Assert-Contains $syncPs1 'using staged local payload at immutable source commit' 'sync.ps1 must use the local pinned payload without cloning'
+Assert-Contains $syncPs1 'Cannot verify legacy agent ownership for $relative from an action archive without Git history' 'sync.ps1 must retain legacy agent provenance checks'
+Assert-Contains $syncPs1 'source_commit:[ \t]*' 'sync.ps1 must render the action input commit from the same source SHA'
 Assert-Before $syncSh 'SHEEN_SYNC_WF="$REPO_ROOT/.github/workflows/sheen-sync.yml"' 'cat > "$CANDIDATE_MANIFEST"' 'sync.sh must record managed workflow before manifest serialization'
 Assert-Before $syncPs1 '$sheenSyncWorkflow = Join-Path $repoRoot ''.github'' ''workflows'' ''sheen-sync.yml''' '($manifest | ConvertTo-Json -Depth 8)' 'sync.ps1 must record managed workflow before manifest serialization'
 
@@ -232,18 +244,28 @@ foreach ($example in Get-ChildItem -LiteralPath (Join-Path $repoRoot 'docs' 'exa
     Assert-NotContains $exampleText 'ref: v0.5.0' "copyable example $($example.Name) must not pin a nonexistent public mirror tag"
 }
 
-Write-Host '[3/7] scheduled sync template uses internal callable and .sheen.yml source precedence'
+Write-Host '[3/7] scheduled sync template pins the token-free shared action'
 $template = Read-RepoText 'templates/sheen-sync.yml'
-Assert-Contains $template 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' 'scheduled sync must keep using the internal callable workflow host'
-Assert-Contains $template 'The release workflow fails if this ref does not resolve to' 'scheduled sync must document release-ref pin validation'
-Assert-NotContains $template 'source_repo: ivegamsft/sheen' 'scheduled sync template must not override .sheen.yml source'
-Assert-NotContains $template 'source_repo: IBuySpy-Shared/basecoat-sheen' 'scheduled sync template must not clone the private source by default'
-Assert-Contains $template 'Public ivegamsft/sheen mirror: no fetch token required.' 'template must document that fetch_token is optional for the default source'
-Assert-Contains $template 'by IBuySpy-Shared consumers; no per-repo setup or credential provisioning.' 'template must document inherited organization fetch access'
-Assert-Contains $template 'Scope: IBuySpy-Shared/basecoat-sheen Contents: Read only.' 'template must limit fetch access to read-only source contents'
-Assert-Contains $template 'Missing access: file an issue in IBuySpy-Shared/basecoat-sheen.' 'template must direct access issues to source maintainers'
+Assert-Contains $template 'uses: IBuySpy-Shared/basecoat-sheen/.github/actions/sync-assets@' 'scheduled sync must run the internal shared action by default'
+Assert-Contains $template 'uses: IBuySpy-Shared/basecoat-sheen/.github/actions/discover-release@' 'scheduled sync must pin release discovery to the current source'
+Assert-Contains $template 'source_commit: v1.2.0' 'released template must use a non-circular source commit placeholder'
+Assert-Contains $template 'desired_tag: ${{ inputs.source_ref || '''' }}' 'manual ref must be a release-discovery request only'
+Assert-Contains $template 'Assets apply on a later workflow run' 'discovery must not apply its selected release in the same run'
+Assert-Contains $template 'secrets.SHEEN_UPDATE_TOKEN || github.token' 'workflow must preserve the update-token fallback'
+Assert-Contains $template 'SHEEN_FETCH_TOKEN' 'internal compatibility guidance must explain centrally managed fetch access'
+Assert-Contains $template 'centrally managed organization' 'internal compatibility guidance must not request consumer credentials'
+Assert-NotContains $template 'fetch_token:' 'default shared action workflow must not pass a fetch token'
+$pinJobStart = $template.IndexOf('  discover-release:')
+$assetJobStart = $template.IndexOf('  sync-assets:')
+if ($pinJobStart -lt 0 -or $assetJobStart -le $pinJobStart) { throw 'ASSERTION FAILED: expected separate release-pin and asset-sync jobs' }
+$pinJob = $template.Substring($pinJobStart, $assetJobStart - $pinJobStart)
+Assert-NotContains $pinJob 'AUTO_MERGE' 'asset-sync auto_merge consent must not merge executable action pin changes'
+$assetJob = $template.Substring($assetJobStart)
+Assert-Contains $assetJob 'title == "chore(sheen): sync pinned assets"' 'asset sync must recognize existing managed open PRs'
+Assert-Contains $assetJob 'if [[ -n "$open_pr" ]]' 'asset sync must stop before duplicating an open PR'
+Assert-Before $assetJob 'if [[ -n "$open_pr" ]]' 'branch="chore/sheen-assets-' 'asset PR deduplication must precede branch creation'
 
-Write-Host '[4/7] callable workflow preflights private source fetch credentials'
+Write-Host '[4/7] callable workflow preflights private access and isolates Sheen from a root sync.sh collision'
 $callable = Read-RepoText '.github/workflows/check-sheen-version-callable.yml'
 Assert-Contains $callable 'default: ""' 'callable source/ref inputs must be empty so .sheen.yml can fill them'
 Assert-Contains $callable 'SOURCE="${SOURCE:-ivegamsft/sheen}"' 'callable source_repo default must be public after .sheen.yml is evaluated'
@@ -261,6 +283,14 @@ Assert-NotContains $callable 'Configure a repository or organization secret name
 Assert-Contains $callable 'change .sheen.yml source to the public mirror https://github.com/ivegamsft/sheen.git' 'callable must offer the public mirror alternative'
 Assert-Contains $callable 'echo "source_url=$SOURCE_URL" >> "$GITHUB_OUTPUT"' 'callable must emit a clone-ready source URL'
 Assert-Contains $callable 'SHEEN_REPO: "${{ steps.config.outputs.source_url }}"' 'sync step must use the resolved clone URL directly'
+Assert-Contains $callable 'git -c core.longpaths=true clone --no-checkout -- "$CLONE_URL" "$SOURCE_PATH"' 'callable must stage source before invoking the sync engine'
+Assert-Contains $callable 'git -C "$SOURCE_PATH" checkout --detach "$SHEEN_REF"' 'callable must check out the exact resolved Sheen source ref'
+Assert-Contains $callable 'source_commit=$SOURCE_COMMIT' 'callable must expose the resolved immutable source commit'
+Assert-Contains $callable 'SHEEN_REF: "${{ steps.source.outputs.source_commit }}"' 'callable asset sync must use the staged script commit'
+Assert-Contains $callable 'SHEEN_SOURCE_COMMIT: "${{ steps.source.outputs.source_commit }}"' 'callable must pass the staged commit with its local source path'
+Assert-Contains $callable 'bash "$SHEEN_SOURCE_PATH/sync.sh"' 'callable must invoke sync.sh from the staged Sheen source path'
+Assert-NotContains $callable 'bash sync.sh' 'callable must never dispatch through the consumer-owned BaseCoat root sync.sh'
+Assert-NotContains $callable 'raw.githubusercontent.com/ivegamsft/sheen/main/sync.sh' 'callable must not drift to the public main sync.sh'
 Assert-Contains $callable 'if [[ -n "${SHEEN_FETCH_TOKEN}" && "$SHEEN_REPO" == https://github.com/* ]]; then' 'sync step must only inject tokens into GitHub clone URLs'
 Assert-Contains $callable 'Missing Sheen fetch token' 'callable must warn when a non-default source has no fetch token'
 Assert-Contains $callable 'Non-GitHub Sheen source authentication' 'callable must give host-auth guidance for non-GitHub sources'
@@ -284,12 +314,16 @@ foreach ($guidance in @((Read-RepoText 'README.md'), (Read-RepoText '.sheen.yml.
     Assert-Contains $guidance 'Contents: Read only' 'entry guidance must describe least-privilege fetch scope'
 }
 
-Write-Host '[5/7] production publication rewrites the callable workflow host'
+Write-Host '[5/7] production publication preserves and rewrites the shared action'
 $publish = Read-RepoText '.github/workflows/publish-to-production.yml'
 Assert-Contains $publish '''.github/workflows/check-sheen-version-callable.yml''' 'publish workflow must keep the consumer-facing callable workflow in the public mirror'
 Assert-NotContains $publish 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@' 'publish workflow must not restore the internal callable host after public mirror sanitization'
 Assert-NotContains $publish 'grep -v ''^templates/sheen-sync.yml:.*uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@''' 'publish safety gate must not allow-list the generated template to keep internal owner references'
 Assert-Contains $publish '''scripts/test-sheen-sync-source.ps1''' 'publish workflow must strip source-only internal sync source tests from the public mirror'
+Assert-Contains $publish '''.github/actions/sync-assets/action.yml''' 'publish workflow must preserve the public sync action'
+Assert-Contains $publish '''.github/actions/discover-release/action.yml''' 'publish workflow must preserve the public discovery action'
+Assert-Contains $publish '''scripts/discover-sheen-release.py''' 'publish workflow must preserve the action runtime resolver'
+Assert-Contains $publish 'release-provenance.json' 'publish workflow must provide source commit provenance for internal action pins'
 Assert-Before $publish 'python scripts/prepare-public-guidance.py --root .' '- name: Remove internal-only content before publish' 'publisher must strip internal guidance before removal and global rewrites'
 Assert-Contains $publish '''scripts/prepare-public-guidance.py''' 'publisher must remove its source-only preparation helper'
 & python (Join-Path $repoRoot 'scripts' 'test-public-guidance.py')
@@ -299,12 +333,20 @@ Write-Host '[6/7] marker-owned public-host workflows are migrated and recorded'
 $scratch = Join-Path $repoRoot (".sheen-sync-source-" + [Guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Force -Path $scratch | Out-Null
 try {
-    $oldWorkflow = $template.Replace(
-        'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@',
-        'uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@'
-    )
-    $oldWorkflow = $oldWorkflow -replace 'with:\r?\n', "with:`n      source_repo: ivegamsft/sheen`n"
-    $source = New-SyncSourceFixture -Root $scratch -Template $oldWorkflow
+    $oldWorkflow = @'
+# This file was synced into your repo by basecoat-sheen.
+# Do not edit directly — changes will be overwritten on the next sync.
+name: Sheen - Sync Assets
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+jobs:
+  sync:
+    uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@v0.13.2
+    with:
+      source_repo: ivegamsft/sheen
+'@
+    $source = New-SyncSourceFixture -Root $scratch -Template $template
     Invoke-CheckedGit -C $source tag v0.13.2
 
     $consumerPs = New-SyncConsumerFixture -Root (Join-Path $scratch 'ps') -OldWorkflow $oldWorkflow

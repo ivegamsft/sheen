@@ -62,9 +62,46 @@ Rules:
   the next manifest. Unrelated/custom agents MUST survive.
 - `install_sync_workflow` MUST default to false and accept only true/false.
   When true, install/update the marker-owned workflow with the resolved source
-  SHA. Otherwise never install/recreate/update it. Preserve existing managed
-  workflow bytes and ownership entries, and warn that deleting it is required
-  to stop its schedule; after deletion, the next manifest drops that entry.
+  SHA. The default workflow MUST use the `sync-assets` composite action; sync
+  scripts MUST render its action ref and `source_commit` input to the same
+  40-character SHA. Preserve the selected action owner in public templates;
+  publishing sanitizes internal owners to `ivegamsft/sheen`. Otherwise never
+  install/recreate/update it. Preserve existing managed workflow bytes and
+  ownership entries, and warn that deleting it is required to stop its
+  schedule; after deletion, the next manifest drops that entry.
+- The released template MAY use its release tag as a non-circular placeholder.
+  An installed workflow MUST pin both `sync-assets` and `discover-release` to
+  the resolved immutable source commit; a release MUST NOT require a workflow
+  to contain the commit SHA of the commit that contains that workflow.
+- Release discovery MUST resolve only a published stable `vX.Y.Z` tag from the
+  public release API. An optional dispatch tag is a discovery request, not a
+  runtime action ref. Discovery may open a pin-only PR but MUST NOT apply the
+  newly selected assets in that same run. A later run using the merged SHA
+  applies the release. The public workflow MUST resolve public action SHAs from
+  public Git refs; private-source action SHAs MUST come from published
+  provenance, because the source and sanitized mirror commits differ.
+- The token-free composite action MUST use the packaged local payload and
+  MUST NOT clone the source repo. It MUST pass paired `SHEEN_SOURCE_PATH` and
+  `SHEEN_SOURCE_COMMIT` values to the existing PowerShell/Bash sync engine,
+  validate the full commit SHA and required payload, and stage a private copy
+  in a unique directory without mutating the action cache. Existing allow-list,
+  manifest ownership, idempotency, build, workflow opt-in, and rollback
+  semantics remain shared with the scripts. If an organization-mode legacy
+  agent requires Git history to verify ownership, local-archive sync MUST fail
+  visibly and direct the consumer to the documented clone compatibility path;
+  it MUST NOT weaken verification.
+- The existing reusable `check-sheen-version-callable.yml` workflow remains a
+ documented compatibility path for custom sources, including non-GitHub Git
+ remotes. Its private-source clone path continues to use the centrally managed
+ `SHEEN_FETCH_TOKEN` for internal sources; the default shared-action path does
+ not need that credential. The callable MUST stage its selected
+ source at the resolved ref, invoke that checkout's root `sync.sh` by absolute
+ path, and use the checkout's resolved commit for the asset sync. It MUST NOT
+ execute a consumer-root `sync.sh` or download a drifting `main` script.
+ Consumer PRs created with `GITHUB_TOKEN` may not trigger downstream
+ workflows; document manual dispatch or an organization-managed
+ `SHEEN_UPDATE_TOKEN` when downstream triggering is required. The
+ `GITHUB_TOKEN` fallback remains supported.
 - Release automation MUST fail visibly without `SHEEN_ORG_AGENTS_TOKEN`, scoped
   to Contents and Pull requests read/write on the central repository. Source
   release reads use the source workflow token. No direct-main push or protection

@@ -134,6 +134,26 @@ is_excluded() {
 
 SOURCE="${SHEEN_REPO:-$(yml_value source)}"; [ -n "$SOURCE" ] || SOURCE="$DEFAULT_SOURCE"
 REF="${SHEEN_REF:-$(yml_value ref)}"; [ -n "$REF" ] || REF="$DEFAULT_REF"
+SOURCE_PATH="${SHEEN_SOURCE_PATH:-}"
+SOURCE_COMMIT="${SHEEN_SOURCE_COMMIT:-}"
+if { [ -n "$SOURCE_PATH" ] && [ -z "$SOURCE_COMMIT" ]; } \
+  || { [ -z "$SOURCE_PATH" ] && [ -n "$SOURCE_COMMIT" ]; }; then
+  echo "sheen sync: SHEEN_SOURCE_PATH and SHEEN_SOURCE_COMMIT must be provided together" >&2
+  exit 1
+fi
+LOCAL_SOURCE=0
+GIT_SOURCE_PATH=""
+if [ -n "$SOURCE_PATH" ]; then
+  [[ "$SOURCE_COMMIT" =~ ^[0-9a-fA-F]{40}$ ]] || {
+    echo "sheen sync: SHEEN_SOURCE_COMMIT must be a full 40-character commit SHA" >&2
+    exit 1
+  }
+  [ -d "$SOURCE_PATH" ] || {
+    echo "sheen sync: local source payload directory does not exist: $SOURCE_PATH" >&2
+    exit 1
+  }
+  LOCAL_SOURCE=1
+fi
 AGENT_DISTRIBUTION="$(yml_value agent_distribution)"; [ -n "$AGENT_DISTRIBUTION" ] || AGENT_DISTRIBUTION=organization
 case "$AGENT_DISTRIBUTION" in organization|repository) ;; *) echo "agent_distribution must be organization or repository" >&2; exit 1 ;; esac
 INSTALL_SYNC_WORKFLOW="$(yml_value install_sync_workflow)"
@@ -148,33 +168,64 @@ THEMES=()
 [ "$EXCLUDE_RAW" != "__ALL__" ] && mapfile -t EXCLUDES <<< "$EXCLUDE_RAW"
 [ "$THEMES_RAW" != "__ALL__" ] && mapfile -t THEMES <<< "$THEMES_RAW"
 
-WORK="$(mktemp -d "${TMPDIR:-/tmp}/sheen-sync-XXXXXX")"
+STAGING_ROOT="${SHEEN_SYNC_TEMP_ROOT:-${TMPDIR:-/tmp}}"
+mkdir -p "$STAGING_ROOT" || { echo "sheen sync: cannot create staging root '$STAGING_ROOT'" >&2; exit 1; }
+WORK="$(mktemp -d "$STAGING_ROOT/sheen-sync-XXXXXX")"
 cleanup() { rm -rf "$WORK"; }
 trap cleanup EXIT
 
-if ! git -c core.longpaths=true clone --quiet --depth 1 --branch "$REF" "$SOURCE" "$WORK" 2>/dev/null; then
-  rm -rf "$WORK"
-  git -c core.longpaths=true clone --quiet "$SOURCE" "$WORK" || {
-    echo "sheen sync: clone failed for $DISPLAY_SOURCE; confirm the source/ref and use a writable short TMPDIR if checkout paths are too long" >&2
+if [ "$LOCAL_SOURCE" -eq 1 ]; then
+  cp -R "$SOURCE_PATH"/. "$WORK"/
+  for required in sync.sh sync.ps1 templates/sheen-sync.yml; do
+    [ -f "$WORK/$required" ] || {
+      echo "sheen sync: local source payload is missing required file '$required'" >&2
+      exit 1
+    }
+  done
+  payload_found=0
+  for payload in .github/skills .github/agents .github/instructions .github/prompts templates tokens; do
+    if [ -d "$WORK/$payload" ]; then payload_found=1; break; fi
+  done
+  [ "$payload_found" -eq 1 ] || {
+    echo "sheen sync: local source payload contains no supported asset directory" >&2
     exit 1
   }
-  git -C "$WORK" checkout --quiet "$REF" || {
-    echo "sheen sync: checkout failed for ref '$REF' from $DISPLAY_SOURCE in '$WORK'" >&2
+  COMMIT="$(printf '%s' "$SOURCE_COMMIT" | tr '[:upper:]' '[:lower:]')"
+  echo "sheen sync: using staged local payload at immutable source commit $COMMIT"
+  if git -C "$SOURCE_PATH" rev-parse --show-prefix >/dev/null 2>&1; then
+    SOURCE_PREFIX="$(git -C "$SOURCE_PATH" rev-parse --show-prefix)"
+    if [ -z "$SOURCE_PREFIX" ]; then
+      GIT_SOURCE_PATH="$SOURCE_PATH"
+    fi
+  fi
+else
+  if ! git -c core.longpaths=true clone --quiet --depth 1 --branch "$REF" "$SOURCE" "$WORK" 2>/dev/null; then
+    rm -rf "$WORK"
+    git -c core.longpaths=true clone --quiet "$SOURCE" "$WORK" || {
+      echo "sheen sync: clone failed for $DISPLAY_SOURCE; confirm the source/ref and use a writable short TMPDIR if checkout paths are too long" >&2
+      exit 1
+    }
+    git -C "$WORK" checkout --quiet "$REF" || {
+      echo "sheen sync: checkout failed for ref '$REF' from $DISPLAY_SOURCE in '$WORK'" >&2
+      exit 1
+    }
+  fi
+  if [ ! -e "$WORK/.git" ]; then
+    echo "sheen sync: clone did not create a complete Git checkout at '$WORK'; use a writable short TMPDIR and retry" >&2
+    exit 1
+  fi
+  COMMIT="$(git -C "$WORK" rev-parse HEAD)" || {
+    echo "sheen sync: could not resolve a complete source commit from '$WORK'; use a writable short TMPDIR and retry" >&2
+    exit 1
+  }
+  [[ "$COMMIT" =~ ^[0-9a-fA-F]{40}$ ]] || {
+    echo "sheen sync: source checkout at '$WORK' returned an invalid commit id; use a writable short TMPDIR and retry" >&2
     exit 1
   }
 fi
-if [ ! -e "$WORK/.git" ]; then
-  echo "sheen sync: clone did not create a complete Git checkout at '$WORK'; use a writable short TMPDIR and retry" >&2
-  exit 1
+if [ -z "$GIT_SOURCE_PATH" ]; then
+  GIT_SOURCE_PATH="$WORK"
 fi
-COMMIT="$(git -C "$WORK" rev-parse HEAD)" || {
-  echo "sheen sync: could not resolve a complete source commit from '$WORK'; use a writable short TMPDIR and retry" >&2
-  exit 1
-}
-[[ "$COMMIT" =~ ^[0-9a-fA-F]{40}$ ]] || {
-  echo "sheen sync: source checkout at '$WORK' returned an invalid commit id; use a writable short TMPDIR and retry" >&2
-  exit 1
-}
 
 mkdir -p "$REPO_ROOT/.sheen"
 MANIFEST="$REPO_ROOT/.sheen/manifest.json"
@@ -230,14 +281,17 @@ if [ "$AGENT_DISTRIBUTION" = organization ]; then
     if [ "$previous_source" != "$DISPLAY_SOURCE" ] || [[ ! "$previous_commit" =~ ^[0-9a-fA-F]{40}$ ]]; then
       echo "Cannot verify legacy agent ownership for $rel; restore the previous source before migrating" >&2; exit 1
     fi
-    if ! git -C "$WORK" cat-file -e "$previous_commit^{commit}" 2>/dev/null; then
-      git -C "$WORK" fetch --quiet origin "$previous_commit" || { echo "Cannot fetch previous source commit to verify $rel" >&2; exit 1; }
+    if [ "$LOCAL_SOURCE" -eq 1 ] && [ "$GIT_SOURCE_PATH" = "$WORK" ]; then
+      echo "Cannot verify legacy agent ownership for $rel from an action archive without Git history; use the documented callable clone path for this one-time migration" >&2; exit 1
+    fi
+    if ! git -C "$GIT_SOURCE_PATH" cat-file -e "$previous_commit^{commit}" 2>/dev/null; then
+      git -C "$GIT_SOURCE_PATH" fetch --quiet origin "$previous_commit" || { echo "Cannot fetch previous source commit $previous_commit to verify $rel from '$GIT_SOURCE_PATH'" >&2; exit 1; }
     fi
     found=0
     while IFS= read -r directory; do
       blob="$previous_commit:$directory/${rel##*/}"
-      if git -C "$WORK" cat-file -e "$blob" 2>/dev/null; then
-        git -C "$WORK" show "$blob" > "$WORK/expected-agent"
+      if git -C "$GIT_SOURCE_PATH" cat-file -e "$blob" 2>/dev/null; then
+        git -C "$GIT_SOURCE_PATH" show "$blob" > "$WORK/expected-agent"
         found=1; break
       fi
     done < <(source_dirs_for agents)
@@ -368,6 +422,8 @@ if [ "$INSTALL_SYNC_WORKFLOW" = true ] && [ -f "$UPSTREAM_SYNC_WF" ]; then
   sed -E \
     -e 's#uses: ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@#uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@#g' \
     -e 's#(uses: IBuySpy-Shared/basecoat-sheen/\.github/workflows/check-sheen-version-callable\.yml@)[^[:space:]]+#\1__SHEEN_COMMIT_SHA__#g' \
+    -e 's#(uses: (IBuySpy-Shared/basecoat-sheen|ivegamsft/sheen)/\.github/actions/(sync-assets|discover-release)@)[^[:space:]]+#\1__SHEEN_COMMIT_SHA__#g' \
+    -e 's#(^[[:space:]]*source_commit:[[:space:]]*)[^[:space:]#]+#\1__SHEEN_COMMIT_SHA__#' \
     -e "s/__SHEEN_COMMIT_SHA__/$COMMIT/g" \
     -e 's/Pinned to the released tag/Pinned to the immutable source commit/g' \
     -e '/^[[:space:]]*source_repo:[[:space:]]*ivegamsft\/sheen[[:space:]]*$/d' \

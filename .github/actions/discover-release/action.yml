@@ -1,0 +1,28 @@
+name: Sheen release pin discovery
+description: Open a pin-bump PR for a published Sheen release; assets apply on a later run
+inputs:
+  desired_tag:
+    description: Optional published vX.Y.Z release tag to request; empty discovers the latest stable release
+    required: false
+    default: ""
+outputs:
+  changed:
+    description: Whether the consumer workflow pins changed
+    value: ${{ steps.discover.outputs.changed }}
+  release_tag:
+    description: Published release tag selected for the pin update
+    value: ${{ steps.discover.outputs.release_tag }}
+  release_commit:
+    description: Immutable source commit for the selected release
+    value: ${{ steps.discover.outputs.release_commit }}
+runs:
+  using: composite
+  steps:
+    - name: Resolve the published release and update action pins
+      id: discover
+      shell: bash
+      env:
+        SHEEN_DESIRED_TAG: ${{ inputs.desired_tag }}
+      run: |
+        set -euo pipefail
+        python3 "$GITHUB_ACTION_PATH/../../../scripts/discover-sheen-release.py"

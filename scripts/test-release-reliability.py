@@ -110,9 +110,20 @@ class ProvenanceTests(unittest.TestCase):
             f"## [{version}]\n\n{marker}-CHANGELOG\n", encoding="utf-8", newline="\n")
         (self.repo / "templates").mkdir(exist_ok=True)
         (self.repo / "templates" / "sheen-sync.yml").write_text(
-            f"    uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/"
-            f"check-sheen-version-callable.yml@v{version}\n",
+            "jobs:\n"
+            "  discover:\n"
+            f"    uses: IBuySpy-Shared/basecoat-sheen/.github/actions/discover-release@v{version}\n"
+            "  sync:\n"
+            f"    uses: IBuySpy-Shared/basecoat-sheen/.github/actions/sync-assets@v{version}\n"
+            "    with:\n"
+            f"      source_commit: v{version}\n",
             encoding="utf-8", newline="\n")
+        for action in ("sync-assets", "discover-release"):
+            action_path = self.repo / ".github" / "actions" / action
+            action_path.mkdir(parents=True, exist_ok=True)
+            (action_path / "action.yml").write_text(f"{marker}-{action}\n", encoding="utf-8", newline="\n")
+        (self.repo / "scripts" / "discover-sheen-release.py").write_text(
+            f"{marker}-DISCOVERY-RUNTIME\n", encoding="utf-8", newline="\n")
         for name in ("sync.ps1", "sync.sh", "rollback.ps1", "rollback.sh"):
             (self.repo / name).write_text(f"{marker}-{name}\n", encoding="utf-8", newline="\n")
 
@@ -122,6 +133,7 @@ class ProvenanceTests(unittest.TestCase):
             if self.output.exists() else {}
         values = {f"steps.{step}.outputs.{key}": outputs[key]
                   for step, key in (("tag", "tag"), ("tag", "version"),
+                                    ("resolve_tag", "tag"),
                                     ("package", "artifact"), ("notes", "notes")) if key in outputs}
         body = re.sub(r"\$\{\{\s*(.*?)\s*\}\}", lambda m: values[m[1]], body)
         result = subprocess.run([BASH, "-c", body], cwd=self.repo, env=self.env,
@@ -130,7 +142,7 @@ class ProvenanceTests(unittest.TestCase):
         return result
 
     def payload_steps(self):
-        for title in ("Validate version.json matches tag", "Validate sync template release ref",
+        for title in ("Validate version.json matches tag", "Validate sync template action refs",
                       "Validate sync scripts present", "Wave/sprint label coverage gate",
                       "Build repository zip artifact", "Generate release notes",
                       "Create or update GitHub release"):
@@ -156,8 +168,18 @@ class ProvenanceTests(unittest.TestCase):
             self.assertIn(b"TAG-GENERATOR", archive.read("scripts/generate-release-notes.sh"))
             self.assertEqual(json.loads(archive.read("version.json"))["version"], "1.2.3")
             self.assertIn(
-                b"IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@v1.2.3",
+                b"IBuySpy-Shared/basecoat-sheen/.github/actions/discover-release@v1.2.3",
                 archive.read("templates/sheen-sync.yml"))
+            self.assertIn(
+                b"IBuySpy-Shared/basecoat-sheen/.github/actions/sync-assets@v1.2.3",
+                archive.read("templates/sheen-sync.yml"))
+            self.assertIn(b"source_commit: v1.2.3", archive.read("templates/sheen-sync.yml"))
+            self.assertEqual(
+                archive.read(".github/actions/sync-assets/action.yml"), b"TAG-sync-assets\n")
+            self.assertEqual(
+                archive.read(".github/actions/discover-release/action.yml"), b"TAG-discover-release\n")
+            self.assertEqual(
+                archive.read("scripts/discover-sheen-release.py"), b"TAG-DISCOVERY-RUNTIME\n")
 
     def test_dispatch_selects_tag_for_all_payloads_and_rerun_updates(self):
         self.assertNotEqual(self.dispatch_sha, self.tag_sha)
@@ -294,16 +316,55 @@ class ProvenanceTests(unittest.TestCase):
                 self.run_step("Validate version.json matches tag", expected=1)
                 self.assertEqual(list(self.capture.iterdir()), [])
 
-    def test_sync_template_ref_must_match_release(self):
+    def test_sync_template_action_refs_must_match_release_or_resolve_to_tag_commit(self):
         self.run_step("Resolve and check out release tag")
-        self.run_step("Validate sync template release ref")
+        self.run_step("Validate sync template action refs")
+        template = self.repo / "templates" / "sheen-sync.yml"
+        template.write_text(
+            "jobs:\n"
+            "  discover:\n"
+            "    uses: IBuySpy-Shared/basecoat-sheen/.github/actions/discover-release@action-pin\n"
+            "  sync:\n"
+            "    uses: IBuySpy-Shared/basecoat-sheen/.github/actions/sync-assets@action-pin\n"
+            "    with:\n"
+            "      source_commit: v1.2.3\n",
+            encoding="utf-8", newline="\n")
+        self.git("add", ".")
+        self.git("commit", "--quiet", "-m", "alternate matching action ref")
+        self.git("branch", "action-pin", "HEAD")
+        self.git("tag", "-f", TAG)
+        self.run_step("Resolve and check out release tag")
+        self.run_step("Validate sync template action refs")
         self.git("checkout", "--quiet", "dispatch")
         for contents in (
-            "uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/"
-            "check-sheen-version-callable.yml@v1.2.2\n",
-            "uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/"
-            "check-sheen-version-callable.yml@main\n",
-            "uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@v1.2.3\n",
+            "jobs:\n"
+            "  discover:\n"
+            "    uses: IBuySpy-Shared/basecoat-sheen/.github/actions/discover-release@v1.2.2\n"
+            "  sync:\n"
+            "    uses: IBuySpy-Shared/basecoat-sheen/.github/actions/sync-assets@v1.2.2\n"
+            "    with:\n"
+            "      source_commit: v1.2.3\n",
+            "jobs:\n"
+            "  discover:\n"
+            "    uses: IBuySpy-Shared/basecoat-sheen/.github/actions/discover-release@main\n"
+            "  sync:\n"
+            "    uses: IBuySpy-Shared/basecoat-sheen/.github/actions/sync-assets@v1.2.3\n"
+            "    with:\n"
+            "      source_commit: v1.2.3\n",
+            "jobs:\n"
+            "  discover:\n"
+            "    uses: ivegamsft/sheen/.github/actions/discover-release@v1.2.3\n"
+            "  sync:\n"
+            "    uses: ivegamsft/sheen/.github/actions/sync-assets@v1.2.3\n"
+            "    with:\n"
+            "      source_commit: v1.2.3\n",
+            "jobs:\n"
+            "  discover:\n"
+            "    uses: IBuySpy-Shared/basecoat-sheen/.github/actions/discover-release@v1.2.3\n"
+            "  sync:\n"
+            "    uses: IBuySpy-Shared/basecoat-sheen/.github/actions/sync-assets@v1.2.3\n"
+            "    with:\n"
+            "      source_commit: v1.2.2\n",
             "",
         ):
             with self.subTest(contents=contents):
@@ -313,7 +374,7 @@ class ProvenanceTests(unittest.TestCase):
                 self.git("commit", "--quiet", "-m", "bad template ref")
                 self.git("tag", "-f", TAG)
                 self.run_step("Resolve and check out release tag")
-                self.run_step("Validate sync template release ref", expected=1)
+                self.run_step("Validate sync template action refs", expected=1)
                 self.git("checkout", "--quiet", "dispatch")
 
     def test_sync_template_gate_blocks_original_mixed_payload(self):
@@ -322,7 +383,7 @@ class ProvenanceTests(unittest.TestCase):
         self.run_step("Resolve and check out release tag", override=body)
         self.run_step("Validate version.json matches tag", expected=1)
         (self.repo / "version.json").write_text('{"version":"1.2.3"}', encoding="utf-8")
-        self.run_step("Validate sync template release ref", expected=1)
+        self.run_step("Validate sync template action refs", expected=1)
         self.assertEqual(list(self.capture.iterdir()), [])
 
     def test_history_fallback_uses_tag_not_dispatch_sha(self):
@@ -435,9 +496,20 @@ class ProvenanceTests(unittest.TestCase):
         steps = workflow_steps("publish-to-production.yml")
         internal = ("publish-release.py", "test-release-reliability.py",
                     "test-release-reliability.ps1", "build-metadata.ps1",
-                    "test-downstream-token-hygiene.ps1", "test-downstream-token-hygiene.py")
+                    "test-downstream-token-hygiene.ps1", "test-downstream-token-hygiene.py",
+                    "test-sheen-action-sync.ps1", "test-sheen-shared-action.py",
+                    "test-sheen-release-discovery.py", "test-public-guidance.py",
+                    "prepare-public-guidance.py")
         for name in internal:
-            shutil.copyfile(ROOT / "scripts" / name, self.repo / "scripts" / name)
+            source = ROOT / "scripts" / name
+            if source.is_file():
+                shutil.copyfile(source, self.repo / "scripts" / name)
+            else:
+                (self.repo / "scripts" / name).write_text(f"INTERNAL-{name}\n", encoding="utf-8")
+        shutil.copyfile(
+            ROOT / "scripts" / "discover-sheen-release.py",
+            self.repo / "scripts" / "discover-sheen-release.py",
+        )
         workflows = self.repo / ".github" / "workflows"
         workflows.mkdir(parents=True)
         for name in ("release.yml", "publish-to-production.yml", "docs.yml",
@@ -446,15 +518,30 @@ class ProvenanceTests(unittest.TestCase):
         template = self.repo / "templates" / "sheen-sync.yml"
         template.parent.mkdir(exist_ok=True)
         template.write_text(
-            "uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/"
-            "check-sheen-version-callable.yml@abc123\n",
+            "jobs:\n"
+            "  discover:\n"
+            "    uses: IBuySpy-Shared/basecoat-sheen/.github/actions/discover-release@abc123\n"
+            "  sync:\n"
+            "    uses: IBuySpy-Shared/basecoat-sheen/.github/actions/sync-assets@abc123\n"
+            "    with:\n"
+            "      source_commit: abc123\n",
             encoding="utf-8", newline="\n")
+        for action in ("sync-assets", "discover-release"):
+            source = ROOT / ".github" / "actions" / action / "action.yml"
+            destination = self.repo / ".github" / "actions" / action / "action.yml"
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, destination)
+        internal_action = self.repo / ".github" / "actions" / "internal-only" / "action.yml"
+        internal_action.parent.mkdir(parents=True)
+        internal_action.write_text("name: internal\n", encoding="utf-8")
         self.git("add", ".")
         self.git("commit", "--quiet", "-m", "Current-tag internal tooling")
         retained = self.root / "retained"
         retained.mkdir()
         self.env.update(RUNNER_TEMP=retained.as_posix(), TAG=TAG)
         self.run_step("", override=steps["Retain source release completion helper"][1])
+        if "Prepare public guidance" in steps:
+            self.run_step("", override=steps["Prepare public guidance"][1])
         self.run_step("", override=steps["Remove internal-only content before publish"][1])
         tracked = self.git("ls-files").splitlines()
         for name in internal:
@@ -465,12 +552,29 @@ class ProvenanceTests(unittest.TestCase):
             self.assertNotIn(name, tracked)
         self.assertEqual(sorted(path.name for path in workflows.iterdir()),
                          ["check-sheen-version-callable.yml", "docs.yml"])
+        for action in ("sync-assets", "discover-release"):
+            self.assertTrue((self.repo / ".github" / "actions" / action / "action.yml").is_file())
+            self.assertIn(f".github/actions/{action}/action.yml", tracked)
+        self.assertFalse(internal_action.exists())
+        self.assertNotIn(".github/actions/internal-only/action.yml", tracked)
+        self.assertTrue((self.repo / "scripts" / "discover-sheen-release.py").is_file())
+        self.assertIn("scripts/discover-sheen-release.py", tracked)
+        if "Stamp published version" in steps:
+            self.output.write_text(f"tag={TAG}\n", encoding="utf-8")
+            self.run_step("", override=steps["Stamp published version"][1])
+            provenance = json.loads((self.repo / "release-provenance.json").read_text(encoding="utf-8"))
+            self.assertEqual(provenance["source_tag"], TAG)
+            self.assertEqual(provenance["source_commit"], self.tag_sha)
+            self.assertIn("release-provenance.json", self.git("ls-files").splitlines())
         for name in ("sync.ps1", "sync.sh", "rollback.ps1", "rollback.sh"):
             self.assertTrue((self.repo / name).is_file())
             self.assertIn(name, tracked)
         self.run_step("", override=steps["Sanitize internal identifiers for production"][1])
         self.assertIn(
-            "uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@abc123",
+            "uses: ivegamsft/sheen/.github/actions/discover-release@abc123",
+            template.read_text(encoding="utf-8"))
+        self.assertIn(
+            "uses: ivegamsft/sheen/.github/actions/sync-assets@abc123",
             template.read_text(encoding="utf-8"))
         self.assertNotIn(
             "IBuySpy-Shared/basecoat-sheen",

@@ -153,6 +153,9 @@ jobs:
             'scripts/test-downstream-token-hygiene.ps1'
             'scripts/test-downstream-token-hygiene.py'
             'scripts/test-sheen-sync-source.ps1'
+            'scripts/test-sheen-action-sync.ps1'
+            'scripts/test-sheen-shared-action.py'
+            'scripts/test-sheen-release-discovery.py'
             'scripts/prepare-public-guidance.py'
             'scripts/test-public-guidance.py'
             'scripts/audit-evals.ps1'
@@ -162,6 +165,13 @@ jobs:
           PUBLIC_WORKFLOWS=(
             '.github/workflows/check-sheen-version-callable.yml'
             '.github/workflows/docs.yml'
+          )
+          PUBLIC_ACTIONS=(
+            '.github/actions/sync-assets/action.yml'
+            '.github/actions/discover-release/action.yml'
+          )
+          PUBLIC_RUNTIME_FILES=(
+            'scripts/discover-sheen-release.py'
           )
 
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -197,6 +207,33 @@ jobs:
             REMOVED=$((REMOVED + 1))
           done < <(git ls-files -- ':(glob).github/workflows/**')
 
+          is_public_action() {
+            local candidate="$1"
+            local allowed
+            for allowed in "${PUBLIC_ACTIONS[@]}"; do
+              if [[ "$candidate" == "$allowed" ]]; then
+                return 0
+              fi
+            done
+            return 1
+          }
+
+          while IFS= read -r action_file; do
+            if is_public_action "$action_file"; then
+              echo "Keeping public action: $action_file"
+              continue
+            fi
+            git rm -f -- "$action_file"
+            REMOVED=$((REMOVED + 1))
+          done < <(git ls-files -- ':(glob).github/actions/**')
+
+          for runtime_file in "${PUBLIC_RUNTIME_FILES[@]}"; do
+            if ! git ls-files --error-unmatch "$runtime_file" >/dev/null 2>&1; then
+              echo "::error::Required public action runtime is missing: $runtime_file"
+              exit 1
+            fi
+          done
+
           if [ "$REMOVED" -gt 0 ]; then
             git diff --cached --quiet || git commit -m "chore(publish): remove internal-only content for ${TAG}"
             echo "Removed ${REMOVED} internal file(s) from publish payload."
@@ -211,13 +248,20 @@ jobs:
           set -euo pipefail
 
           VERSION=$(jq -r '.version' version.json 2>/dev/null || echo "${TAG#v}")
+          SOURCE_COMMIT=$(git rev-parse "refs/tags/${TAG}^{commit}")
           echo "${VERSION}" > VERSION
+          jq -n \
+            --arg version "$VERSION" \
+            --arg source_tag "$TAG" \
+            --arg source_commit "$SOURCE_COMMIT" \
+            '{schema:"basecoat-sheen-release-provenance/v1",version:$version,source_tag:$source_tag,source_commit:$source_commit}' \
+            > release-provenance.json
 
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git add VERSION
+          git add VERSION release-provenance.json
           git diff --cached --quiet || git commit -m "chore(publish): stamp build version ${TAG}"
-          echo "Published version stamped: ${VERSION}"
+          echo "Published version ${VERSION} stamped with source commit provenance ${SOURCE_COMMIT}"
 
       - name: Sanitize internal identifiers for production
         env:

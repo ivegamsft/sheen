@@ -1,0 +1,56 @@
+name: Sheen sync assets
+description: Sync assets from this immutable Sheen action release without cloning the source
+inputs:
+  source_commit:
+    description: Full commit SHA rendered by sync.sh or sync.ps1 for this action release
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Sync assets with PowerShell
+      if: runner.os == 'Windows'
+      shell: pwsh
+      working-directory: ${{ github.workspace }}
+      env:
+        SHEEN_SOURCE_COMMIT: ${{ inputs.source_commit }}
+        SHEEN_ACTION_REF: ${{ github.action_ref }}
+        SHEEN_REPO: https://github.com/${{ github.action_repository }}.git
+        SHEEN_REF: ${{ inputs.source_commit }}
+      run: |
+        if ($env:SHEEN_SOURCE_COMMIT -notmatch '^[0-9a-fA-F]{40}$' -or
+            $env:SHEEN_ACTION_REF -notmatch '^[0-9a-fA-F]{40}$' -or
+            -not [string]::Equals($env:SHEEN_SOURCE_COMMIT, $env:SHEEN_ACTION_REF, [System.StringComparison]::OrdinalIgnoreCase)) {
+          throw 'source_commit must be the exact 40-character SHA used by the sync-assets action ref'
+        }
+        $sourcePath = (Resolve-Path -LiteralPath (Join-Path $env:GITHUB_ACTION_PATH '..' '..' '..')).Path
+        if (-not (Test-Path -LiteralPath (Join-Path $sourcePath 'sync.ps1') -PathType Leaf)) {
+          throw 'The pinned Sheen action payload is missing sync.ps1'
+        }
+        $env:SHEEN_SOURCE_PATH = $sourcePath
+        $env:SHEEN_SYNC_TEMP_ROOT = Join-Path $env:GITHUB_WORKSPACE '.git\sheen-sync-staging'
+        & (Join-Path $sourcePath 'sync.ps1')
+    - name: Sync assets with Bash
+      if: runner.os != 'Windows'
+      shell: bash
+      working-directory: ${{ github.workspace }}
+      env:
+        SHEEN_SOURCE_COMMIT: ${{ inputs.source_commit }}
+        SHEEN_ACTION_REF: ${{ github.action_ref }}
+        SHEEN_REPO: https://github.com/${{ github.action_repository }}.git
+        SHEEN_REF: ${{ inputs.source_commit }}
+        SHEEN_SYNC_TEMP_ROOT: ${{ github.workspace }}/.git/sheen-sync-staging
+      run: |
+        set -euo pipefail
+        if [[ ! "$SHEEN_SOURCE_COMMIT" =~ ^[0-9a-fA-F]{40}$ \
+          || ! "$SHEEN_ACTION_REF" =~ ^[0-9a-fA-F]{40}$ \
+          || "${SHEEN_SOURCE_COMMIT,,}" != "${SHEEN_ACTION_REF,,}" ]]; then
+          echo "::error::source_commit must be the exact 40-character SHA used by the sync-assets action ref"
+          exit 1
+        fi
+        SHEEN_SOURCE_PATH="$(cd "$GITHUB_ACTION_PATH/../../.." && pwd)"
+        [[ -f "$SHEEN_SOURCE_PATH/sync.sh" ]] || {
+          echo "::error::The pinned Sheen action payload is missing sync.sh"
+          exit 1
+        }
+        export SHEEN_SOURCE_PATH
+        bash "$SHEEN_SOURCE_PATH/sync.sh"

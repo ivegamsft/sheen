@@ -94,6 +94,7 @@ nav:
       - Theme Lifecycle: guides/theme-lifecycle.md
       - Style Guide Authoring: guides/style-guide-authoring.md
       - Upgrading sheen: guides/upgrading-sheen.md
+      - Shared action sync and release pins: guides/shared-action-sync.md
       - Authoring a Skill: guides/authoring-a-skill.md
   - Prompt Guide:
       - Overview & Intent Index: guides/prompts/index.md

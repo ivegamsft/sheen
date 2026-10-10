@@ -105,7 +105,7 @@ jobs:
           fi
           echo "✓ version.json ($actual) matches tag ${{ steps.tag.outputs.tag }}"
 
-      - name: Validate sync template release ref
+      - name: Validate sync template action refs
         shell: bash
         run: |
           set -euo pipefail
@@ -115,31 +115,49 @@ jobs:
             echo "::error::${template} is required in release payload"
             exit 1
           fi
-          matches="$(grep -E '^[[:space:]]*uses:[[:space:]]+IBuySpy-Shared/basecoat-sheen/\.github/workflows/check-sheen-version-callable\.yml@' "$template" || true)"
+          matches="$(grep -E '^[[:space:]]*uses:[[:space:]]+IBuySpy-Shared/basecoat-sheen/\.github/actions/(sync-assets|discover-release)@' "$template" || true)"
           count="$(printf '%s\n' "$matches" | grep -c . || true)"
-          if [[ "$count" -ne 1 ]]; then
-            echo "::error::${template} must contain exactly one internal check-sheen-version-callable.yml uses ref"
-            exit 1
-          fi
-          ref="${matches##*@}"
-          if [[ -z "$ref" ]]; then
-            echo "::error::${template} callable workflow ref is empty"
+          if [[ "$count" -ne 2 ]] || [[ "$(printf '%s\n' "$matches" | grep -c '/sync-assets@' || true)" -ne 1 ]] \
+            || [[ "$(printf '%s\n' "$matches" | grep -c '/discover-release@' || true)" -ne 1 ]]; then
+            echo "::error::${template} must contain exactly one internal sync-assets and one discover-release action ref"
             exit 1
           fi
           tag_commit="$(git rev-parse "refs/tags/${tag}^{commit}")"
-          if [[ "$ref" == "$tag" ]]; then
-            echo "✓ ${template} callable ref uses release tag ${tag}"
-            exit 0
+          while IFS= read -r line; do
+            ref="${line##*@}"
+            if [[ -z "$ref" ]]; then
+              echo "::error::${template} contains an empty action ref"
+              exit 1
+            fi
+            if [[ "$ref" != "$tag" ]]; then
+              if ! git rev-parse --verify --quiet "${ref}^{commit}" >/dev/null; then
+                echo "::error::${template} action ref '${ref}' must be '${tag}' or a commit resolving to ${tag_commit}"
+                exit 1
+              fi
+              ref_commit="$(git rev-parse "${ref}^{commit}")"
+              if [[ "$ref_commit" != "$tag_commit" ]]; then
+                echo "::error::${template} action ref '${ref}' resolves to ${ref_commit}, not release commit ${tag_commit}"
+                exit 1
+              fi
+            fi
+          done <<< "$matches"
+          source_commit="$(sed -nE 's/^[[:space:]]*source_commit:[[:space:]]*([^[:space:]#]+).*$/\1/p' "$template")"
+          if [[ "$(printf '%s\n' "$source_commit" | grep -c . || true)" -ne 1 ]]; then
+            echo "::error::${template} must contain exactly one source_commit input"
+            exit 1
           fi
-          if git rev-parse --verify --quiet "${ref}^{commit}" >/dev/null; then
-            ref_commit="$(git rev-parse "${ref}^{commit}")"
-            if [[ "$ref_commit" == "$tag_commit" ]]; then
-              echo "✓ ${template} callable ref ${ref} resolves to release commit ${tag_commit}"
-              exit 0
+          if [[ "$source_commit" != "$tag" ]]; then
+            if ! git rev-parse --verify --quiet "${source_commit}^{commit}" >/dev/null; then
+              echo "::error::${template} source_commit '${source_commit}' must be '${tag}' or resolve to ${tag_commit}"
+              exit 1
+            fi
+            source_commit_resolved="$(git rev-parse "${source_commit}^{commit}")"
+            if [[ "$source_commit_resolved" != "$tag_commit" ]]; then
+              echo "::error::${template} source_commit '${source_commit}' resolves to ${source_commit_resolved}, not release commit ${tag_commit}"
+              exit 1
             fi
           fi
-          echo "::error::${template} callable ref '${ref}' must be '${tag}' or resolve to release commit ${tag_commit}"
-          exit 1
+          echo "✓ ${template} actions and source_commit resolve to release ${tag} (${tag_commit})"
 
       - name: Validate sync scripts present
         shell: bash

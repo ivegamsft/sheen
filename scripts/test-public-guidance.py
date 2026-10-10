@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import re
 import shutil
+import stat
 import subprocess
 import sys
 import uuid
@@ -27,6 +28,11 @@ def runtime(name):
         if candidate.is_file():
             return str(candidate)
     return shutil.which(name)
+
+
+def remove_readonly(function, path, _error):
+    os.chmod(path, stat.S_IWRITE)
+    function(path)
 
 
 def check_resolver(workflow, root, bash, config, private=False):
@@ -62,6 +68,120 @@ def check_resolver(workflow, root, bash, config, private=False):
     values = dict(line.split("=", 1) for line in output.read_text().splitlines())
     assert values["source_url"] == "https://github.com/ivegamsft/sheen.git", values
     assert values["ref"] == "main", values
+
+
+def run_callable_source_regression(workflow, fixture, bash):
+    def step_script(name):
+        match = re.search(
+            rf"(?ms)^      - name: {re.escape(name)}.*?^        run: \|\r?\n"
+            r"(.*?)(?=^      - name: |\Z)",
+            workflow,
+        )
+        assert match, f"Missing callable step {name}"
+        return "\n".join(
+            line[10:] if line.startswith("          ") else line
+            for line in match[1].splitlines()
+        ) + "\n"
+
+    git = shutil.which("git")
+    assert git, "Git is required for pinned-source collision proof"
+    source = fixture / "callable-source"
+    source.mkdir()
+    subprocess.run([git, "init", "-b", "main", str(source)], check=True, capture_output=True)
+    subprocess.run([git, "-C", str(source), "config", "user.name", "Sheen test"], check=True)
+    subprocess.run([git, "-C", str(source), "config", "user.email", "sheen-test@example.com"], check=True)
+    (source / "sync.sh").write_text(
+        "#!/usr/bin/env bash\n"
+        "# sync.sh --- basecoat-sheen consumer sync (POSIX shell)\n"
+        "set -euo pipefail\n"
+        "printf '%s\\n%s\\n' \"$SHEEN_REF\" "
+        "\"$(git -C \"$SHEEN_SOURCE_PATH\" rev-parse HEAD)\" "
+        "> \"$GITHUB_WORKSPACE/sheen-script-source.txt\"\n",
+        encoding="utf-8",
+        newline="\n",
+    )
+    subprocess.run([git, "-C", str(source), "add", "sync.sh"], check=True)
+    subprocess.run([git, "-C", str(source), "commit", "-m", "Sheen source payload"], check=True, capture_output=True)
+    source_commit = subprocess.run(
+        [git, "-C", str(source), "rev-parse", "HEAD"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+
+    stage_script = fixture / "stage-pinned-source.sh"
+    run_script = fixture / "run-pinned-source.sh"
+    stage_script.write_text(
+        step_script("Stage sync engine from the resolved Sheen source revision"),
+        encoding="utf-8",
+        newline="\n",
+    )
+    run_script.write_text(step_script("Run sheen sync"), encoding="utf-8", newline="\n")
+
+    for case in ("mixed-basecoat-sheen", "sheen-only"):
+        consumer = fixture / case
+        consumer.mkdir()
+        if case == "mixed-basecoat-sheen":
+            (consumer / ".basecoat.yml").write_text("source: https://example.invalid/basecoat.git\n", encoding="utf-8")
+            root_sync = (
+                "#!/usr/bin/env bash\n"
+                "touch \"$GITHUB_WORKSPACE/basecoat-sync-was-run\"\n"
+            ).encode()
+            (consumer / "sync.sh").write_bytes(root_sync)
+        else:
+            root_sync = None
+        (consumer / ".sheen.yml").write_text(
+            f"source: {source.as_posix()}\nref: main\n",
+            encoding="utf-8",
+        )
+        output = fixture / f"{case}-github-output.txt"
+        output.unlink(missing_ok=True)
+        runner_temp = fixture / f"{case}-runner"
+        runner_temp.mkdir()
+        env = dict(
+            os.environ,
+            GITHUB_WORKSPACE=consumer.as_posix(),
+            GITHUB_OUTPUT=output.as_posix(),
+            GITHUB_RUN_ID="304309",
+            GITHUB_RUN_ATTEMPT="1",
+            RUNNER_TEMP=runner_temp.as_posix(),
+            SHEEN_REPO=source.as_posix(),
+            SHEEN_REF="main",
+            SHEEN_FETCH_TOKEN="",
+        )
+        if os.name == "nt":
+            env["PATH"] = str(Path(bash).parent) + os.pathsep + env["PATH"]
+        staged = subprocess.run(
+            [bash, stage_script.as_posix()],
+            cwd=consumer,
+            env=env,
+            text=True,
+            capture_output=True,
+        )
+        assert staged.returncode == 0, staged.stdout + staged.stderr
+        outputs = dict(line.split("=", 1) for line in output.read_text(encoding="utf-8").splitlines())
+        assert outputs["source_commit"] == source_commit, outputs
+        env["SHEEN_SOURCE_PATH"] = outputs["source_path"]
+        env["SHEEN_REF"] = outputs["source_commit"]
+        synced = subprocess.run(
+            [bash, run_script.as_posix()],
+            cwd=consumer,
+            env=env,
+            text=True,
+            capture_output=True,
+        )
+        assert synced.returncode == 0, synced.stdout + synced.stderr
+        assert (consumer / "sheen-script-source.txt").read_text(encoding="utf-8").splitlines() == [
+            source_commit,
+            source_commit,
+        ]
+        assert not (consumer / "basecoat-sync-was-run").exists()
+        if root_sync is not None:
+            assert (consumer / "sync.sh").read_bytes() == root_sync, "Consumer BaseCoat sync.sh was modified"
+            assert (consumer / ".basecoat.yml").read_text(encoding="utf-8") == (
+                "source: https://example.invalid/basecoat.git\n"
+            )
+        assert not Path(outputs["source_path"]).exists(), "Staged source clone must be cleaned after sync"
 
 
 def main():
@@ -106,6 +226,7 @@ def main():
         check_resolver(public, fixture, bash, "")
         check_resolver(public, fixture, bash, "source: https://github.com/ivegamsft/sheen.git\nref: main\n")
         internal = (ROOT / ".github/workflows/check-sheen-version-callable.yml").read_text()
+        run_callable_source_regression(internal, fixture, bash)
         check_resolver(internal, fixture, bash, "source: https://github.com/IBuySpy-Shared/basecoat-sheen.git\n", private=True)
         check_resolver(internal, fixture, bash, "source: https://GitHub.com/ibuyspy-shared/basecoat-sheen.Git\n", private=True)
         for malformed in (
@@ -121,7 +242,7 @@ def main():
                 raise AssertionError("Malformed internal-only markers must fail closed")
         print("Public guidance semantics and actual sanitized anonymous resolver passed.")
     finally:
-        shutil.rmtree(fixture)
+        shutil.rmtree(fixture, onerror=remove_readonly)
 
 
 if __name__ == "__main__":
