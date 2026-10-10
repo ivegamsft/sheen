@@ -13,7 +13,7 @@ license policy.
 | Source | https://github.com/cathrynlavery/diagram-design |
 | License | MIT |
 | Copyright | © 2025 Cathryn Lavery |
-| Used under | Epic [#110](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/110) — Diagram Design Integration |
+| Used under | Epic [#110](https://github.com/ivegamsft/sheen/issues/110) — Diagram Design Integration |
 
 ### What was adapted
 
@@ -87,7 +87,7 @@ attribution expectation for the design concepts and rule sets carried over.
 | Source | https://github.com/tabler/tabler-icons |
 | License | MIT |
 | Copyright | © 2020-2026 Paweł Kuna |
-| Used under | Epic [#110](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/110), issue [#111](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/111) — icon vendoring for the documentation-diagram renderer |
+| Used under | Epic [#110](https://github.com/ivegamsft/sheen/issues/110), issue [#111](https://github.com/ivegamsft/sheen/issues/111) — icon vendoring for the documentation-diagram renderer |
 
 Unlike the diagram-design entry above, this **is** a literal vendored copy:
 19 `outline`-variant SVG icon files, pinned at commit

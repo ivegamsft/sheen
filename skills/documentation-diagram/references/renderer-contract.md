@@ -41,11 +41,11 @@ The source-checkout path used in commands is `skills/documentation-diagram/sampl
 ## Usage
 
 Run commands from a sheen source checkout, not the synced skill folder. Source
-tools: [renderer](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/scripts/render-diagram.ps1),
-[skin builder](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/scripts/build-diagram-skins.ps1),
-[icon builder](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/scripts/build-icons.ps1),
-[geometry lint](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/scripts/lint-diagram-geometry.ps1),
-and [slop audit](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/scripts/audit-diagram-slop.ps1).
+tools: [renderer](https://github.com/ivegamsft/sheen/blob/main/scripts/render-diagram.ps1),
+[skin builder](https://github.com/ivegamsft/sheen/blob/main/scripts/build-diagram-skins.ps1),
+[icon builder](https://github.com/ivegamsft/sheen/blob/main/scripts/build-icons.ps1),
+[geometry lint](https://github.com/ivegamsft/sheen/blob/main/scripts/lint-diagram-geometry.ps1),
+and [slop audit](https://github.com/ivegamsft/sheen/blob/main/scripts/audit-diagram-slop.ps1).
 These scripts and their generated `dist/` outputs are not bundled here.
 
 ```

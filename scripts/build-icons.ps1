@@ -145,8 +145,8 @@ if (-not $Check) {
         ""
         "Source: [Tabler Icons](https://github.com/tabler/tabler-icons) (MIT),"
         "pinned commit ``$commit``. Full attribution in"
-        '[`THIRD_PARTY_LICENSES.md`](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/THIRD_PARTY_LICENSES.md) and'
-        '[`vendor/tabler-icons/VENDOR.md`](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/vendor/tabler-icons/VENDOR.md).'
+        '[`THIRD_PARTY_LICENSES.md`](https://github.com/ivegamsft/sheen/blob/main/THIRD_PARTY_LICENSES.md) and'
+        '[`vendor/tabler-icons/VENDOR.md`](https://github.com/ivegamsft/sheen/blob/main/vendor/tabler-icons/VENDOR.md).'
         ""
         'All icons use `stroke="currentColor"` so they inherit their color'
         "from the diagram-skin adapter (#116) — never a hard-coded hex. At"
