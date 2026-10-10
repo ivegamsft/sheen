@@ -98,6 +98,25 @@ Sync is **idempotent** and records a manifest so [`rollback.ps1`](rollback.ps1) 
   (see [`specs/05-validation-checks.spec.md`](specs/05-validation-checks.spec.md)).
   `vendor/` is never scanned — it is validated upstream.
 
+## Platform interfaces
+
+Sheen is the design-system and UX governance product in the AI-SDLC governance
+family. Contracts are defined in
+[`basecoat-api-spec`](https://github.com/IBuySpy-Shared/basecoat-api-spec) and
+[`basecoat-mcp-spec`](https://github.com/IBuySpy-Shared/basecoat-mcp-spec);
+shared IDs and schemas come from Binder. Sheen stays Git-native: the synced
+assets in this repository remain the source of truth, and the API is a read
+adapter over them.
+
+| Interface | Direction |
+| --- | --- |
+| Authorization | Tokens, vocabulary, and design rules are readable by family products and consumers; changes follow PR review in this repository. |
+| API | Design tokens and design-rule catalog, including `checks.json` validation rules and `.lexicon.md` vocabulary, by release version. |
+| MCP | Read-only: `get_tokens`, `list_design_rules`, `explain_design_rule`. |
+| Integrated graph | Contributes design-system release and rule nodes; Batchbook records which apps have adopted which versions. |
+
+These are initial directions, not approved contracts.
+
 ## Contributing
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md). This repo runs on a shared enterprise EMU
