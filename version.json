@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "releaseDate": "2026-10-10",
-  "notes": "v1.0.0: central organization agent distribution, explicit repository compatibility and opt-in scheduled sync workflows."
+  "notes": "v1.1.0: strengthened wireframing with screen specifications, sketched SVG and offline HTML click-through prototypes."
 }

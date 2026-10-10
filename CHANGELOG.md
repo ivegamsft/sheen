@@ -7,6 +7,16 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [1.1.0] — 2026-10-10
+
+| Field | Value |
+|---|---|
+| Version | v1.1.0 |
+| Range | v1.0.0..v1.1.0 |
+| Wave | wave:17 |
+| Sprint | N/A |
+| Release date | 2026-10-10 |
+
 ### Added
 
 - Strengthened `wireframing` with screen-spec, sketched SVG and offline HTML
