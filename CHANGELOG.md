@@ -7,6 +7,16 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [1.0.0] — 2026-10-10
+
+| Field | Value |
+|---|---|
+| Version | v1.0.0 |
+| Range | v0.13.4..v1.0.0 |
+| Wave | wave:16 |
+| Sprint | N/A |
+| Release date | 2026-10-10 |
+
 ### Changed
 
 - **Breaking migration (#283):** agents default to organization discovery.

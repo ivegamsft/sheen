@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "0.13.4",
-  "releaseDate": "2026-10-08",
-  "notes": "v0.13.4: pin generated callable workflows to source commits and harden Windows sync checkout staging."
+  "version": "1.0.0",
+  "releaseDate": "2026-10-10",
+  "notes": "v1.0.0: central organization agent distribution, explicit repository compatibility and opt-in scheduled sync workflows."
 }
