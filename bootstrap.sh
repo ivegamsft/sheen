@@ -76,6 +76,13 @@ if [ ! -f "$SHEEN_YML" ]; then
 source: ${SOURCE}
 ref: "${REF}"
 
+# Run BaseCoat first and Sheen last after every full refresh.
+# Agents use your organization's established central channel by default.
+# Unsupported hosts/forks: explicitly select repository compatibility.
+# agent_distribution: repository
+# Scheduled workflow installation is opt-in:
+# install_sync_workflow: true
+
 # Uncomment and edit to limit which assets are synced.
 # Empty list [] = sync none. Omit key = sync all (default).
 # Asset names without file extension (e.g. 'design-tokens' not 'design-tokens.md')

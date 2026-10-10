@@ -13,6 +13,8 @@ A `.sheen.yml.example` in this repo documents every key.
 # -- Sync configuration --
 source: https://github.com/YOUR-ORG/basecoat-sheen.git   # upstream (or private fork)
 ref: main                                                 # branch or release tag (pin for stability)
+agent_distribution: organization                         # default; repository is explicit compatibility
+install_sync_workflow: false                              # default; true deploys/updates scheduling
 
 # Allow-lists — omit a key to sync ALL of that asset type.
 skills:        [design-audit, design-tokens, accessibility-audit]
@@ -30,7 +32,8 @@ Rules:
 - `source`/`ref` select the upstream and version. Consumers SHOULD pin `ref` to a
   release tag in production.
 - Each allow-list, when present, is an explicit include set; when absent, all
-  assets of that type sync.
+  repository-distributed assets of that type sync. `agents` applies only in
+  explicit `agent_distribution: repository` compatibility mode.
 - `themes` selects which token themes are materialized in the consumer.
 
 ## 2. `sync.*` (`sync.ps1` / `sync.sh`)
@@ -41,6 +44,31 @@ Rules:
 - MUST record what it wrote (a manifest) so `rollback.*` can revert precisely.
 - Runs token build (spec 01 §4) if the consumer opts into materialized tokens.
 - PowerShell and shell entry points MUST stay behavior-equivalent.
+
+### 2.0 Agent distribution and scheduled workflow
+
+- `agent_distribution` MUST default to `organization`; only `organization` and
+  `repository` are valid. Organization mode MUST NOT project agents into the
+  consumer repository. Organization owners MUST establish their own central
+  channel before migration; this source publishes `IBuySpy-Shared/.github-private`.
+- Publish only pinned release `agents/*.agent.md` definitions, not eval files,
+  through central PRs. Record source/ref/commit and SHA-256 hashes in
+  `sheen-agents-manifest.json`; preflight all collisions and modified owned
+  files before updating/removing anything. Preserve unrelated definitions.
+- Organization-mode migration MUST remove only prior manifest-owned agent files
+  verified against the previous immutable source commit. Source changes,
+  unverifiable/modified files, staged or unstaged edits, and non-regular paths
+  MUST fail visibly before any agent removal. Missing owned files drop out of
+  the next manifest. Unrelated/custom agents MUST survive.
+- `install_sync_workflow` MUST default to false and accept only true/false.
+  When true, install/update the marker-owned workflow with the resolved source
+  SHA. Otherwise never install/recreate/update it. Preserve existing managed
+  workflow bytes and ownership entries, and warn that deleting it is required
+  to stop its schedule; after deletion, the next manifest drops that entry.
+- Release automation MUST fail visibly without `SHEEN_ORG_AGENTS_TOKEN`, scoped
+  to Contents and Pull requests read/write on the central repository. Source
+  release reads use the source workflow token. No direct-main push or protection
+  bypass is permitted. Publication PR merging remains governed separately.
 
 ### 2.1 Generated-token Git hygiene
 
@@ -112,8 +140,9 @@ outputs. Consumers regenerate ignored outputs during builds (see the
 ## 5. Relationship to basecoat
 
 `.sheen.yml` intentionally parallels `.basecoat.yml`; a repo may carry both. The
-two sync mechanisms are independent but share conventions, so tooling and operator
-knowledge transfer. sheen adds the `themes` key and token materialization, which
+two sync mechanisms share conventions, but BaseCoat replaces shared `.github`
+paths: consumers MUST run BaseCoat first and Sheen last after every full refresh.
+Sheen adds the `themes` key and token materialization, which
 basecoat has no equivalent for.
 
 ## 6. Vendored basecoat
@@ -125,7 +154,7 @@ gets basecoat alongside sheen:
    directly (single source, pinned together).
 2. **Independent** — the consumer syncs basecoat from its own upstream via
    `.basecoat.yml` and syncs sheen via `.sheen.yml`. Because namespaces never
-   collide (`basecoat-*` vs `sheen-*`), both resolve cleanly.
+   collide (`basecoat-*` vs `sheen-*`), both resolve cleanly when Sheen runs last.
 
 The vendored tree is read-only here and excluded from sheen's validation and
 metadata scans (spec 05 §1).

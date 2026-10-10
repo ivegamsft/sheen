@@ -23,6 +23,14 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  publish-organization-agents:
+    needs: release
+    uses: ./.github/workflows/publish-org-agents.yml
+    with:
+      tag: ${{ inputs.tag || github.ref_name }}
+    secrets:
+      SHEEN_ORG_AGENTS_TOKEN: ${{ secrets.SHEEN_ORG_AGENTS_TOKEN }}
+
   production-token-preflight:
     name: Preflight — PRODUCTION_REPO_TOKEN readiness
     uses: ./.github/workflows/token-preflight.yml

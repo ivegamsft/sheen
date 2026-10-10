@@ -89,6 +89,28 @@ running the script.
 Sync is **idempotent** and records a manifest so [`rollback.ps1`](rollback.ps1) /
 [`rollback.sh`](rollback.sh) can revert precisely.
 
+**Sync order:** run BaseCoat first, then Sheen last after every full refresh;
+BaseCoat replaces shared `.github` paths even when asset names differ.
+
+**Agent channel:** agents default to organization discovery, not repository
+copies. The `IBuySpy-Shared` channel is `.github-private/agents/`; other
+organizations must publish their own central channel before migrating, or set
+`agent_distribution: repository` for explicit compatibility on supported hosts.
+The `agents` allow-list applies only in repository mode. Migration removes only
+verified previous manifest-owned copies and blocks on modified/unverifiable files.
+
+**Scheduled updates:** set `install_sync_workflow: true` to install/update
+`.github/workflows/sheen-sync.yml`. With the default false, an existing managed
+workflow is preserved without updates. To disable its schedule, delete it and
+keep opt-in off; later syncs will not recreate it.
+
+Source release publication opens a governed central-channel PR and records
+pinned provenance/hashes. Automation requires `SHEEN_ORG_AGENTS_TOKEN`, scoped
+to Contents and Pull requests read/write on the central repository only; it
+must not have an enterprise-owner bypass. Merge publication PRs through normal
+gates before treating a release's agents as delivered. Roll back through a
+central revert PR and restore the consumer's previous pinned ref if necessary.
+
 ## Governance & vocabulary
 
 - [`.lexicon.md`](.lexicon.md) — the canonical design vocabulary used across assets.

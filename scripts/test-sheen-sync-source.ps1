@@ -44,6 +44,7 @@ function New-SyncConsumerFixture([string]$Root, [string]$OldWorkflow) {
     $consumer = Join-Path $Root 'consumer'
     New-Item -ItemType Directory -Force -Path (Join-Path $consumer '.github' 'workflows') | Out-Null
     Set-Content -LiteralPath (Join-Path $consumer '.github' 'workflows' 'sheen-sync.yml') -Value $OldWorkflow -NoNewline
+    Set-Content -LiteralPath (Join-Path $consumer '.sheen.yml') -Value 'install_sync_workflow: true'
     Invoke-CheckedGit -C $consumer init -b main
     Invoke-CheckedGit -C $consumer config user.name test
     Invoke-CheckedGit -C $consumer config user.email test@example.com

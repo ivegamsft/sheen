@@ -134,6 +134,10 @@ is_excluded() {
 
 SOURCE="${SHEEN_REPO:-$(yml_value source)}"; [ -n "$SOURCE" ] || SOURCE="$DEFAULT_SOURCE"
 REF="${SHEEN_REF:-$(yml_value ref)}"; [ -n "$REF" ] || REF="$DEFAULT_REF"
+AGENT_DISTRIBUTION="$(yml_value agent_distribution)"; [ -n "$AGENT_DISTRIBUTION" ] || AGENT_DISTRIBUTION=organization
+case "$AGENT_DISTRIBUTION" in organization|repository) ;; *) echo "agent_distribution must be organization or repository" >&2; exit 1 ;; esac
+INSTALL_SYNC_WORKFLOW="$(yml_value install_sync_workflow)"
+case "$INSTALL_SYNC_WORKFLOW" in ''|true|false) ;; *) echo "install_sync_workflow must be true or false" >&2; exit 1 ;; esac
 DISPLAY_SOURCE="$(echo "$SOURCE" | sed -E 's#^(https?://)[^/@]*@#\1#' | sed 's/[?#].*$//')"
 echo "sheen sync: $DISPLAY_SOURCE @ $REF"
 
@@ -210,7 +214,50 @@ FILES_LIST="$WORK/manifest-files"
 : > "$FILES_LIST"
 COUNT=0
 
+if [ "$AGENT_DISTRIBUTION" = organization ]; then
+  REMOVALS="$WORK/agent-removals"
+  : > "$REMOVALS"
+  while IFS= read -r rel; do
+    [[ "$rel" == .github/agents/* ]] || continue
+    [[ "$rel" =~ ^\.github/agents/[A-Za-z0-9._-]+$ ]] || { echo "Unsafe legacy managed agent path: $rel" >&2; exit 1; }
+    path="$REPO_ROOT/$rel"
+    [ -e "$path" ] || [ -L "$path" ] || continue
+    if [ -L "$path" ] || [ -L "$REPO_ROOT/.github/agents" ] || [ -L "$REPO_ROOT/.github" ] || [ ! -f "$path" ]; then
+      echo "Non-regular legacy managed agent: $rel" >&2; exit 1
+    fi
+    previous_source="$(sed -n 's/^[[:space:]]*"source":[[:space:]]*"\([^"]*\)".*/\1/p' "$PREV_MANIFEST")"
+    previous_commit="$(sed -n 's/^[[:space:]]*"commit":[[:space:]]*"\([^"]*\)".*/\1/p' "$PREV_MANIFEST")"
+    if [ "$previous_source" != "$DISPLAY_SOURCE" ] || [[ ! "$previous_commit" =~ ^[0-9a-fA-F]{40}$ ]]; then
+      echo "Cannot verify legacy agent ownership for $rel; restore the previous source before migrating" >&2; exit 1
+    fi
+    if ! git -C "$WORK" cat-file -e "$previous_commit^{commit}" 2>/dev/null; then
+      git -C "$WORK" fetch --quiet origin "$previous_commit" || { echo "Cannot fetch previous source commit to verify $rel" >&2; exit 1; }
+    fi
+    found=0
+    while IFS= read -r directory; do
+      blob="$previous_commit:$directory/${rel##*/}"
+      if git -C "$WORK" cat-file -e "$blob" 2>/dev/null; then
+        git -C "$WORK" show "$blob" > "$WORK/expected-agent"
+        found=1; break
+      fi
+    done < <(source_dirs_for agents)
+    if [ "$found" -eq 0 ] || [ "$(sed 's/\r$//' "$path")" != "$(sed 's/\r$//' "$WORK/expected-agent")" ]; then
+      echo "Locally modified or unverifiable managed agent: $rel; preserve/review edits before migrating" >&2; exit 1
+    fi
+    tracked="$(git -C "$REPO_ROOT" ls-files -v -- "$rel")"
+    if printf '%s\n' "$tracked" | grep -qE '^[a-zS] '; then
+      echo "Index flags block agent migration: $rel; review assume-unchanged/skip-worktree before retrying" >&2; exit 1
+    fi
+    git --no-optional-locks -C "$REPO_ROOT" diff --quiet -- "$rel" || { echo "Unstaged changes block agent migration: $rel" >&2; exit 1; }
+    git --no-optional-locks -C "$REPO_ROOT" diff --cached --quiet -- "$rel" || { echo "Staged changes block agent migration: $rel" >&2; exit 1; }
+    printf '%s\n' "$path" >> "$REMOVALS"
+  done <<< "$PREV_FILES"
+  while IFS= read -r path; do rm -- "$path"; done < "$REMOVALS"
+  echo "sheen sync: organization agent discovery; removed $(wc -l < "$REMOVALS" | tr -d ' ') verified legacy managed file(s)"
+fi
+
 for type in $TYPES; do
+  [ "$type" != agents ] || [ "$AGENT_DISTRIBUTION" != organization ] || continue
   SRC_DIRS=()
   while IFS= read -r rel; do
     [ -n "$rel" ] || continue
@@ -316,7 +363,7 @@ done
 # opens a PR whenever a new sheen version is available.
 SHEEN_SYNC_WF="$REPO_ROOT/.github/workflows/sheen-sync.yml"
 UPSTREAM_SYNC_WF="$WORK/templates/sheen-sync.yml"
-if [ -f "$UPSTREAM_SYNC_WF" ]; then
+if [ "$INSTALL_SYNC_WORKFLOW" = true ] && [ -f "$UPSTREAM_SYNC_WF" ]; then
   NORMALIZED_SYNC_WF="$WORK/templates/sheen-sync.normalized.yml"
   sed -E \
     -e 's#uses: ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@#uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@#g' \
@@ -343,6 +390,11 @@ if [ -f "$UPSTREAM_SYNC_WF" ]; then
     printf '%s\n' ".github/workflows/sheen-sync.yml" >> "$FILES_LIST"
     COUNT=$((COUNT + 1))
   fi
+elif [ -f "$SHEEN_SYNC_WF" ] && grep -Fq 'This file was synced into your repo by basecoat-sheen.' "$SHEEN_SYNC_WF"; then
+  FILES_JSON="$FILES_JSON  \".github/workflows/sheen-sync.yml\",\n"
+  printf '%s\n' ".github/workflows/sheen-sync.yml" >> "$FILES_LIST"
+  COUNT=$((COUNT + 1))
+  echo 'sheen sync: existing managed scheduled workflow preserved without updates; delete it to disable scheduling. It will not be recreated unless install_sync_workflow: true.' >&2
 fi
 
 FILES_JSON="$(printf '%b' "$FILES_JSON" | sed '$ s/,$//')"
@@ -355,6 +407,7 @@ cat > "$CANDIDATE_MANIFEST" <<EOF
   "ref": "$REF",
   "synced": "$SYNCED",
   "commit": "$COMMIT",
+  "agent_distribution": "$AGENT_DISTRIBUTION",
   "files": [
 $FILES_JSON
   ]

@@ -293,6 +293,15 @@ $source = if ($env:SHEEN_REPO) { $env:SHEEN_REPO } else { Get-ConfigScalar -Key 
 if (-not $source) { $source = $DefaultSource }
 $ref = if ($env:SHEEN_REF) { $env:SHEEN_REF } else { Get-ConfigScalar -Key 'ref' }
 if (-not $ref) { $ref = $DefaultRef }
+$agentDistribution = Get-ConfigScalar -Key 'agent_distribution'
+if (-not $agentDistribution) { $agentDistribution = 'organization' }
+if ($agentDistribution -cnotin @('organization', 'repository')) {
+    throw 'agent_distribution must be organization or repository'
+}
+$installWorkflow = Get-ConfigScalar -Key 'install_sync_workflow'
+if ($installWorkflow -and $installWorkflow -notin @('true', 'false')) {
+    throw 'install_sync_workflow must be true or false'
+}
 
 $displaySource = $source -replace '(?i)^(https?://)[^/@]*@', '$1' -replace '[?#].*$', ''
 Write-Host "sheen sync: $displaySource @ $ref"
@@ -310,7 +319,7 @@ if (Test-Path -LiteralPath $previousManifest) {
         $previousManifestData = Get-Content -LiteralPath $previousManifest -Raw | ConvertFrom-Json
         foreach ($item in @($previousManifestData.files)) { [void]$previousManaged.Add([string]$item) }
         $previousInstalledHashes = Get-InstalledFileHashes -RepoRoot $repoRoot -Files @($previousManifestData.files)
-    } catch { }
+    } catch { throw "Cannot read previous Sheen ownership manifest: $($_.Exception.Message)" }
 }
 
 $stagingRoot = $env:SHEEN_SYNC_TEMP_ROOT
@@ -334,6 +343,7 @@ $manifest = [ordered]@{
     ref     = $ref
     synced  = (Get-Date).ToUniversalTime().ToString('o')
     commit  = $null
+    agent_distribution = $agentDistribution
     files   = New-Object System.Collections.Generic.List[string]
 }
 
@@ -354,7 +364,62 @@ try {
         throw "could not resolve a complete source commit from '$work'. Set SHEEN_SYNC_TEMP_ROOT to a writable short path and retry."
     }
 
+    if ($agentDistribution -eq 'organization') {
+        $removals = New-Object System.Collections.Generic.List[string]
+        foreach ($relative in $previousManaged) {
+            if (-not $relative.StartsWith('.github/agents/')) { continue }
+            if ($relative -notmatch '^\.github/agents/[A-Za-z0-9._-]+$') {
+                throw "Unsafe legacy managed agent path: $relative"
+            }
+            $path = Join-Path $repoRoot $relative
+            if (-not (Test-Path -LiteralPath $path)) { continue }
+            $item = Get-Item -LiteralPath $path -Force
+            if ($item.PSIsContainer) { throw "Non-regular legacy managed agent: $relative" }
+            $parent = Get-Item -LiteralPath $item.DirectoryName -Force
+            $githubDirectory = Get-Item -LiteralPath (Join-Path $repoRoot '.github') -Force
+            if (($item.Attributes -bor $parent.Attributes -bor $githubDirectory.Attributes) -band [System.IO.FileAttributes]::ReparsePoint) {
+                throw "Non-regular legacy managed agent: $relative"
+            }
+            if ([string]$previousManifestData.source -cne $displaySource -or [string]$previousManifestData.commit -notmatch '^[0-9a-fA-F]{40}$') {
+                throw "Cannot verify legacy agent ownership for $relative; restore the previous source before migrating"
+            }
+            $previousCommit = [string]$previousManifestData.commit
+            git -C $work cat-file -e "$previousCommit^{commit}" 2>$null
+            if ($LASTEXITCODE -ne 0) {
+                git -C $work fetch --quiet origin $previousCommit
+                if ($LASTEXITCODE -ne 0) { throw "Cannot fetch previous source commit to verify $relative" }
+            }
+            $expected = $null
+            foreach ($directory in $SourceMap.agents) {
+                $blob = "${previousCommit}:$directory/$($item.Name)"
+                git -C $work cat-file -e $blob 2>$null
+                if ($LASTEXITCODE -eq 0) {
+                    $expected = @(git -C $work show $blob) -join "`n"
+                    if ($LASTEXITCODE -ne 0) { throw "Cannot read previous source agent: $relative" }
+                    break
+                }
+            }
+            $actual = (Get-Content -LiteralPath $path -Raw).Replace("`r`n", "`n").TrimEnd("`r", "`n")
+            if ($null -eq $expected -or $actual -cne $expected.TrimEnd("`r", "`n")) {
+                throw "Locally modified or unverifiable managed agent: $relative; preserve/review edits before migrating"
+            }
+            $tracked = @(git -C $repoRoot ls-files -v -- $relative)
+            if ($LASTEXITCODE -ne 0) { throw "Cannot inspect legacy agent index flags: $relative" }
+            if (@($tracked | Where-Object { $_ -cmatch '^[a-zS] ' }).Count -gt 0) {
+                throw "Index flags block agent migration: $relative; review assume-unchanged/skip-worktree before retrying"
+            }
+            git --no-optional-locks -C $repoRoot diff --quiet -- $relative
+            if ($LASTEXITCODE -ne 0) { throw "Unstaged changes block agent migration: $relative" }
+            git --no-optional-locks -C $repoRoot diff --cached --quiet -- $relative
+            if ($LASTEXITCODE -ne 0) { throw "Staged changes block agent migration: $relative" }
+            [void]$removals.Add($path)
+        }
+        foreach ($path in $removals) { Remove-Item -LiteralPath $path -Force }
+        Write-Host "sheen sync: organization agent discovery; removed $($removals.Count) verified legacy managed file(s)"
+    }
+
     foreach ($type in $TargetMap.Keys) {
+        if ($type -eq 'agents' -and $agentDistribution -eq 'organization') { continue }
         $sourceCandidates = if ($SourceMap.Contains($type)) { @($SourceMap[$type]) } else { @($type) }
         $srcDirs = New-Object System.Collections.Generic.List[string]
         foreach ($candidate in $sourceCandidates) {
@@ -445,7 +510,7 @@ try {
     # opens a PR whenever a new sheen version is available.
     $sheenSyncWorkflow = Join-Path $repoRoot '.github' 'workflows' 'sheen-sync.yml'
     $upstreamTemplate = Join-Path $work 'templates' 'sheen-sync.yml'
-    if (Test-Path -LiteralPath $upstreamTemplate) {
+    if ($installWorkflow -eq 'true' -and (Test-Path -LiteralPath $upstreamTemplate)) {
         $normalizedWorkflow = Get-Content -LiteralPath $upstreamTemplate -Raw
         $normalizedWorkflow = $normalizedWorkflow -replace 'uses:\s+ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@', 'uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@'
         $normalizedWorkflow = [regex]::Replace($normalizedWorkflow, '(?m)(uses:\s+IBuySpy-Shared/basecoat-sheen/\.github/workflows/check-sheen-version-callable\.yml@)[^\s]+', ('${1}' + [string]$manifest.commit))
@@ -469,6 +534,13 @@ try {
             }
         }
     }
+    elseif (Test-Path -LiteralPath $sheenSyncWorkflow) {
+        $existingWorkflow = Get-Content -LiteralPath $sheenSyncWorkflow -Raw
+        if ($existingWorkflow.Contains('This file was synced into your repo by basecoat-sheen.')) {
+            Add-ManifestFile -ManifestFiles $manifest.files -RepoRoot $repoRoot -Path $sheenSyncWorkflow
+            Write-Warning 'sheen sync: existing managed scheduled workflow preserved without updates; delete it to disable scheduling. It will not be recreated unless install_sync_workflow: true.'
+        }
+    }
 
     $manifestDir = Join-Path $repoRoot '.sheen'
     New-Item -ItemType Directory -Force -Path $manifestDir | Out-Null
@@ -479,6 +551,8 @@ try {
         -and [string]::Equals([string]$previousManifestData.source, [string]$manifest.source, [System.StringComparison]::Ordinal) `
         -and [string]::Equals([string]$previousManifestData.ref, [string]$manifest.ref, [System.StringComparison]::Ordinal) `
         -and [string]::Equals([string]$previousManifestData.commit, [string]$manifest.commit, [System.StringComparison]::Ordinal) `
+        -and (Test-HasProp -Obj $previousManifestData -Name 'agent_distribution') `
+        -and [string]::Equals([string]$previousManifestData.agent_distribution, $agentDistribution, [System.StringComparison]::Ordinal) `
         -and (Test-SequenceEqual -Left @($previousManifestData.files) -Right @($manifest.files)) `
         -and (Test-HashMapsEqual -Left $previousInstalledHashes -Right $currentInstalledHashes)
     if ($preserveManifest) {

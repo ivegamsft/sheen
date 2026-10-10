@@ -7,6 +7,23 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+### Changed
+
+- **Breaking migration (#283):** agents default to organization discovery.
+  Establish an organization's central channel first, or explicitly set
+  `agent_distribution: repository` for compatibility. Only verified previous
+  manifest-owned copies are removed; custom/modified files are protected.
+- Scheduled workflow installation/update now requires
+  `install_sync_workflow: true`. Existing managed workflows are preserved without
+  updates; turn opt-in off and delete the workflow to stop its schedule.
+- Document required BaseCoat-first, Sheen-last sync ordering.
+
+### Added
+
+- Pinned central-agent publication via governed PRs with canonical source
+  hashes, ownership preflight, and scoped `SHEEN_ORG_AGENTS_TOKEN` authentication.
+  Release promotion requires successful credential preflight and central PR gates.
+
 ## [0.13.4] — 2026-10-08
 
 | Field | Value |

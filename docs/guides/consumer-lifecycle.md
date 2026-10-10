@@ -27,6 +27,15 @@ existing project.
 
 **Goal:** Pull sheen assets into your consumer repo for the first time.
 
+Run BaseCoat first and Sheen last after every full refresh: BaseCoat replaces
+shared `.github` paths. Agents now default to your organization's central
+`.github-private/agents` channel, which must be established before adoption.
+For forks/unsupported hosts, explicitly set `agent_distribution: repository`;
+the `agents` allow-list only affects that compatibility mode. Scheduled workflow
+installation is separately opt-in with `install_sync_workflow: true`.
+To disable an existing schedule, turn opt-in off and delete
+`.github/workflows/sheen-sync.yml`; it will not be recreated.
+
 > ⚠️ **Bootstrap first.** Skills like `/sheen-onboard` live in `.github/skills/`
 > and do not exist until you run the sync below. Do **not** try to invoke
 > `/sheen-onboard` before completing this phase.

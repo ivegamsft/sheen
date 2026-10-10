@@ -7,7 +7,7 @@
 # All keys are optional. Remove any key to accept the default.
 #
 # sheen is the design/UX layer over basecoat. It syncs alongside a `.basecoat.yml`;
-# the `sheen-*` and `basecoat-*` namespaces never collide.
+# Always run Sheen AFTER BaseCoat: BaseCoat replaces shared .github paths.
 #
 # Full reference: specs/06-consumption-sync.spec.md
 
@@ -30,8 +30,15 @@ ref: main
 #   - design-review
 #   - token-audit
 
-# agents: explicit allow-list of agent names (without the .agent.md suffix).
-# Omit this key entirely to sync all available sheen agents.
+# agent_distribution: organization (default) discovers centrally published
+# agents from your organization's .github-private/agents channel.
+# This source publishes the IBuySpy-Shared channel. Other organizations must
+# establish their own channel or explicitly select repository compatibility.
+# Unsupported hosts/forks may use repository; check local path restrictions.
+agent_distribution: organization
+
+# agents: repository-mode allow-list (without the .agent.md suffix).
+# Ignored in organization mode. In repository mode, omit to sync all agents.
 # agents:
 #   - ux-designer
 #   - design-reviewer
@@ -89,7 +96,8 @@ ref: main
 # generate_aesthetic_direction: true
 
 # Auto-update workflow:
-# On first sync, sheen deploys .github/workflows/sheen-sync.yml to your repo.
+# Disabled by default; set install_sync_workflow: true to deploy/update
+# .github/workflows/sheen-sync.yml.
 # This scheduled workflow checks for new sheen versions weekly and opens a PR
 # — the same auto-update experience as basecoat. Public mirror sources need no
 # extra fetch credential. Private/internal sources such as
@@ -97,7 +105,10 @@ ref: main
 # contents:read access to the source repo.
 # The workflow is callable from sheen's release pipeline and can also be
 # triggered manually from the GitHub Actions tab.
-# To disable, delete .github/workflows/sheen-sync.yml after your first sync.
+# Existing managed workflows are preserved and remain manifest-tracked without
+# updates when disabled. To stop scheduling, remove the key/set it to false AND
+# delete .github/workflows/sheen-sync.yml; later syncs will not recreate it.
+# install_sync_workflow: true
 
 # sync: sync behaviour overrides (one mapping --- combine the keys you need).
 #   script  --- path to the sync entrypoint, relative to repo root. Set this when
