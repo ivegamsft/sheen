@@ -127,7 +127,7 @@ if ($GenerateMissing) {
         Write-Host "audit-design-md: dispatching generate-design-md workflow for $($missing.Count) repo(s)…"
         foreach ($row in $missing) {
             $result = gh workflow run generate-design-md-callable.yml `
-                --repo IBuySpy-Shared/basecoat-sheen `
+                --repo ivegamsft/sheen `
                 --field "target_repo=$($row.Repo)" `
                 --field "sheen_ref=$SheenRef" 2>&1
             if ($LASTEXITCODE -eq 0) {

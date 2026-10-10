@@ -147,7 +147,7 @@ Both exact failing A4 PDFs replayed locally with their original expected content
 plus table boundaries derived from the delivered HTML: all 294 extracted lines
 were consumed, including the three repeated header cells; all 188 expected blocks,
 geometry, heading and image checks passed. Subsequently, corrected-head
-[Linux CI run 38078582828](https://github.com/IBuySpy-Shared/basecoat-sheen/actions/runs/38078582828)
+[Linux CI run 38078582828](https://github.com/ivegamsft/sheen/actions/runs/38078582828)
 completed successfully at `0d7fcef6ebc38efcc37bf67292018808e78a0c5d`, with all
 fifteen source Chromium tests including actual print checks passing. This is
 synthetic source regression evidence, not downstream approval; consumer

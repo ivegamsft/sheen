@@ -1,6 +1,6 @@
 # basecoat-sheen
 
-**The design/UX "finish coat" for [basecoat](https://github.com/IBuySpy-Shared/basecoat).**
+**The design/UX "finish coat" for [basecoat](https://github.com/ivegamsft/sheen).**
 
 basecoat-sheen is a shared repository of GitHub Copilot customizations — skills,
 agents, instructions, prompts, and a validated design-token system — focused on
@@ -93,7 +93,7 @@ Sync is **idempotent** and records a manifest so [`rollback.ps1`](rollback.ps1) 
 BaseCoat replaces shared `.github` paths even when asset names differ.
 
 **Agent channel:** agents default to organization discovery, not repository
-copies. The `IBuySpy-Shared` channel is `.github-private/agents/`; other
+copies. The `ivegamsft` channel is `.github-private/agents/`; other
 organizations must publish their own central channel before migrating, or set
 `agent_distribution: repository` for explicit compatibility on supported hosts.
 The `agents` allow-list applies only in repository mode. Migration removes only
@@ -105,14 +105,8 @@ workflow is preserved without updates. To disable its schedule, delete it and
 keep opt-in off; later syncs will not recreate it.
 
 **Source access:** the public `ivegamsft/sheen` mirror needs no fetch token.
-<!-- sheen-internal-only:start -->
-`IBuySpy-Shared` consumers of the internal source inherit the centrally managed
-organization `SHEEN_FETCH_TOKEN` (basecoat-sheen **Contents: Read only**); bootstrap
-does not prompt for or provision a repository secret. Do not shadow it with a
-consumer credential. See [central ownership and rotation](docs/guides/upgrading-sheen.md#central-ownership-and-rotation-maintainers-only).
-<!-- sheen-internal-only:end -->
 Missing access and changes to Sheen-managed assets, docs, workflows, or bootstrap
-must be requested through [issues here](https://github.com/IBuySpy-Shared/basecoat-sheen/issues)
+must be requested through [issues here](https://github.com/ivegamsft/sheen/issues)
 and implemented in this source repository, not by editing managed consumer files.
 Consumer-owned `.sheen.yml` settings remain configurable.
 
@@ -162,8 +156,8 @@ review and approval; fixture success is neither WCAG certification nor readiness
 
 Sheen is the design-system and UX governance product in the AI-SDLC governance
 family. Contracts are defined in
-[`basecoat-api-spec`](https://github.com/IBuySpy-Shared/basecoat-api-spec) and
-[`basecoat-mcp-spec`](https://github.com/IBuySpy-Shared/basecoat-mcp-spec);
+[`basecoat-api-spec`](https://github.com/ivegamsft/sheen-api-spec) and
+[`basecoat-mcp-spec`](https://github.com/ivegamsft/sheen-mcp-spec);
 shared IDs and schemas come from Binder. Sheen stays Git-native: the synced
 assets in this repository remain the source of truth, and the API is a read
 adapter over them.

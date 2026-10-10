@@ -1,5 +1,5 @@
 ---
-$id: https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/PRODUCT.md
+$id: https://github.com/ivegamsft/sheen/blob/main/PRODUCT.md
 $type: Product
 $context: https://schema.org
 register: product
@@ -174,7 +174,7 @@ no telemetry, no vendor lock-in.
   those tools.
 - **Not an engineering framework.** Cross-domain engineering concerns (CI/CD,
   infrastructure, security, code review) are handled by
-  [basecoat](https://github.com/IBuySpy-Shared/basecoat), the parent framework
+  [basecoat](https://github.com/ivegamsft/sheen), the parent framework
   that sheen integrates with.
 - **Not a documentation host.** sheen's docs (published at
   `ivegamsft.github.io/sheen`) describe the framework itself. Consumer teams

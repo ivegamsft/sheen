@@ -55,7 +55,7 @@ jobs:
         id: discovery
         # The sync scripts replace both action refs with this checked-out
         # source's commit SHA when installing the managed workflow.
-        uses: IBuySpy-Shared/basecoat-sheen/.github/actions/discover-release@v1.3.0
+        uses: ivegamsft/sheen/.github/actions/discover-release@v1.3.0
         with:
           desired_tag: ${{ inputs.source_ref || '' }}
 
@@ -108,7 +108,7 @@ jobs:
           token: ${{ secrets.SHEEN_UPDATE_TOKEN || github.token }}
 
       - name: Sync assets from immutable Sheen action
-        uses: IBuySpy-Shared/basecoat-sheen/.github/actions/sync-assets@v1.3.0
+        uses: ivegamsft/sheen/.github/actions/sync-assets@v1.3.0
         with:
           source_commit: v1.3.0
 
@@ -164,7 +164,3 @@ jobs:
 # check-sheen-version-callable.yml compatibility workflow instead. That path
 # clones the configured source; the default action path does not clone the
 # configured source. The public ivegamsft/sheen action needs no fetch token.
-# sheen-internal-only:start
-# Private-source clone compatibility uses the centrally managed organization
-# SHEEN_FETCH_TOKEN; consumers must not create per-repository fetch secrets.
-# sheen-internal-only:end

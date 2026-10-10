@@ -69,14 +69,6 @@ not execute or overwrite a consumer-root `sync.sh`, which remains owned by the
 tool that installed it. The staged script commit is also used for the asset
 sync, preventing script and payload drift.
 
-<!-- sheen-internal-only:start -->
-For `IBuySpy-Shared/basecoat-sheen`, the callable workflow receives the centrally
-managed organization Actions secret `SHEEN_FETCH_TOKEN`. Organization secret
-administrators own its provisioning and rotation; consumers must not create a
-repository secret with the same name. If inherited access is unavailable, file
-an issue with the source maintainers. This read-scoped organization credential
-is not a general-purpose token for custom private sources.
-<!-- sheen-internal-only:end -->
 
 The action archive intentionally has no Git history. If a previous manifest
 owns legacy organization-mode agent copies that still need history-based

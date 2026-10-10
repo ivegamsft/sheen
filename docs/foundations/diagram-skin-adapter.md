@@ -1,6 +1,6 @@
 # Diagram Semantic-Role Adapter
 
-Part of [epic #110](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/110)
+Part of [epic #110](https://github.com/ivegamsft/sheen/issues/110)
 (Position C — "bridge, don't fork"). Resolves diagram-design semantic roles
 *from* `tokens/themes/*` at build time, so documentation/code diagrams (the
 renderer landing in #113) never hard-code hex and automatically follow theme
@@ -97,9 +97,9 @@ Every vendored icon uses `stroke="currentColor"`, so it inherits its colour
 from the diagram-skin adapter above via CSS `color` — icons never carry a
 hard-coded hex. See the generated
 [Diagram Icon Gallery](icon-gallery.md) for previews, and
-[`vendor/tabler-icons/VENDOR.md`](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/vendor/tabler-icons/VENDOR.md)
+[`vendor/tabler-icons/VENDOR.md`](https://github.com/ivegamsft/sheen/blob/main/vendor/tabler-icons/VENDOR.md)
 for the full provenance and per-diagram-type mapping. Attribution is tracked
-in [`THIRD_PARTY_LICENSES.md`](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/THIRD_PARTY_LICENSES.md).
+in [`THIRD_PARTY_LICENSES.md`](https://github.com/ivegamsft/sheen/blob/main/THIRD_PARTY_LICENSES.md).
 
 ## Renderer (#113)
 
@@ -115,7 +115,7 @@ pwsh scripts/render-diagram.ps1 -Type bar -SpecPath spec.json -OutPath out.html 
 ```
 
 Full type list, spec schemas, and runnable sample specs are documented in
-[`skills/documentation-diagram/SKILL.md`](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/skills/documentation-diagram/SKILL.md).
+[`skills/documentation-diagram/SKILL.md`](https://github.com/ivegamsft/sheen/blob/main/skills/documentation-diagram/SKILL.md).
 Every rendered diagram is validated in CI against
 `lint-diagram-geometry.ps1` and `audit-diagram-slop.ps1` above — the
 renderer's output must pass both, unmodified, for every sample spec.

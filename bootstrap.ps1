@@ -81,13 +81,8 @@ ref: "$Ref"
 # Scheduled workflow installation is opt-in:
 # install_sync_workflow: true
 # Public mirror: no fetch token.
-# sheen-internal-only:start
-# IBuySpy-Shared internal-source consumers inherit
-# the centrally managed organization SHEEN_FETCH_TOKEN; no per-repo setup.
-# Never provision a consumer secret.
-# sheen-internal-only:end
 # Request access or managed-content changes
-# through issues in IBuySpy-Shared/basecoat-sheen, not consumer-managed edits.
+# through issues in ivegamsft/sheen, not consumer-managed edits.
 
 # Uncomment and edit to limit which assets are synced.
 # Empty list [] = sync none. Omit key = sync all (default).

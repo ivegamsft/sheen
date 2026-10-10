@@ -15,12 +15,12 @@ from urllib.request import Request, urlopen
 
 
 PUBLIC_REPOSITORY = "ivegamsft/sheen"
-PRIVATE_REPOSITORY = "IBuySpy-Shared/basecoat-sheen"
+PRIVATE_REPOSITORY = "ivegamsft/sheen"
 RELEASE_TAG = re.compile(r"^v[0-9]+\.[0-9]+\.[0-9]+$")
 COMMIT_SHA = re.compile(r"^[0-9a-f]{40}$")
 ACTION_USE = re.compile(
     r"(?m)^(?P<prefix>[ \t]*uses:[ \t]*)"
-    r"(?P<repository>IBuySpy-Shared/basecoat-sheen|ivegamsft/sheen)"
+    r"(?P<repository>ivegamsft/sheen|ivegamsft/sheen)"
     r"/\.github/actions/(?P<action>sync-assets|discover-release)"
     r"@(?P<ref>[^\s#]+)(?P<suffix>[ \t]*(?:\#.*)?\r?)$"
 )

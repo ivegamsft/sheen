@@ -50,7 +50,7 @@ Rules:
 - `agent_distribution` MUST default to `organization`; only `organization` and
   `repository` are valid. Organization mode MUST NOT project agents into the
   consumer repository. Organization owners MUST establish their own central
-  channel before migration; this source publishes `IBuySpy-Shared/.github-private`.
+  channel before migration; this source publishes `ivegamsft/.github-private`.
 - Publish only pinned release `agents/*.agent.md` definitions, not eval files,
   through central PRs. Record source/ref/commit and SHA-256 hashes in
   `sheen-agents-manifest.json`; preflight all collisions and modified owned

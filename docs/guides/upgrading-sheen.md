@@ -36,7 +36,7 @@ targeting. You can check it in several ways:
 - **Automatically:** the upgrade scripts fetch and print the upstream
   `CHANGELOG.md` during Phase 3 of the upgrade run.
 - **Manually:** visit the GitHub releases page or the
-  [CHANGELOG.md](https://github.com/IBuySpy-Shared/basecoat-sheen/blob/main/CHANGELOG.md)
+  [CHANGELOG.md](https://github.com/ivegamsft/sheen/blob/main/CHANGELOG.md)
   in the upstream source repo.
 
 ---
@@ -169,47 +169,6 @@ jobs:
 
 Scheduled workflows that read from the public `ivegamsft/sheen` mirror do not
 need a fetch credential, regardless of consumer organization.
-<!-- sheen-internal-only:start -->
-`IBuySpy-Shared` consumers using the internal `IBuySpy-Shared/basecoat-sheen`
-source inherit the centrally managed organization Actions secret
-`SHEEN_FETCH_TOKEN`, available to all organization repositories. There is **no
-per-repository secret setup or credential provisioning step**. The managed sync
-template passes the inherited secret to the callable workflow as `fetch_token`.
-Do not create a repository secret with the same name; it would shadow the
-centrally managed value.
-
-The fetch credential is read-only: repository access is limited to
-`IBuySpy-Shared/basecoat-sheen` with **Contents: Read only** (not write access to
-consumer repositories). It is separate from the optional `SHEEN_UPDATE_TOKEN`
-used to create consumer PRs. The consumer repository's default `GITHUB_TOKEN`
-cannot clone a separate private/internal source repository. When the inherited
-fetch secret is missing, scheduled sync fails during preflight with a `Missing
-Sheen fetch token` error. File an issue in
-[IBuySpy-Shared/basecoat-sheen](https://github.com/IBuySpy-Shared/basecoat-sheen/issues)
-for the maintainers to resolve central availability or workflow wiring; do not
-provision a consumer credential. Other private forks need their own source-owner
-authentication policy; the organization secret is not a general-purpose token.
-
-### Central ownership and rotation (maintainers only)
-
-`IBuySpy-Shared` organization secret administrators own the organization Actions
-secret; Sheen maintainers coordinate source access and rotation through issues in
-this repository. This is role-based ownership, not an individual consumer owner.
-
-1. Track the rotation or access incident in a Sheen source issue without posting
-   credential values, authorization headers, or authenticated URLs.
-2. An authorized organization secret administrator prepares a replacement
-   credential restricted to `basecoat-sheen`, **Contents: Read only**, and updates
-   the existing organization `SHEEN_FETCH_TOKEN`, preserving its availability to
-   all organization repositories. No consumer repository secret is created.
-3. Sheen maintainers validate a pinned internal-source sync in an organization
-   consumer and the public mirror's no-token path. Confirm source reads and the
-   consumer PR flow work without granting the fetch credential write access.
-4. After validation, the administrator revokes the previous credential and
-   maintainers record completion/evidence in the issue without secret values.
-   On failure, keep rotation open and restore or replace the central credential
-   as appropriate; do not ask consumers to create local substitutes.
-<!-- sheen-internal-only:end -->
 
 ### Source-owned changes
 
@@ -247,7 +206,7 @@ not part of the sync.
 
 The upgrade script relies on `sync.ps1` / `sync.sh` being present at the consumer
 repo root. If it is missing, download the latest version from the
-[sheen release assets](https://github.com/IBuySpy-Shared/basecoat-sheen/releases/latest).
+[sheen release assets](https://github.com/ivegamsft/sheen/releases/latest).
 
 ### Upgrade completed but expected assets are missing
 
