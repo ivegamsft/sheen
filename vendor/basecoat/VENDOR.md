@@ -9,10 +9,10 @@ provides the engineering-SDLC foundation that basecoat-sheen (the design/UX
 | Field | Value |
 |---|---|
 | Source | <https://github.com/IBuySpy-Shared/basecoat> |
-| Ref | `v4.6.3` |
-| Commit | `a6e4302bf23c8cad75f7add541222fb516be583d` |
+| Ref | `v4.6.4` |
+| Commit | `01d96489247d56f444d1fbed446f93bd65b6c7c3` |
 | Commit date | 2026-10-08 |
-| Vendored on | 2026-10-08 |
+| Vendored on | 2026-10-10 |
 | License | See [`LICENSE`](LICENSE) |
 
 ## What is included

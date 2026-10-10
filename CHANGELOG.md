@@ -7,6 +7,12 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+### Fixed
+
+- Refresh read-only BaseCoat to v4.6.4, restricting guidance-lock predecessor
+  migration to the approved path and SHA-256; unknown or modified content
+  remains fail-closed (#295).
+
 ## [1.1.0] — 2026-10-10
 
 | Field | Value |
