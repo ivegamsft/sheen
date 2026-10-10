@@ -119,10 +119,12 @@ content model. · Pairs: `navigation-design`, `taxonomy`; agent
 
 **`wireframing`** *(ia · stable)* — low/mid-fidelity screen wireframes and layout
 intent.
-· Use for: wireframe a screen/flow, layout hierarchy, content blocks · Not for:
-high-fidelity component specs (`component-spec`)
-· Workflow: define screen goal → block layout → annotate states. · Output:
-wireframe spec. · Pairs: `layout-grid-spacing`, `ui-states-interaction`; agent
+· Use for: screen specs, sketched SVG boards, offline HTML click-throughs · Not for:
+production scaffolds (`design-to-code`), taxonomy (`taxonomy`)
+· Workflow: capture task/page/flow IDs → compose regions/states → render selected
+format → validate actual transitions and review evidence. · Output:
+screen specification, static SVG or offline HTML plus ownership evidence.
+· Pairs: `layout-grid-spacing`, `ui-states-interaction`, `experience-blueprint`; agent
 `ux-designer`.
 
 **`navigation-design`** *(ia · stable)* — navigation patterns and wayfinding.

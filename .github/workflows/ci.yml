@@ -143,6 +143,9 @@ jobs:
           python scripts/test-publish-org-agents.py
           python scripts/test-agent-distribution.py
 
+      - name: Validate - wireframe formats, references and owned refresh (#287)
+        run: python scripts/test-wireframes.py
+
       - name: Validate - vendored BaseCoat sync overlay guard (#265)
         run: pwsh -NonInteractive -File scripts/test-vendor-basecoat-sync.ps1
 

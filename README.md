@@ -111,6 +111,14 @@ must not have an enterprise-owner bypass. Merge publication PRs through normal
 gates before treating a release's agents as delivered. Roll back through a
 central revert PR and restore the consumer's previous pinned ref if necessary.
 
+## Wireframe exploration
+
+Use `wireframing` to draft screen specifications, sketched SVG boards or explicitly
+requested offline HTML click-throughs. The [portable skill contract](skills/wireframing/references/artifact-contract.md)
+includes a complete task-flow sample and optional dependency-free Python renderer.
+Screens retain page/state/flow IDs; prototypes simulate interactions only and
+must pass visual/task review before production handoff to `design-to-code`.
+
 ## Governance & vocabulary
 
 - [`.lexicon.md`](.lexicon.md) — the canonical design vocabulary used across assets.

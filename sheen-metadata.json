@@ -1731,17 +1731,32 @@
         "category": "ia",
         "pillar": "ia",
         "maturity": "stable",
-        "description": "Use when drafting screen wireframes, planning layout hierarchies, or defining flow skeletons before visual design. USE FOR: screen wireframe drafting, layout hierarchy planning, flow skeleton definition. DO NOT USE FOR: final visual polish, token refactoring.",
-        "hash": "52d4614a26e377922519fb3f126aafc4f07a15289c556ea710edc99e86b4187f",
+        "description": "Create low-fidelity screen and flow artifacts before visual design. USE FOR: screen wireframe specifications, sketched SVG wireframes, offline HTML click-through prototypes, layout hierarchy planning, flow skeleton definition. DO NOT USE FOR: production component scaffolding (design-to-code), taxonomy modeling (taxonomy), final visual polish, token refactoring.",
+        "hash": "34c25c95d62325f7727789fb2167f4c4a929733a8efceb80f59041435b8d5e05",
         "files": [
           {
             "path": "SKILL.md",
-            "hash": "52d4614a26e377922519fb3f126aafc4f07a15289c556ea710edc99e86b4187f",
+            "hash": "34c25c95d62325f7727789fb2167f4c4a929733a8efceb80f59041435b8d5e05",
             "hash_mode": "text-lf"
           },
           {
             "path": "eval.yaml",
-            "hash": "28f69bf4d49b3c5055e3a96921fb61bf07ee2d8e0944354ec34c7136c8e31aac",
+            "hash": "ad29e3c7cc11057b1128568e564e67c1946f3151be01aa01d9971b01c481a148",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "references/artifact-contract.md",
+            "hash": "29fc99b58915db9366ee8b100c1bb4fd2fcf5ce5fc3ccf24a1b569245d47c3ab",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "scripts/render-wireframes.py",
+            "hash": "15855eac15d88d8cb34c51f7161b54ff1ba071437cbb171ddcb3513629549e1e",
+            "hash_mode": "text-lf"
+          },
+          {
+            "path": "templates/task-flow.json",
+            "hash": "1fb953b590f6aa9417e2a569504ad31b8433a52a4b16687f82e8043921df9fe3",
             "hash_mode": "text-lf"
           }
         ]

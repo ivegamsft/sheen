@@ -7,6 +7,17 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+### Added
+
+- Strengthened `wireframing` with screen-spec, sketched SVG and offline HTML
+  click-through modes, a portable renderer/sample, page/flow validation, owned
+  refresh safeguards and actual browser acceptance checks (#287).
+
+### Fixed
+
+- Replaced `wireframing`'s taxonomy-shaped workflow with screen/interaction
+  composition and prototype-only handoff boundaries.
+
 ## [1.0.0] — 2026-10-10
 
 | Field | Value |

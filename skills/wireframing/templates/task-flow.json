@@ -1,0 +1,47 @@
+{
+  "schema": "sheen-wireframes/v1",
+  "title": "Saved-view task exploration",
+  "start": "list-empty",
+  "pages": ["views", "editor"],
+  "screens": [
+    {
+      "id": "list-empty", "page": "views", "title": "No saved views", "state": "empty",
+      "annotations": ["Primary task: create a saved view.", "Regions stack on mobile and desktop; no real data is stored."],
+      "regions": [{"label": "Workspace", "blocks": [
+        {"kind": "text", "label": "Save a filter combination to reuse later."},
+        {"kind": "placeholder", "label": "Empty-state illustration"},
+        {"kind": "action", "label": "Create view", "target": "edit"}
+      ]}]
+    },
+    {
+      "id": "edit", "page": "editor", "title": "Name the view", "state": "default",
+      "annotations": ["Input is simulated and optional.", "Error is reachable explicitly; no invented server validation."],
+      "regions": [{"label": "View details", "blocks": [
+        {"kind": "input", "label": "View name (sample only)"},
+        {"kind": "action", "label": "Save sample view", "target": "saved"},
+        {"kind": "action", "label": "Preview save error", "target": "save-error"},
+        {"kind": "action", "label": "Cancel", "target": "list-empty"}
+      ]}]
+    },
+    {
+      "id": "save-error", "page": "editor", "title": "Save error example", "state": "error",
+      "annotations": ["Simulated error; no network request.", "Loading omitted because no asynchronous work is modeled."],
+      "regions": [{"label": "Recovery", "blocks": [
+        {"kind": "text", "label": "The sample view was not saved. Review the details and try again."},
+        {"kind": "action", "label": "Review details", "target": "edit"}
+      ]}]
+    },
+    {
+      "id": "saved", "page": "views", "title": "View saved", "state": "success",
+      "annotations": ["Success example only; no persistence.", "Selected layout needs product-specific visual/task review."],
+      "regions": [{"label": "Confirmation", "blocks": [
+        {"kind": "text", "label": "Your sample view is ready."},
+        {"kind": "action", "label": "Return to workspace", "target": "list-empty"}
+      ]}]
+    }
+  ],
+  "flows": [
+    {"id": "create-view", "steps": ["list-empty", "edit", "saved", "list-empty"]},
+    {"id": "recover-save", "steps": ["edit", "save-error", "edit", "saved"]}
+  ]
+}

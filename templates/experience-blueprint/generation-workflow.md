@@ -56,7 +56,10 @@ speed, long-term maintainability). Record:
 4. **Pages** — delegate to `content-hierarchy` and `app-component-catalog`
    for the app-specific logical component/pattern selection.
 5. **Wireframes** — delegate to `wireframing`; low fidelity unless the brief
-   explicitly requests visual comps.
+   explicitly requests visual comps. Use `wireframing` for screen specs, static
+   sketched SVG boards or explicitly requested offline HTML click-throughs.
+   Keep page/state/flow IDs and validate actual transitions before handoff;
+   prototypes are not production UI.
 6. **Flows** — delegate to `user-research`/`ux` journey templates; every
    step MUST link to a page ID or a declared external touchpoint.
 

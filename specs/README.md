@@ -22,6 +22,8 @@ extensions; a specification does not itself establish implementation status.
 | 13 | [App-Specific Theme Lifecycle](13-theme-lifecycle.spec.md) | Implemented agent contracts and illustrative T01-T14 checks for previews, scoped selection, readiness, custom reuse/revision; downstream visual validation remains separate |
 | 14 | [Guide Authoring and HTML Delivery](14-html-brand-guide.spec.md) | Extension of existing `style-guide-authoring`: Markdown/audit compatibility, canonical input reuse, offline HTML budgets, safe refresh and read-only freshness; guide input freshness and portable HTML packaging are implemented, while browser readiness evidence remains separate |
 
+| 15 | [Wireframing and portable prototypes](15-wireframing-prototypes.spec.md) | Screen specs, static sketched SVG and offline HTML click-throughs; model, safe refresh and browser evidence contracts |
+
 ## Conventions used in these specs
 
 - **MUST / SHOULD / MAY** follow RFC 2119 meaning.

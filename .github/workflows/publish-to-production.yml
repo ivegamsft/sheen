@@ -138,6 +138,7 @@ jobs:
             'scripts/publish-org-agents.py'
             'scripts/test-publish-org-agents.py'
             'scripts/test-agent-distribution.py'
+            'scripts/test-wireframes.py'
             'scripts/test-release-reliability.ps1'
             'scripts/test-release-reliability.py'
             'scripts/test-downstream-token-hygiene.ps1'

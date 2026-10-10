@@ -1,7 +1,7 @@
 ---
 name: wireframing
 compatibility: [github-copilot-cli]
-description: "Use when drafting screen wireframes, planning layout hierarchies, or defining flow skeletons before visual design. USE FOR: screen wireframe drafting, layout hierarchy planning, flow skeleton definition. DO NOT USE FOR: final visual polish, token refactoring."
+description: "Create low-fidelity screen and flow artifacts before visual design. USE FOR: screen wireframe specifications, sketched SVG wireframes, offline HTML click-through prototypes, layout hierarchy planning, flow skeleton definition. DO NOT USE FOR: production component scaffolding (design-to-code), taxonomy modeling (taxonomy), final visual polish, token refactoring."
 category: ia
 metadata:
   category: ia
@@ -13,25 +13,30 @@ allowed-tools: []
 
 # wireframing
 
-Create low/mid-fidelity wireframes for flows and screens.
+Create screen specifications, sketched SVG boards, or offline HTML click-throughs.
 
 ## Workflow
-1. Define user intents and findability tasks for the information space.
-2. Model entities, categories, and relationships for retrieval and navigation.
-3. Build candidate structures and labeling systems for target channels.
-4. Stress-test ambiguity and overlap using representative content examples.
-5. Finalize governance rules for growth, naming, and change control.
+1. Read and apply the [artifact contract](references/artifact-contract.md).
+2. Capture the task, audience, existing page/flow IDs, layout constraints, states and content priorities. Mark assumptions; preserve approved decisions.
+3. Select fidelity, output format and authorized destination; default to a screen specification. Explore alternatives with `design-debate` when structure is uncertain.
+4. Model screens, ordered regions, controls, targets and flow edges. Use the [sample](templates/task-flow.json) as a complete portable example, not product evidence.
+5. Generate the selected artifact; optionally use bundled `scripts/render-wireframes.py` (Python 3). Richer manual artifacts follow the same contract.
+6. Validate references and actual output. For HTML, exercise keyboard/mouse, Back/Reset, focus, states and narrow viewports; record visual/task findings before handoff.
 
 ## Guardrails
-- Do not optimize taxonomy for internal jargon over user language.
-- Do not leave overlapping categories without clear disambiguation rules.
-- Do not change IA without migration implications for navigation/search.
-- Do not publish IA recommendations without concrete placement examples.
+- Never present a prototype as production UI or user-validation evidence.
+- Simulate interactions only: no real data submission, services, payments or credentials.
+- No deployment, unrelated overwrite or silent state omission; refresh only verified owned output with explicit authorization.
+- Static SVG is a storyboard, not a clickable prototype. Do not infer accessibility compliance from a screenshot or renderer pass.
 
 ## Output
-- IA/taxonomy package: structure map, definitions, and naming rules.
-- Ambiguity and edge-case register with resolution policy.
+- Selected screen-spec Markdown, sketched SVG board, or self-contained HTML at the requested destination.
+- Page/screen/state/flow references, annotations, assumptions and review findings; helper outputs include an ownership sidecar.
 
 ## Delegates / pairs with
 - layout-grid-spacing
 - ui-states-interaction
+- experience-blueprint
+- design-debate
+- accessibility-audit
+- design-to-code
