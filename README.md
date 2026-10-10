@@ -9,7 +9,7 @@ foundation that basecoat provides: basecoat governs the *engineering* surface,
 sheen governs the *design* surface, and the two namespaces (`basecoat-*` /
 `sheen-*`) never collide, so a consumer can adopt both together.
 
-> **Status:** v1.1.0 release — 61 skills, 7 agents, 10 instruction layers, and
+> **Status:** v1.2.0 release — 61 skills, 7 agents, 10 instruction layers, and
 > 18 templates, all validated against [`checks.json`](checks.json) in CI. The
 > contract is specified in [`SPEC.md`](SPEC.md) and [`specs/`](specs/); see
 > [`CHANGELOG.md`](CHANGELOG.md) for release history.
@@ -117,7 +117,25 @@ Use `wireframing` to draft screen specifications, sketched SVG boards or explici
 requested offline HTML click-throughs. The [portable skill contract](skills/wireframing/references/artifact-contract.md)
 includes a complete task-flow sample and optional dependency-free Python renderer.
 Screens retain page/state/flow IDs; prototypes simulate interactions only and
-must pass visual/task review before production handoff to `design-to-code`.
+must pass visual/task review before production handoff. Use `experience-blueprint`
+and the [portable design-handoff contract](skills/design-handoff/references/wireframe-contract.md)
+to validate mappings against the approved original wireframe model before
+production scaffolding through `design-to-code`. Structural checks are not
+production-readiness approval.
+
+## Discovery and guide evidence
+
+Use `user-research` for a scoped
+[discovery brief and evidence/findings register](skills/user-research/references/discovery-contract.md);
+`design-bootstrap` and `design-exploration` consume the permitted findings.
+Unresearched concepts remain explicitly provisional, and missing evidence never
+becomes invented research or authorization to expand the engagement.
+
+The existing `style-guide-authoring` skill includes a
+[browser/print evidence protocol](skills/style-guide-authoring/references/browser-print-evidence.md).
+Source Chromium regressions exercise the actual portable renderer, narrow/zoomed
+layouts and A4/Letter output. Downstream guides still need artifact-specific
+review and approval; fixture success is neither WCAG certification nor readiness.
 
 ## Governance & vocabulary
 

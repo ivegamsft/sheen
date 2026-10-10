@@ -1,6 +1,6 @@
 {
   "name": "basecoat-sheen",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "releaseDate": "2026-10-10",
-  "notes": "v1.1.0: strengthened wireframing with screen specifications, sketched SVG and offline HTML click-through prototypes."
+  "notes": "v1.2.0: evidence-backed discovery, validated wireframe handoff, portable guide browser/print evidence and BaseCoat v4.6.4."
 }

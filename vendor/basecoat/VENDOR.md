@@ -39,7 +39,10 @@ Heavy, generated, or repo-specific content not needed for the asset library:
 repository-specific PR control-plane entrypoint that requires an evaluator in
 the excluded `.github/` runtime. Sheen does not invoke it. Keep both outside this
 asset-library snapshot rather than shipping a broken entrypoint or importing
-the upstream control plane. Included upstream files remain byte-identical.
+the upstream control plane. Included upstream content is byte-identical to the
+pinned archive. The root `.gitattributes` preserves upstream CRLF in
+`scripts/bootstrap-basecoat.ps1` and `sync.ps1`; compare all included bytes
+exactly when verifying the pinned snapshot.
 
 ## Update policy
 

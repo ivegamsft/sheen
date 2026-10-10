@@ -5,7 +5,7 @@ name: "Sheen - Publish to Production"
 #   1. Preflight — validate PRODUCTION_REPO_TOKEN push access to ivegamsft/sheen
 #   2. Strip     — remove internal-only workflows and CI tooling
 #   3. Sanitize  — rewrite IBuySpy-Shared/basecoat-sheen → ivegamsft/sheen
-#   4. Push      — force-push to ivegamsft/sheen main + re-tag
+#   4. Push      — atomically update main and create an immutable public tag
 #   5. Release   — create matching GitHub release on production repo
 #   6. Meta      — update description/homepage on production repo
 #   7. Docs      — dispatch docs.yml on ivegamsft/sheen (bootstrap Pages + deploy)
@@ -305,6 +305,23 @@ jobs:
           PROTECTION_API="https://api.github.com/repos/ivegamsft/sheen/branches/main/protection"
           PROTECTION_BACKUP_FILE=".production-main-protection.json"
 
+          if git ls-remote --exit-code --tags "$PRODUCTION_REMOTE" "refs/tags/${TAG}"; then
+            git fetch --no-tags "$PRODUCTION_REMOTE" "refs/tags/${TAG}"
+            if [[ "$(git rev-parse 'FETCH_HEAD^{tree}')" != "$(git rev-parse 'HEAD^{tree}')" ]]; then
+              echo "::error::Public tag ${TAG} has a different payload; publish a new version instead."
+              exit 1
+            fi
+            echo "Verified identical immutable payload; skipping all remote Git/protection writes."
+            echo "had_protection=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          else
+            status=$?
+            if [[ "$status" -ne 2 ]]; then
+              echo "::error::Cannot verify public tag absence (git status ${status})."
+              exit "$status"
+            fi
+          fi
+
           echo "Capturing existing branch protection..."
           protection_status=$(curl -sS -o "$PROTECTION_BACKUP_FILE" -w "%{http_code}" \
             -H "Authorization: token ${PRODUCTION_TOKEN}" \
@@ -330,12 +347,12 @@ jobs:
           # Clear any persisted Actions bot credentials so PAT is used for push
           git config --local --unset-all http.https://github.com/.extraheader || true
 
-          # Force-push: mirror rewritten release content to production main
-          git push "${PRODUCTION_REMOTE}" HEAD:refs/heads/main --force
-
-          # Re-tag on the cleaned HEAD so the published archive is clean
-          git tag -f "${TAG}" HEAD
-          git push "${PRODUCTION_REMOTE}" "refs/tags/${TAG}" --force
+          # Replace only the disposable source-checkout tag, never the remote tag.
+          git tag --delete "${TAG}"
+          git tag "${TAG}" HEAD
+          # Only main is force-updated. A concurrent tag creation rejects both updates.
+          git push --atomic "${PRODUCTION_REMOTE}" \
+            +HEAD:refs/heads/main "refs/tags/${TAG}:refs/tags/${TAG}"
 
           echo "Pushed ${TAG} to ivegamsft/sheen"
 

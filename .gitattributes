@@ -1,0 +1,2 @@
+vendor/basecoat/scripts/bootstrap-basecoat.ps1 -text
+vendor/basecoat/sync.ps1 -text

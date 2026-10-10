@@ -224,6 +224,53 @@ class ProvenanceTests(unittest.TestCase):
             self.run_step("", expected=1, override=body)
             self.assertFalse(self.output.exists())
 
+    def test_public_tag_is_create_only_and_push_is_atomic(self):
+        body = workflow_steps("publish-to-production.yml")["Push to production repository"][1]
+        guard = body[body.index('if git ls-remote'):body.index('echo "Capturing existing')]
+        remote = self.root / "public.git"
+        subprocess.run(["git", "init", "--quiet", "--bare", str(remote)], check=True)
+        self.env.update(PRODUCTION_REMOTE=remote.as_posix(), TAG=TAG)
+        self.run_step("", override=guard)
+        self.git("push", "--quiet", str(remote), f"refs/tags/{TAG}")
+        self.run_step("", expected=1, override=guard)
+        # A post-push release failure can resume without moving any Git refs.
+        self.git("checkout", "--quiet", "--detach", f"refs/tags/{TAG}")
+        self.run_step("", override=guard)
+        self.assertIn("had_protection=false", self.output.read_text())
+        self.git("checkout", "--quiet", "dispatch")
+        self.env["PRODUCTION_REMOTE"] = (self.root / "missing.git").as_posix()
+        result = subprocess.run([BASH, "-c", guard], cwd=self.repo, env=self.env,
+                                text=True, capture_output=True, timeout=30)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Cannot verify public tag absence", result.stdout)
+
+        self.env["PRODUCTION_REMOTE"] = remote.as_posix()
+        subprocess.run(["git", "--git-dir", str(remote), "update-ref",
+                        "refs/heads/main", self.tag_sha], check=True)
+        push = body[body.index('git push --atomic'):body.index('echo "Pushed')]
+        self.assertNotIn("--force", push)
+        # Simulate a racing publisher creating the tag after the absence guard.
+        self.git("tag", "-f", TAG, self.dispatch_sha)
+        result = subprocess.run([BASH, "-c", push], cwd=self.repo, env=self.env,
+                                text=True, capture_output=True, timeout=30)
+        self.assertNotEqual(result.returncode, 0)
+        for ref in ("refs/heads/main", f"refs/tags/{TAG}"):
+            actual = subprocess.run(["git", "--git-dir", str(remote), "rev-parse", ref],
+                                    text=True, capture_output=True, check=True).stdout.strip()
+            self.assertEqual(actual, self.tag_sha)
+        subprocess.run(["git", "--git-dir", str(remote), "update-ref", "-d",
+                        f"refs/tags/{TAG}"], check=True)
+        self.run_step("", override=push)
+        for ref in ("refs/heads/main", f"refs/tags/{TAG}"):
+            actual = subprocess.run(["git", "--git-dir", str(remote), "rev-parse", ref],
+                                    text=True, capture_output=True, check=True).stdout.strip()
+            self.assertEqual(actual, self.dispatch_sha)
+        self.run_step("", override=guard)
+        for ref in ("refs/heads/main", f"refs/tags/{TAG}"):
+            actual = subprocess.run(["git", "--git-dir", str(remote), "rev-parse", ref],
+                                    text=True, capture_output=True, check=True).stdout.strip()
+            self.assertEqual(actual, self.dispatch_sha)
+
     def test_bad_and_missing_refs_never_execute_or_output(self):
         for tag in ("v9.8.7", "1.2.3", "v1.2", "v1.2.3-rc.1", "--help",
                     "refs/tags/v1.2.3", "v1.2.3\ninjected=1", '$(touch INJECTED)',

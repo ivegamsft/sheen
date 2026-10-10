@@ -7,6 +7,27 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 
 ## [Unreleased]
 
+## [1.2.0] — 2026-10-10
+
+| Field | Value |
+|---|---|
+| Version | v1.2.0 |
+| Range | v1.1.0..v1.2.0 |
+| Wave | wave:18 |
+| Sprint | N/A |
+| Release date | 2026-10-10 |
+
+### Added
+
+- Evidence-backed agency discovery briefs and findings registers in existing
+  research/bootstrap/exploration skills, with permission, assumption and
+  non-fabrication boundaries (#292; Spec 16).
+- Validated original-ID wireframe mappings into Experience Blueprint and
+  production handoff, with simulated-state and review limitations (#293).
+- Reproducible portable HTML guide Chromium keyboard, narrow/zoomed layout,
+  offline and A4/Letter print evidence, with pinned source-only PDF inspection
+  and retained CI artifacts; downstream readiness remains separate (#294).
+
 ### Fixed
 
 - Refresh read-only BaseCoat to v4.6.4, restricting guidance-lock predecessor
@@ -15,6 +36,14 @@ asset is a breaking change (major bump) per [`.lexicon.md`](.lexicon.md) §2.
 - Exclude the upstream-only PR intake entrypoint together with its unsupported
   evaluator runtime; Sheen does not invoke either, and the asset library keeps
   its upstream control-plane exclusion (#298).
+
+### Upgrade notes
+
+- Public version tags are create-only: different-payload republication fails
+  before remote writes. Identical-payload reruns skip Git/protection writes and
+  resume release completion. Use a new version for corrected payloads.
+- To roll back consumers, restore the v1.1.0 sync workflow/source pin and run
+  sync; revert source changes through a governed PR, not by moving release tags.
 
 ## [1.1.0] — 2026-10-10
 
@@ -953,7 +982,8 @@ sheen was **pull-only** (manual `sync.ps1`). This release closes that gap.
 - The upstream `basecoat` framework remains vendored read-only under
   `vendor/basecoat/` and is not modified by sheen.
 
-[Unreleased]: https://github.com/IBuySpy-Shared/basecoat-sheen/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/IBuySpy-Shared/basecoat-sheen/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v1.2.0
 [0.4.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.4.0
 [0.3.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.3.0
 [0.2.0]: https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.2.0

@@ -12,7 +12,8 @@
 > consumption/sync (06), per-skill catalog (07), standards (08), router (09),
 > Experience Blueprint (10), App Component Catalog (11), App Layout
 > Catalog (12), implemented App-Specific Theme Lifecycle agent contracts (13),
-> Guide Authoring and HTML Delivery (14), and Wireframing and Portable Prototypes (15).
+> Guide Authoring and HTML Delivery (14), Wireframing and Portable Prototypes (15),
+> and Agency Discovery and Research (16).
 
 ---
 
