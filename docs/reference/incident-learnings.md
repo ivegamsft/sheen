@@ -7,11 +7,11 @@ short, evidence-based, and actionable.
 
 **Decision record:** audit follow-up, owned by Sheen maintainers for source and
 consumer integration, and BaseCoat maintainers for canonical imported assets.
-Tracking: [#232](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/232);
+Tracking: [#232](https://github.com/ivegamsft/sheen/issues/232);
 upstream work:
-[IBuySpy-Shared/basecoat#3324](https://github.com/IBuySpy-Shared/basecoat/issues/3324).
+[upstream-basecoat#3324](https://github.com/ivegamsft/sheen/issues/3324).
 Learning capture is
-[#240](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/240). This
+[#240](https://github.com/ivegamsft/sheen/issues/240). This
 record logs findings and decisions, not
 implementation approval, release readiness, or completed remediation.
 
@@ -84,7 +84,7 @@ reconciliation. These cases do not justify duplicate upstream repair issues.
    installed/vendor skill headers were identical after normalization. File one
    canonical issue for a shared defect and track both refresh surfaces, rather
    than creating independent repair issues for each copy. Reuse
-   [#227](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/227) for the
+   [#227](https://github.com/ivegamsft/sheen/issues/227) for the
    existing guide-authoring gap. Preserve closed upstream work while logging
    residual semantic defects that its original acceptance did not cover.
    Compare the declared pin as well as current upstream before claiming a file
@@ -119,35 +119,35 @@ upstream links cover shared installed/vendor defects once, not twice.
 
 | Finding | Follow-up |
 |---|---|
-| S1 - backend and Markdown scope leakage | [#233](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/233) |
-| S2 - categories and twelve missing pillars | [#234](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/234) |
-| S3 - authoring/output mismatch | Existing [#227](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/227) under [#225](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/225); specification delivered by [#231](https://github.com/IBuySpy-Shared/basecoat-sheen/pull/231) |
-| S4 - ontology scope ambiguity | [#235](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/235) |
-| S5 - neighboring review and accessibility-target ambiguity | [#236](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/236) |
-| S6 - strict YAML/schema assurance | [#237](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/237) |
-| I-01 - Electron agent identifiers in `applyTo` | [IBuySpy-Shared/basecoat#3330](https://github.com/IBuySpy-Shared/basecoat/issues/3330) |
-| I-02 - model aliases and precedence | [IBuySpy-Shared/basecoat#3331](https://github.com/IBuySpy-Shared/basecoat/issues/3331) |
-| I-03 - conflicting category fields | [IBuySpy-Shared/basecoat#3332](https://github.com/IBuySpy-Shared/basecoat/issues/3332) |
-| I-04 - audit/implementation and namespace boundaries | [IBuySpy-Shared/basecoat#3333](https://github.com/IBuySpy-Shared/basecoat/issues/3333) |
-| I-05 - contradictory API handoff | [IBuySpy-Shared/basecoat#3334](https://github.com/IBuySpy-Shared/basecoat/issues/3334) |
-| I-06 - optional tools versus required dispatch | [IBuySpy-Shared/basecoat#3335](https://github.com/IBuySpy-Shared/basecoat/issues/3335) |
-| V1 - two YAML failures | [IBuySpy-Shared/basecoat#3325](https://github.com/IBuySpy-Shared/basecoat/issues/3325) |
-| V2 - duplicate visibility | [IBuySpy-Shared/basecoat#3326](https://github.com/IBuySpy-Shared/basecoat/issues/3326) for four remaining cases; [#239](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/239) for the corrected fifth case |
-| V3 - folded tool declaration | Already corrected upstream; refresh via [#239](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/239) |
-| V4 - UX alias targets Quality | [IBuySpy-Shared/basecoat#3327](https://github.com/IBuySpy-Shared/basecoat/issues/3327) |
-| V5 - agent-definition paths used as operational scopes | [IBuySpy-Shared/basecoat#3328](https://github.com/IBuySpy-Shared/basecoat/issues/3328) |
-| V6 - upgrade prompt execution/tool mismatch | Absent at current and pinned upstream; reconcile ownership, source sync and consumer remnants via [#239](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/239) |
-| V7 - alias distribution mismatch | [IBuySpy-Shared/basecoat#3329](https://github.com/IBuySpy-Shared/basecoat/issues/3329) |
-| Host-aware model capability evidence | [#238](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/238) |
-| Host schemas and copyable-example advisories | [IBuySpy-Shared/basecoat#3336](https://github.com/IBuySpy-Shared/basecoat/issues/3336) |
-| Reviewed installed/vendor refresh | [#239](https://github.com/IBuySpy-Shared/basecoat-sheen/issues/239) |
+| S1 - backend and Markdown scope leakage | [#233](https://github.com/ivegamsft/sheen/issues/233) |
+| S2 - categories and twelve missing pillars | [#234](https://github.com/ivegamsft/sheen/issues/234) |
+| S3 - authoring/output mismatch | Existing [#227](https://github.com/ivegamsft/sheen/issues/227) under [#225](https://github.com/ivegamsft/sheen/issues/225); specification delivered by [#231](https://github.com/ivegamsft/sheen/pull/231) |
+| S4 - ontology scope ambiguity | [#235](https://github.com/ivegamsft/sheen/issues/235) |
+| S5 - neighboring review and accessibility-target ambiguity | [#236](https://github.com/ivegamsft/sheen/issues/236) |
+| S6 - strict YAML/schema assurance | [#237](https://github.com/ivegamsft/sheen/issues/237) |
+| I-01 - Electron agent identifiers in `applyTo` | [upstream-basecoat#3330](https://github.com/ivegamsft/sheen/issues/3330) |
+| I-02 - model aliases and precedence | [upstream-basecoat#3331](https://github.com/ivegamsft/sheen/issues/3331) |
+| I-03 - conflicting category fields | [upstream-basecoat#3332](https://github.com/ivegamsft/sheen/issues/3332) |
+| I-04 - audit/implementation and namespace boundaries | [upstream-basecoat#3333](https://github.com/ivegamsft/sheen/issues/3333) |
+| I-05 - contradictory API handoff | [upstream-basecoat#3334](https://github.com/ivegamsft/sheen/issues/3334) |
+| I-06 - optional tools versus required dispatch | [upstream-basecoat#3335](https://github.com/ivegamsft/sheen/issues/3335) |
+| V1 - two YAML failures | [upstream-basecoat#3325](https://github.com/ivegamsft/sheen/issues/3325) |
+| V2 - duplicate visibility | [upstream-basecoat#3326](https://github.com/ivegamsft/sheen/issues/3326) for four remaining cases; [#239](https://github.com/ivegamsft/sheen/issues/239) for the corrected fifth case |
+| V3 - folded tool declaration | Already corrected upstream; refresh via [#239](https://github.com/ivegamsft/sheen/issues/239) |
+| V4 - UX alias targets Quality | [upstream-basecoat#3327](https://github.com/ivegamsft/sheen/issues/3327) |
+| V5 - agent-definition paths used as operational scopes | [upstream-basecoat#3328](https://github.com/ivegamsft/sheen/issues/3328) |
+| V6 - upgrade prompt execution/tool mismatch | Absent at current and pinned upstream; reconcile ownership, source sync and consumer remnants via [#239](https://github.com/ivegamsft/sheen/issues/239) |
+| V7 - alias distribution mismatch | [upstream-basecoat#3329](https://github.com/ivegamsft/sheen/issues/3329) |
+| Host-aware model capability evidence | [#238](https://github.com/ivegamsft/sheen/issues/238) |
+| Host schemas and copyable-example advisories | [upstream-basecoat#3336](https://github.com/ivegamsft/sheen/issues/3336) |
+| Reviewed installed/vendor refresh | [#239](https://github.com/ivegamsft/sheen/issues/239) |
 
 Prior upstream scope, pointer-stub and negative-clause work remains recorded in
-[IBuySpy-Shared/basecoat#2975](https://github.com/IBuySpy-Shared/basecoat/issues/2975),
-[IBuySpy-Shared/basecoat#2977](https://github.com/IBuySpy-Shared/basecoat/issues/2977),
-[IBuySpy-Shared/basecoat#2926](https://github.com/IBuySpy-Shared/basecoat/issues/2926)
+[upstream-basecoat#2975](https://github.com/ivegamsft/sheen/issues/2975),
+[upstream-basecoat#2977](https://github.com/ivegamsft/sheen/issues/2977),
+[upstream-basecoat#2926](https://github.com/ivegamsft/sheen/issues/2926)
 and
-[IBuySpy-Shared/basecoat#3134](https://github.com/IBuySpy-Shared/basecoat/issues/3134).
+[upstream-basecoat#3134](https://github.com/ivegamsft/sheen/issues/3134).
 Closed work was not reopened merely because an older vendor snapshot retained
 its original problem.
 
@@ -158,7 +158,7 @@ its original problem.
 Wave 6 delivered the generated system atlas, two rounds of diagram-rendering
 corrections, path-scoped Copilot instructions, and the v0.11.0 source and
 production releases. Evidence: #150, #152, #154, #156, #158, and
-[v0.11.0](https://github.com/IBuySpy-Shared/basecoat-sheen/releases/tag/v0.11.0).
+[v0.11.0](https://github.com/ivegamsft/sheen/releases/tag/v0.11.0).
 
 ### Wave 6 learnings
 

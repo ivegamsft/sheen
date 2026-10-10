@@ -32,7 +32,7 @@ ref: main
 
 # agent_distribution: organization (default) discovers centrally published
 # agents from your organization's .github-private/agents channel.
-# This source publishes the IBuySpy-Shared channel. Other organizations must
+# This source publishes the ivegamsft channel. Other organizations must
 # establish their own channel or explicitly select repository compatibility.
 # Unsupported hosts/forks may use repository; check local path restrictions.
 agent_distribution: organization
@@ -101,7 +101,7 @@ agent_distribution: organization
 # This scheduled workflow checks for new sheen versions weekly and opens a PR
 # — the same auto-update experience as basecoat. Public mirror sources need no
 # extra fetch credential. Private/internal sources such as
-# IBuySpy-Shared/basecoat-sheen require a SHEEN_FETCH_TOKEN secret with
+# ivegamsft/sheen require a SHEEN_FETCH_TOKEN secret with
 # contents:read access to the source repo.
 # The workflow is callable from sheen's release pipeline and can also be
 # triggered manually from the GitHub Actions tab.

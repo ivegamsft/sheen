@@ -6,7 +6,7 @@ docs site for a clean build.
 ## 1. Clone and inspect
 
 ```bash
-git clone https://github.com/IBuySpy-Shared/basecoat-sheen.git
+git clone https://github.com/ivegamsft/sheen.git
 cd basecoat-sheen
 ```
 

@@ -366,8 +366,8 @@ UPSTREAM_SYNC_WF="$WORK/templates/sheen-sync.yml"
 if [ "$INSTALL_SYNC_WORKFLOW" = true ] && [ -f "$UPSTREAM_SYNC_WF" ]; then
   NORMALIZED_SYNC_WF="$WORK/templates/sheen-sync.normalized.yml"
   sed -E \
-    -e 's#uses: ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@#uses: IBuySpy-Shared/basecoat-sheen/.github/workflows/check-sheen-version-callable.yml@#g' \
-    -e 's#(uses: IBuySpy-Shared/basecoat-sheen/\.github/workflows/check-sheen-version-callable\.yml@)[^[:space:]]+#\1__SHEEN_COMMIT_SHA__#g' \
+    -e 's#uses: ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@#uses: ivegamsft/sheen/.github/workflows/check-sheen-version-callable.yml@#g' \
+    -e 's#(uses: ivegamsft/sheen/\.github/workflows/check-sheen-version-callable\.yml@)[^[:space:]]+#\1__SHEEN_COMMIT_SHA__#g' \
     -e "s/__SHEEN_COMMIT_SHA__/$COMMIT/g" \
     -e 's/Pinned to the released tag/Pinned to the immutable source commit/g' \
     -e '/^[[:space:]]*source_repo:[[:space:]]*ivegamsft\/sheen[[:space:]]*$/d' \
